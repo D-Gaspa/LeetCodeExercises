@@ -72,3 +72,41 @@ def subsets1(nums: List[int]) -> List[List[int]]:
         ans.append(subset)
 
     return ans
+
+
+def subsets2(nums: List[int]) -> List[List[int]]:
+    """
+    Generates all possible subsets of an integer list.
+
+    This solution uses backtracking to generate all subsets.
+    The time complexity of this solution is O(2^n * n) where n is the length of the input list.
+    """
+    def backtrack(start, current_subset):
+        ans.append(current_subset[:])  # Make a copy before appending
+
+        for i in range(start, len(nums)):
+            current_subset.append(nums[i])
+            backtrack(i + 1, current_subset)
+            current_subset.pop()  # Backtrack by removing the last element
+
+    ans = []
+    backtrack(0, [])
+    return ans
+
+
+def subsets3(nums: List[int]) -> List[List[int]]:
+    """
+    Generates all possible subsets of an integer list.
+
+    This solution uses an iterative approach to generate all subsets.
+    The time complexity of this solution is O(2^n * n) where n is the length of the input list.
+    """
+    ans = [[]]
+
+    for num in nums:
+        ans += [curr + [num] for curr in ans]  # Add the current number to all existing subsets
+
+    return ans
+
+
+# <-------------------------------------------------- May 22nd, 2024 -------------------------------------------------->
