@@ -82,7 +82,8 @@ def subsets2(nums: List[int]) -> List[List[int]]:
     The time complexity of this solution is O(2^n * n) where n is the length of the input list.
     """
     def backtrack(start, current_subset):
-        ans.append(current_subset[:])  # Make a copy before appending
+        """Backtracking function to generate all subsets."""
+        ans.append(current_subset[:])
 
         for i in range(start, len(nums)):
             current_subset.append(nums[i])
@@ -133,12 +134,47 @@ def partition1(s: str) -> List[List[str]]:
         return True
 
     def backtrack(start, current_partition):
-        if start == len(s):  # Base case: reached the end of the string
-            result.append(current_partition[:])  # Copy before appending
+        """Backtracking function to generate all palindrome partitions."""
+        if start == len(s):
+            result.append(current_partition[:])  # Found a valid partition
             return
 
         for end in range(start, len(s)):
             if is_palindrome(s, start, end):
+                current_partition.append(s[start:end + 1])
+                backtrack(end + 1, current_partition)
+                current_partition.pop()  # Backtrack by removing the last element
+
+    result = []
+    backtrack(0, [])
+    return result
+
+
+def partition2(s: str) -> List[List[str]]:
+    """
+    Generates all possible palindrome partitions of a string.
+
+    This solution uses dynamic programming and backtracking to generate all palindrome partitions.
+    The time complexity of this solution is O(n * 2^n) where n is the length of the input string.
+    """
+    n = len(s)
+    dp_table = [[False] * n for _ in range(n)]  # DP table to store palindrome substrings
+
+    for start in range(n - 1, -1, -1):
+        for end in range(start, n):
+            # A substring is a palindrome if the start and end characters are the same,
+            # and the substring between them is also a palindrome
+            if s[start] == s[end] and (end - start < 2 or dp_table[start + 1][end - 1]):
+                dp_table[start][end] = True
+
+    def backtrack(start, current_partition):
+        """Backtracking function to generate all palindrome partitions."""
+        if start == n:
+            result.append(current_partition[:])  # Found a valid partition
+            return
+
+        for end in range(start, n):
+            if dp_table[start][end]:
                 current_partition.append(s[start:end + 1])
                 backtrack(end + 1, current_partition)
                 current_partition.pop()  # Backtrack by removing the last element
