@@ -110,3 +110,39 @@ def subsets3(nums: List[int]) -> List[List[int]]:
 
 
 # <-------------------------------------------------- May 22nd, 2024 -------------------------------------------------->
+# 131. Palindrome Partitioning
+
+# Given a string 's', partition 's' such that every substring of the partition is a palindrome
+# Return all possible palindrome partitions of 's'.
+
+
+def partition1(s: str) -> List[List[str]]:
+    """
+    Generates all possible palindrome partitions of a string.
+
+    This solution uses backtracking to generate all palindrome partitions.
+    The time complexity of this solution is O(n * 2^n) where n is the length of the input string.
+    """
+    def is_palindrome(s, start, end):
+        """Checks if a substring is a palindrome."""
+        while start < end:
+            if s[start] != s[end]:
+                return False
+            start += 1
+            end -= 1
+        return True
+
+    def backtrack(start, current_partition):
+        if start == len(s):  # Base case: reached the end of the string
+            result.append(current_partition[:])  # Copy before appending
+            return
+
+        for end in range(start, len(s)):
+            if is_palindrome(s, start, end):
+                current_partition.append(s[start:end + 1])
+                backtrack(end + 1, current_partition)
+                current_partition.pop()  # Backtrack by removing the last element
+
+    result = []
+    backtrack(0, [])
+    return result
