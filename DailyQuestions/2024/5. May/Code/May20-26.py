@@ -184,3 +184,4 @@ def partition2(s: str) -> List[List[str]]:
     return result
 
 # <-------------------------------------------------- May 23rd, 2024 -------------------------------------------------->
+# 2597. The Number of Beautiful Subsets
