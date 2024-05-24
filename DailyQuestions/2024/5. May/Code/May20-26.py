@@ -274,4 +274,42 @@ def beautifulSubsets2(nums: List[int], k: int) -> int:
     return total_count - 1  # Exclude the empty subset
 
 
+def beautifulSubsets3(nums: List[int], k: int) -> int:
+    """
+    Counts the number of beautiful subsets in the given list of numbers.
+
+    This solution uses dynamic programming with an iterative approach to count beautiful subsets.
+    The time complexity of this solution is O(n log n) where n is the length of the input list.
+    """
+    beautiful_count = 1
+    remainder_groups = defaultdict(dict)
+
+    # Group numbers by their remainders when divided by k
+    for num in nums:
+        remainder_groups[num % k][num] = remainder_groups[num % k].get(num, 0) + 1
+
+    # Iterate over each remainder group
+    for group in remainder_groups.values():
+        prev_num = -k  # Initialize with a number guaranteed not to be in nums
+        count_excluding_prev, exclude_count = 1, 1
+
+        # Iterate over sorted numbers in the group
+        for num, frequency in sorted(group.items()):
+            include_count = (1 << frequency) - 1  # Count subsets with the current number
+
+            # If current and previous numbers differ by k, they must be in different subsets
+            if num - prev_num == k:
+                include_count *= count_excluding_prev
+            else:
+                # Otherwise, the previous number can be in the same subset, so include it
+                include_count *= exclude_count
+
+            # Update counts for the next iteration
+            count_excluding_prev, exclude_count = exclude_count, exclude_count + include_count
+            prev_num = num
+
+        beautiful_count *= exclude_count  # Update the overall count
+
+    return beautiful_count - 1  # Exclude the empty subset
+
 # <-------------------------------------------------- May 24th, 2024 -------------------------------------------------->
