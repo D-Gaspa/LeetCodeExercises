@@ -83,7 +83,7 @@ def subsets2(nums: List[int]) -> List[List[int]]:
     The time complexity of this solution is O(2^n * n) where n is the length of the input list.
     """
 
-    def backtrack(start, current_subset):
+    def backtrack(start: int, current_subset: List[int]):
         """Backtracking function to generate all subsets."""
         ans.append(current_subset[:])
 
@@ -136,7 +136,7 @@ def partition1(s: str) -> List[List[str]]:
             end -= 1
         return True
 
-    def backtrack(start, current_partition):
+    def backtrack(start: int, current_partition: List[str]):
         """Backtracking function to generate all palindrome partitions."""
         if start == len(s):
             result.append(current_partition[:])  # Found a valid partition
@@ -170,7 +170,7 @@ def partition2(s: str) -> List[List[str]]:
             if s[start] == s[end] and (end - start < 2 or dp_table[start + 1][end - 1]):
                 dp_table[start][end] = True
 
-    def backtrack(start, current_partition):
+    def backtrack(start: int, current_partition: List[str]):
         """Backtracking function to generate all palindrome partitions."""
         if start == n:
             result.append(current_partition[:])  # Found a valid partition
@@ -205,7 +205,7 @@ def beautifulSubsets1(nums: List[int], k: int) -> int:
     beautiful_count = 0
     current_subset = []
 
-    def backtrack(start_index):
+    def backtrack(start_index: int):
         nonlocal beautiful_count  # Access the outer variable
 
         # Base case: a subset is found, check if it's beautiful
@@ -236,7 +236,7 @@ def beautifulSubsets2(nums: List[int], k: int) -> int:
     remainder_groups = defaultdict(lambda: defaultdict(int))
     memo = {}
 
-    def count_beautiful_subsets(subsets, current_index):
+    def count_beautiful_subsets(subsets: List[tuple], current_index: int) -> int:
         """Recursively counts beautiful subsets starting from the current index."""
         if current_index == len(subsets):
             return 1  # Base case: empty subset is beautiful
