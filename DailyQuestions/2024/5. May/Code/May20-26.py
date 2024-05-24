@@ -81,6 +81,7 @@ def subsets2(nums: List[int]) -> List[List[int]]:
     This solution uses backtracking to generate all subsets.
     The time complexity of this solution is O(2^n * n) where n is the length of the input list.
     """
+
     def backtrack(start, current_subset):
         """Backtracking function to generate all subsets."""
         ans.append(current_subset[:])
@@ -183,5 +184,45 @@ def partition2(s: str) -> List[List[str]]:
     backtrack(0, [])
     return result
 
+
 # <-------------------------------------------------- May 23rd, 2024 -------------------------------------------------->
 # 2597. The Number of Beautiful Subsets
+
+# Count the number of non-empty subsets in an array of positive integers where no two elements have an absolute
+# difference equal to a given positive integer k.
+
+
+def beautifulSubsets1(nums: List[int], k: int) -> int:
+    """
+    Counts the number of beautiful subsets in an integer list.
+
+    This solution uses bit manipulation to generate all subsets and check if they are beautiful.
+    The time complexity of this solution is O(2^n * n) where n is the length of the input list.
+    """
+    n = len(nums)
+    beautiful_count = 0
+
+    def is_beautiful(mask):
+        for i in range(n):
+            if mask & (1 << i):  # Check if i-th element is in the current subset
+                for j in range(i + 1, n):
+                    if mask & (1 << j) and abs(nums[i] - nums[j]) == k:  # Check if the subset is beautiful
+                        return False
+        return True
+
+    for mask in range(1, 1 << n):  # Iterate over all possible subsets (except the empty set)
+        if is_beautiful(mask):
+            beautiful_count += 1
+
+    return beautiful_count
+
+
+def beautifulSubsets2(nums: List[int], k: int) -> int:
+    pass
+
+
+def beautifulSubsets3(nums: List[int], k: int) -> int:
+    pass
+
+
+# <-------------------------------------------------- May 24th, 2024 -------------------------------------------------->
