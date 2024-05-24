@@ -236,7 +236,7 @@ def beautifulSubsets2(nums: List[int], k: int) -> int:
     remainder_groups = defaultdict(lambda: defaultdict(int))
     memo = {}
 
-    def count_beautiful_subsets_recursive(subsets, current_index):
+    def count_beautiful_subsets(subsets, current_index):
         """Recursively counts beautiful subsets starting from the current index."""
         if current_index == len(subsets):
             return 1  # Base case: empty subset is beautiful
@@ -247,19 +247,18 @@ def beautifulSubsets2(nums: List[int], k: int) -> int:
             return memo[key]  # Return memoized result if available
 
         # Divide the subsets into two groups, excluding and including the current number, then count them
-        count_excluding_current = count_beautiful_subsets_recursive(subsets, current_index + 1)
-        count_including_current = (1 << subsets[current_index][1]) - 1
+        exclude_count = count_beautiful_subsets(subsets, current_index + 1)
+        include_count = (1 << subsets[current_index][1]) - 1
 
         # If the next number is 'k' apart from the current number, it must be in a different subset, so skip it
         if current_index + 1 < len(subsets) and subsets[current_index + 1][0] - subsets[current_index][0] == k:
-            # Otherwise, the next number can be in the same subset, so include it
-            count_including_current *= count_beautiful_subsets_recursive(subsets, current_index + 2)
+            include_count *= count_beautiful_subsets(subsets, current_index + 2)
         else:
-            # Include the next number
-            count_including_current *= count_beautiful_subsets_recursive(subsets, current_index + 1)
+            # Otherwise, the next number can be in the same subset, so include it
+            include_count *= count_beautiful_subsets(subsets, current_index + 1)
 
         # Store the total count in memoization dictionary for future use, then return it
-        total_count = count_excluding_current + count_including_current
+        total_count = exclude_count + include_count
         memo[key] = total_count
         return total_count
 
@@ -270,9 +269,9 @@ def beautifulSubsets2(nums: List[int], k: int) -> int:
     # Calculate beautiful subsets for each remainder group
     for group in remainder_groups.values():
         sorted_subsets = sorted(group.items())
-        total_count *= count_beautiful_subsets_recursive(sorted_subsets, 0)
+        total_count *= count_beautiful_subsets(sorted_subsets, 0)
 
-    return total_count - 1  # Subtract 1 for the empty subset
+    return total_count - 1  # Exclude the empty subset
 
 
 # <-------------------------------------------------- May 24th, 2024 -------------------------------------------------->
