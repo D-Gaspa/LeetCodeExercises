@@ -192,33 +192,35 @@ def partition2(s: str) -> List[List[str]]:
 # difference equal to a given positive integer k.
 
 
-def beautifulSubsets1(nums: List[int], k: int) -> int:
+def beautifulSubsets1(nums, k):
     """
     Counts the number of beautiful subsets in an integer list.
 
-    This solution uses bit manipulation to generate all subsets and check if they are beautiful.
-    The time complexity of this solution is O(2^n * n) where n is the length of the input list.
+    This solution uses backtracking to generate all subsets and check if they are beautiful.
+    The time complexity of this solution is O(2^n) where n is the length of the input list.
     """
     n = len(nums)
     beautiful_count = 0
+    current_subset = []
 
-    def is_beautiful(mask):
-        for i in range(n):
-            if mask & (1 << i):  # Check if i-th element is in the current subset
-                for j in range(i + 1, n):
-                    if mask & (1 << j) and abs(nums[i] - nums[j]) == k:  # Check if the subset is beautiful
-                        return False
-        return True
+    def backtrack(start_index):
+        nonlocal beautiful_count  # Access the outer variable
 
-    for mask in range(1, 1 << n):  # Iterate over all possible subsets (except the empty set)
-        if is_beautiful(mask):
+        # Base case: a subset is found, check if it's beautiful
+        if len(current_subset) > 0:
+            for i in range(len(current_subset) - 1):
+                if abs(current_subset[i] - current_subset[-1]) == k:
+                    return  # Not beautiful, prune the search
             beautiful_count += 1
 
+        # Recursive case: try adding each remaining element
+        for i in range(start_index, n):
+            current_subset.append(nums[i])
+            backtrack(i + 1)  # Explore subsets starting from the next index
+            current_subset.pop()  # Remove the last added element (backtracking)
+
+    backtrack(0)  # Start backtracking from the beginning
     return beautiful_count
-
-
-def beautifulSubsets2(nums: List[int], k: int) -> int:
-    pass
 
 
 def beautifulSubsets3(nums: List[int], k: int) -> int:
