@@ -1,3 +1,4 @@
+from collections import defaultdict
 from typing import List
 
 
@@ -125,6 +126,7 @@ def partition1(s: str) -> List[List[str]]:
     This solution uses backtracking to generate all palindrome partitions.
     The time complexity of this solution is O(n * 2^n) where n is the length of the input string.
     """
+
     def is_palindrome(s, start, end):
         """Checks if a substring is a palindrome."""
         while start < end:
@@ -192,7 +194,7 @@ def partition2(s: str) -> List[List[str]]:
 # difference equal to a given positive integer k.
 
 
-def beautifulSubsets1(nums, k):
+def beautifulSubsets1(nums: List[int], k: int) -> int:
     """
     Counts the number of beautiful subsets in an integer list.
 
@@ -223,8 +225,54 @@ def beautifulSubsets1(nums, k):
     return beautiful_count
 
 
-def beautifulSubsets3(nums: List[int], k: int) -> int:
-    pass
+def beautifulSubsets2(nums: List[int], k: int) -> int:
+    """
+    Counts the number of beautiful subsets in the given list of numbers.
+
+    This solution uses dynamic programming and memoization to count beautiful subsets.
+    The time complexity of this solution is O(2^n) where n is the length of the input list.
+    """
+    total_count = 1
+    remainder_groups = defaultdict(lambda: defaultdict(int))
+    memo = {}
+
+    def count_beautiful_subsets_recursive(subsets, current_index):
+        """Recursively counts beautiful subsets starting from the current index."""
+        if current_index == len(subsets):
+            return 1  # Base case: empty subset is beautiful
+
+        # Create a key for the memoization dictionary based on the current index and remaining subsets
+        key = (current_index, tuple(subsets[current_index:]))
+        if key in memo:
+            return memo[key]  # Return memoized result if available
+
+        # Divide the subsets into two groups, excluding and including the current number, then count them
+        count_excluding_current = count_beautiful_subsets_recursive(subsets, current_index + 1)
+        count_including_current = (1 << subsets[current_index][1]) - 1
+
+        # If the next number is 'k' apart from the current number, it must be in a different subset, so skip it
+        if current_index + 1 < len(subsets) and subsets[current_index + 1][0] - subsets[current_index][0] == k:
+            # Otherwise, the next number can be in the same subset, so include it
+            count_including_current *= count_beautiful_subsets_recursive(subsets, current_index + 2)
+        else:
+            # Include the next number
+            count_including_current *= count_beautiful_subsets_recursive(subsets, current_index + 1)
+
+        # Store the total count in memoization dictionary for future use, then return it
+        total_count = count_excluding_current + count_including_current
+        memo[key] = total_count
+        return total_count
+
+    # Group numbers by their remainders when divided by k
+    for num in nums:
+        remainder_groups[num % k][num] += 1
+
+    # Calculate beautiful subsets for each remainder group
+    for group in remainder_groups.values():
+        sorted_subsets = sorted(group.items())
+        total_count *= count_beautiful_subsets_recursive(sorted_subsets, 0)
+
+    return total_count - 1  # Subtract 1 for the empty subset
 
 
 # <-------------------------------------------------- May 24th, 2024 -------------------------------------------------->
