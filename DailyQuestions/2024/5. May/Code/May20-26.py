@@ -312,4 +312,51 @@ def beautifulSubsets3(nums: List[int], k: int) -> int:
 
     return beautiful_count - 1  # Exclude the empty subset
 
+
 # <-------------------------------------------------- May 24th, 2024 -------------------------------------------------->
+
+# 1255. Maximum Score Words Formed by Letters
+
+# Given a list of words, list of letters, and score of letters, find the maximum score of any valid set of words you can
+# form using the given letters (words[i] cannot be used two or more times).
+
+def maxScoreWords1(words: List[str], letters: List[str], score: List[int]) -> int:
+    """
+    Finds the maximum score of any valid set of words that can be formed using the given letters.
+
+    This solution uses backtracking to generate all valid sets of words and calculate their scores.
+    The time complexity of this solution is O(2^n * L) where n is the number of words, and L is the average length of
+    the words in the input list.
+    """
+
+    def backtrack(start: int, current_score: int, letter_counts: List[int]):
+        """Backtracking function to generate all valid sets of words and calculate their scores."""
+        nonlocal max_score  # Access the outer variable
+
+        max_score = max(max_score, current_score)  # Update the maximum score
+
+        for i in range(start, len(words)):
+            word = words[i]
+            word_score = 0
+            valid_word = True
+
+            for char in word:  # Calculate the score of the current word and check if it's valid
+                letter_counts[ord(char) - ord('a')] -= 1
+                word_score += score[ord(char) - ord('a')]
+
+                if letter_counts[ord(char) - ord('a')] < 0:
+                    valid_word = False  # The word is not valid if a letter count becomes negative
+
+            if valid_word:  # If the word is valid, continue backtracking with the next word
+                backtrack(i + 1, current_score + word_score, letter_counts)
+
+            # Backtrack by restoring the letter counts
+            for char in word:
+                letter_counts[ord(char) - ord('a')] += 1
+
+    max_score = 0
+    letter_counts = [letters.count(chr(i + ord('a'))) for i in range(26)]  # Compute the count of each letter
+    backtrack(0, 0, letter_counts)  # Start backtracking from the beginning
+    return max_score
+
+# <-------------------------------------------------- May 25th, 2024 -------------------------------------------------->
