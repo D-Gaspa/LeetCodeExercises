@@ -436,13 +436,39 @@ def maxScoreWords2(words: List[str], letters: List[str], score: List[int]) -> in
 
 # 140. Word Break II
 
-# Given a string s and a dictionary of strings wordDict, add spaces in s to construct a sentence where each word is a
+# Given a string s and a dictionary of strings word_dict, add spaces in s to construct a sentence where each word is a
 # valid dictionary word.
 # Return all such possible sentences in any order.
 
 
 def wordBreak1(s: str, word_dict: List[str]) -> List[str]:
-    pass
+    """
+    Returns all possible sentences formed by adding spaces to a string to construct valid dictionary words.
+
+    This solution uses backtracking with memoization to generate all possible sentences.
+    The time complexity of this solution is O(2^n) where n is the length of the input string.
+    """
+    def backtrack(start: int):
+        """Backtracking function to generate all possible sentences."""
+        if start == len(s):  # Base case: reached the end of the string
+            return [[]]
+
+        if start in memo:  # Return memoized result if available
+            return memo[start]
+
+        sentences = []
+        for end in range(start + 1, len(s) + 1):  # Try adding spaces at different positions
+            word = s[start:end]
+            if word in word_dict:
+                for sentence in backtrack(end):  # Recursively generate sentences for the remaining string
+                    sentences.append([word] + sentence)
+
+        memo[start] = sentences
+        return sentences
+
+    memo = {}
+    sentences = backtrack(0)  # Start backtracking from the beginning
+    return [' '.join(words) for words in sentences]  # Convert the list of words to sentences
 
 
 def wordBreak2(s: str, word_dict: List[str]) -> List[str]:
