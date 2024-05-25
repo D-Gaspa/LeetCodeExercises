@@ -329,7 +329,7 @@ def maxScoreWords1(words: List[str], letters: List[str], score: List[int]) -> in
     the words in the input list.
     """
 
-    def backtrack(start: int, current_score: int, letter_counts: List[int]):
+    def backtrack(start: int, current_score: int, available_letters: List[int]):
         """Backtracking function to generate all valid sets of words and calculate their scores."""
         nonlocal max_score  # Access the outer variable
 
@@ -341,22 +341,95 @@ def maxScoreWords1(words: List[str], letters: List[str], score: List[int]) -> in
             valid_word = True
 
             for char in word:  # Calculate the score of the current word and check if it's valid
-                letter_counts[ord(char) - ord('a')] -= 1
+                available_letters[ord(char) - ord('a')] -= 1
                 word_score += score[ord(char) - ord('a')]
 
-                if letter_counts[ord(char) - ord('a')] < 0:
+                if available_letters[ord(char) - ord('a')] < 0:
                     valid_word = False  # The word is not valid if a letter count becomes negative
 
             if valid_word:  # If the word is valid, continue backtracking with the next word
-                backtrack(i + 1, current_score + word_score, letter_counts)
+                backtrack(i + 1, current_score + word_score, available_letters)
 
             # Backtrack by restoring the letter counts
             for char in word:
-                letter_counts[ord(char) - ord('a')] += 1
+                available_letters[ord(char) - ord('a')] += 1
 
     max_score = 0
-    letter_counts = [letters.count(chr(i + ord('a'))) for i in range(26)]  # Compute the count of each letter
-    backtrack(0, 0, letter_counts)  # Start backtracking from the beginning
+    available_letters = [letters.count(chr(i + ord('a'))) for i in range(26)]  # Compute the count of each letter
+    backtrack(0, 0, available_letters)  # Start backtracking from the beginning
     return max_score
+
+
+def maxScoreWords2(words: List[str], letters: List[str], score: List[int]) -> int:
+    """
+    Finds the maximum score of any valid set of words that can be formed using the given letters.
+
+    This solution uses backtracking with memoization to generate all valid sets of words and calculate their scores.
+    The time complexity of this solution is O(2^n * L) where n is the number of words, and L is the average length of
+    the words in the input list.
+    """
+
+    n = len(words)
+    max_scores_by_word_idx = [0] * n  # Memoized max scores for each starting word
+    word_scores = [0] * n
+    available_letter_counts = [0] * 26
+
+    # Precalculate word scores and available letter counts
+    for letter in letters:
+        available_letter_counts[ord(letter) - ord('a')] += 1
+    for i, word in enumerate(words):
+        for char in word:
+            char_code = ord(char) - ord('a')
+            if available_letter_counts[char_code] > 0:
+                word_scores[i] += score[char_code]
+            else:  # Word cannot be formed with available letters
+                word_scores[i] = -1
+                break
+
+    visited_states = set()  # Track combinations to avoid redundancy
+
+    def backtrack(word_index: int, current_score: int, used_words_bitmask: int, letter_counts: List[int]):
+        """Recursively explore valid word combinations and update max_scores_by_word_idx."""
+
+        # Mark the current word as used (set the corresponding bit in the bitmask)
+        used_words_bitmask |= (1 << word_index)
+        if word_index == n:  # Base case: reached the end of the word list
+            return
+        if used_words_bitmask in visited_states:  # Skip redundant exploration
+            return
+        if word_scores[word_index] == -1:  # Skip words that cannot be formed
+            return
+
+        # Check if the current combination is valid (enough letters available)
+        for i in range(26):
+            if letter_counts[i] > available_letter_counts[i]:
+                return
+
+        visited_states.add(used_words_bitmask)  # Mark the current combination as visited
+        current_score += word_scores[word_index]
+        max_scores_by_word_idx[word_index] = max(max_scores_by_word_idx[word_index], current_score)
+
+        # Recursively explore the next word combinations
+        for next_word_index in range(word_index + 1, n):
+            for char in words[next_word_index]:  # Update letter counts for the next word
+                letter_counts[ord(char) - ord('a')] += 1
+            backtrack(next_word_index, current_score, used_words_bitmask, letter_counts)  # Recursive call
+            for char in words[next_word_index]:  # Restore letter counts before moving to the next word
+                letter_counts[ord(char) - ord('a')] -= 1
+
+    overall_max_score = 0
+
+    # Start backtracking from each word index and update the overall maximum score
+    for idx in range(n):
+        available_letters = [0] * 26
+        for char in words[idx]:  # Count letters in the starting word
+            available_letters[ord(char) - ord('a')] += 1
+
+        used_words_bitmask = 1 << idx  # Mark the starting word as used
+        backtrack(idx, 0, used_words_bitmask, available_letters)
+        overall_max_score = max(overall_max_score, max_scores_by_word_idx[idx])
+
+    return overall_max_score
+
 
 # <-------------------------------------------------- May 25th, 2024 -------------------------------------------------->
