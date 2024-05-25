@@ -457,10 +457,11 @@ def wordBreak1(s: str, word_dict: List[str]) -> List[str]:
             return memo[start]
 
         sentences = []
-        for end in range(start + 1, len(s) + 1):  # Try adding spaces at different positions
+        for end in range(start + 1, len(s) + 1):  # Try all possible substrings starting from the current index
             word = s[start:end]
             if word in word_dict:
-                for sentence in backtrack(end):  # Recursively generate sentences for the remaining string
+                # Recursively backtrack from the next index and append the current word to the sentences
+                for sentence in backtrack(end):
                     sentences.append([word] + sentence)
 
         memo[start] = sentences
@@ -472,7 +473,26 @@ def wordBreak1(s: str, word_dict: List[str]) -> List[str]:
 
 
 def wordBreak2(s: str, word_dict: List[str]) -> List[str]:
-    pass
+    """
+    Returns all possible sentences formed by adding spaces to a string to construct valid dictionary words.
+
+    This solution uses iterative dynamic programming to generate all possible sentences.
+    The time complexity of this solution is O(n^2) where n is the length of the input string.
+    """
+    n = len(s)
+    dp_table = [[] for _ in range(n + 1)]
+    dp_table[n] = [[]]  # Base case: empty string has an empty list of sentences
+
+    # Iterate backwards through the string to build up sentences
+    for start in range(n - 1, -1, -1):
+        for end in range(start + 1, n + 1):  # Try all possible substrings starting from the current index
+            word = s[start:end]
+            if word in word_dict:
+                # Append the current word to all possible sentences starting from the end index
+                for sentence in dp_table[end]:
+                    dp_table[start].append([word] + sentence)
+
+    return [' '.join(words) for words in dp_table[0]]  # Convert the list of words to sentences
 
 
 def wordBreak3(s: str, word_dict: List[str]) -> List[str]:
