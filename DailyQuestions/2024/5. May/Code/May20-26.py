@@ -439,3 +439,26 @@ def maxScoreWords2(words: List[str], letters: List[str], score: List[int]) -> in
 # Given a string s and a dictionary of strings wordDict, add spaces in s to construct a sentence where each word is a
 # valid dictionary word.
 # Return all such possible sentences in any order.
+
+
+def wordBreak1(s: str, word_dict: List[str]) -> List[str]:
+    pass
+
+
+def wordBreak2(s: str, word_dict: List[str]) -> List[str]:
+    pass
+
+
+def wordBreak3(s: str, word_dict: List[str]) -> List[str]:
+    pass
+
+
+s = "catsanddog"
+word_dict = ["cat", "cats", "and", "sand", "dog"]
+
+# Expected output: ["cats and dog", "cat sand dog"]
+print(wordBreak1(s, word_dict))
+print(wordBreak2(s, word_dict))
+print(wordBreak3(s, word_dict))
+
+# <-------------------------------------------------- May 26th, 2024 -------------------------------------------------->
