@@ -433,3 +433,9 @@ def maxScoreWords2(words: List[str], letters: List[str], score: List[int]) -> in
 
 
 # <-------------------------------------------------- May 25th, 2024 -------------------------------------------------->
+
+# 140. Word Break II
+
+# Given a string s and a dictionary of strings wordDict, add spaces in s to construct a sentence where each word is a
+# valid dictionary word.
+# Return all such possible sentences in any order.
