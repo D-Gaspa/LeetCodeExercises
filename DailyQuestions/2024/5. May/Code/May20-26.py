@@ -496,15 +496,48 @@ def wordBreak2(s: str, word_dict: List[str]) -> List[str]:
 
 
 def wordBreak3(s: str, word_dict: List[str]) -> List[str]:
-    pass
+    """
+    Returns all possible sentences formed by adding spaces to a string to construct valid dictionary words.
 
+    This solution uses the Trie data structure and iterative dynamic programming to generate all possible sentences.
+    The time complexity of this solution is O(n^2) where n is the length of the input string.
+    """
+    class TrieNode:
+        """A node in a Trie data structure."""
+        def __init__(self):
+            """Initializes a Trie node."""
+            self.children = {}  # Dictionary to store child nodes
+            self.is_word_end = False  # Flag to indicate the end of a valid word
 
-s = "catsanddog"
-word_dict = ["cat", "cats", "and", "sand", "dog"]
+    def build_trie(words: List[str]) -> TrieNode:
+        """Builds a trie from a list of words."""
+        root = TrieNode()
+        for word in words:
+            node = root
+            for char in word:
+                node = node.children.setdefault(char, TrieNode())  # Create child if not exists
+            node.is_word_end = True
+        return root
 
-# Expected output: ["cats and dog", "cat sand dog"]
-print(wordBreak1(s, word_dict))
-print(wordBreak2(s, word_dict))
-print(wordBreak3(s, word_dict))
+    n = len(s)
+    sentences_at_index = [[] for _ in range(n + 1)]  # DP table: sentences found at each index
+    sentences_at_index[n] = [[]]  # Base case: empty string has an empty list of sentences
+    trie_root = build_trie(word_dict)
+
+    # Iterate backwards, building sentences from the end of the string
+    for start in range(n - 1, -1, -1):
+        node = trie_root
+        for end in range(start, n):
+            char = s[end]
+            if char not in node.children:
+                break  # The current prefix is not a valid word start
+            node = node.children[char]
+            if node.is_word_end:
+                # Add valid words found at 'end' to sentences starting at 'start'
+                for sentence in sentences_at_index[end + 1]:
+                    sentences_at_index[start].append([s[start:end + 1]] + sentence)
+
+    return [' '.join(words) for words in sentences_at_index[0]]  # Convert the list of words to sentences
+
 
 # <-------------------------------------------------- May 26th, 2024 -------------------------------------------------->
