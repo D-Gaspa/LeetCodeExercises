@@ -541,3 +541,18 @@ def wordBreak3(s: str, word_dict: List[str]) -> List[str]:
 
 
 # <-------------------------------------------------- May 26th, 2024 -------------------------------------------------->
+
+# 552. Student Attendance Record II
+
+# Given an integer n, return the number of all possible attendance records with length 'n' that make a student
+# eligible for an award.
+# An attendance record is a string where each character represents whether the student was absent ('A'), late ('L'), or
+# present ('P') on a particular day.
+# A student is eligible for an award if they were absent for strictly fewer than 2 days in total and were never late
+# for 3 or more consecutive days.
+# The function should return the number of possible attendance records, modulo 10^9 + 7 due to the potential large
+# result.
+
+
+def checkRecord1(n: int) -> int:
+    pass
