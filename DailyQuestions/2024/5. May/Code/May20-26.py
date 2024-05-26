@@ -1,4 +1,3 @@
-import sys
 from collections import defaultdict
 from typing import List
 
@@ -644,22 +643,57 @@ def checkRecord2(n: int) -> int:
 
 
 def checkRecord3(n: int) -> int:
-    pass
+    """
+    Returns the number of all possible attendance records with length 'n' that make a student eligible for an award.
 
+    This solution uses matrix exponentiation to count valid attendance records.
+    The time complexity of this solution is O(log n) where n is the length of the attendance record.
+    """
+    MOD = 10 ** 9 + 7  # Modulo to prevent integer overflow
 
-n = 2
-print(checkRecord1(n))  # Expected output: 8
-print(checkRecord2(n))  # Expected output: 8
-print(checkRecord3(n))  # Expected output: 8
+    # Define the transition matrix based on possible attendance states
+    # Each state represents (absences, consecutive late days):
+    #  - State 0: (0, 0)  # No absences, no late days
+    #  - State 1: (0, 1)  # No absences, 1 late day
+    #  - State 2: (0, 2)  # No absences, 2 consecutive late days
+    #  - State 3: (1, 0)  # 1 absence, no late days
+    #  - State 4: (1, 1)  # 1 absence, 1 late day
+    #  - State 5: (1, 2)  # 1 absence, 2 consecutive late days
+    transition_matrix = [
+        [1, 1, 0, 1, 0, 0],
+        [1, 0, 1, 1, 0, 0],
+        [1, 0, 0, 1, 0, 0],
+        [0, 0, 0, 1, 1, 0],
+        [0, 0, 0, 1, 0, 1],
+        [0, 0, 0, 1, 0, 0]
+    ]
 
-n = 1
-print(checkRecord1(n))  # Expected output: 3
-print(checkRecord2(n))  # Expected output: 3
-print(checkRecord3(n))  # Expected output: 3
+    def matrix_multiply(matrix1: List[List[int]], matrix2: List[List[int]]) -> List[List[int]]:
+        """Multiplies two matrices and returns the result."""
+        rows_A, cols_A = len(matrix1), len(matrix1[0])
+        rows_B, cols_B = len(matrix2), len(matrix2[0])
 
-sys.setrecursionlimit(10**6)  # Increase the recursion limit
+        result = [[0] * cols_B for _ in range(rows_A)]
 
-n = 10101
-print(checkRecord1(n))  # Expected output: 183236316
-print(checkRecord2(n))  # Expected output: 183236316
-print(checkRecord3(n))  # Expected output: 183236316
+        for i in range(rows_A):
+            for j in range(cols_B):
+                for k in range(cols_A):
+                    result[i][j] += matrix1[i][k] * matrix2[k][j] % MOD
+
+        return result
+
+    def matrix_power(matrix: List[List[int]], power: int) -> List[List[int]]:
+        """Calculates the matrix exponentiation of a matrix."""
+        if power == 1:  # Base case: return the matrix
+            return matrix
+        if power % 2 == 0:  # If the power is even, calculate the square of the matrix
+            half_power = matrix_power(matrix, power // 2)
+            return matrix_multiply(half_power, half_power)
+        return matrix_multiply(matrix, matrix_power(matrix, power - 1))  # Recursively calculate the matrix power
+
+    # Calculate the matrix power for the given attendance record length
+    result_matrix = matrix_power(transition_matrix, n)
+
+    # The first row of the result matrix represents valid records ending in each state.
+    # Sum those to get the total number of valid records.
+    return sum(result_matrix[0]) % MOD
