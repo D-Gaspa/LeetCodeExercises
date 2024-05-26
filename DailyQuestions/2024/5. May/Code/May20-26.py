@@ -1,5 +1,9 @@
+import sys
 from collections import defaultdict
 from typing import List
+
+# TODO: Add function parameters and return types to the function definitions.
+# TODO: Add thorough debug statements to improve example outputs.
 
 
 # Week 4: May 20th - 26th
@@ -448,6 +452,7 @@ def wordBreak1(s: str, word_dict: List[str]) -> List[str]:
     This solution uses backtracking with memoization to generate all possible sentences.
     The time complexity of this solution is O(2^n) where n is the length of the input string.
     """
+
     def backtrack(start: int):
         """Backtracking function to generate all possible sentences."""
         if start == len(s):  # Base case: reached the end of the string
@@ -502,8 +507,10 @@ def wordBreak3(s: str, word_dict: List[str]) -> List[str]:
     This solution uses the Trie data structure and iterative dynamic programming to generate all possible sentences.
     The time complexity of this solution is O(n^2) where n is the length of the input string.
     """
+
     class TrieNode:
         """A node in a Trie data structure."""
+
         def __init__(self):
             """Initializes a Trie node."""
             self.children = {}  # Dictionary to store child nodes
@@ -555,4 +562,69 @@ def wordBreak3(s: str, word_dict: List[str]) -> List[str]:
 
 
 def checkRecord1(n: int) -> int:
+    """
+    Returns the number of all possible attendance records with length 'record_length' that meet the award criteria:
+
+    - No more than one absence (A)
+    - No more than two consecutive late days (L)
+    - Remaining days are present (P)
+
+    This solution uses a top-down dynamic programming approach with memoization to count valid attendance records.
+    The time complexity of this solution is O(n) where n is the length of the attendance record.
+    """
+    MOD = 10 ** 9 + 7  # Modulo to prevent integer overflow
+
+    def count_valid_records(day: int, absences: int, consecutive_late_days: int) -> int:
+        """Recursively counts valid attendance records starting from the current day."""
+        if day == n:
+            return 1  # Base case: reached the end of the attendance record
+
+        # Return the memoized result if available
+        if (day, absences, consecutive_late_days) in memo:
+            return memo[(day, absences, consecutive_late_days)]
+
+        total_valid_records = 0
+
+        # Case 1: Student is absent today
+        if absences < 1:  # Only count if the student has not yet used up their allowed absence
+            total_valid_records += count_valid_records(day + 1, absences + 1, 0) % MOD
+
+        # Case 2: Student is late today
+        if consecutive_late_days < 2:  # Only count if the student has not yet had 2 consecutive late days
+            total_valid_records += count_valid_records(day + 1, absences, consecutive_late_days + 1) % MOD
+
+        # Case 3: Student is present today
+        total_valid_records += count_valid_records(day + 1, absences, 0) % MOD
+
+        # Store the total count in memoization dictionary for future use, then return it
+        memo[(day, absences, consecutive_late_days)] = total_valid_records % MOD
+        return total_valid_records % MOD
+
+    memo = {}
+    return count_valid_records(0, 0, 0)  # Start counting from the first day
+
+
+def checkRecord2(n: int) -> int:
     pass
+
+
+def checkRecord3(n: int) -> int:
+    pass
+
+
+n = 2
+print(checkRecord1(n))  # Expected output: 8
+print(checkRecord2(n))  # Expected output: 8
+print(checkRecord3(n))  # Expected output: 8
+
+n = 1
+print(checkRecord1(n))  # Expected output: 3
+print(checkRecord2(n))  # Expected output: 3
+print(checkRecord3(n))  # Expected output: 3
+
+sys.setrecursionlimit(10**6)  # Increase the recursion limit
+
+n = 10101
+print(checkRecord1(n))  # Expected output: 183236316
+print(checkRecord2(n))  # Expected output: 183236316
+print(checkRecord3(n))  # Expected output: 183236316
