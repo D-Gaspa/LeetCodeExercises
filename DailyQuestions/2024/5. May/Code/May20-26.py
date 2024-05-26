@@ -553,21 +553,18 @@ def wordBreak3(s: str, word_dict: List[str]) -> List[str]:
 
 # Given an integer n, return the number of all possible attendance records with length 'n' that make a student
 # eligible for an award.
-# An attendance record is a string where each character represents whether the student was absent ('A'), late ('L'), or
-# present ('P') on a particular day.
-# A student is eligible for an award if they were absent for strictly fewer than 2 days in total and were never late
-# for 3 or more consecutive days.
+# The attendance record may only contain the characters 'A' (absent), 'L' (late), or 'P' (present).
+# A student is eligible for an award if they meet the following criteria:
+# - No more than one 'A' (absence) in the entire attendance record.
+# - No more than two continuous 'L' (late) days.
+# - All remaining days are 'P' (present).
 # The function should return the number of possible attendance records, modulo 10^9 + 7 due to the potential large
 # result.
 
 
 def checkRecord1(n: int) -> int:
     """
-    Returns the number of all possible attendance records with length 'record_length' that meet the award criteria:
-
-    - No more than one absence (A)
-    - No more than two consecutive late days (L)
-    - Remaining days are present (P)
+    Returns the number of all possible attendance records that make a student eligible for an award.
 
     This solution uses a top-down dynamic programming approach with memoization to count valid attendance records.
     The time complexity of this solution is O(n) where n is the length of the attendance record.
@@ -605,7 +602,45 @@ def checkRecord1(n: int) -> int:
 
 
 def checkRecord2(n: int) -> int:
-    pass
+    """
+    Returns the number of all possible attendance records with length 'n' that make a student eligible for an award.
+
+    This solution uses an iterative bottom-up dynamic programming approach to count valid attendance records.
+    The time complexity of this solution is O(n) where n is the length of the attendance record.
+    """
+    MOD = 10 ** 9 + 7  # Modulo to prevent integer overflow
+
+    dp_current_state = [[0] * 3 for _ in range(2)]  # Current day's states (absences: 0 or 1)
+    dp_next_state = [[0] * 3 for _ in range(2)]  # Next day's states (initialized to 0)
+
+    dp_current_state[0][0] = 1  # Base case: 1 valid empty record (no absences, no late days)
+
+    for day in range(1, n + 1):
+        for absences in range(2):
+            for consecutive_late_days in range(3):
+
+                # Case 1: Add a 'P' (present) day to any existing valid record
+                dp_next_state[absences][0] = (dp_next_state[absences][0] +
+                                              dp_current_state[absences][consecutive_late_days]) % MOD
+
+                # Case 2: Add an 'A' (absence) day to a record with no absences
+                if absences < 1:
+                    dp_next_state[absences + 1][0] = (dp_next_state[absences + 1][0] +
+                                                      dp_current_state[absences][consecutive_late_days]) % MOD
+
+                # Case 3: Add an 'L' (late) day to a record with less than 2 consecutive late days
+                if consecutive_late_days < 2:
+                    dp_next_state[absences][consecutive_late_days + 1] = (
+                            (dp_next_state[absences][consecutive_late_days + 1] +
+                             dp_current_state[absences][consecutive_late_days]) % MOD)
+
+        # Move to the next day by swapping the current and next states
+        dp_current_state, dp_next_state = dp_next_state, dp_current_state
+        # Reset the next state to 0 for the next iteration
+        dp_next_state = [[0] * 3 for _ in range(2)]
+
+    # Sum all valid records for both cases of having 0 or 1 absences in the final current_state
+    return sum(dp_current_state[absences][late_days] for absences in range(2) for late_days in range(3)) % MOD
 
 
 def checkRecord3(n: int) -> int:
