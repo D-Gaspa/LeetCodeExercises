@@ -1,5 +1,7 @@
 from collections import defaultdict
+from pprint import pprint
 from typing import List
+
 
 # TODO: Add function parameters and return types to the function definitions.
 # TODO: Add thorough debug statements to improve example outputs.
@@ -570,34 +572,53 @@ def checkRecord1(n: int) -> int:
     """
     MOD = 10 ** 9 + 7  # Modulo to prevent integer overflow
 
+    # Print the input parameters for debugging
+    print(f"Input Parameters: n = {n}")
+
     def count_valid_records(day: int, absences: int, consecutive_late_days: int) -> int:
         """Recursively counts valid attendance records starting from the current day."""
+        print(f"\n--- Day: {day}, Absences: {absences}, Late Days: {consecutive_late_days} ---")
+
         if day == n:
+            print("Reached end of attendance record (Base Case). Returning 1.")
             return 1  # Base case: reached the end of the attendance record
 
         # Return the memoized result if available
         if (day, absences, consecutive_late_days) in memo:
+            print(f"Memoized result found: {memo[(day, absences, consecutive_late_days)]}")
             return memo[(day, absences, consecutive_late_days)]
 
         total_valid_records = 0
 
         # Case 1: Student is absent today
-        if absences < 1:  # Only count if the student has not yet used up their allowed absence
+        if absences < 1:
+            print("Exploring absence for today...")
             total_valid_records += count_valid_records(day + 1, absences + 1, 0) % MOD
+            print(f"Back from exploring absence. Valid records so far: {total_valid_records}")
 
         # Case 2: Student is late today
-        if consecutive_late_days < 2:  # Only count if the student has not yet had 2 consecutive late days
+        if consecutive_late_days < 2:
+            print("Exploring being late today...")
             total_valid_records += count_valid_records(day + 1, absences, consecutive_late_days + 1) % MOD
+            print(f"Back from exploring being late. Valid records so far: {total_valid_records}")
 
         # Case 3: Student is present today
+        print("Exploring being present today...")
         total_valid_records += count_valid_records(day + 1, absences, 0) % MOD
+        print(f"Back from exploring being present. Valid records so far: {total_valid_records}")
 
         # Store the total count in memoization dictionary for future use, then return it
         memo[(day, absences, consecutive_late_days)] = total_valid_records % MOD
+        print(f"Memoizing result: {total_valid_records % MOD}")
         return total_valid_records % MOD
 
     memo = {}
-    return count_valid_records(0, 0, 0)  # Start counting from the first day
+    result = count_valid_records(0, 0, 0)  # Start counting from the first day
+
+    print("\n--- Final Memoization Table ---")
+    pprint(memo)  # Print the final memoization table nicely formatted
+
+    return result  # Return the final count of valid attendance records
 
 
 def checkRecord2(n: int) -> int:
@@ -609,32 +630,46 @@ def checkRecord2(n: int) -> int:
     """
     MOD = 10 ** 9 + 7  # Modulo to prevent integer overflow
 
+    # Print the input parameters for debugging
+    print(f"Input Parameters: n = {n}")
+
     dp_current_state = [[0] * 3 for _ in range(2)]  # Current day's states (absences: 0 or 1)
     dp_next_state = [[0] * 3 for _ in range(2)]  # Next day's states (initialized to 0)
 
     dp_current_state[0][0] = 1  # Base case: 1 valid empty record (no absences, no late days)
 
     for day in range(1, n + 1):
+        print(f"\n--- Day {day} ---")
+        print("Current State (before update):")
+        pprint(dp_current_state)
+
         for absences in range(2):
             for consecutive_late_days in range(3):
+                print(f"- Absences: {absences}, Late Days: {consecutive_late_days}")
 
                 # Case 1: Add a 'P' (present) day to any existing valid record
                 dp_next_state[absences][0] = (dp_next_state[absences][0] +
                                               dp_current_state[absences][consecutive_late_days]) % MOD
+                print("  Adding 'P':", dp_next_state[absences][0])
 
                 # Case 2: Add an 'A' (absence) day to a record with no absences
                 if absences < 1:
                     dp_next_state[absences + 1][0] = (dp_next_state[absences + 1][0] +
                                                       dp_current_state[absences][consecutive_late_days]) % MOD
+                    print("  Adding 'A':", dp_next_state[absences + 1][0])
 
                 # Case 3: Add an 'L' (late) day to a record with less than 2 consecutive late days
                 if consecutive_late_days < 2:
                     dp_next_state[absences][consecutive_late_days + 1] = (
                             (dp_next_state[absences][consecutive_late_days + 1] +
                              dp_current_state[absences][consecutive_late_days]) % MOD)
+                    print("  Adding 'L':", dp_next_state[absences][consecutive_late_days + 1])
 
         # Move to the next day by swapping the current and next states
         dp_current_state, dp_next_state = dp_next_state, dp_current_state
+        print("Next State (for next iteration):")
+        pprint(dp_current_state)
+
         # Reset the next state to 0 for the next iteration
         dp_next_state = [[0] * 3 for _ in range(2)]
 
@@ -650,6 +685,9 @@ def checkRecord3(n: int) -> int:
     The time complexity of this solution is O(log n) where n is the length of the attendance record.
     """
     MOD = 10 ** 9 + 7  # Modulo to prevent integer overflow
+
+    # Print the input parameters for debugging
+    print(f"Input Parameters: n = {n}")
 
     # Define the transition matrix based on possible attendance states
     # Each state represents (absences, consecutive late days):
@@ -668,8 +706,17 @@ def checkRecord3(n: int) -> int:
         [0, 0, 0, 1, 0, 0]
     ]
 
+    print("\n--- Transition Matrix ---")
+    pprint(transition_matrix)
+
     def matrix_multiply(matrix1: List[List[int]], matrix2: List[List[int]]) -> List[List[int]]:
         """Multiplies two matrices and returns the result."""
+
+        print("\n--- Matrix Multiplication ---")
+        pprint(matrix1)
+        print("x")
+        pprint(matrix2)
+
         rows_A, cols_A = len(matrix1), len(matrix1[0])
         rows_B, cols_B = len(matrix2), len(matrix2[0])
 
@@ -680,20 +727,63 @@ def checkRecord3(n: int) -> int:
                 for k in range(cols_A):
                     result[i][j] += matrix1[i][k] * matrix2[k][j] % MOD
 
+        print("Result:")
+        pprint(result)
+
         return result
 
     def matrix_power(matrix: List[List[int]], power: int) -> List[List[int]]:
         """Calculates the matrix exponentiation of a matrix."""
+        print(f"\n--- Matrix Power (Power = {power}) ---")
         if power == 1:  # Base case: return the matrix
+            print("Base Case Reached. Returning the matrix:")
+            pprint(matrix)
             return matrix
         if power % 2 == 0:  # If the power is even, calculate the square of the matrix
+            print("Power is even. Calculating half power...")
             half_power = matrix_power(matrix, power // 2)
-            return matrix_multiply(half_power, half_power)
-        return matrix_multiply(matrix, matrix_power(matrix, power - 1))  # Recursively calculate the matrix power
+            result = matrix_multiply(half_power, half_power)
+            print("Squared Result:")
+            pprint(result)
+            return result
+        print("Power is odd. Recursive call to matrix_power...")
+        result = matrix_multiply(matrix, matrix_power(matrix, power - 1))
+        print("Result:")
+        pprint(result)
+        return result
 
     # Calculate the matrix power for the given attendance record length
+    print(f"\n--- Calculating Matrix Power for n = {n} ---")
     result_matrix = matrix_power(transition_matrix, n)
+
+    print("\n--- Result Matrix ---")
+    pprint(result_matrix)
 
     # The first row of the result matrix represents valid records ending in each state.
     # Sum those to get the total number of valid records.
     return sum(result_matrix[0]) % MOD
+
+
+# <-------------------------------------------------- Test Cases -------------------------------------------------->
+
+# May 20th
+# ...
+
+# May 21st
+# ...
+
+# May 22nd
+# ...
+
+# May 23rd
+# ...
+
+# May 24th
+# ...
+
+# May 25th
+# ...
+
+# May 26th
+n = 2
+print(f"Number of valid attendance records: {checkRecord3(n)}")
