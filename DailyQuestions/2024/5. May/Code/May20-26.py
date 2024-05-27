@@ -6,13 +6,12 @@ from typing import List
 
 # TODO: Add function parameters and return types to the function definitions.
 # TODO: Add thorough debug statements to improve example outputs.
-# - May 20th is complete
+# - TO be completed:
 # - May 21st
 # - May 22nd
 # - May 23rd
 # - May 24th
 # - May 25th
-# - May 26th is complete
 
 
 # Week 4: May 20th - 26th
@@ -113,21 +112,35 @@ def subsets1(nums: List[int]) -> List[List[int]]:
 
     This solution uses bit manipulation to generate all subsets.
     The time complexity of this solution is O(2^n * n) where n is the length of the input list.
+    :param nums: List of integers with unique elements
+    :return: List of all possible subsets
     """
     n = len(nums)
-    ans = []
+    result = []
+    table_data = []
 
-    # Iterate over all possible subsets using bit representations (2^n subsets) [1 << n = 2^n]
+    # Print the input parameters for debugging
+    print(f"Input Parameters: nums = {nums}")
+
+    print("\n--- Subset Generation ---")
+
     for i in range(1 << n):
         subset = []
+        included_elements = []
 
         for j in range(n):
             if i & (1 << j):  # Bitwise trick to check if j-th element is in this subset
                 subset.append(nums[j])
+                included_elements.append(j)
 
-        ans.append(subset)
+        result.append(subset)
+        table_data.append([i, bin(i)[2:].zfill(n), included_elements, subset])
 
-    return ans
+    print(tabulate(table_data, headers=["Iteration (i)", "Bit Rep.", "Included Indices", "Subset"]))
+
+    print("\n--- Final Subsets ---")
+    pprint(result)
+    return result
 
 
 def subsets2(nums: List[int]) -> List[List[int]]:
@@ -136,20 +149,37 @@ def subsets2(nums: List[int]) -> List[List[int]]:
 
     This solution uses backtracking to generate all subsets.
     The time complexity of this solution is O(2^n * n) where n is the length of the input list.
+    :param nums: List of integers with unique elements
+    :return: List of all possible subsets
     """
 
-    def backtrack(start: int, current_subset: List[int]):
-        """Backtracking function to generate all subsets."""
-        ans.append(current_subset[:])
+    def backtrack(start: int, current_subset: List[int], depth: int = 0):
+        """
+        Backtracking function to generate all possible subsets.
+        :param start: Starting index for the current subset being generated
+        :param current_subset: Current subset being generated
+        :param depth: Recursion depth for visual indentation
+        :return: None
+        """
+        indent = "  " * depth  # For visual indentation based on recursion depth
+        print(f"{indent}Exploring from index {start} with current subset:", current_subset)
+
+        result.append(current_subset[:])
+        print(f"{indent}Appending subset: {current_subset}")
 
         for i in range(start, len(nums)):
             current_subset.append(nums[i])
-            backtrack(i + 1, current_subset)
-            current_subset.pop()  # Backtrack by removing the last element
+            print(f"{indent}Adding element {nums[i]} (index {i}) to subset: {current_subset}")
+            backtrack(i + 1, current_subset, depth + 1)  # Recursive call with increased depth
+            current_subset.pop()
+            print(f"{indent}Backtracking, removing {nums[i]} (index {i}) from subset: {current_subset}")
 
-    ans = []
+    result = []
     backtrack(0, [])
-    return ans
+
+    print("\n--- All Subsets ---")
+    pprint(result)
+    return result
 
 
 def subsets3(nums: List[int]) -> List[List[int]]:
@@ -158,13 +188,23 @@ def subsets3(nums: List[int]) -> List[List[int]]:
 
     This solution uses an iterative approach to generate all subsets.
     The time complexity of this solution is O(2^n * n) where n is the length of the input list.
+    :param nums: List of integers with unique elements
+    :return: List of all possible subsets
     """
-    ans = [[]]
+    result = [[]]
+
+    print("\n--- Subset Generation ---")
+    print("Num | Existing Subsets  |  New Subsets")
+    print("----|-----------------|----------------")
 
     for num in nums:
-        ans += [curr + [num] for curr in ans]  # Add the current number to all existing subsets
+        new_subsets = [curr + [num] for curr in result]
+        print(f"{num} | {result}  |  {new_subsets}")  # Print existing and new subsets
+        result += new_subsets  # Add new subsets to the result
 
-    return ans
+    print("\n--- All Subsets ---")
+    pprint(result)  # Use pprint for nicely formatted output
+    return result
 
 
 # <-------------------------------------------------- May 22nd, 2024 -------------------------------------------------->
@@ -822,7 +862,10 @@ nums = [5, 1, 6]
 # print(f"Sum of XOR totals: {subsetXORSum2(nums)}")  # Expected output: 28
 
 # May 21st
-# ...
+nums_2 = [1, 2, 3]
+# print(f"Subsets: {subsets1(nums_2)}")  # Expected output: [[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]]
+# print(f"Subsets: {subsets2(nums_2)}")  # Expected output: [[], [1], [1, 2], [1, 2, 3], [1, 3], [2], [2, 3], [3]]
+# print(f"Subsets: {subsets3(nums_2)}")  # Expected output: [[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]]
 
 # May 22nd
 # ...
