@@ -785,5 +785,7 @@ def checkRecord3(n: int) -> int:
 # ...
 
 # May 26th
-n = 2
-print(f"Number of valid attendance records: {checkRecord3(n)}")
+# n = 2
+# print(f"Number of valid attendance records: {checkRecord1(n)}")
+# print(f"Number of valid attendance records: {checkRecord2(n)}")
+# print(f"Number of valid attendance records: {checkRecord3(n)}")
