@@ -1,10 +1,18 @@
 from collections import defaultdict
 from pprint import pprint
+from tabulate import tabulate
 from typing import List
 
 
 # TODO: Add function parameters and return types to the function definitions.
 # TODO: Add thorough debug statements to improve example outputs.
+# - May 20th is complete
+# - May 21st
+# - May 22nd
+# - May 23rd
+# - May 24th
+# - May 25th
+# - May 26th is complete
 
 
 # Week 4: May 20th - 26th
@@ -20,35 +28,77 @@ def subsetXORSum1(nums: List[int]) -> int:
 
     This solution uses bit manipulation to generate all subsets and calculate their XOR totals.
     The time complexity of this solution is O(2^n * n) where n is the length of the input list.
+    :param nums: List of integers
+    :return: Sum of XOR totals over all possible subsets
     """
     n = len(nums)
-    ans = 0
+    result = 0
+    table_data = []
+
+    # Print the input parameters for debugging
+    print(f"Input Parameters: nums = {nums}")
+
+    print("\n--- Subset XOR Calculation ---")
 
     # Iterate over all possible subsets using bit representations (2^n subsets) [1 << n = 2^n]
     for i in range(1 << n):
+        print(f"\n**Iteration {i}: Bit Representation = {bin(i)[2:].zfill(n)}**")
         xor = 0
+        subset = []
 
         for j in range(n):  # Calculate XOR total for the current subset.
             if i & (1 << j):  # Bitwise trick to check if j-th element is in this subset
                 xor ^= nums[j]
-        ans += xor
+                subset.append(nums[j])
+                print(f"  - Adding {nums[j]} (index {j}) to subset, XOR = {xor}")
+            else:
+                print(f"  - Skipping {nums[j]} (index {j}), not in subset")
 
-    return ans
+        table_data.append([i, bin(i)[2:].zfill(n), subset, xor])
+        result += xor
+        print(f"  - Subset XOR total: {xor}")
+
+    print("\n--- Subsets and XOR Totals ---")
+    print(tabulate(table_data, headers=["Iteration (i)", "Bit Rep.", "Subset", "XOR Total"]))
+
+    print(f"\n--- Final Sum of XOR Totals: {result} ---")
+    return result
 
 
 def subsetXORSum2(nums: List[int]) -> int:
-    """Calculates the sum of XOR totals over all possible subsets of an integer list.
+    """
+    Calculates the sum of XOR totals over all possible subsets of an integer list.
 
     This solution uses a bitwise OR operation to combine all numbers and then calculates the sum of XOR totals.
     The time complexity of this solution is O(n) where n is the length of the input list.
+    :param nums: List of integers
+    :return: Sum of XOR totals over all possible subsets
     """
-    combined_bits = 0  # Accumulate bitwise OR of all numbers
+    combined_bits = 0
+    table_data = []
 
-    for num in nums:
+    # Print the input parameters for debugging
+    print(f"Input Parameters: nums = {nums}")
+
+    print("\n--- Subset XOR Calculation (Bitwise OR Approach) ---")
+    print("Num | Bit Representation | Combined Bits")
+    print("----|-------------------|---------------")
+
+    for i, num in enumerate(nums):
         combined_bits |= num
+        table_data.append([num, bin(num)[2:].zfill(8), bin(combined_bits)[2:].zfill(8)])
+        print(f"{num} | {bin(num)[2:].zfill(8)}   | {bin(combined_bits)[2:].zfill(8)}")
 
-    # Calculate the sum of XOR totals by multiplying the combined bits with 2^(n-1)
-    return combined_bits * (1 << (len(nums) - 1))
+    print("\n--- Combined Bits ---")
+    print(tabulate(table_data, headers=["Num", "Bit Rep.", "Combined Bits"]))
+
+    n = len(nums)
+    result = combined_bits * (1 << (n - 1))
+
+    print(f"\nCombined Bits: {combined_bits} (decimal), {bin(combined_bits)} (binary)")
+    print(f"Number of subsets: 2 ^ (n - 1) = 2 ^ {n - 1} = {1 << (n - 1)}")
+    print(f"\n--- Final Sum of XOR Totals: {result} ---")
+    return result
 
 
 # <-------------------------------------------------- May 21st, 2024 -------------------------------------------------->
@@ -767,7 +817,9 @@ def checkRecord3(n: int) -> int:
 # <-------------------------------------------------- Test Cases -------------------------------------------------->
 
 # May 20th
-# ...
+nums = [5, 1, 6]
+# print(f"Sum of XOR totals: {subsetXORSum1(nums)}")  # Expected output: 28
+# print(f"Sum of XOR totals: {subsetXORSum2(nums)}")  # Expected output: 28
 
 # May 21st
 # ...
@@ -785,7 +837,7 @@ def checkRecord3(n: int) -> int:
 # ...
 
 # May 26th
-# n = 2
-# print(f"Number of valid attendance records: {checkRecord1(n)}")
-# print(f"Number of valid attendance records: {checkRecord2(n)}")
-# print(f"Number of valid attendance records: {checkRecord3(n)}")
+n = 2
+# print(f"Number of valid attendance records: {checkRecord1(n)}")  # Expected output: 8
+# print(f"Number of valid attendance records: {checkRecord2(n)}")  # Expected output: 8
+# print(f"Number of valid attendance records: {checkRecord3(n)}")  # Expected output: 8
