@@ -708,28 +708,56 @@ def wordBreak1(s: str, word_dict: List[str]) -> List[str]:
     The time complexity of this solution is O(2^n) where n is the length of the input string.
     """
 
-    def backtrack(start: int):
+    # Print the input parameters for debugging
+    print(f"Input Parameters: s = '{s}', word_dict = {word_dict}")
+
+    table_data = []
+
+    def backtrack(start_index: int, depth=0):
         """Backtracking function to generate all possible sentences."""
-        if start == len(s):  # Base case: reached the end of the string
+        indent = "  " * depth  # For visual indentation based on recursion depth
+        print(f"{indent}Backtracking from index {start_index} of string '{s}'")
+        table_data.append([depth, start_index, []])
+
+        if start_index == len(s):
+            print(f"{indent}Base case reached. Returning empty sentence.")
             return [[]]
 
-        if start in memo:  # Return memoized result if available
-            return memo[start]
+        if start_index in memo:
+            print(f"{indent}Found memoized result for index {start_index}:")
+            pprint(memo[start_index])
+            return memo[start_index]
 
         sentences = []
-        for end in range(start + 1, len(s) + 1):  # Try all possible substrings starting from the current index
-            word = s[start:end]
-            if word in word_dict:
-                # Recursively backtrack from the next index and append the current word to the sentences
-                for sentence in backtrack(end):
-                    sentences.append([word] + sentence)
+        for end_index in range(start_index + 1, len(s) + 1):
+            word = s[start_index:end_index]
+            print(f"{indent}Checking word '{word}'...")
+            table_data.append([depth, start_index, [word]])
 
-        memo[start] = sentences
+            if word in word_dict:
+                print(f"{indent}  Word '{word}' found in dictionary.")
+                for sentence in backtrack(end_index, depth + 1):
+                    sentences.append([word] + sentence)
+                    print(f"{indent}  Appending '{word}' to existing sentences:")
+                    pprint(sentences)
+            else:
+                print(f"{indent}  Word '{word}' not found in dictionary.")
+
+        memo[start_index] = sentences
+        print(f"{indent}Memoizing result for index {start_index}:")
+        pprint(sentences)
         return sentences
 
     memo = {}
-    sentences = backtrack(0)  # Start backtracking from the beginning
-    return [' '.join(words) for words in sentences]  # Convert the list of words to sentences
+    sentences = backtrack(0)
+    formatted_sentences = [' '.join(words) for words in sentences]
+
+    print("\n--- Backtracking Exploration ---")
+    print(tabulate(table_data, headers=["Depth", "Start Index", "Word Being Checked"], tablefmt="fancy_grid"))
+
+    print("\n--- Resulting Sentences ---")
+    pprint(formatted_sentences)
+    return formatted_sentences
 
 
 def wordBreak2(s: str, word_dict: List[str]) -> List[str]:
@@ -739,20 +767,35 @@ def wordBreak2(s: str, word_dict: List[str]) -> List[str]:
     This solution uses iterative dynamic programming to generate all possible sentences.
     The time complexity of this solution is O(n^2) where n is the length of the input string.
     """
+
+    # Print the input parameters for debugging
+    print(f"Input Parameters: s = '{s}', word_dict = {word_dict}")
+
     n = len(s)
-    dp_table = [[] for _ in range(n + 1)]
-    dp_table[n] = [[]]  # Base case: empty string has an empty list of sentences
+    sentence_list = [[] for _ in range(n + 1)]
+    sentence_list[n] = [[]]  # Base case: empty string has an empty list of sentences
+
+    print("\n--- Generating Sentences Iteratively (Dynamic Programming) ---")
 
     # Iterate backwards through the string to build up sentences
-    for start in range(n - 1, -1, -1):
-        for end in range(start + 1, n + 1):  # Try all possible substrings starting from the current index
-            word = s[start:end]
+    for start_index in range(n - 1, -1, -1):
+        print(f"\nProcessing start index: {start_index}")
+        for end_index in range(start_index + 1, n + 1):
+            word = s[start_index:end_index]
+            print(f"  Checking word: '{word}'")
             if word in word_dict:
-                # Append the current word to all possible sentences starting from the end index
-                for sentence in dp_table[end]:
-                    dp_table[start].append([word] + sentence)
+                print(f"Word '{word}' found in dictionary.")
+                for sentence in sentence_list[end_index]:
+                    sentence_list[start_index].append([word] + sentence)
+                    print(f"Appending '{word}' to existing sentences:")
+                    pprint(sentence_list[start_index])
+            else:
+                print(f"Word '{word}' not found in dictionary.")
 
-    return [' '.join(words) for words in dp_table[0]]  # Convert the list of words to sentences
+    result = [' '.join(words) for words in sentence_list[0]]
+    print("\n--- Final Sentences ---")
+    pprint(result)
+    return result
 
 
 def wordBreak3(s: str, word_dict: List[str]) -> List[str]:
@@ -764,42 +807,63 @@ def wordBreak3(s: str, word_dict: List[str]) -> List[str]:
     """
 
     class TrieNode:
-        """A node in a Trie data structure."""
-
         def __init__(self):
-            """Initializes a Trie node."""
-            self.children = {}  # Dictionary to store child nodes
-            self.is_word_end = False  # Flag to indicate the end of a valid word
+            self.children = {}
+            self.is_word_end = False
 
     def build_trie(words: List[str]) -> TrieNode:
-        """Builds a trie from a list of words."""
         root = TrieNode()
         for word in words:
             node = root
             for char in word:
-                node = node.children.setdefault(char, TrieNode())  # Create child if not exists
+                node = node.children.setdefault(char, TrieNode())
             node.is_word_end = True
         return root
 
+    def print_trie_node(node, prefix=""):
+        """Recursively prints the Trie structure with word end markers."""
+        if node.is_word_end:
+            print(f"{prefix}*")  # Mark word ends with '*'
+        for char, child_node in node.children.items():
+            print_trie_node(child_node, prefix + char)
+
+    # Print the input parameters for debugging
+    print(f"Input Parameters: s = '{s}', word_dict = {word_dict}")
+
     n = len(s)
-    sentences_at_index = [[] for _ in range(n + 1)]  # DP table: sentences found at each index
-    sentences_at_index[n] = [[]]  # Base case: empty string has an empty list of sentences
+    sentences_at_index = [[] for _ in range(n + 1)]
+    sentences_at_index[n] = [[]]
     trie_root = build_trie(word_dict)
 
-    # Iterate backwards, building sentences from the end of the string
-    for start in range(n - 1, -1, -1):
-        node = trie_root
-        for end in range(start, n):
-            char = s[end]
-            if char not in node.children:
-                break  # The current prefix is not a valid word start
-            node = node.children[char]
-            if node.is_word_end:
-                # Add valid words found at 'end' to sentences starting at 'start'
-                for sentence in sentences_at_index[end + 1]:
-                    sentences_at_index[start].append([s[start:end + 1]] + sentence)
+    print("\n>>> Constructed Trie:")
+    print_trie_node(trie_root)
 
-    return [' '.join(words) for words in sentences_at_index[0]]  # Convert the list of words to sentences
+    for start_index in range(n - 1, -1, -1):
+        print(f"\n>>> Processing Start Index: {start_index}")
+
+        node = trie_root
+        for end_index in range(start_index, n):
+            char = s[end_index]
+            print(f"- Checking char '{char}' at end_index {end_index}")
+
+            if char not in node.children:
+                print(f"- Prefix '{s[start_index:end_index + 1]}' not found in Trie, breaking inner loop.")
+                break
+
+            node = node.children[char]
+
+            if node.is_word_end:
+                print(f"- Found valid word '{s[start_index:end_index + 1]}'!")
+                for sentence in sentences_at_index[end_index + 1]:
+                    new_sentence = [s[start_index:end_index + 1]] + sentence
+                    sentences_at_index[start_index].append(new_sentence)
+                    print(f"- Adding sentence: {' '.join(new_sentence)}")
+
+    result = [' '.join(words) for words in sentences_at_index[0]]
+
+    print("\n--- Final Sentences ---")
+    pprint(result)
+    return result
 
 
 # <-------------------------------------------------- May 26th, 2024 -------------------------------------------------->
@@ -1047,12 +1111,15 @@ k = 2
 words = ["dog", "cat", "dad", "good"]
 letters = ["a", "a", "c", "d", "d", "d", "g", "o", "o"]
 score = [1, 0, 9, 5, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-
 # maxScoreWords1(words, letters, score)  # Expected output: 23
-maxScoreWords2(words, letters, score)  # Expected output: 23
+# maxScoreWords2(words, letters, score)  # Expected output: 23
 
 # May 25th
-# ...
+s_2 = "catsanddog"
+wordDict = ["cat", "cats", "and", "sand", "dog"]
+# wordBreak1(s_2, wordDict)  # Expected output: ["cats and dog", "cat sand dog"]
+# wordBreak2(s_2, wordDict)  # Expected output: ["cats and dog", "cat sand dog"]
+# wordBreak3(s_2, wordDict)  # Expected output: ["cats and dog", "cat sand dog"]
 
 # May 26th
 n = 2
