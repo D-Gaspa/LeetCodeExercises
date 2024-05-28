@@ -1,13 +1,12 @@
 from collections import defaultdict
 from pprint import pprint
-from tabulate import tabulate
 from typing import List
 
+from tabulate import tabulate
 
-# TODO: Add function parameters and return types to the function definitions.
+
 # TODO: Add thorough debug statements to improve example outputs.
 # - To be completed:
-# - May 23rd
 # - May 24th
 # - May 25th
 
@@ -528,35 +527,80 @@ def maxScoreWords1(words: List[str], letters: List[str], score: List[int]) -> in
     The time complexity of this solution is O(2^n * L) where n is the number of words, and L is the average length of
     the words in the input list.
     """
+    table_data = []
 
-    def backtrack(start: int, current_score: int, available_letters: List[int]):
+    # Print the input parameters for debugging
+    print(f"Input Parameters: words = {words}, letters = {letters}, score = {score}")
+
+    def backtrack(start: int, current_words: List[str], current_score: int, available_letters: List[int], depth=0):
         """Backtracking function to generate all valid sets of words and calculate their scores."""
         nonlocal max_score  # Access the outer variable
 
-        max_score = max(max_score, current_score)  # Update the maximum score
+        indent = "  " * depth  # For visual indentation based on recursion depth
+        print(f"{indent}Exploring from word index {start} with current words: {current_words}, score: {current_score}")
 
-        for i in range(start, len(words)):
-            word = words[i]
+        if current_score > max_score:
+            max_score = current_score
+            print(f"{indent}Updated max_score to {max_score}")
+
+        # Create a formatted string for available letters
+        available_letters_str = ", ".join([
+            f"{chr(i + ord('a'))} = {count}" for i, count in enumerate(available_letters) if count > 0
+        ])
+
+        # Add formatted string to table data
+        table_data.append([depth, start, current_words[:], current_score, max_score, available_letters_str])
+
+        for index in range(start, len(words)):
+            word = words[index]
             word_score = 0
             valid_word = True
+            original_available_letters = available_letters[:]
 
-            for char in word:  # Calculate the score of the current word and check if it's valid
-                available_letters[ord(char) - ord('a')] -= 1
-                word_score += score[ord(char) - ord('a')]
-
-                if available_letters[ord(char) - ord('a')] < 0:
-                    valid_word = False  # The word is not valid if a letter count becomes negative
-
-            if valid_word:  # If the word is valid, continue backtracking with the next word
-                backtrack(i + 1, current_score + word_score, available_letters)
-
-            # Backtrack by restoring the letter counts
+            print(f"{indent}  Checking word '{word}'...")
             for char in word:
-                available_letters[ord(char) - ord('a')] += 1
+                letter_index = ord(char) - ord('a')
+                available_letters[letter_index] -= 1
+                word_score += score[letter_index]
+
+                if available_letters[letter_index] < 0:
+                    print(f"{indent}    Invalid! Letter '{char}' not available.")
+                    valid_word = False
+                    break  # Stop checking this word early
+
+            if valid_word:
+                current_words.append(word)
+                print(f"{indent}    Valid! Adding '{word}' to current words, new score: {current_score + word_score}")
+                backtrack(index + 1, current_words, current_score + word_score, available_letters, depth + 1)
+                current_words.pop()
+                print(f"{indent}    Backtracking, removing '{word}' from current words")
+
+            # Restore available letters for backtracking
+            available_letters = original_available_letters[:]
+            print(f"{indent}  Available letters restored:")
+
+            # Create a formatted string for available letters
+            available_letters_str = ", ".join([
+                f"{chr(i + ord('a'))} = {count}" for i, count in enumerate(available_letters) if count > 0
+            ])
+
+            print(f"{indent}  {available_letters_str}")
 
     max_score = 0
-    available_letters = [letters.count(chr(i + ord('a'))) for i in range(26)]  # Compute the count of each letter
-    backtrack(0, 0, available_letters)  # Start backtracking from the beginning
+    available_letters = [letters.count(chr(i + ord('a'))) for i in range(26)]
+    print("Initial available letters:")
+    print(", ".join([f"{chr(i + ord('a'))} = {count}" for i, count in enumerate(available_letters) if count > 0]))
+
+    print("\n--- Backtracking: Exploring Valid Sets of Words ---")
+    backtrack(0, [], 0, available_letters)
+
+    print("\n--- Backtracking Exploration ---")
+    print(tabulate(table_data,
+                   headers=["Depth", "Word Index", "Current Words", "Current Score", "Max Score", "Available Letters"],
+                   tablefmt="fancy_grid"))
+
+    print(f"\n--- Final Max Score: {max_score} ---")
+
     return max_score
 
 
@@ -568,66 +612,81 @@ def maxScoreWords2(words: List[str], letters: List[str], score: List[int]) -> in
     The time complexity of this solution is O(2^n * L) where n is the number of words, and L is the average length of
     the words in the input list.
     """
-
     n = len(words)
-    max_scores_by_word_idx = [0] * n  # Memoized max scores for each starting word
+    max_scores_by_word_index = [0] * n
     word_scores = [0] * n
     available_letter_counts = [0] * 26
+    table_data = []
 
-    # Precalculate word scores and available letter counts
+    print("\n--- Precalculating Word Scores and Letter Counts ---")
     for letter in letters:
         available_letter_counts[ord(letter) - ord('a')] += 1
-    for i, word in enumerate(words):
+    print("Available letters:")
+    print(", ".join([f"{chr(i + ord('a'))} = {count}" for i, count in enumerate(available_letter_counts) if count > 0]))
+
+    print("\nWord scores:")
+    for index, word in enumerate(words):
         for char in word:
             char_code = ord(char) - ord('a')
             if available_letter_counts[char_code] > 0:
-                word_scores[i] += score[char_code]
-            else:  # Word cannot be formed with available letters
-                word_scores[i] = -1
+                word_scores[index] += score[char_code]
+            else:
+                word_scores[index] = -1
                 break
+        table_data.append([index, word, word_scores[index]])
+    print(tabulate(table_data, headers=["Index", "Word", "Score"], tablefmt="fancy_grid"))
 
-    visited_states = set()  # Track combinations to avoid redundancy
+    visited_states = set()
 
-    def backtrack(word_index: int, current_score: int, used_words_bitmask: int, letter_counts: List[int]):
-        """Recursively explore valid word combinations and update max_scores_by_word_idx."""
+    def backtrack(word_index: int, current_score: int, used_words_bitmask: int, available_letters: List[int], depth=0):
+        nonlocal max_scores_by_word_index
 
-        # Mark the current word as used (set the corresponding bit in the bitmask)
+        indent = "  " * depth
+        print(
+            f"{indent}Backtracking from word index {word_index}, current score: {current_score}, "
+            f"used words: {bin(used_words_bitmask)[2:].zfill(n)}")
+
         used_words_bitmask |= (1 << word_index)
-        if word_index == n:  # Base case: reached the end of the word list
+        if word_index == n:
+            print(f"{indent}Base case reached (all words processed).")
             return
-        if used_words_bitmask in visited_states:  # Skip redundant exploration
+        if used_words_bitmask in visited_states:
+            print(f"{indent}Skipping redundant state.")
             return
-        if word_scores[word_index] == -1:  # Skip words that cannot be formed
+        if word_scores[word_index] == -1:
+            print(f"{indent}Skipping word '{words[word_index]}' (cannot be formed).")
             return
 
         # Check if the current combination is valid (enough letters available)
-        for i in range(26):
-            if letter_counts[i] > available_letter_counts[i]:
+        for index in range(26):
+            if available_letters[index] > available_letter_counts[index]:
+                print(f"{indent}Invalid combination. Not enough letters available.")
                 return
 
-        visited_states.add(used_words_bitmask)  # Mark the current combination as visited
+        visited_states.add(used_words_bitmask)
         current_score += word_scores[word_index]
-        max_scores_by_word_idx[word_index] = max(max_scores_by_word_idx[word_index], current_score)
+        print(f"{indent}Valid combination! Current score updated to {current_score}.")
+        max_scores_by_word_index[word_index] = max(max_scores_by_word_index[word_index], current_score)
 
         # Recursively explore the next word combinations
         for next_word_index in range(word_index + 1, n):
-            for char in words[next_word_index]:  # Update letter counts for the next word
-                letter_counts[ord(char) - ord('a')] += 1
-            backtrack(next_word_index, current_score, used_words_bitmask, letter_counts)  # Recursive call
-            for char in words[next_word_index]:  # Restore letter counts before moving to the next word
-                letter_counts[ord(char) - ord('a')] -= 1
+            for char in words[next_word_index]:
+                available_letters[ord(char) - ord('a')] += 1
+            backtrack(next_word_index, current_score, used_words_bitmask, available_letters, depth + 1)
+            for char in words[next_word_index]:
+                available_letters[ord(char) - ord('a')] -= 1
 
     overall_max_score = 0
-
-    # Start backtracking from each word index and update the overall maximum score
-    for idx in range(n):
+    for index in range(n):
         available_letters = [0] * 26
-        for char in words[idx]:  # Count letters in the starting word
+        for char in words[index]:
             available_letters[ord(char) - ord('a')] += 1
 
-        used_words_bitmask = 1 << idx  # Mark the starting word as used
-        backtrack(idx, 0, used_words_bitmask, available_letters)
-        overall_max_score = max(overall_max_score, max_scores_by_word_idx[idx])
+        used_words_bitmask = 1 << index
+        backtrack(index, 0, used_words_bitmask, available_letters)
+        overall_max_score = max(overall_max_score, max_scores_by_word_index[index])
+
+    print(f"\n--- Final Max Score: {overall_max_score} ---")
 
     return overall_max_score
 
@@ -985,7 +1044,12 @@ k = 2
 # beautifulSubsets3(nums_3, k)  # Expected output: 4
 
 # May 24th
-# ...
+words = ["dog", "cat", "dad", "good"]
+letters = ["a", "a", "c", "d", "d", "d", "g", "o", "o"]
+score = [1, 0, 9, 5, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+# maxScoreWords1(words, letters, score)  # Expected output: 23
+maxScoreWords2(words, letters, score)  # Expected output: 23
 
 # May 25th
 # ...
