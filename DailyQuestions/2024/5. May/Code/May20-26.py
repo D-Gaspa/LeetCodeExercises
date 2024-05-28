@@ -152,6 +152,8 @@ def subsets2(nums: List[int]) -> List[List[int]]:
     :param nums: List of integers with unique elements
     :return: List of all possible subsets
     """
+    # Print the input parameters for debugging
+    print(f"Input Parameters: nums = {nums}")
 
     def backtrack(start: int, current_subset: List[int], depth: int = 0):
         """
@@ -223,31 +225,67 @@ def partition1(s: str) -> List[List[str]]:
 
     This solution uses backtracking to generate all palindrome partitions.
     The time complexity of this solution is O(n * 2^n) where n is the length of the input string.
+    :param s: Input string
+    :return: List of all possible palindrome partitions
     """
+    # Print the input parameters for debugging
+    print(f"Input Parameters: s = {s}")
 
-    def is_palindrome(s, start, end):
-        """Checks if a substring is a palindrome."""
-        while start < end:
-            if s[start] != s[end]:
+    print("\n--- Palindrome Partitioning ---")
+
+    def is_palindrome(s, start_index, end_index, depth=0):
+        """
+        Checks if a substring is a palindrome.
+        :param s: Input string
+        :param start_index: Start index of the substring
+        :param end_index: End index of the substring
+        :param depth: Recursion depth for visual indentation
+        :return: True if the substring is a palindrome, False otherwise
+        """
+        indent = "  " * depth  # For visual indentation based on recursion depth
+        print(f"{indent}Checking if '{s[start_index:end_index + 1]}' is a palindrome...")
+        while start_index < end_index:
+            if s[start_index] != s[end_index]:
+                print(f"{indent}Not a palindrome. Characters at indices {start_index} and {end_index} don't match.")
                 return False
-            start += 1
-            end -= 1
+            start_index += 1
+            end_index -= 1
+        print(f"{indent}Palindrome!")
         return True
 
-    def backtrack(start: int, current_partition: List[str]):
-        """Backtracking function to generate all palindrome partitions."""
-        if start == len(s):
-            result.append(current_partition[:])  # Found a valid partition
+    def backtrack(start_index: int, current_partition: List[str], depth: int = 0):
+        """
+        Backtracking function to generate all palindrome partitions.
+        :param start_index: Start index for the current partition being generated
+        :param current_partition: Current partition being generated
+        :param depth: Recursion depth for visual indentation
+        :return: None
+        """
+        indent = "  " * depth  # For visual indentation based on recursion depth
+        print(f"{indent}Backtracking from index {start_index} with partition:", current_partition)
+
+        if start_index == len(s):
+            result.append(current_partition[:])
+            print(f"{indent}Found a valid partition: {current_partition}")
             return
 
-        for end in range(start, len(s)):
-            if is_palindrome(s, start, end):
-                current_partition.append(s[start:end + 1])
-                backtrack(end + 1, current_partition)
-                current_partition.pop()  # Backtrack by removing the last element
+        for end_index in range(start_index, len(s)):
+            if is_palindrome(s, start_index, end_index, depth + 1):  # Pass depth to is_palindrome
+                current_partition.append(s[start_index:end_index + 1])
+                print(f"{indent}Adding '{s[start_index:end_index + 1]}' to partition: {current_partition}")
+                backtrack(end_index + 1, current_partition, depth + 2)  # Recursive call with increased depth
+                current_partition.pop()
+                print(f"{indent}Backtracking, removing '{s[start_index:end_index + 1]}' "
+                      f"from partition: {current_partition}")
+            else:
+                print(f"{indent}Skipping '{s[start_index:end_index + 1]}', not a palindrome.")
 
     result = []
     backtrack(0, [])
+
+    print("\n--- All Palindrome Partitions ---")
+    table = tabulate(enumerate(result), headers=["Index", "Partition"], tablefmt="fancy_grid")
+    print(table)
     return result
 
 
@@ -257,31 +295,65 @@ def partition2(s: str) -> List[List[str]]:
 
     This solution uses dynamic programming and backtracking to generate all palindrome partitions.
     The time complexity of this solution is O(n * 2^n) where n is the length of the input string.
+    :param s: Input string
+    :return: List of all possible palindrome partitions
     """
+    # Print the input parameters for debugging
+    print(f"Input Parameters: s = {s}")
+
     n = len(s)
-    dp_table = [[False] * n for _ in range(n)]  # DP table to store palindrome substrings
+    is_palindrome = [[False] * n for _ in range(n)]  # DP table to store palindrome substrings
+    table_data = []
 
-    for start in range(n - 1, -1, -1):
-        for end in range(start, n):
-            # A substring is a palindrome if the start and end characters are the same,
-            # and the substring between them is also a palindrome
-            if s[start] == s[end] and (end - start < 2 or dp_table[start + 1][end - 1]):
-                dp_table[start][end] = True
+    print("\n--- Dynamic Programming: Palindrome Substrings ---")
 
-    def backtrack(start: int, current_partition: List[str]):
-        """Backtracking function to generate all palindrome partitions."""
-        if start == n:
-            result.append(current_partition[:])  # Found a valid partition
+    for start_index in range(n - 1, -1, -1):
+        for end_index in range(start_index, n):
+            if s[start_index] == s[end_index] and (
+                    end_index - start_index < 2 or is_palindrome[start_index + 1][end_index - 1]):
+                is_palindrome[start_index][end_index] = True
+                table_data.append([s[start_index:end_index + 1], start_index, end_index, True])
+            else:
+                table_data.append([s[start_index:end_index + 1], start_index, end_index, False])
+
+    print(tabulate(table_data, headers=["Substring", "Start", "End", "Is Palindrome?"], tablefmt="fancy_grid"))
+
+    print("\n--- Backtracking: Generating Palindrome Partitions ---")
+
+    def backtrack(start_index: int, current_partition: List[str], depth: int = 0):
+        """
+        Backtracking function to generate all palindrome partitions.
+        :param start_index: Start index for the current partition being generated
+        :param current_partition: Current partition being generated
+        :param depth: Recursion depth for visual indentation
+        :return: None
+        """
+        indent = "  " * depth  # For visual indentation based on recursion depth
+        print(f"{indent}Backtracking from index {start_index} with partition: {current_partition}")
+
+        if start_index == n:
+            result.append(current_partition[:])
+            print(f"{indent}Found a valid partition: {current_partition}")
             return
 
-        for end in range(start, n):
-            if dp_table[start][end]:
-                current_partition.append(s[start:end + 1])
-                backtrack(end + 1, current_partition)
-                current_partition.pop()  # Backtrack by removing the last element
+        for end_index in range(start_index, n):
+            if is_palindrome[start_index][end_index]:
+                current_partition.append(s[start_index:end_index + 1])
+                print(f"{indent}Adding '{s[start_index:end_index + 1]}' to partition: {current_partition}")
+                backtrack(end_index + 1, current_partition, depth + 1)
+                current_partition.pop()
+                print(
+                    f"{indent}Backtracking, removing '{s[start_index:end_index + 1]}' "
+                    f"from partition: {current_partition}")
+            else:
+                print(f"{indent}Skipping '{s[start_index:end_index + 1]}', not a palindrome.")
 
     result = []
     backtrack(0, [])
+
+    print("\n--- All Palindrome Partitions ---")
+    table = tabulate(enumerate(result), headers=["Index", "Partition"], tablefmt="fancy_grid")
+    print(table)
     return result
 
 
@@ -861,17 +933,19 @@ def checkRecord3(n: int) -> int:
 
 # May 20th
 nums = [5, 1, 6]
-# print(f"Sum of XOR totals: {subsetXORSum1(nums)}")  # Expected output: 28
-# print(f"Sum of XOR totals: {subsetXORSum2(nums)}")  # Expected output: 28
+# subsetXORSum1(nums)  # Expected output: 28
+# subsetXORSum2(nums)  # Expected output: 28
 
 # May 21st
 nums_2 = [1, 2, 3]
-# print(f"Subsets: {subsets1(nums_2)}")  # Expected output: [[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]]
-# print(f"Subsets: {subsets2(nums_2)}")  # Expected output: [[], [1], [1, 2], [1, 2, 3], [1, 3], [2], [2, 3], [3]]
-# print(f"Subsets: {subsets3(nums_2)}")  # Expected output: [[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]]
+# subsets1(nums_2)  # Expected output: [[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]]
+# subsets2(nums_2)  # Expected output: [[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]]
+# subsets3(nums_2)  # Expected output: [[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]]
 
 # May 22nd
-# ...
+s = "aab"
+# partition1(s)  # Expected output: [["a", "a", "b"], ["aa", "b"]]
+partition2(s)  # Expected output: [["a", "a", "b"], ["aa", "b"]]
 
 # May 23rd
 # ...
@@ -884,6 +958,6 @@ nums_2 = [1, 2, 3]
 
 # May 26th
 n = 2
-# print(f"Number of valid attendance records: {checkRecord1(n)}")  # Expected output: 8
-# print(f"Number of valid attendance records: {checkRecord2(n)}")  # Expected output: 8
-# print(f"Number of valid attendance records: {checkRecord3(n)}")  # Expected output: 8
+# checkRecord1(n)  # Expected output: 8
+# checkRecord2(n)  # Expected output: 8
+# checkRecord3(n)  # Expected output: 8
