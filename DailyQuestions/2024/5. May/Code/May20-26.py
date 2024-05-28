@@ -7,7 +7,6 @@ from typing import List
 # TODO: Add function parameters and return types to the function definitions.
 # TODO: Add thorough debug statements to improve example outputs.
 # - To be completed:
-# - May 22nd
 # - May 23rd
 # - May 24th
 # - May 25th
@@ -26,8 +25,6 @@ def subsetXORSum1(nums: List[int]) -> int:
 
     This solution uses bit manipulation to generate all subsets and calculate their XOR totals.
     The time complexity of this solution is O(2^n * n) where n is the length of the input list.
-    :param nums: List of integers
-    :return: Sum of XOR totals over all possible subsets
     """
     n = len(nums)
     result = 0
@@ -69,8 +66,6 @@ def subsetXORSum2(nums: List[int]) -> int:
 
     This solution uses a bitwise OR operation to combine all numbers and then calculates the sum of XOR totals.
     The time complexity of this solution is O(n) where n is the length of the input list.
-    :param nums: List of integers
-    :return: Sum of XOR totals over all possible subsets
     """
     combined_bits = 0
     table_data = []
@@ -111,9 +106,6 @@ def subsets1(nums: List[int]) -> List[List[int]]:
 
     This solution uses bit manipulation to generate all subsets.
     The time complexity of this solution is O(2^n * n) where n is the length of the input list.
-    The space complexity is O(2^n * n) as well since there are 2^n subsets, each with an average length of n.
-    :param nums: List of integers with unique elements
-    :return: List of all possible subsets
     """
     n = len(nums)
     result = []
@@ -149,20 +141,12 @@ def subsets2(nums: List[int]) -> List[List[int]]:
 
     This solution uses backtracking to generate all subsets.
     The time complexity of this solution is O(2^n * n) where n is the length of the input list.
-    :param nums: List of integers with unique elements
-    :return: List of all possible subsets
     """
     # Print the input parameters for debugging
     print(f"Input Parameters: nums = {nums}")
 
     def backtrack(start: int, current_subset: List[int], depth: int = 0):
-        """
-        Backtracking function to generate all possible subsets.
-        :param start: Starting index for the current subset being generated
-        :param current_subset: Current subset being generated
-        :param depth: Recursion depth for visual indentation
-        :return: None
-        """
+        """Backtracking function to generate all possible subsets."""
         indent = "  " * depth  # For visual indentation based on recursion depth
         print(f"{indent}Exploring from index {start} with current subset:", current_subset)
 
@@ -190,8 +174,6 @@ def subsets3(nums: List[int]) -> List[List[int]]:
 
     This solution uses an iterative approach to generate all subsets.
     The time complexity of this solution is O(2^n * n) where n is the length of the input list.
-    :param nums: List of integers with unique elements
-    :return: List of all possible subsets
     """
     result = [[]]
 
@@ -225,8 +207,6 @@ def partition1(s: str) -> List[List[str]]:
 
     This solution uses backtracking to generate all palindrome partitions.
     The time complexity of this solution is O(n * 2^n) where n is the length of the input string.
-    :param s: Input string
-    :return: List of all possible palindrome partitions
     """
     # Print the input parameters for debugging
     print(f"Input Parameters: s = {s}")
@@ -234,14 +214,7 @@ def partition1(s: str) -> List[List[str]]:
     print("\n--- Palindrome Partitioning ---")
 
     def is_palindrome(s, start_index, end_index, depth=0):
-        """
-        Checks if a substring is a palindrome.
-        :param s: Input string
-        :param start_index: Start index of the substring
-        :param end_index: End index of the substring
-        :param depth: Recursion depth for visual indentation
-        :return: True if the substring is a palindrome, False otherwise
-        """
+        """Checks if a substring is a palindrome."""
         indent = "  " * depth  # For visual indentation based on recursion depth
         print(f"{indent}Checking if '{s[start_index:end_index + 1]}' is a palindrome...")
         while start_index < end_index:
@@ -254,13 +227,7 @@ def partition1(s: str) -> List[List[str]]:
         return True
 
     def backtrack(start_index: int, current_partition: List[str], depth: int = 0):
-        """
-        Backtracking function to generate all palindrome partitions.
-        :param start_index: Start index for the current partition being generated
-        :param current_partition: Current partition being generated
-        :param depth: Recursion depth for visual indentation
-        :return: None
-        """
+        """Backtracking function to generate all palindrome partitions."""
         indent = "  " * depth  # For visual indentation based on recursion depth
         print(f"{indent}Backtracking from index {start_index} with partition:", current_partition)
 
@@ -295,8 +262,6 @@ def partition2(s: str) -> List[List[str]]:
 
     This solution uses dynamic programming and backtracking to generate all palindrome partitions.
     The time complexity of this solution is O(n * 2^n) where n is the length of the input string.
-    :param s: Input string
-    :return: List of all possible palindrome partitions
     """
     # Print the input parameters for debugging
     print(f"Input Parameters: s = {s}")
@@ -321,13 +286,7 @@ def partition2(s: str) -> List[List[str]]:
     print("\n--- Backtracking: Generating Palindrome Partitions ---")
 
     def backtrack(start_index: int, current_partition: List[str], depth: int = 0):
-        """
-        Backtracking function to generate all palindrome partitions.
-        :param start_index: Start index for the current partition being generated
-        :param current_partition: Current partition being generated
-        :param depth: Recursion depth for visual indentation
-        :return: None
-        """
+        """Backtracking function to generate all palindrome partitions."""
         indent = "  " * depth  # For visual indentation based on recursion depth
         print(f"{indent}Backtracking from index {start_index} with partition: {current_partition}")
 
@@ -376,19 +335,20 @@ def beautifulSubsets1(nums: List[int], k: int) -> int:
     current_subset = []
 
     def backtrack(start_index: int):
+        """Backtracking function to generate all subsets and check if they are beautiful."""
         nonlocal beautiful_count  # Access the outer variable
 
         # Base case: a subset is found, check if it's beautiful
         if len(current_subset) > 0:
-            for i in range(len(current_subset) - 1):
-                if abs(current_subset[i] - current_subset[-1]) == k:
+            for index in range(len(current_subset) - 1):
+                if abs(current_subset[index] - current_subset[-1]) == k:
                     return  # Not beautiful, prune the search
             beautiful_count += 1
 
         # Recursive case: try adding each remaining element
-        for i in range(start_index, n):
-            current_subset.append(nums[i])
-            backtrack(i + 1)  # Explore subsets starting from the next index
+        for index in range(start_index, n):
+            current_subset.append(nums[index])
+            backtrack(index + 1)  # Explore subsets starting from the next index
             current_subset.pop()  # Remove the last added element (backtracking)
 
     backtrack(0)  # Start backtracking from the beginning
@@ -945,7 +905,7 @@ nums_2 = [1, 2, 3]
 # May 22nd
 s = "aab"
 # partition1(s)  # Expected output: [["a", "a", "b"], ["aa", "b"]]
-partition2(s)  # Expected output: [["a", "a", "b"], ["aa", "b"]]
+# partition2(s)  # Expected output: [["a", "a", "b"], ["aa", "b"]]
 
 # May 23rd
 # ...
