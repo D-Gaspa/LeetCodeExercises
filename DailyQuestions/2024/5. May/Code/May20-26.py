@@ -5,12 +5,6 @@ from typing import List
 from tabulate import tabulate
 
 
-# TODO: Add thorough debug statements to improve example outputs.
-# - To be completed:
-# - May 24th
-# - May 25th
-
-
 # Week 4: May 20th - 26th
 
 # <-------------------------------------------------- May 20th, 2024 -------------------------------------------------->
