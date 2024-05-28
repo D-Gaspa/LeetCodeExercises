@@ -54,7 +54,7 @@ def subsetXORSum1(nums: List[int]) -> int:
         print(f"  - Subset XOR total: {xor}")
 
     print("\n--- Subsets and XOR Totals ---")
-    print(tabulate(table_data, headers=["Iteration (i)", "Bit Rep.", "Subset", "XOR Total"]))
+    print(tabulate(table_data, headers=["Iteration (i)", "Bit Rep.", "Subset", "XOR Total"], tablefmt="fancy_grid"))
 
     print(f"\n--- Final Sum of XOR Totals: {result} ---")
     return result
@@ -128,7 +128,8 @@ def subsets1(nums: List[int]) -> List[List[int]]:
         result.append(subset)
         table_data.append([i, bin(i)[2:].zfill(n), included_elements, subset])
 
-    print(tabulate(table_data, headers=["Iteration (i)", "Bit Rep.", "Included Indices", "Subset"]))
+    print(tabulate(table_data, headers=["Iteration (i)", "Bit Rep.", "Included Indices", "Subset"],
+                   tablefmt="fancy_grid"))
 
     print("\n--- Final Subsets ---")
     pprint(result)
@@ -333,25 +334,46 @@ def beautifulSubsets1(nums: List[int], k: int) -> int:
     n = len(nums)
     beautiful_count = 0
     current_subset = []
+    table_data = []
 
-    def backtrack(start_index: int):
+    # Print the input parameters for debugging
+    print(f"Input Parameters: nums = {nums}, k = {k}")
+
+    print("\n--- Backtracking: Generating Beautiful Subsets ---")
+
+    def backtrack(start_index: int, depth=0):
         """Backtracking function to generate all subsets and check if they are beautiful."""
         nonlocal beautiful_count  # Access the outer variable
+
+        indent = "  " * depth  # For visual indentation based on recursion depth
+        print(f"{indent}Exploring from index {start_index} with subset: {current_subset}")
 
         # Base case: a subset is found, check if it's beautiful
         if len(current_subset) > 0:
             for index in range(len(current_subset) - 1):
                 if abs(current_subset[index] - current_subset[-1]) == k:
-                    return  # Not beautiful, prune the search
+                    print(f"{indent}Not beautiful (difference of {k} found). Pruning.")
+                    return
             beautiful_count += 1
+            print(f"{indent}Beautiful subset found! Count updated: {beautiful_count}")
+
+        table_data.append([depth, start_index, current_subset[:], beautiful_count])  # Record the exploration steps
 
         # Recursive case: try adding each remaining element
         for index in range(start_index, n):
             current_subset.append(nums[index])
-            backtrack(index + 1)  # Explore subsets starting from the next index
-            current_subset.pop()  # Remove the last added element (backtracking)
+            print(f"{indent}Adding element {nums[index]} (index {index}) to subset: {current_subset}")
+            backtrack(index + 1, depth + 1)
+            current_subset.pop()
+            print(f"{indent}Backtracking, removing {nums[index]} (index {index}) from subset: {current_subset}")
 
     backtrack(0)  # Start backtracking from the beginning
+
+    print("\n--- Exploration Steps ---")
+    print(tabulate(table_data, headers=["Depth", "Start Index", "Subset", "Beautiful Count"], tablefmt="fancy_grid"))
+
+    print(f"\n--- Final Count of Beautiful Subsets: {beautiful_count} ---")
+
     return beautiful_count
 
 
@@ -365,43 +387,66 @@ def beautifulSubsets2(nums: List[int], k: int) -> int:
     total_count = 1
     remainder_groups = defaultdict(lambda: defaultdict(int))
     memo = {}
+    table_data = []
 
-    def count_beautiful_subsets(subsets: List[tuple], current_index: int) -> int:
+    # Print the input parameters for debugging
+    print(f"Input Parameters: nums = {nums}, k = {k}")
+
+    def count_beautiful_subsets(subsets: List[tuple], current_index: int, depth=0) -> int:
         """Recursively counts beautiful subsets starting from the current index."""
-        if current_index == len(subsets):
-            return 1  # Base case: empty subset is beautiful
+        indent = "  " * depth  # For visual indentation based on recursion depth
+        print(f"{indent}Exploring from index {current_index} with remaining subsets:")
+        pprint(subsets[current_index:])
 
-        # Create a key for the memoization dictionary based on the current index and remaining subsets
+        if current_index == len(subsets):
+            print(f"{indent}Base case reached. Empty subset is beautiful. Returning 1.")
+            return 1
+
         key = (current_index, tuple(subsets[current_index:]))
         if key in memo:
-            return memo[key]  # Return memoized result if available
+            print(f"{indent}Memoized result found: {memo[key]}")
+            return memo[key]
 
         # Divide the subsets into two groups, excluding and including the current number, then count them
-        exclude_count = count_beautiful_subsets(subsets, current_index + 1)
+        print(f"{indent}Excluding current number:")
+        exclude_count = count_beautiful_subsets(subsets, current_index + 1, depth + 1)
+
         include_count = (1 << subsets[current_index][1]) - 1
-
-        # If the next number is 'k' apart from the current number, it must be in a different subset, so skip it
+        print(f"{indent}Including current number:")
         if current_index + 1 < len(subsets) and subsets[current_index + 1][0] - subsets[current_index][0] == k:
-            include_count *= count_beautiful_subsets(subsets, current_index + 2)
+            print(f"{indent}  Skipping next number (difference of k).")
+            include_count *= count_beautiful_subsets(subsets, current_index + 2, depth + 1)
         else:
-            # Otherwise, the next number can be in the same subset, so include it
-            include_count *= count_beautiful_subsets(subsets, current_index + 1)
+            print(f"{indent}  Including next number.")
+            include_count *= count_beautiful_subsets(subsets, current_index + 1, depth + 1)
 
-        # Store the total count in memoization dictionary for future use, then return it
         total_count = exclude_count + include_count
         memo[key] = total_count
+        print(f"{indent}Memoizing result: {total_count} for key: {key}")
+
         return total_count
 
-    # Group numbers by their remainders when divided by k
+    print("\n--- Grouping Numbers by Remainders (Modulo k) ---")
     for num in nums:
         remainder_groups[num % k][num] += 1
+        table_data.append([num, num % k, remainder_groups[num % k][num]])  # Add data for table
+    print(tabulate(table_data, headers=["Number", "Remainder", "Count"], tablefmt="fancy_grid"))
 
-    # Calculate beautiful subsets for each remainder group
-    for group in remainder_groups.values():
+    table_data = []
+    print("\n--- Calculating Beautiful Subsets for Each Remainder Group ---")
+    for remainder, group in remainder_groups.items():
+        print(f"\nRemainder Group: {remainder}")
         sorted_subsets = sorted(group.items())
-        total_count *= count_beautiful_subsets(sorted_subsets, 0)
+        pprint(sorted_subsets)
+        group_count = count_beautiful_subsets(sorted_subsets, 0)
+        total_count *= group_count
+        table_data.append([remainder, group_count, total_count])
 
-    return total_count - 1  # Exclude the empty subset
+    print("\n--- Beautiful Subset Counts per Remainder Group ---")
+    print(tabulate(table_data, headers=["Remainder", "Group Count", "Total Count (Cumulative)"], tablefmt="fancy_grid"))
+
+    print(f"\nFinal total count (excluding empty set): {total_count - 1}")
+    return total_count - 1
 
 
 def beautifulSubsets3(nums: List[int], k: int) -> int:
@@ -413,34 +458,59 @@ def beautifulSubsets3(nums: List[int], k: int) -> int:
     """
     beautiful_count = 1
     remainder_groups = defaultdict(dict)
+    table_data = []
+
+    # Print the input parameters for debugging
+    print(f"Input Parameters: nums = {nums}, k = {k}")
 
     # Group numbers by their remainders when divided by k
+    print("\n--- Grouping Numbers by Remainders (Modulo k) ---")
     for num in nums:
         remainder_groups[num % k][num] = remainder_groups[num % k].get(num, 0) + 1
+        table_data.append([num, num % k, remainder_groups[num % k][num]])  # Add data for table
+    print(tabulate(table_data, headers=["Number", "Remainder", "Count"], tablefmt="fancy_grid"))
 
-    # Iterate over each remainder group
-    for group in remainder_groups.values():
+    table_data = []  # Reset table data
+
+    print("\n--- Calculating Beautiful Subsets for Each Remainder Group ---")
+    for remainder, group in remainder_groups.items():
+        print(f"\nRemainder Group: {remainder}")
         prev_num = -k  # Initialize with a number guaranteed not to be in nums
         count_excluding_prev, exclude_count = 1, 1
 
+        # Print initial values for the group
+        print(tabulate([["Initial", prev_num, 0, count_excluding_prev, exclude_count]],
+                       headers=["Step", "Current Number", "Frequency", "Count Excluding Prev", "Exclude Count"],
+                       tablefmt="fancy_grid"))
+
         # Iterate over sorted numbers in the group
         for num, frequency in sorted(group.items()):
-            include_count = (1 << frequency) - 1  # Count subsets with the current number
-
-            # If current and previous numbers differ by k, they must be in different subsets
+            include_count = (1 << frequency) - 1
             if num - prev_num == k:
+                print(f"  Difference of {k} found. Excluding previous number.")
                 include_count *= count_excluding_prev
             else:
-                # Otherwise, the previous number can be in the same subset, so include it
+                print("  No difference of k. Including previous number.")
                 include_count *= exclude_count
 
             # Update counts for the next iteration
             count_excluding_prev, exclude_count = exclude_count, exclude_count + include_count
+
+            # Append to table data for the current step
+            table_data.append([num, frequency, count_excluding_prev, exclude_count])
+
+            # Print the table for the current step
+            print(tabulate(table_data, headers=["Current Number", "Frequency", "Count Excluding Prev", "Exclude Count"],
+                           tablefmt="fancy_grid"))
+
             prev_num = num
 
-        beautiful_count *= exclude_count  # Update the overall count
+        # Print the final beautiful count for the group
+        print(f"Beautiful Subsets for Remainder {remainder}: {exclude_count}")
+        beautiful_count *= exclude_count
 
-    return beautiful_count - 1  # Exclude the empty subset
+    print(f"\nFinal total count (excluding empty set): {beautiful_count - 1}")
+    return beautiful_count - 1
 
 
 # <-------------------------------------------------- May 24th, 2024 -------------------------------------------------->
@@ -908,7 +978,11 @@ s = "aab"
 # partition2(s)  # Expected output: [["a", "a", "b"], ["aa", "b"]]
 
 # May 23rd
-# ...
+nums_3 = [2, 4, 6]
+k = 2
+# beautifulSubsets1(nums_3, k)  # Expected output: 4
+# beautifulSubsets2(nums_3, k)  # Expected output: 4
+# beautifulSubsets3(nums_3, k)  # Expected output: 4
 
 # May 24th
 # ...
