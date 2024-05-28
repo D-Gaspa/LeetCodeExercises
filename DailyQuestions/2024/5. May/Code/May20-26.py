@@ -6,8 +6,7 @@ from typing import List
 
 # TODO: Add function parameters and return types to the function definitions.
 # TODO: Add thorough debug statements to improve example outputs.
-# - TO be completed:
-# - May 21st
+# - To be completed:
 # - May 22nd
 # - May 23rd
 # - May 24th
@@ -112,6 +111,7 @@ def subsets1(nums: List[int]) -> List[List[int]]:
 
     This solution uses bit manipulation to generate all subsets.
     The time complexity of this solution is O(2^n * n) where n is the length of the input list.
+    The space complexity is O(2^n * n) as well since there are 2^n subsets, each with an average length of n.
     :param nums: List of integers with unique elements
     :return: List of all possible subsets
     """
@@ -170,7 +170,7 @@ def subsets2(nums: List[int]) -> List[List[int]]:
         for i in range(start, len(nums)):
             current_subset.append(nums[i])
             print(f"{indent}Adding element {nums[i]} (index {i}) to subset: {current_subset}")
-            backtrack(i + 1, current_subset, depth + 1)  # Recursive call with increased depth
+            backtrack(i + 1, current_subset, depth + 2)  # Recursive call with increased depth
             current_subset.pop()
             print(f"{indent}Backtracking, removing {nums[i]} (index {i}) from subset: {current_subset}")
 
@@ -193,13 +193,16 @@ def subsets3(nums: List[int]) -> List[List[int]]:
     """
     result = [[]]
 
+    # Print the input parameters for debugging
+    print(f"Input Parameters: nums = {nums}")
+
     print("\n--- Subset Generation ---")
-    print("Num | Existing Subsets  |  New Subsets")
-    print("----|-----------------|----------------")
 
     for num in nums:
         new_subsets = [curr + [num] for curr in result]
-        print(f"{num} | {result}  |  {new_subsets}")  # Print existing and new subsets
+
+        print(tabulate([[num, result, new_subsets]], headers=["Num", "Existing Subsets", "New Subsets"]))
+
         result += new_subsets  # Add new subsets to the result
 
     print("\n--- All Subsets ---")
