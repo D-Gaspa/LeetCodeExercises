@@ -108,7 +108,7 @@ def numSteps1(s: str) -> int:
     """
     Determines the number of steps needed to reduce the binary number 's' to 1.
 
-    This solution uses a brute-force approach to reduce the binary number to 1.
+    This solution converts the binary number to an integer and simulates the process of reducing it to 1.
     The time complexity of this solution is O(n), where 'n' is the length of the binary number.
     """
     num = int(s, 2)
@@ -128,7 +128,7 @@ def numSteps2(s: str) -> int:
     """
     Determines the number of steps needed to reduce the binary number 's' to 1.
 
-    This approach efficiently simulates the process by working with bits in reverse order.
+    This approach simulates the process by working with bits in reverse order.
     The time complexity of this solution is O(n), where 'n' is the length of the binary number.
     """
     steps = 0
