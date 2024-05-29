@@ -1,4 +1,8 @@
+from pprint import pprint
 from typing import List
+
+from tabulate import tabulate
+
 
 # Week 5: May 27th - May 31st
 
@@ -38,7 +42,7 @@ def specialArray1(nums: List[int]) -> int:
 # each character is the absolute difference of their ASCII values, and the total cost cannot exceed `max_cost`.
 
 
-def equalSubstring(s: str, t: str, max_cost: int) -> int:
+def equalSubstring1(s: str, t: str, max_cost: int) -> int:
     """
     Finds the length of the longest substring of 's' that can be transformed into the corresponding substring of 't'
     within the given budget 'max_cost'.
@@ -46,21 +50,49 @@ def equalSubstring(s: str, t: str, max_cost: int) -> int:
     This solution uses a sliding window approach to find the longest substring.
     The time complexity of this solution is O(n), where 'n' is the length of the input strings.
     """
+    # Print the input parameters for debugging
+    print(f"Input Parameters: s = {s}, t = {t}, max_cost = {max_cost}")
+
     n = len(s)
-    cost = [abs(ord(s[i]) - ord(t[i])) for i in range(n)]  # Calculate the cost of changing each character
+    cost = [abs(ord(s[i]) - ord(t[i])) for i in range(n)]
+
+    print("\n--- Initialization ---")
+    print("String Length (n):", n)
+    print("Cost Array:")
+    pprint(cost)
 
     start_index = 0
     total_cost = 0
     max_length = 0
 
-    for end_index in range(n):  # Sliding window
+    print("\n--- Sliding Window Iterations ---")
+    table_data = []
+    for end_index in range(n):
         total_cost += cost[end_index]
+
+        current_substring_s = s[start_index: end_index + 1]
+        current_substring_t = t[start_index: end_index + 1]
+
+        table_data.append([end_index, total_cost, start_index, max_length, current_substring_s, current_substring_t])
 
         while total_cost > max_cost:
             total_cost -= cost[start_index]
             start_index += 1
+            table_data[-1][2] = start_index
+            current_substring_s = s[start_index: end_index + 1]
+            current_substring_t = t[start_index: end_index + 1]
+            table_data[-1][4] = current_substring_s
+            table_data[-1][5] = current_substring_t
 
         max_length = max(max_length, end_index - start_index + 1)
+        table_data[-1][3] = max_length
+
+        # Print table for each iteration
+        print(tabulate(table_data, headers=["End Index", "Total Cost", "Start Index", "Max Length", "Substring (s)",
+                                            "Substring (t)"], tablefmt="fancy_grid"))
+
+    print("\n--- Final Result ---")
+    print("Maximum Substring Length:", max_length)
 
     return max_length
 
@@ -68,27 +100,10 @@ def equalSubstring(s: str, t: str, max_cost: int) -> int:
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
 # Test cases for May 27th, 2024
-nums = [3, 5]
-print(specialArray1(nums))  # Output: 2
 
-nums = [0, 0]
-print(specialArray1(nums))  # Output: -1
-
-nums = [0, 4, 3, 0, 4]
-print(specialArray1(nums))  # Output: 3
+# nums = [0, 4, 3, 0, 4]
+# print(specialArray1(nums))  # Output: 3
 
 # Test cases for May 28th, 2024
-s = "abcd"
-t = "bcdf"
-max_cost = 3
-print(equalSubstring(s, t, max_cost))  # Output: 3
 
-s = "abcd"
-t = "cdef"
-max_cost = 3
-print(equalSubstring(s, t, max_cost))  # Output: 1
-
-s = "abcd"
-t = "acde"
-max_cost = 0
-print(equalSubstring(s, t, max_cost))  # Output: 1
+equalSubstring1("abcd", "bcdf", 3)  # Expected output: 3
