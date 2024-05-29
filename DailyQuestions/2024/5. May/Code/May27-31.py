@@ -97,13 +97,45 @@ def equalSubstring1(s: str, t: str, max_cost: int) -> int:
     return max_length
 
 
+# <-------------------------------------------------- May 29th, 2024 -------------------------------------------------->
+# 1404. Number of Steps to Reduce a Number in Binary Representation to One
+
+# Given a string `s` representing a binary number, determine the number of steps needed to reduce it to the value of 1
+# by repeatedly dividing even numbers by 2 and adding 1 to odd numbers.
+
+
+def numSteps1(s: str) -> int:
+    """
+    Determines the number of steps needed to reduce the binary number 's' to 1.
+
+    This solution uses a brute-force approach to reduce the binary number to 1.
+    The time complexity of this solution is O(n), where 'n' is the length of the binary number.
+    """
+    num = int(s, 2)
+    steps = 0
+
+    while num != 1:
+        if num % 2 == 0:  # Same as num & 1 == 0 (check if the last bit is 0)
+            num //= 2  # Same as num >>= 1 (right shift by 1)
+        else:
+            num += 1
+        steps += 1
+
+    return steps
+
+
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
 # Test cases for May 27th, 2024
-
-# nums = [0, 4, 3, 0, 4]
-# print(specialArray1(nums))  # Output: 3
+nums = [0, 4, 3, 0, 4]
+# specialArray1(nums)  # Expected output: 3
 
 # Test cases for May 28th, 2024
+s = "abcd"
+t = "bcdf"
+max_cost = 3
+# equalSubstring1("s", "t", max_cost)  # Expected output: 3
 
-equalSubstring1("abcd", "bcdf", 3)  # Expected output: 3
+# Test cases for May 29th, 2024
+s_2 = "1101"
+# numSteps1(s_2)  # Expected output: 6
