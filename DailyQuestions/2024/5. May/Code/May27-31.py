@@ -124,6 +124,35 @@ def numSteps1(s: str) -> int:
     return steps
 
 
+def numSteps2(s: str) -> int:
+    """
+    Determines the number of steps needed to reduce the binary number 's' to 1.
+
+    This approach efficiently simulates the process by working with bits in reverse order.
+    The time complexity of this solution is O(n), where 'n' is the length of the binary number.
+    """
+    steps = 0
+    carry = 0
+
+    # Process bits from the second-to-last (most significant bit) to the first (least significant bit).
+    # We skip the last bit as it doesn't affect carry propagation when adding 1.
+    for index in range(len(s) - 1, 0, -1):
+        steps += 1  # Every bit operation (division or addition) requires a step
+
+        if s[index] == '1':  # Odd number
+            # If there's no carry, adding 1 will result in a carry
+            if carry == 0:
+                carry = 1
+                steps += 1  # Extra step due to carry propagation
+        else:  # Even number
+            # Only need an extra step if there was a carry from the previous (less significant) bit.
+            if carry == 1:
+                steps += 1
+
+    # If there's a final carry, it represents an extra step
+    return steps + carry
+
+
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
 # Test cases for May 27th, 2024
@@ -139,3 +168,4 @@ max_cost = 3
 # Test cases for May 29th, 2024
 s_2 = "1101"
 # numSteps1(s_2)  # Expected output: 6
+# numSteps2(s_2)  # Expected output: 6
