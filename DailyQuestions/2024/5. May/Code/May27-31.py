@@ -148,26 +148,51 @@ def numSteps2(s: str) -> int:
     This approach simulates the process by working with bits in reverse order.
     The time complexity of this solution is O(n), where 'n' is the length of the binary number.
     """
+    # Print the input parameter for debugging
+    print(f"Input Parameter: s = {s}")
+
     steps = 0
     carry = 0
+    table_data = []
 
-    # Process bits from the second-to-last (most significant bit) to the first (least significant bit).
-    # We skip the last bit as it doesn't affect carry propagation when adding 1.
+    print("\n--- Bit-by-Bit Iterations (Right-to-Left, Skipping Last Bit) ---")
     for index in range(len(s) - 1, 0, -1):
-        steps += 1  # Every bit operation (division or addition) requires a step
+        print(f"\nProcessing Bit at Index {index} ('{s[index]}'):")
+        steps_this_iteration = 1  # Initial step for processing the bit
 
-        if s[index] == '1':  # Odd number
-            # If there's no carry, adding 1 will result in a carry
+        if s[index] == '1':
+            print("  Odd Number Detected")
             if carry == 0:
                 carry = 1
-                steps += 1  # Extra step due to carry propagation
-        else:  # Even number
-            # Only need an extra step if there was a carry from the previous (less significant) bit.
+                print("  Carry Generated:", carry)
+                steps_this_iteration += 1
+            else:
+                print("  Existing Carry Maintained:", carry)
+        else:
+            print("  Even Number Detected")
             if carry == 1:
-                steps += 1
+                print("  Carry Consumed:", carry)
+                steps_this_iteration += 1
+            else:
+                print("  No Carry to Consume")
 
-    # If there's a final carry, it represents an extra step
-    return steps + carry
+        steps += steps_this_iteration  # Update total steps
+
+        # Add current state to table
+        table_data.append([index, s[index], carry, steps_this_iteration, steps])
+
+    print("\n--- Iteration Summary ---")
+    print(tabulate(table_data, headers=["Index", "Bit", "Carry", "Steps (Iteration)", "Total Steps"],
+                   tablefmt="fancy_grid"))
+
+    if carry == 1:
+        print(f"\n--- Final Carry Requires One More Step ---")
+        steps += 1
+
+    print(f"\n--- Total Steps to Reduce '{s}' to '1' ---")
+    print(steps)
+
+    return steps
 
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
@@ -184,5 +209,5 @@ max_cost = 3
 
 # Test cases for May 29th, 2024
 s_2 = "1101"
-numSteps1(s_2)  # Expected output: 6
+# numSteps1(s_2)  # Expected output: 6
 # numSteps2(s_2)  # Expected output: 6
