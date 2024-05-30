@@ -1,3 +1,4 @@
+from collections import defaultdict
 from pprint import pprint
 from typing import List
 
@@ -221,14 +222,46 @@ def countTriplets1(arr: List[int]) -> int:
     for start_index in range(n):
         for end_index in range(start_index + 1, n):
             if prefix_xor[start_index] == prefix_xor[end_index]:
-                # If XOR values are equal, increment triplet count by the number of valid triplets
+                # Triplet count is incremented by the number of elements between start_index and end_index.
+                # This is because the subarray from start_index+1 to end_index can be partitioned in multiple ways.
                 triplet_count += end_index - start_index - 1
 
     return triplet_count
 
 
 def countTriplets2(arr: List[int]) -> int:
-    pass
+    """
+    Counts the number of triplets that can form two arrays of equal XOR.
+
+    This solution uses a two-pass prefix XOR array to calculate the XOR values efficiently.
+    The time complexity of this solution is O(n), where 'n' is the number of elements in the input array.
+    """
+    # Generate prefix xor array
+    prefix_xor = [0]
+    for num in arr:
+        prefix_xor.append(prefix_xor[-1] ^ num)  # Calculate XOR value and append to prefix XOR array
+
+    triplet_count = 0
+    n = len(prefix_xor)
+
+    xor_count = defaultdict(int)  # Frequency of each prefix XOR value
+    xor_index_sum = defaultdict(int)  # Sum of indices where each prefix XOR value occurred
+
+    for index in range(n):
+        current_xor = prefix_xor[index]
+
+        # Calculate triplet count for current XOR value
+        # For each previously encountered 'current_xor', we can form (index - 1) new triplets
+        # This is because the longer the array with the same XOR, the more ways we can slice it into triplets.
+        # Thus, the number of new divisions (or ways to create triplets) will be (index - 1).
+        # Since we also have to account for over-counting of previous indices, we subtract 'xor_index_sum[current_xor]'
+        triplet_count += xor_count[current_xor] * (index - 1) - xor_index_sum[current_xor]
+
+        # Update maps for the current XOR
+        xor_index_sum[current_xor] += index
+        xor_count[current_xor] += 1
+
+    return triplet_count
 
 
 def countTriplets3(arr: List[int]) -> int:
@@ -258,5 +291,5 @@ s_2 = "1101"
 # Test cases for May 30th, 2024
 arr = [2, 3, 1, 6, 7]
 arr_2 = [1, 1, 1, 1, 1]
-countTriplets1(arr)  # Expected output: 4
-countTriplets1(arr_2)  # Expected output: 10
+# countTriplets2(arr)  # Expected output: 4
+# countTriplets2(arr_2)  # Expected output: 10
