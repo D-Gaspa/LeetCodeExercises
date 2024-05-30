@@ -195,6 +195,28 @@ def numSteps2(s: str) -> int:
     return steps
 
 
+# <-------------------------------------------------- May 30th, 2024 -------------------------------------------------->
+# 1442. Count Triplets That Can Form Two Arrays of Equal XOR
+
+# Given an integer array `arr`, count the number of triplets of indices `(i, j, k)` where `0 <= i < j <= k <
+# arr.length` and the bitwise XOR of elements from `i` to `j-1` equals the bitwise XOR from `j` to `k`.
+
+
+def countTriplets1(arr: List[int]) -> int:
+    pass
+
+
+def countTriplets2(arr: List[int]) -> int:
+    pass
+
+
+def countTriplets3(arr: List[int]) -> int:
+    pass
+
+
+# <-------------------------------------------------- May 31st, 2024 -------------------------------------------------->
+
+
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
 # Test cases for May 27th, 2024
