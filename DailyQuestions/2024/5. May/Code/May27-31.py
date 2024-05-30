@@ -111,16 +111,33 @@ def numSteps1(s: str) -> int:
     This solution converts the binary number to an integer and simulates the process of reducing it to 1.
     The time complexity of this solution is O(n), where 'n' is the length of the binary number.
     """
+    # Print the input parameter for debugging
+    print(f"Input Parameter: s = {s}")
+
     num = int(s, 2)
     steps = 0
 
+    print(f"\nInitial Binary: {s}  (Decimal: {num})")
+    print("\n--- Reduction Steps ---\n")
+
+    table_data = []
+
     while num != 1:
-        if num % 2 == 0:  # Same as num & 1 == 0 (check if the last bit is 0)
-            num //= 2  # Same as num >>= 1 (right shift by 1)
-        else:
-            num += 1
+        operation = "Divide by 2" if num % 2 == 0 else "Add 1"
+        next_num = num // 2 if num % 2 == 0 else num + 1
+
+        binary_num = bin(num)[2:]
+        binary_next_num = bin(next_num)[2:]
+
+        table_data.append([steps, binary_num, num, operation, binary_next_num, next_num])
+
+        num = next_num
         steps += 1
 
+    print(tabulate(table_data, headers=["Step", "Binary", "Decimal", "Operation", "New Binary", "New Decimal"],
+                   tablefmt="fancy_grid"))
+
+    print(f"\nFinal Result: {steps} steps\n")
     return steps
 
 
@@ -167,5 +184,5 @@ max_cost = 3
 
 # Test cases for May 29th, 2024
 s_2 = "1101"
-# numSteps1(s_2)  # Expected output: 6
+numSteps1(s_2)  # Expected output: 6
 # numSteps2(s_2)  # Expected output: 6
