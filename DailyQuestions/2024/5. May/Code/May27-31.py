@@ -262,7 +262,7 @@ def countTriplets2(arr: List[int]) -> int:
     n = len(prefix_xor)
 
     xor_count = defaultdict(int)  # Frequency of each prefix XOR value
-    xor_index_sum = defaultdict(int)  # Sum of indices where each prefix XOR value occurred
+    xor_index_sum = defaultdict(int)  # Sum of indices for each prefix XOR value
 
     for index in range(n):
         current_xor = prefix_xor[index]
@@ -278,7 +278,41 @@ def countTriplets2(arr: List[int]) -> int:
 
 
 def countTriplets3(arr: List[int]) -> int:
-    pass
+    """
+    Counts the number of triplets that can form two arrays with equal XOR.
+
+    This solution optimizes `countTriplets2` by combining prefix XOR calculation and triplet count calculation
+    in just a single pass through the array.
+    It maintains a running prefix variable (`prefix_xor`) that stores the XOR
+    of elements up to the current index, and gets updated with each iteration by XORing it with the current element.
+    This eliminates the need for a separate prefix XOR computation step, making this approach more efficient.
+
+    The time complexity of this solution is O(n), where 'n' is the number of elements in the input array.
+    This is because we only iterate through the array once and use maps to store the XOR values.
+    """
+    triplet_count = 0
+    prefix_xor = 0
+
+    xor_count = defaultdict(int)  # Frequency of each prefix XOR value
+
+    # Initialize the count of XOR 0 to 1 to account for the cases where a valid triplet is found at the start of the
+    # array where XOR is zero.
+    xor_count[0] = 1
+
+    xor_index_sum = defaultdict(int)  # Sum of indices for each prefix XOR value
+
+    for index, num in enumerate(arr):
+        # Update prefix XOR with the current number
+        prefix_xor ^= num
+
+        # Calculate triplet count for current XOR value
+        triplet_count += xor_count[prefix_xor] * index - xor_index_sum[prefix_xor]
+
+        # Update maps for the current XOR
+        xor_index_sum[prefix_xor] += index + 1
+        xor_count[prefix_xor] += 1
+
+    return triplet_count
 
 
 # <-------------------------------------------------- May 31st, 2024 -------------------------------------------------->
@@ -303,6 +337,6 @@ s_2 = "1101"
 
 # Test cases for May 30th, 2024
 arr = [2, 3, 1, 6, 7]
-arr_2 = [1, 1, 1, 1, 1]
+# countTriplets1(arr)  # Expected output: 4
 # countTriplets2(arr)  # Expected output: 4
-# countTriplets2(arr_2)  # Expected output: 10
+# countTriplets3(arr)  # Expected output: 4
