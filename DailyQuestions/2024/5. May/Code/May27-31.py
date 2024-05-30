@@ -208,7 +208,13 @@ def countTriplets1(arr: List[int]) -> int:
     Counts the number of triplets that can form two arrays of equal XOR.
 
     This solution uses a prefix XOR array to calculate the XOR values efficiently.
-    The time complexity of this solution is O(n^2), where 'n' is the number of elements in the input array.
+    If we consider the XOR from index 0 to indices i and j respectively (where i < j),
+    and find that those XORs are equal, then the XOR from index i+1 to j must be 0.
+    This is because the XOR of a number with itself is 0. We can deduce it follows that
+    the array can be sliced at index i+1 to form two subarrays with equal XORs.
+
+    The time complexity of this solution is O(n^2), where 'n' is the number of elements in the array.
+    This is because for each starting index, we are looping through the rest of the array.
     """
     # Generate prefix xor array
     prefix_xor = [0]
@@ -233,8 +239,19 @@ def countTriplets2(arr: List[int]) -> int:
     """
     Counts the number of triplets that can form two arrays of equal XOR.
 
-    This solution uses a two-pass prefix XOR array to calculate the XOR values efficiently.
+    This solution adopts a more efficient approach than `countTriplets1` by computing a prefix XOR array in a single
+    pass, keeping track of the number of occurrences and cumulative indices of each XOR value encountered.
+    However, with `countTriplets2`, we don't explicitly calculate every triplet.
+    Instead, for each XOR value, we calculate how many new triplets are added based on already encountered XORs.
+
+    Specifically, for each previously encountered 'current_xor', we can form (index - 1) new triplets.
+    This is because the longer the array with the same XOR,
+    the more divisions there are that can split the array into triplets with equal XORs.
+    Since we also have to account for over-counting of previous indices, we subtract the sum of indices where
+    the current XOR value occurred.
+
     The time complexity of this solution is O(n), where 'n' is the number of elements in the input array.
+    This is because we are iterating through the array only once and using maps to store the XOR values.
     """
     # Generate prefix xor array
     prefix_xor = [0]
@@ -251,10 +268,6 @@ def countTriplets2(arr: List[int]) -> int:
         current_xor = prefix_xor[index]
 
         # Calculate triplet count for current XOR value
-        # For each previously encountered 'current_xor', we can form (index - 1) new triplets
-        # This is because the longer the array with the same XOR, the more ways we can slice it into triplets.
-        # Thus, the number of new divisions (or ways to create triplets) will be (index - 1).
-        # Since we also have to account for over-counting of previous indices, we subtract 'xor_index_sum[current_xor]'
         triplet_count += xor_count[current_xor] * (index - 1) - xor_index_sum[current_xor]
 
         # Update maps for the current XOR
