@@ -203,7 +203,28 @@ def numSteps2(s: str) -> int:
 
 
 def countTriplets1(arr: List[int]) -> int:
-    pass
+    """
+    Counts the number of triplets that can form two arrays of equal XOR.
+
+    This solution uses a prefix XOR array to calculate the XOR values efficiently.
+    The time complexity of this solution is O(n^2), where 'n' is the number of elements in the input array.
+    """
+    # Generate prefix xor array
+    prefix_xor = [0]
+    for num in arr:
+        prefix_xor.append(prefix_xor[-1] ^ num)  # Calculate XOR value and append to prefix XOR array
+
+    triplet_count = 0
+    n = len(prefix_xor)
+
+    # Iterate over potential triplets
+    for start_index in range(n):
+        for end_index in range(start_index + 1, n):
+            if prefix_xor[start_index] == prefix_xor[end_index]:
+                # If XOR values are equal, increment triplet count by the number of valid triplets
+                triplet_count += end_index - start_index - 1
+
+    return triplet_count
 
 
 def countTriplets2(arr: List[int]) -> int:
@@ -233,3 +254,9 @@ max_cost = 3
 s_2 = "1101"
 # numSteps1(s_2)  # Expected output: 6
 # numSteps2(s_2)  # Expected output: 6
+
+# Test cases for May 30th, 2024
+arr = [2, 3, 1, 6, 7]
+arr_2 = [1, 1, 1, 1, 1]
+countTriplets1(arr)  # Expected output: 4
+countTriplets1(arr_2)  # Expected output: 10
