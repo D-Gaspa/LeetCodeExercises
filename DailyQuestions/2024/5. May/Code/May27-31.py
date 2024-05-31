@@ -216,22 +216,32 @@ def countTriplets1(arr: List[int]) -> int:
     The time complexity of this solution is O(n^2), where 'n' is the number of elements in the array.
     This is because for each starting index, we are looping through the rest of the array.
     """
-    # Generate prefix xor array
+    # Print the input parameter for debugging
+    print(f"Input Parameter: arr = {arr}")
+
     prefix_xor = [0]
-    for num in arr:
-        prefix_xor.append(prefix_xor[-1] ^ num)  # Calculate XOR value and append to prefix XOR array
+    print("\nBuilding Prefix XOR Array:")
+    table_data = [["Index", "Number", "Prefix XOR"]]  # Headers for the table
+    for i, num in enumerate(arr):
+        prefix_xor.append(prefix_xor[-1] ^ num)
+        table_data.append([i, num, prefix_xor[-1]])  # Add data row to table
+    print(tabulate(table_data, headers='firstrow', tablefmt='fancy_grid'))
 
     triplet_count = 0
     n = len(prefix_xor)
 
-    # Iterate over potential triplets
+    print("\nChecking for Triplets:")
     for start_index in range(n):
         for end_index in range(start_index + 1, n):
             if prefix_xor[start_index] == prefix_xor[end_index]:
-                # Triplet count is incremented by the number of elements between start_index and end_index.
-                # This is because the subarray from start_index+1 to end_index can be partitioned in multiple ways.
-                triplet_count += end_index - start_index - 1
+                count_increment = end_index - start_index - 1
+                print(f"\t- Found triplet at indices ({start_index}, {end_index}):")
+                print(f"\t\tPrefix XOR values match: {prefix_xor[start_index]}")
+                print(f"\t\tIncrementing count by: {count_increment}")
+                triplet_count += count_increment
 
+    print("\nFinal Triplet Count:")
+    pprint(triplet_count)  # Use pprint for clean output
     return triplet_count
 
 
@@ -337,6 +347,6 @@ s_2 = "1101"
 
 # Test cases for May 30th, 2024
 arr = [2, 3, 1, 6, 7]
-# countTriplets1(arr)  # Expected output: 4
-# countTriplets2(arr)  # Expected output: 4
-# countTriplets3(arr)  # Expected output: 4
+countTriplets1(arr)  # Expected output: 4
+countTriplets2(arr)  # Expected output: 4
+countTriplets3(arr)  # Expected output: 4
