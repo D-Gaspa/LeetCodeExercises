@@ -340,6 +340,37 @@ def countTriplets3(arr: List[int]) -> int:
 
 
 # <-------------------------------------------------- May 31st, 2024 -------------------------------------------------->
+# 260. Single Number III
+
+# Given an integer array `nums`, in which exactly two elements appear only once and all the other elements appear
+# exactly twice, return the two elements (in any order) that appear only once.
+
+def singleNumber1(nums: List[int]) -> List[int]:
+    """
+    Finds the two elements that appear only once in the given integer array.
+
+    This solution uses the high-level strategy of using a dictionary to store the frequency of each number in the array.
+    The keys in the dictionary represent the unique numbers in the array, and their corresponding values represent
+    the frequency of each number.
+
+    After going through the entire array and filling the dictionary,
+    the function iterates over the entries in the dictionary and identifies the numbers that occur only once.
+    It does this by checking if the value associated with the dictionary key is 1.
+
+    The time complexity of this solution is O(n), where 'n' is the number of elements in the input array.
+    This is because we only iterate through the array and the dictionary once, hence the time complexity is linear.
+    The space complexity is also O(n) because the dictionary can store up to n unique numbers.
+    """
+    element_counts = {}
+
+    for num in nums:
+        # Increment the count of the number in the dictionary or add it if it doesn't exist
+        element_counts[num] = element_counts.get(num, 0) + 1
+
+    # Find the unique elements that appear only once
+    unique_elements = [num for num, count in element_counts.items() if count == 1]
+
+    return unique_elements
 
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
@@ -361,6 +392,11 @@ s_2 = "1101"
 
 # Test cases for May 30th, 2024
 arr = [2, 3, 1, 6, 7]
-countTriplets1(arr)  # Expected output: 4
-countTriplets2(arr)  # Expected output: 4
-countTriplets3(arr)  # Expected output: 4
+# countTriplets1(arr)  # Expected output: 4
+# countTriplets2(arr)  # Expected output: 4
+# countTriplets3(arr)  # Expected output: 4
+
+# Test cases for May 31st, 2024
+nums_2 = [1, 2, 1, 3, 2, 5]
+singleNumber1(nums_2)  # Expected output: [3, 5]
+singleNumber2(nums_2)  # Expected output: [3, 5]
