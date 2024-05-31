@@ -263,27 +263,35 @@ def countTriplets2(arr: List[int]) -> int:
     The time complexity of this solution is O(n), where 'n' is the number of elements in the input array.
     This is because we are iterating through the array only once and using maps to store the XOR values.
     """
-    # Generate prefix xor array
-    prefix_xor = [0]
-    for num in arr:
-        prefix_xor.append(prefix_xor[-1] ^ num)  # Calculate XOR value and append to prefix XOR array
-
     triplet_count = 0
-    n = len(prefix_xor)
+    xor_count = defaultdict(int)
+    xor_index_sum = defaultdict(int)
 
-    xor_count = defaultdict(int)  # Frequency of each prefix XOR value
-    xor_index_sum = defaultdict(int)  # Sum of indices for each prefix XOR value
+    print("\nBuilding Prefix XOR Array:")
+    prefix_xor = [0]
 
-    for index in range(n):
-        current_xor = prefix_xor[index]
+    table_data = []
+    for i, num in enumerate(arr):
+        prefix_xor.append(prefix_xor[-1] ^ num)
+        table_data.append([i, num, prefix_xor[-1]])
+    print(tabulate(table_data, headers=["Index", "Number", "Prefix XOR"], tablefmt="fancy_grid"))
 
-        # Calculate triplet count for current XOR value
-        triplet_count += xor_count[current_xor] * (index - 1) - xor_index_sum[current_xor]
+    print("\nIterating and Counting Triplets:")
+    table_data = [["Index", "Current XOR", "XOR Count", "Index Sum", "New Triplets", "Total Triplets"]]
+    for index, current_xor in enumerate(prefix_xor):
+        new_triplets = xor_count[current_xor] * (index - 1) - xor_index_sum[current_xor]
+        triplet_count += new_triplets
 
-        # Update maps for the current XOR
+        table_data.append(
+            [index, current_xor, xor_count[current_xor], xor_index_sum[current_xor], new_triplets, triplet_count])
+
         xor_index_sum[current_xor] += index
         xor_count[current_xor] += 1
 
+    print(tabulate(table_data, headers='firstrow', tablefmt='fancy_grid'))
+
+    print("\nFinal Triplet Count:")
+    pprint(triplet_count)
     return triplet_count
 
 
