@@ -263,6 +263,9 @@ def countTriplets2(arr: List[int]) -> int:
     The time complexity of this solution is O(n), where 'n' is the number of elements in the input array.
     This is because we are iterating through the array only once and using maps to store the XOR values.
     """
+    # Print the input parameter for debugging
+    print(f"Input Parameter: arr = {arr}")
+
     triplet_count = 0
     xor_count = defaultdict(int)
     xor_index_sum = defaultdict(int)
@@ -308,28 +311,31 @@ def countTriplets3(arr: List[int]) -> int:
     The time complexity of this solution is O(n), where 'n' is the number of elements in the input array.
     This is because we only iterate through the array once and use maps to store the XOR values.
     """
+    # Print the input parameter for debugging
+    print(f"Input Parameter: arr = {arr}")
+
     triplet_count = 0
     prefix_xor = 0
+    xor_count = defaultdict(int, {0: 1})
+    xor_index_sum = defaultdict(int)
 
-    xor_count = defaultdict(int)  # Frequency of each prefix XOR value
-
-    # Initialize the count of XOR 0 to 1 to account for the cases where a valid triplet is found at the start of the
-    # array where XOR is zero.
-    xor_count[0] = 1
-
-    xor_index_sum = defaultdict(int)  # Sum of indices for each prefix XOR value
-
+    print("\nIterating and Counting Triplets:")
+    table_data = [["Index", "Number", "Prefix XOR", "XOR Count", "Index Sum", "New Triplets", "Total Triplets"]]
     for index, num in enumerate(arr):
-        # Update prefix XOR with the current number
         prefix_xor ^= num
+        new_triplets = xor_count[prefix_xor] * index - xor_index_sum[prefix_xor]
+        triplet_count += new_triplets
 
-        # Calculate triplet count for current XOR value
-        triplet_count += xor_count[prefix_xor] * index - xor_index_sum[prefix_xor]
+        table_data.append(
+            [index, num, prefix_xor, xor_count[prefix_xor], xor_index_sum[prefix_xor], new_triplets, triplet_count])
 
-        # Update maps for the current XOR
         xor_index_sum[prefix_xor] += index + 1
         xor_count[prefix_xor] += 1
 
+    print(tabulate(table_data, headers='firstrow', tablefmt='fancy_grid'))
+
+    print("\nFinal Triplet Count:")
+    pprint(triplet_count)
     return triplet_count
 
 
