@@ -373,6 +373,44 @@ def singleNumber1(nums: List[int]) -> List[int]:
     return unique_elements
 
 
+def singleNumber2(nums: List[int]) -> List[int]:
+    """
+    Finds the two elements that appear only once in the given integer array.
+
+    This solution uses XOR properties to isolate two unique elements in an array.
+    By XORing all numbers, duplicates cancel out (a ^ a = 0), leaving the XOR of the two unique numbers.
+    This result has at least one set bit, differentiating the unique values.
+
+    Isolating this rightmost-set bit using bitwise operations (differentiating_bit = combined_xor & -combined_xor)
+    allows partitioning the array into two groups: numbers with this bit set and numbers without.
+    This works because the unique numbers have different values at this bit.
+    Within each group, XORing the elements eliminates duplicates, revealing the unique number within that group.
+
+    The time complexity of this solution is O(n), where 'n' is the number of elements in the input array.
+    This is because the function iterates through the array twice - once to find the cumulative XOR
+    and once to separate the numbers into two groups.
+    We improve the space complexity to O(1) by not using any additional data structures.
+    """
+    combined_xor = 0
+
+    for num in nums:
+        combined_xor ^= num
+
+    # Isolate the rightmost set bit to distinguish the two unique elements.
+    differentiating_bit = combined_xor & -combined_xor
+
+    num1, num2 = 0, 0
+
+    for num in nums:
+        # Separate the numbers in the array into two groups
+        if num & differentiating_bit:  # This bit is set in only one of the unique numbers
+            num1 ^= num
+        else:  # This bit is not set in the other unique number
+            num2 ^= num
+
+    return [num1, num2]
+
+
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
 # Test cases for May 27th, 2024
@@ -398,5 +436,5 @@ arr = [2, 3, 1, 6, 7]
 
 # Test cases for May 31st, 2024
 nums_2 = [1, 2, 1, 3, 2, 5]
-singleNumber1(nums_2)  # Expected output: [3, 5]
-singleNumber2(nums_2)  # Expected output: [3, 5]
+# singleNumber1(nums_2)  # Expected output: [3, 5]
+# singleNumber2(nums_2)  # Expected output: [3, 5]
