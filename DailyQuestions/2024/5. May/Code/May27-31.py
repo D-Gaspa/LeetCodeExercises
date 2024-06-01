@@ -29,17 +29,34 @@ def specialArray1(nums: List[int]) -> int:
     The time complexity of this solution is O(n^2) due to the nested linear search within range(n+1)
     The space complexity is O(n) due to the sorting operation in Python that uses Timsort.
     """
-    nums.sort()
+    print("\n--- Input Parameters ---")
+    print(f"\tnums = {nums}")  # Display the input list
     n = len(nums)
 
-    for potential_special_x in range(n + 1):
-        # Count how many numbers are greater than or equal to the potential special number 'x'.
-        numbers_greater_or_equal = sum(1 for num in nums if num >= potential_special_x)
+    print("\n--- Preprocessing (Sorting) ---")
+    nums.sort()
+    print(f"\tSorted nums = {nums}")
 
-        if numbers_greater_or_equal == potential_special_x:  # Special number found.
+    print("\n--- Main Loop (Testing Potential Special Values) ---")
+    for potential_special_x in range(n + 1):
+        print(f"\n\tIteration {potential_special_x + 1}:")
+        print(f"\t\tTesting potential_special_x = {potential_special_x}")
+
+        # Count elements >= potential_special_x
+        numbers_greater_or_equal = sum(1 for num in nums if num >= potential_special_x)
+        print(f"\t\tCount of numbers >= {potential_special_x}: {numbers_greater_or_equal}")
+
+        # Decision Point
+        print(f"\t\tDecision: Is {numbers_greater_or_equal} == {potential_special_x}?")
+        if numbers_greater_or_equal == potential_special_x:
+            print("\t\t\tYes! Special number found.")
+            print("\n--- Function Returning ---")
+            print(f"Result: {potential_special_x}")
             return potential_special_x
 
-    return -1  # No special number found.
+    print("\n--- Function Returning ---")
+    print("Result: -1 (No special number found)")
+    return -1
 
 
 def specialArray2(nums: List[int]) -> int:
