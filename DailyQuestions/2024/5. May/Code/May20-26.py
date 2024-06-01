@@ -5,7 +5,7 @@ from typing import List
 from tabulate import tabulate
 
 
-# Week 4: May 20th - 26th
+# Week 4: May 20th - May 26th, 2024
 
 # <-------------------------------------------------- May 20th, 2024 -------------------------------------------------->
 # 1863. Sum of All Subset XOR Totals

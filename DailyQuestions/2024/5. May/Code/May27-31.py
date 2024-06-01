@@ -6,7 +6,7 @@ from typing import List
 from tabulate import tabulate
 
 
-# Week 5: May 27th - May 31st
+# Week 5: May 27th - May 31st, 2024
 
 # <-------------------------------------------------- May 27th, 2024 -------------------------------------------------->
 # 1608. Special Array With X Elements Greater Than or Equal X
