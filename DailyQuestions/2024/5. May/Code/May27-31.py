@@ -349,26 +349,44 @@ def singleNumber1(nums: List[int]) -> List[int]:
     """
     Finds the two elements that appear only once in the given integer array.
 
-    This solution uses the high-level strategy of using a dictionary to store the frequency of each number in the array.
-    The keys in the dictionary represent the unique numbers in the array, and their corresponding values represent
-    the frequency of each number.
-
-    After going through the entire array and filling the dictionary,
-    the function iterates over the entries in the dictionary and identifies the numbers that occur only once.
-    It does this by checking if the value associated with the dictionary key is 1.
+    This solution uses a dictionary to store the count of each number in the input array.
+    It then filters the dictionary to find the elements that have a count of 1, which are the unique elements.
 
     The time complexity of this solution is O(n), where 'n' is the number of elements in the input array.
     This is because we only iterate through the array and the dictionary once, hence the time complexity is linear.
     The space complexity is also O(n) because the dictionary can store up to n unique numbers.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tnums: {nums}")
+
     element_counts = {}
+    iteration_data = []
 
-    for num in nums:
-        # Increment the count of the number in the dictionary or add it if it doesn't exist
-        element_counts[num] = element_counts.get(num, 0) + 1
+    print("\n--- Main Loop (Building Count Dictionary) ---")
+    for idx, num in enumerate(nums):
+        print(f"\tIteration {idx + 1}:")
+        print(f"\t\tNumber: {num}")
 
-    # Find the unique elements that appear only once
+        if num in element_counts:
+            element_counts[num] += 1
+            print(f"\t\tIncremented count for {num}: {element_counts[num]}")
+        else:
+            element_counts[num] = 1
+            print(f"\t\tAdded new element {num}: {element_counts[num]}")
+
+        # Data for iteration table
+        iteration_data.append([idx + 1, num, element_counts[num]])
+
+    print("\n--- Iteration Summary (Element Counts) ---")
+    headers = ["Iteration", "Number", "Count"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Filtering for Unique Elements ---")
+    print(tabulate(element_counts.items(), headers=["Element", "Count"], tablefmt="fancy_grid"))
     unique_elements = [num for num, count in element_counts.items() if count == 1]
+
+    print("\n--- Function Returning ---")
+    print(f"\tUnique Elements: {unique_elements}")
 
     return unique_elements
 
@@ -436,5 +454,5 @@ arr = [2, 3, 1, 6, 7]
 
 # Test cases for May 31st, 2024
 nums_2 = [1, 2, 1, 3, 2, 5]
-# singleNumber1(nums_2)  # Expected output: [3, 5]
-# singleNumber2(nums_2)  # Expected output: [3, 5]
+singleNumber1(nums_2)  # Expected output: [3, 5]
+singleNumber2(nums_2)  # Expected output: [3, 5]
