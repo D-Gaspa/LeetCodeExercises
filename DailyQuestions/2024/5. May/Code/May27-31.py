@@ -478,5 +478,5 @@ arr = [2, 3, 1, 6, 7]
 
 # Test cases for May 31st, 2024
 nums_2 = [1, 2, 1, 3, 2, 5]
-singleNumber1(nums_2)  # Expected output: [3, 5]
-singleNumber2(nums_2)  # Expected output: [3, 5]
+# singleNumber1(nums_2)  # Expected output: [3, 5]
+# singleNumber2(nums_2)  # Expected output: [3, 5]
