@@ -84,6 +84,40 @@ def specialArray2(nums: List[int]) -> int:
     return -1  # No special number found.
 
 
+def specialArray3(nums: List[int]) -> int:
+    """
+    Finds a special number 'x' in a non-negative integer array 'nums'
+    such that 'x' equals the count of elements in 'nums' that are greater than or equal to 'x'.
+
+    This function employs a frequency count array for optimization, which diminishes the need for a nested search.
+    The function first finds the frequency of each number in 'nums' up to its length 'n'.
+    Following that, it iteratively checks the potential values for 'x' in reverse order (from 'n' down to 1).
+
+    For each 'x', it keeps a running total of the number of elements that are greater than or equal to 'x'
+    (by adding the count of 'x' itself to the total).
+    If this total equals 'x' at some point, 'x' is returned.
+    If no such 'x' can be found, the function yields -1.
+
+    The time complexity of this solution is O(n) due to the single pass through the input array.
+    The space complexity is O(n) due to the frequency count array.
+    """
+    n = len(nums)
+    frequency_count = [0] * (n + 1)
+
+    for num in nums:
+        frequency_count[min(num, n)] += 1
+
+    numbers_greater_or_equal = 0
+
+    for potential_special_x in range(n, 0, -1):
+        # Add the frequency of the current number to the total count of numbers greater or equal to 'x'.
+        numbers_greater_or_equal += frequency_count[potential_special_x]
+        if numbers_greater_or_equal == potential_special_x:  # Special number found.
+            return potential_special_x
+
+    return -1  # No special number found.
+
+
 # <-------------------------------------------------- May 28th, 2024 -------------------------------------------------->
 # 1208. Get Equal Substrings Within a Budget
 
@@ -508,6 +542,7 @@ def singleNumber2(nums: List[int]) -> List[int]:
 nums = [0, 4, 3, 0, 4]
 # specialArray1(nums)  # Expected output: 3
 # specialArray2(nums)  # Expected output: 3
+# specialArray3(nums)  # Expected output: 3
 
 # Test cases for May 28th, 2024
 s = "abcd"
