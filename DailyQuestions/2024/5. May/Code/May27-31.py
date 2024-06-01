@@ -1,3 +1,4 @@
+import bisect
 from collections import defaultdict
 from pprint import pprint
 from typing import List
@@ -17,22 +18,70 @@ from tabulate import tabulate
 
 def specialArray1(nums: List[int]) -> int:
     """
-    Finds a special number 'x' in the given integer array.
+    Finds a special number 'x' in a non-negative integer array 'nums'
+    such that 'x' equals the count of elements in 'nums' that are greater than or equal to 'x'.
 
-    This solution uses a brute-force approach to find the special number 'x'.
-    The time complexity of this solution is O(n log(n)), where 'n' is the number of elements in the input array.
+    This solution uses a brute-force approach by sorting the array first.
+    Then, it iterates through possible values of 'x' from 0 to the length of 'nums'.
+    For each value, it counts the elements greater or equal to it and checks if that count equals 'x'.
+    If found, it returns 'x'; otherwise, -1.
+
+    The time complexity of this solution is O(n^2) due to the nested linear search within range(n+1)
+    The space complexity is O(n) due to the sorting operation in Python that uses Timsort.
     """
     nums.sort()
     n = len(nums)
 
     for potential_special_x in range(n + 1):
-        # Count how many numbers are greater than or equal to the potential special number 'x'
+        # Count how many numbers are greater than or equal to the potential special number 'x'.
         numbers_greater_or_equal = sum(1 for num in nums if num >= potential_special_x)
 
-        if numbers_greater_or_equal == potential_special_x:
+        if numbers_greater_or_equal == potential_special_x:  # Special number found.
             return potential_special_x
 
-    return -1
+    return -1  # No special number found.
+
+
+def specialArray2(nums: List[int]) -> int:
+    """
+    Finds a special number 'x' in a non-negative integer array 'nums'
+    where 'x' equals the count of elements in 'nums' that are greater than or equal to 'x'.
+
+    The function sorts the input array 'nums' and then uses a binary search
+    algorithm to find the special number 'x'.
+
+    During the binary search, for each potential 'x' (represented by 'mid_index'), it calculates the number of items
+    in 'nums' that are greater than or equal to 'x'.
+    If this count equals 'x', then 'x' is returned immediately.
+    If the count is more than 'x',
+    the function narrows the search to the right half of the current range, else it narrows it to the left half.
+
+    The time complexity of this solution is O(n log n), due to sorting the array and the later binary search.
+    The space complexity is O(1), as there are no extra space-demanding data structures used.
+    """
+    nums.sort()
+
+    left_index = 0
+    right_index = len(nums)
+
+    # Perform binary search.
+    while left_index <= right_index:
+        mid_index = (left_index + right_index) // 2
+
+        # Calculate the number of elements greater than or equal to 'mid_index'.
+        numbers_greater_or_equal = len(nums) - bisect.bisect_left(nums, mid_index)
+
+        # If this count equals 'mid_index', return it as the special number.
+        if numbers_greater_or_equal == mid_index:
+            return mid_index
+        # If the count is more than 'mid_index', narrow the search to the right half.
+        elif numbers_greater_or_equal > mid_index:
+            left_index = mid_index + 1
+        # Else, narrow the search to the left half.
+        else:
+            right_index = mid_index - 1
+
+    return -1  # No special number found.
 
 
 # <-------------------------------------------------- May 28th, 2024 -------------------------------------------------->
@@ -458,6 +507,7 @@ def singleNumber2(nums: List[int]) -> List[int]:
 # Test cases for May 27th, 2024
 nums = [0, 4, 3, 0, 4]
 # specialArray1(nums)  # Expected output: 3
+# specialArray2(nums)  # Expected output: 3
 
 # Test cases for May 28th, 2024
 s = "abcd"
