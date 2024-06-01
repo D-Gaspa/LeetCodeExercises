@@ -142,21 +142,45 @@ def specialArray3(nums: List[int]) -> int:
     The time complexity of this solution is O(n) due to the single pass through the input array.
     The space complexity is O(n) due to the frequency count array.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tnums = {nums}")
     n = len(nums)
-    frequency_count = [0] * (n + 1)
 
-    for num in nums:
+    print("\n--- Building Frequency Count Array ---")
+    frequency_count = [0] * (n + 1)  # Create an array to store frequencies
+
+    for i, num in enumerate(nums):
+        print(f"\n\tIteration {i + 1}: Processing num = {num}")
+        # Store frequency at index min(num, n) to avoid going out of bounds
         frequency_count[min(num, n)] += 1
+        print(f"\t\tUpdated frequency_count = {frequency_count}")
 
+    print("\n--- Frequency Count Array (Final) ---")
+    print(tabulate(enumerate(frequency_count), headers=["Number", "Frequency"], tablefmt="fancy_grid"))
+
+    print("\n--- Searching for Special Number in Reverse ---")
     numbers_greater_or_equal = 0
-
+    iteration_data = []  # To collect data for iteration summary
     for potential_special_x in range(n, 0, -1):
-        # Add the frequency of the current number to the total count of numbers greater or equal to 'x'.
+        print(f"\n\tIteration: potential_special_x = {potential_special_x}")
         numbers_greater_or_equal += frequency_count[potential_special_x]
-        if numbers_greater_or_equal == potential_special_x:  # Special number found.
+        print(f"\t\tNumbers >= {potential_special_x}: {numbers_greater_or_equal}")
+
+        # Decision Point:
+        if numbers_greater_or_equal == potential_special_x:
+            print(f"\t\t--- Special Number Found! ---")
             return potential_special_x
 
-    return -1  # No special number found.
+        # Store iteration data for summary
+        iteration_data.append([potential_special_x, numbers_greater_or_equal])
+
+    print("\n--- Iteration Summary (Reverse Search) ---")
+    headers = ["Potential Special X", "Numbers >= X"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print("No special number found.")
+    return -1
 
 
 # <-------------------------------------------------- May 28th, 2024 -------------------------------------------------->
