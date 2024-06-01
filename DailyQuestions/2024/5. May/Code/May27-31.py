@@ -409,24 +409,48 @@ def singleNumber2(nums: List[int]) -> List[int]:
     and once to separate the numbers into two groups.
     We improve the space complexity to O(1) by not using any additional data structures.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tnums = {nums}")  # Display the input array
+
+    print("\n--- Main Loop (Finding cumulative XOR) ---")
     combined_xor = 0
-
-    for num in nums:
+    iteration_data_xor = []
+    for i, num in enumerate(nums):
         combined_xor ^= num
+        iteration_data_xor.append([i + 1, num, f"{num:b}", f"{combined_xor:b}"])
+        print(f"\nIteration {i + 1}: XORing {num} ({num:b})")
+        # Get the binary representation of the number
+        print(f"\tCombined XOR At This Point: {combined_xor:b}")
 
-    # Isolate the rightmost set bit to distinguish the two unique elements.
+    print("\n--- Iteration Summary (Cumulative XOR at each step) ---")
+    headers = ["Iteration", "Number", "Number (Binary)", "Cumulative XOR (Binary)"]
+    print(tabulate(iteration_data_xor, headers=headers, tablefmt="fancy_grid"))
+
     differentiating_bit = combined_xor & -combined_xor
+    print(f"\nDifferentiating Bit: {differentiating_bit:b}")
 
     num1, num2 = 0, 0
-
-    for num in nums:
-        # Separate the numbers in the array into two groups
-        if num & differentiating_bit:  # This bit is set in only one of the unique numbers
+    iteration_data = []
+    print("\n--- Second Loop (Separating numbers into two groups) ---")
+    for i, num in enumerate(nums):
+        if num & differentiating_bit:
             num1 ^= num
-        else:  # This bit is not set in the other unique number
+            group = "Group 1"
+        else:
             num2 ^= num
+            group = "Group 2"
+        iteration_data.append([i + 1, f"{num} ({num:b})", group, f"{num1} ({num1:b})", f"{num2} ({num2:b})"])
+        print(f"\nIteration {i + 1}: Separating {num} ({num:b}) into {group}")
+        print(f"\tNum1 and Num2 At This Point: {num1} ({num1:b}), {num2} ({num2:b})")
 
-    return [num1, num2]
+    print("\n--- Iteration Summary (Numbers in Groups) ---")
+    headers = ["Iteration", "Number", "Group", "Num1", "Num2"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    result = [num1, num2]
+    print("\n--- Function Returning ---")
+    print(f"Function Return Value: {result}")
+    return result
 
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
