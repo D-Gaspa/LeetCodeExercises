@@ -76,29 +76,53 @@ def specialArray2(nums: List[int]) -> int:
     The time complexity of this solution is O(n log n), due to sorting the array and the later binary search.
     The space complexity is O(1), as there are no extra space-demanding data structures used.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tnums = {nums}")
+
+    print("\n--- Sorting Array ---")
     nums.sort()
+    print(f"\tSorted nums = {nums}")
 
     left_index = 0
     right_index = len(nums)
+    mid_index = -1  # Initialize mid_index
+    print(f"\tInitial search range: left_index = {left_index}, right_index = {right_index}")
 
-    # Perform binary search.
+    print("\n--- Main Loop (Binary Search for Special Number) ---")
+    iteration_data = []  # To store data for iteration summary table
     while left_index <= right_index:
         mid_index = (left_index + right_index) // 2
+        print(f"\n\tIteration: left_index = {left_index}, right_index = {right_index}, mid_index = {mid_index}")
 
-        # Calculate the number of elements greater than or equal to 'mid_index'.
         numbers_greater_or_equal = len(nums) - bisect.bisect_left(nums, mid_index)
+        print(f"\t\tElements >= mid_index: {numbers_greater_or_equal}")
 
-        # If this count equals 'mid_index', return it as the special number.
+        # Decision Point
+        print(f"\t\tDecision: numbers_greater_or_equal ({numbers_greater_or_equal}) vs. mid_index ({mid_index})")
         if numbers_greater_or_equal == mid_index:
-            return mid_index
-        # If the count is more than 'mid_index', narrow the search to the right half.
+            print("\t\tSpecial number found!")
+            iteration_data.append([left_index, right_index, mid_index, numbers_greater_or_equal, "Found"])
+            break  # Found the special number, exit loop
         elif numbers_greater_or_equal > mid_index:
             left_index = mid_index + 1
-        # Else, narrow the search to the left half.
+            print("\t\t\tSearching right half")
+            iteration_data.append([left_index, right_index, mid_index, numbers_greater_or_equal, "Right"])
         else:
             right_index = mid_index - 1
+            print("\t\t\tSearching left half")
+            iteration_data.append([left_index, right_index, mid_index, numbers_greater_or_equal, "Left"])
 
-    return -1  # No special number found.
+    print("\n--- Iteration Summary (Binary Search Steps) ---")
+    headers = ["Left Index", "Right Index", "Mid Index", "Elements >=", "Decision"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    if left_index > right_index:
+        print(f"\tNo special number found, returning -1")
+        return -1
+    else:
+        print(f"\tReturning special number: {mid_index}")
+        return mid_index
 
 
 def specialArray3(nums: List[int]) -> int:
