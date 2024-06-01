@@ -417,13 +417,13 @@ def singleNumber2(nums: List[int]) -> List[int]:
     iteration_data_xor = []
     for i, num in enumerate(nums):
         combined_xor ^= num
-        iteration_data_xor.append([i + 1, num, f"{num:b}", f"{combined_xor:b}"])
+        iteration_data_xor.append([i + 1, f"{num} ({num:b})", f"{combined_xor:b}"])
         print(f"\nIteration {i + 1}: XORing {num} ({num:b})")
         # Get the binary representation of the number
         print(f"\tCombined XOR At This Point: {combined_xor:b}")
 
     print("\n--- Iteration Summary (Cumulative XOR at each step) ---")
-    headers = ["Iteration", "Number", "Number (Binary)", "Cumulative XOR (Binary)"]
+    headers = ["Iteration", "Number", "Cumulative XOR (Binary)"]
     print(tabulate(iteration_data_xor, headers=headers, tablefmt="fancy_grid"))
 
     differentiating_bit = combined_xor & -combined_xor
