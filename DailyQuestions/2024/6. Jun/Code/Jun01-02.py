@@ -20,8 +20,6 @@ def scoreOfString(s: str) -> int:
 
     This function iterates through each pair of adjacent characters in the string,
     calculates the absolute difference between their ASCII values, and accumulates this into a total score.
-    The final score represents the sum of these absolute differences,
-    providing a measure of the string's overall character variation.
 
     The time complexity of this function is O(n), where n is the length of the string.
     This is because it performs a single iteration over the string's characters.
