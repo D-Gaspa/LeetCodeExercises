@@ -39,3 +39,10 @@ def problem2_1():
 
 def problem2_2():
     pass
+
+
+# <---------------------------------------------------- Test cases ---------------------------------------------------->
+
+# Test cases for June 1st, 2024
+
+# Test cases for June 2nd, 2024
