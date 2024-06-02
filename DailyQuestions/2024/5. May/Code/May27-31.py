@@ -74,7 +74,7 @@ def specialArray2(nums: List[int]) -> int:
     the function narrows the search to the right half of the current range, else it narrows it to the left half.
 
     The time complexity of this solution is O(n log n), due to sorting the array and the later binary search.
-    The space complexity is O(1), as there are no extra space-demanding data structures used.
+    The space complexity is O(n) due to the sorting operation in Python that uses Timsort.
     """
     print("\n--- Input Parameters ---")
     print(f"\tnums = {nums}")
