@@ -123,5 +123,5 @@ test_input_1 = "hello"
 # scoreOfString(test_input_1)  # Expected output: 13
 
 # Test cases for June 2nd, 2024
-test_input_2 = ["r", "e", "v", "e", "r", "s", "e", "d"]
-reverseString(test_input_2)  # Expected output: ["d", "e", "s", "r", "e", "v", "e", "r"]
+test_input_2 = ["h", "e", "l", "l", "o"]
+# reverseString(test_input_2)  # Expected output: ["o", "l", "l", "e", "h"]
