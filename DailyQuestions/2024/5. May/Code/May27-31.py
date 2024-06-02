@@ -113,7 +113,7 @@ def specialArray2(nums: List[int]) -> int:
             iteration_data.append([left_index, right_index, mid_index, numbers_greater_or_equal, "Left"])
 
     print("\n--- Iteration Summary (Binary Search Steps) ---")
-    headers = ["Left Index", "Right Index", "Mid Index", "Elements >=", "Decision"]
+    headers = ["Left Index", "Right Index", "Mid Index", "Elements >= Mid Index", "Decision"]
     print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
 
     print("\n--- Function Returning ---")
