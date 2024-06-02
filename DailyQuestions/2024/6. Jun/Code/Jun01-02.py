@@ -65,17 +65,34 @@ def scoreOfString(s: str) -> int:
 
 
 # <-------------------------------------------------- June 2nd, 2024 -------------------------------------------------->
-# 2. Problem
+# 344. Reverse String
 
-# Description
-
-
-def problem2_1():
-    pass
+# Given a character array s, reverse the order of its elements.
+# You must do this by modifying the input array in-place with O(1) extra memory.
 
 
-def problem2_2():
-    pass
+def reverseString(s: List[str]) -> None:
+    """
+    This function reverses the order of elements in a character array in-place.
+
+    This function uses a two-pointer approach, where one pointer starts from the beginning (left_index),
+    and the other one starts from the end of the array (right_index).
+    The characters at these two pointers are swapped, and the pointers are moved towards each other.
+    This carries on until the two pointers meet or pass each other, which suggests that the array is now reversed.
+
+    The time complexity of this function is O(n), where n is the number of elements in the list.
+    The space complexity is O(1) because it operates directly on the input list
+    and uses a constant amount of additional memory for the index variables.
+    """
+    left_index = 0
+    right_index = len(s) - 1
+
+    while left_index < right_index:
+        # Swap the characters at the current left and right indices
+        s[left_index], s[right_index] = s[right_index], s[left_index]
+
+        left_index += 1
+        right_index -= 1
 
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
@@ -85,3 +102,5 @@ test_input_1 = "hello"
 # scoreOfString(test_input_1)  # Expected output: 13
 
 # Test cases for June 2nd, 2024
+test_input_2 = ["h", "e", "l", "l", "o"]
+reverseString(test_input_2)  # Expected output: ["o", "l", "l", "e", "h"]
