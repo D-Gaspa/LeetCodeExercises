@@ -27,16 +27,42 @@ def scoreOfString(s: str) -> int:
     This is because it performs a single iteration over the string's characters.
     The space complexity is O(1) as it uses a constant amount of extra space to store variables.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\ts = '{s}'")  # Display the input string
+
     n = len(s)
+    print(f"\tn (string length) = {n}")  # Display calculated length
+
     total_score = 0
+    print(f"\ttotal_score (initialized) = {total_score}")  # Show initial score
 
+    print("\n--- Main Loop (Calculating Character Pair Scores) ---")
+    iteration_data = []  # Collect data for iteration summary
     for index in range(n - 1):
-        total_score += abs((ord(s[index]) - ord(s[index + 1])))
+        print(f"\n\tIteration {index + 1}:")
+        char1 = s[index]
+        char2 = s[index + 1]
+        print(f"\t\tCharacters: '{char1}' and '{char2}'")
 
-    # Alternatively, you can use pairwise from itertools to get the pairs of adjacent characters
-    # s -> (s0, s1), (s1, s2), (s2, s3), ... This alternative approach would have similar time and space
-    # complexities, but offers a more concise way of generating pairs
+        char1_ascii = ord(char1)
+        char2_ascii = ord(char2)
+        print(f"\t\tASCII Values: {char1_ascii} and {char2_ascii}")
 
+        pair_score = abs(char1_ascii - char2_ascii)
+        print(f"\t\tPair Score: {pair_score}")
+
+        total_score += pair_score
+        print(f"\t\tUpdated Total Score: {total_score}")
+
+        # Store data for iteration summary
+        iteration_data.append([index + 1, char1, char2, char1_ascii, char2_ascii, pair_score, total_score])
+
+    print("\n--- Iteration Summary (Character Pair Scores) ---")
+    headers = ["Iteration", "Char 1", "Char 2", "ASCII 1", "ASCII 2", "Pair Score", "Total Score"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"Final Total Score: {total_score}")
     return total_score
 
 
@@ -57,5 +83,7 @@ def problem2_2():
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
 # Test cases for June 1st, 2024
+test_input_1 = "hello"
+# scoreOfString(test_input_1)  # Expected output: 13
 
 # Test cases for June 2nd, 2024
