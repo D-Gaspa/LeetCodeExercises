@@ -1,4 +1,3 @@
-from pprint import pprint
 from typing import List
 
 from tabulate import tabulate
@@ -81,18 +80,40 @@ def reverseString(s: List[str]) -> None:
     This carries on until the two pointers meet or pass each other, which suggests that the array is now reversed.
 
     The time complexity of this function is O(n), where n is the number of elements in the list.
+    This is because the function iterates through roughly half of the elements in the list to reverse it.
     The space complexity is O(1) because it operates directly on the input list
     and uses a constant amount of additional memory for the index variables.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\ts = {s}")
+
+    print("\n--- Main Loop (Reversing In-Place) ---")
     left_index = 0
     right_index = len(s) - 1
 
+    # Data collection for iteration table
+    iteration_data = []
+
     while left_index < right_index:
-        # Swap the characters at the current left and right indices
-        s[left_index], s[right_index] = s[right_index], s[left_index]
+        print(f"\nIteration: {left_index + 1}")
+        print(f"\tBefore swap: s = {s}, left_index = {left_index}, right_index = {right_index}")
+
+        s[left_index], s[right_index] = s[right_index], s[left_index]  # Swap
+
+        print(f"\tAfter swap: s = {s}, left_index = {left_index}, right_index = {right_index}")
+
+        # Collect data for iteration summary table
+        iteration_data.append([left_index + 1, s.copy(), left_index, right_index])
 
         left_index += 1
         right_index -= 1
+
+    print("\n--- Iteration Summary (Swaps and List States) ---")
+    headers = ["Iteration", "List (s)", "Left Index", "Right Index"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Complete ---")
+    print(f"Final reversed list: s = {s}")
 
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
@@ -102,5 +123,5 @@ test_input_1 = "hello"
 # scoreOfString(test_input_1)  # Expected output: 13
 
 # Test cases for June 2nd, 2024
-test_input_2 = ["h", "e", "l", "l", "o"]
-reverseString(test_input_2)  # Expected output: ["o", "l", "l", "e", "h"]
+test_input_2 = ["r", "e", "v", "e", "r", "s", "e", "d"]
+reverseString(test_input_2)  # Expected output: ["d", "e", "s", "r", "e", "v", "e", "r"]
