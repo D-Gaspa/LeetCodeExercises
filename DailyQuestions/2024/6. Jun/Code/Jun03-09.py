@@ -14,11 +14,35 @@ from tabulate import tabulate
 
 
 def appendCharacters1(s: str, t: str) -> int:
-    pass
+    """
+    Calculates the minimum number of characters from string 't'
+    that must be appended to string 's' to make 't' a subsequence of 's'.
 
+    This function iterates through both strings, comparing characters at corresponding positions.
+    When a match is found, it advances in both strings; otherwise, it only moves forward in the first string.
+    The function effectively checks if 't' is a subsequence of 's'
+    (meaning 't' can be formed by deleting zero or more characters from 's').
+    The result is the number of characters remaining in 't' after the comparison,
+    indicating how many need to be appended.
 
-def appendCharacters2(s: str, t: str) -> int:
-    pass
+    The function operates in O(n) time complexity,
+    since each character of the string 's' and 't' is visited at most once.
+    The space complexity is O(1) as the solution here does not require additional space that scales with input size.
+    """
+
+    s_index = 0
+    t_index = 0
+
+    s_length = len(s)
+    t_length = len(t)
+
+    while s_index < s_length and t_index < t_length:
+        if s[s_index] == t[t_index]:
+            t_index += 1
+        s_index += 1
+
+    # Return the count of remaining characters in 't' that needs to be appended to 's'
+    return t_length - t_index
 
 
 # <-------------------------------------------------- June 4th, 2024 -------------------------------------------------->
@@ -108,6 +132,9 @@ def problem7_2():
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
 # Test cases for june 3rd, 2024
+s = "coaching"
+t = "coding"
+appendCharacters1(s, t)  # Expected output: 4
 
 # Test cases for june 4th, 2024
 
