@@ -3,23 +3,25 @@ from typing import List
 
 from tabulate import tabulate
 
-# Week X: Month day th - Month day th, 2024
+# Week 2: June 3rd - June 9th, 2024
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
-# 1. Problem
+# <-------------------------------------------------- June 3rd, 2024 -------------------------------------------------->
+# 2486. Append Characters to String to Make Subsequence
 
-# Description
+# You are given two strings s and t consisting of only lowercase English letters.
+# Return the minimum number of characters that need to be appended to the end of 's'
+# so that 't' becomes a subsequence of s
 
 
-def problem1_1():
+def appendCharacters1(s: str, t: str) -> int:
     pass
 
 
-def problem1_2():
+def appendCharacters2(s: str, t: str) -> int:
     pass
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <-------------------------------------------------- June 4th, 2024 -------------------------------------------------->
 # 2. Problem
 
 # Description
@@ -33,7 +35,7 @@ def problem2_2():
     pass
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <-------------------------------------------------- June 5th, 2024 -------------------------------------------------->
 # 3. Problem
 
 # Description
@@ -47,7 +49,7 @@ def problem3_2():
     pass
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <-------------------------------------------------- June 6th, 2024 -------------------------------------------------->
 # 4. Problem
 
 # Description
@@ -61,7 +63,7 @@ def problem4_2():
     pass
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <-------------------------------------------------- June 7th, 2024 -------------------------------------------------->
 # 5. Problem
 
 # Description
@@ -75,7 +77,7 @@ def problem5_2():
     pass
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <-------------------------------------------------- June 8th, 2024 -------------------------------------------------->
 # 6. Problem
 
 # Description
@@ -89,7 +91,7 @@ def problem6_2():
     pass
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <-------------------------------------------------- June 9th, 2024 -------------------------------------------------->
 # 7. Problem
 
 # Description
@@ -105,16 +107,16 @@ def problem7_2():
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
-# Test cases for month day th, 2024
+# Test cases for june 3rd, 2024
 
-# Test cases for month day th, 2024
+# Test cases for june 4th, 2024
 
-# Test cases for month day th, 2024
+# Test cases for june 5th, 2024
 
-# Test cases for month day th, 2024
+# Test cases for june 6th, 2024
 
-# Test cases for month day th, 2024
+# Test cases for june 7th, 2024
 
-# Test cases for month day th, 2024
+# Test cases for june 8th, 2024
 
-# Test cases for month day th, 2024
+# Test cases for june 9th, 2024
