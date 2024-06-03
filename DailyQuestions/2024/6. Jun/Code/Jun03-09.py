@@ -3,6 +3,7 @@ from typing import List
 
 from tabulate import tabulate
 
+
 # Week 2: June 3rd - June 9th, 2024
 
 # <-------------------------------------------------- June 3rd, 2024 -------------------------------------------------->
@@ -29,20 +30,44 @@ def appendCharacters1(s: str, t: str) -> int:
     since each character of the string 's' and 't' is visited at most once.
     The space complexity is O(1) as the solution here does not require additional space that scales with input size.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\ts = {s}")
+    print(f"\tt = {t}")
 
     s_index = 0
     t_index = 0
-
     s_length = len(s)
     t_length = len(t)
+    iterations = []
 
+    print("\n--- Main Loop (Comparing 's' and 't') ---")
     while s_index < s_length and t_index < t_length:
+        print(f"\nIteration of Main Loop: {s_index + 1}")
+        print(f"\tCurrent 's_index': {s_index}")
+        print(f"\tCurrent 't_index': {t_index}")
+
+        # Condition check
+        print(f"\tComparing s[{s_index}] = {s[s_index]} with t[{t_index}] = {t[t_index]}")
         if s[s_index] == t[t_index]:
+            print("\t\tTrue Branch: s and t characters match")
             t_index += 1
+        else:
+            print("\t\tFalse Branch: s and t characters don't match")
         s_index += 1
 
-    # Return the count of remaining characters in 't' that needs to be appended to 's'
-    return t_length - t_index
+        # Summary for this iteration
+        iterations.append([s_index, t_index, s[s_index - 1], t[t_index - 1]])
+
+    print("\n--- Iteration Summary (Current Indexes and Matched Characters) ---")
+    headers = ["s_index", "t_index", "s[s_index]", "t[t_index]"]
+    print(tabulate(iterations, headers=headers, tablefmt="fancy_grid"))
+
+    final_result = t_length - t_index
+
+    print("\n--- Function return value ---")
+    print(f"Final Result: t_length - t_index = {t_length} - {t_index} = {final_result}")
+
+    return final_result
 
 
 # <-------------------------------------------------- June 4th, 2024 -------------------------------------------------->
