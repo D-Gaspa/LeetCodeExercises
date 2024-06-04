@@ -76,12 +76,17 @@ def appendCharacters1(s: str, t: str) -> int:
 
 
 # <-------------------------------------------------- June 4th, 2024 -------------------------------------------------->
-# 2. Problem
+# 409 - Longest Palindrome
 
-# Description
+# Given a string 's', which consists of lowercase or uppercase letters, return the length of the longest palindrome
+# that can be built with those letters.
 
 
-def problem2_1():
+def longestPalindrome(s: str) -> int:
+    pass
+
+
+def longestPalindrome2(s: str) -> int:
     pass
 
 
@@ -167,6 +172,8 @@ t = "coding"
 # appendCharacters1(s, t)  # Expected output: 4
 
 # Test cases for june 4th, 2024
+s_2 = "abccccdd"
+# longestPalindrome(s_2)  # Expected output: 7
 
 # Test cases for june 5th, 2024
 
