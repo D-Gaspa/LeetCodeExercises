@@ -83,7 +83,45 @@ def appendCharacters1(s: str, t: str) -> int:
 
 
 def longestPalindrome(s: str) -> int:
-    pass
+    """
+    Calculates the length of the longest palindrome that can be built with the characters in the input string 's'.
+
+    First, the function counts the frequency of each character using the 'char_count' dictionary.
+    Then, it iterates through the counts and if the count is even, it adds the count to the result.
+    If the count is odd, it adds one less than the count to the result and sets 'odd_exists' flag to True.
+    This is done because palindromes can have at most one character with an odd count (at the center of the palindrome);
+    all other characters must occur an even number of times.
+    Finally, if there was at least one character with an odd count,
+    it adds 1 to the result, accounting for the possible center element in the palindrome.
+
+    The total time complexity of this function is O(n) because it iterates over the string 's' once to count characters
+    and iterates over every character frequency in 'char_count' once.
+    The space complexity of this function is O(1) because the 'char_count' dictionary will at most contain entries
+    equal to the number of different characters which are constant.
+    """
+    char_count = {}
+
+    for char in s:
+        if char in char_count:
+            char_count[char] += 1
+        else:
+            char_count[char] = 1
+
+    result = 0
+    odd_exists = False
+
+    for _, count in char_count.items():
+        if count % 2 == 0:
+            result += count
+        else:
+            result += count - 1
+            odd_exists = True
+
+    # If there was at least one character with an odd count, it can be used as the center of the palindrome
+    if odd_exists:
+        result += 1
+
+    return result
 
 
 def longestPalindrome2(s: str) -> int:
