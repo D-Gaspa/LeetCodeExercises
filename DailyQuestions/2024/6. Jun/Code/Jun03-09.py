@@ -45,21 +45,26 @@ def appendCharacters1(s: str, t: str) -> int:
         print(f"\nIteration of Main Loop: {s_index + 1}")
         print(f"\tCurrent 's_index': {s_index}")
         print(f"\tCurrent 't_index': {t_index}")
+        match = False
+
+        # Summary for this iteration
+        iterations.append([s_index, t_index, s[s_index], t[t_index], ])
 
         # Condition check
         print(f"\tComparing s[{s_index}] = {s[s_index]} with t[{t_index}] = {t[t_index]}")
         if s[s_index] == t[t_index]:
             print("\t\tTrue Branch: s and t characters match")
             t_index += 1
+            match = True
         else:
             print("\t\tFalse Branch: s and t characters don't match")
         s_index += 1
 
-        # Summary for this iteration
-        iterations.append([s_index, t_index, s[s_index - 1], t[t_index - 1]])
+        # Add the match status to the summary
+        iterations[-1].append("Yes" if match else "No")
 
     print("\n--- Iteration Summary (Current Indexes and Matched Characters) ---")
-    headers = ["s_index", "t_index", "s[s_index]", "t[t_index]"]
+    headers = ["s_index", "t_index", "s[s_index]", "t[t_index]", "Match?"]
     print(tabulate(iterations, headers=headers, tablefmt="fancy_grid"))
 
     final_result = t_length - t_index
@@ -159,7 +164,7 @@ def problem7_2():
 # Test cases for june 3rd, 2024
 s = "coaching"
 t = "coding"
-appendCharacters1(s, t)  # Expected output: 4
+# appendCharacters1(s, t)  # Expected output: 4
 
 # Test cases for june 4th, 2024
 
