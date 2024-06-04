@@ -1,6 +1,3 @@
-from pprint import pprint
-from typing import List
-
 from tabulate import tabulate
 
 
@@ -125,7 +122,35 @@ def longestPalindrome(s: str) -> int:
 
 
 def longestPalindrome2(s: str) -> int:
-    pass
+    """
+    Calculates the length of the longest palindrome that can be built with the characters in the input string 's'.
+
+    This function uses a set `character_set` to keep track of characters encountered.
+    For each character, if it is already in the set, it can be paired with its existing counterpart,
+    contributing 2 to the palindrome length.
+    If not in the set, it is added to the set as it may be paired with a future character.
+    In the end, if `character_set` still contains characters,
+    it means a palindrome can still fit one more character in its middle.
+    Therefore, the result is incremented by 1 if `character_set` is not empty.
+
+    The time complexity is O(n) where n is the length of the input string due to the single pass through the string.
+    The space complexity is O(1) since the set will contain at most 52 characters (26 lowercase and 26 uppercase).
+    """
+    character_set = set()
+    result = 0
+
+    for char in s:
+        if char in character_set:
+            result += 2
+            character_set.remove(char)
+        else:
+            character_set.add(char)
+
+    # If there are characters left in the set, one of them can be used as the center of the palindrome
+    if character_set:
+        result += 1
+
+    return result
 
 
 def problem2_2():
