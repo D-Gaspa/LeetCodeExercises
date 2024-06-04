@@ -79,7 +79,7 @@ def appendCharacters1(s: str, t: str) -> int:
 # that can be built with those letters.
 
 
-def longestPalindrome(s: str) -> int:
+def longestPalindrome1(s: str) -> int:
     """
     Calculates the length of the longest palindrome that can be built with the characters in the input string 's'.
 
