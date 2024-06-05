@@ -231,6 +231,7 @@ def commonChars1(words: List[str]) -> List[str]:
     for i, word in enumerate(words[1:], start=1):  # Start from the second word
         print(f"\nIteration {i}: Comparing with word '{word}'")
         new_common_chars = []
+        common_chars_copy = common_chars.copy()
 
         print("\tInner Loop (Checking Characters in Word) ---")
         for char in word:
@@ -244,10 +245,10 @@ def commonChars1(words: List[str]) -> List[str]:
         common_chars = new_common_chars
         print(f"\tUpdated common_chars after iteration {i}: {common_chars}")
 
-        iteration_data.append([i, word, new_common_chars])  # Store data for this iteration
+        iteration_data.append([i, word, common_chars_copy, new_common_chars.copy()])
 
     print("\n--- Iteration Summary (Common Characters per Word) ---")
-    headers = ["Iteration", "Word", "New Common Chars"]
+    headers = ["Iteration", "Word", "Common Chars Before Iteration", "New Common Chars"]
     print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
 
     print("\n--- Function Returning ---")
@@ -272,8 +273,8 @@ def commonChars2(words: List[str]) -> List[str]:
     The time complexity of this solution is O(n*m), where n is the number of words,
     and m is the average length of each word.
     This is because for each word, the function runs through each character to update the Counter.
-    The space complexity is O(min(m, k)), where m is the length of the longest word, and k is the size of the alphabet
-    (26 for English), as 'Counter' holds the count of each character appearing in the word.
+    The space complexity is O(1) as the size of the `Counter` used to store the character counts is limited by the
+    fixed alphabet size (26).
     """
     print("\n--- Input Parameters ---")
     print(f"\twords = {words}")
