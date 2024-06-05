@@ -153,20 +153,42 @@ def longestPalindrome2(s: str) -> int:
     The time complexity is O(n) where n is the length of the input string due to the single pass through the string.
     The space complexity is O(1) since the set will contain at most 52 characters (26 lowercase and 26 uppercase).
     """
+    print("\n--- Input Parameters ---")
+    print(f"\ts = {s}")
+
+    print("\n--- Main Loop (Character Processing) ---")
     character_set = set()
     result = 0
+    iteration_data = []
 
-    for char in s:
+    for i, char in enumerate(s):
+        print(f"\nIteration {i + 1}:")
+        print(f"\tCharacter: {char}")
+        print(f"\tcharacter_set (before): {character_set}")
         if char in character_set:
             result += 2
             character_set.remove(char)
+            print(f"\t\tCharacter found in set, removed from set and result updated to {result}")
+            iteration_data.append(["In Set", char, character_set.copy(), result])
         else:
             character_set.add(char)
+            print(f"\t\tCharacter not in set, added to set")
+            iteration_data.append(["Not in Set", char, character_set.copy(), result])
 
-    # If there are characters left in the set, one of them can be used as the center of the palindrome
+    print("\n--- Final character_set ---")
+    pprint(character_set)
+
+    print("\n--- Decision Point (Remaining Characters?) ---")
     if character_set:
         result += 1
+        print(f"\tCharacters remaining in set, adding 1 to result (result = {result})")
 
+    print("\n--- Iteration Summary (Palindrome Length Calculation) ---")
+    headers = ["Status", "Character", "Character Set", "Result"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"Length of longest possible palindrome: {result}")
     return result
 
 
