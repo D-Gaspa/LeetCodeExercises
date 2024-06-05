@@ -1,3 +1,5 @@
+from pprint import pprint
+
 from tabulate import tabulate
 
 
@@ -96,28 +98,43 @@ def longestPalindrome1(s: str) -> int:
     The space complexity of this function is O(1) because the 'char_count' dictionary will at most contain entries
     equal to the number of different characters which are constant.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\ts = {s}")
+    print("\n--- Building Character Count Dictionary ---")
     char_count = {}
-
-    for char in s:
+    for i, char in enumerate(s):
+        print(f"\tIteration {i + 1}:")
+        print(f"\t\tCharacter: {char}")
         if char in char_count:
             char_count[char] += 1
         else:
             char_count[char] = 1
+        print(f"\t\tUpdated char_count: {char_count}")
+    print("\n--- Character Count Dictionary ---")
+    pprint(char_count)
 
+    print("\n--- Main Loop (Calculating Palindrome Length) ---")
     result = 0
     odd_exists = False
-
-    for _, count in char_count.items():
+    for char, count in char_count.items():
+        print(f"\tCharacter: {char}, Count: {count}")
         if count % 2 == 0:
             result += count
+            print(f"\t\tCount is even, added {count} to result (result = {result})")
         else:
             result += count - 1
             odd_exists = True
+            print(f"\t\tCount is odd, added count - 1 = {count - 1} to result (result = {result})")
+            print("\t\todd_exists flag set to True")
 
     # If there was at least one character with an odd count, it can be used as the center of the palindrome
+    print("\n--- Decision Point (Odd Character Exists?) ---")
     if odd_exists:
         result += 1
+        print("\tOdd character exists, adding 1 to result (result = {result})")
 
+    print("\n--- Function Returning ---")
+    print(f"Length of longest possible palindrome: {result}")
     return result
 
 
@@ -151,10 +168,6 @@ def longestPalindrome2(s: str) -> int:
         result += 1
 
     return result
-
-
-def problem2_2():
-    pass
 
 
 # <-------------------------------------------------- June 5th, 2024 -------------------------------------------------->
@@ -236,7 +249,8 @@ t = "coding"
 
 # Test cases for june 4th, 2024
 s_2 = "abccccdd"
-# longestPalindrome(s_2)  # Expected output: 7
+# longestPalindrome1(s_2)  # Expected output: 7
+# longestPalindrome2(s_2)  # Expected output: 7
 
 # Test cases for june 5th, 2024
 
