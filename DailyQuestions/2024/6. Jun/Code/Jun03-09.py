@@ -1,4 +1,6 @@
+from collections import Counter
 from pprint import pprint
+from typing import List
 
 from tabulate import tabulate
 
@@ -195,15 +197,42 @@ def longestPalindrome2(s: str) -> int:
 # <-------------------------------------------------- June 5th, 2024 -------------------------------------------------->
 # 1002. Find Common Characters
 
-# Given a string array `words`, return *an array of all characters that show up in all strings within the `words`
+# Given a string array `words`, return an array of all characters that show up in all strings within the `words`
 # (including duplicates).
 
+def commonChars1(words: List[str]) -> List[str]:
+    """
+    Finds the common characters (including duplicates) that appear in all strings within the input list 'words'.
 
-def problem3_1():
-    pass
+    This function starts with a list of characters from the first word and iteratively updates it
+    by checking with each later word.
+    Each character found in both the 'common_chars' and the current word is retained.
+    This operation is performed by 'new_common_chars',
+    which is then assigned back to 'common_chars' at the end of each iteration.
+
+    The time complexity of this solution is O(n*m^2) where n is the number of words,
+    and m is the average length of each word.
+    The outer loop runs n times and the inner loop m times.
+    Within the inner loop, the 'remove' operation is performed which can take up to m operations in the worst-case
+    scenario (hence, m squared).
+    The space complexity is O(p), where p is the length of the first word.
+    The initial size of the common_chars list is determined by the size of the first word,
+    and while exploring other words in the list, the size of this list would only decrease or remain the same.
+    """
+    common_chars = list(words[0])
+
+    for word in words[1:]:
+        new_common_chars = []
+        for char in word:
+            if char in common_chars:
+                new_common_chars.append(char)
+                common_chars.remove(char)
+        common_chars = new_common_chars
+
+    return common_chars
 
 
-def problem3_2():
+def commonChars2(words: List[str]) -> List[str]:
     pass
 
 
@@ -276,6 +305,9 @@ s_2 = "abccccdd"
 # longestPalindrome2(s_2)  # Expected output: 7
 
 # Test cases for june 5th, 2024
+words = ["bella", "label", "roller"]
+commonChars1(words)  # Expected output: ["e", "l", "l"]
+commonChars2(words)  # Expected output: ["e", "l", "l"]
 
 # Test cases for june 6th, 2024
 
