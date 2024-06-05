@@ -193,9 +193,10 @@ def longestPalindrome2(s: str) -> int:
 
 
 # <-------------------------------------------------- June 5th, 2024 -------------------------------------------------->
-# 3. Problem
+# 1002. Find Common Characters
 
-# Description
+# Given a string array `words`, return *an array of all characters that show up in all strings within the `words`
+# (including duplicates).
 
 
 def problem3_1():
