@@ -219,16 +219,39 @@ def commonChars1(words: List[str]) -> List[str]:
     The initial size of the common_chars list is determined by the size of the first word,
     and while exploring other words in the list, the size of this list would only decrease or remain the same.
     """
-    common_chars = list(words[0])
+    print("\n--- Input Parameters ---")
+    print(f"\twords = {words}")
 
-    for word in words[1:]:
+    print("\n--- Initialization ---")
+    common_chars = list(words[0])  # Initial common characters from the first word
+    print(f"\tInitial common_chars: {common_chars}")
+
+    print("\n--- Main Loop (Comparing with Each Word) ---")
+    iteration_data = []  # To store data for iteration summary
+    for i, word in enumerate(words[1:], start=1):  # Start from the second word
+        print(f"\nIteration {i}: Comparing with word '{word}'")
         new_common_chars = []
+
+        print("\tInner Loop (Checking Characters in Word) ---")
         for char in word:
             if char in common_chars:
                 new_common_chars.append(char)
-                common_chars.remove(char)
-        common_chars = new_common_chars
+                common_chars.remove(char)  # Remove to handle duplicates correctly
+                print(f"\t\tFound common char '{char}': {new_common_chars}")
+            else:
+                print(f"\t\t'{char}' not found in common_chars")
 
+        common_chars = new_common_chars
+        print(f"\tUpdated common_chars after iteration {i}: {common_chars}")
+
+        iteration_data.append([i, word, new_common_chars])  # Store data for this iteration
+
+    print("\n--- Iteration Summary (Common Characters per Word) ---")
+    headers = ["Iteration", "Word", "New Common Chars"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal common_chars: {common_chars}")
     return common_chars
 
 
@@ -330,7 +353,7 @@ s_2 = "abccccdd"
 
 # Test cases for june 5th, 2024
 words = ["bella", "label", "roller"]
-# commonChars1(words)  # Expected output: ["e", "l", "l"]
+commonChars1(words)  # Expected output: ["e", "l", "l"]
 # commonChars2(words)  # Expected output: ["e", "l", "l"]
 
 # Test cases for june 6th, 2024
