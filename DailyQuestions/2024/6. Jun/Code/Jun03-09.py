@@ -233,7 +233,31 @@ def commonChars1(words: List[str]) -> List[str]:
 
 
 def commonChars2(words: List[str]) -> List[str]:
-    pass
+    """
+    Finds the common characters (including duplicates) that appear in all strings within the input list 'words'.
+
+    The function uses python's built-in data structure 'Counter' to generate a count
+    of each character in a word.
+    Initially, the 'Counter' of the first word is taken,
+    and then applied with bitwise 'AND' operation with the 'Counter' of each later word.
+    This bitwise 'AND' operation results in the intersection of characters of both words,
+    keeping the count as the minimum of counts in both words.
+    This ensures that 'common_chars' always holds the common characters with the least count among all processed words,
+    thus effectively finding the common characters.
+    Finally, 'elements()' method is used to generate the list of common characters from the updated 'Counter'.
+
+    The time complexity of this solution is O(n*m), where n is the number of words,
+    and m is the average length of each word.
+    This is because for each word, the function runs through each character to update the Counter.
+    The space complexity is O(min(m, k)), where m is the length of the longest word, and k is the size of the alphabet
+    (26 for English), as 'Counter' holds the count of each character appearing in the word.
+    """
+    common_chars = Counter(words[0])
+
+    for word in words[1:]:
+        common_chars &= Counter(word)
+
+    return list(common_chars.elements())
 
 
 # <-------------------------------------------------- June 6th, 2024 -------------------------------------------------->
@@ -306,8 +330,8 @@ s_2 = "abccccdd"
 
 # Test cases for june 5th, 2024
 words = ["bella", "label", "roller"]
-commonChars1(words)  # Expected output: ["e", "l", "l"]
-commonChars2(words)  # Expected output: ["e", "l", "l"]
+# commonChars1(words)  # Expected output: ["e", "l", "l"]
+# commonChars2(words)  # Expected output: ["e", "l", "l"]
 
 # Test cases for june 6th, 2024
 
