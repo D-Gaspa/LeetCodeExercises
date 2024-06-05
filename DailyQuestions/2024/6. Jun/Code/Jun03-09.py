@@ -275,12 +275,34 @@ def commonChars2(words: List[str]) -> List[str]:
     The space complexity is O(min(m, k)), where m is the length of the longest word, and k is the size of the alphabet
     (26 for English), as 'Counter' holds the count of each character appearing in the word.
     """
-    common_chars = Counter(words[0])
+    print("\n--- Input Parameters ---")
+    print(f"\twords = {words}")
 
-    for word in words[1:]:
-        common_chars &= Counter(word)
+    print("\n--- Initialization ---")
+    common_chars = Counter(words[0])  # Initialize with character counts from the first word
+    print(f"\tInitial common_chars (Counter):")
+    print(f"\t\t{common_chars}")
 
-    return list(common_chars.elements())
+    print("\n--- Main Loop (Intersecting Character Counts) ---")
+    iteration_data = []
+    for i, word in enumerate(words[1:], start=1):  # Iterate from the second word onwards
+        print(f"\nIteration {i}: Comparing with word '{word}'")
+        print(f"\tWord's Counter:")
+        print(f"\t\t{Counter(word)}")
+
+        common_chars &= Counter(word)  # Intersection of character counts
+        print(f"\tUpdated common_chars after intersection:")
+        print(f"\t\t{common_chars}")
+        iteration_data.append([i, word, common_chars.copy()])
+
+    print("\n--- Iteration Summary (Common Character Counts After Each Word) ---")
+    headers = ["Iteration", "Word", "Common Chars Counter"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    result = list(common_chars.elements())  # Convert Counter to a list of characters
+    print(f"\tFinal common_chars: {result}")
+    return result
 
 
 # <-------------------------------------------------- June 6th, 2024 -------------------------------------------------->
@@ -353,7 +375,7 @@ s_2 = "abccccdd"
 
 # Test cases for june 5th, 2024
 words = ["bella", "label", "roller"]
-commonChars1(words)  # Expected output: ["e", "l", "l"]
+# commonChars1(words)  # Expected output: ["e", "l", "l"]
 # commonChars2(words)  # Expected output: ["e", "l", "l"]
 
 # Test cases for june 6th, 2024
