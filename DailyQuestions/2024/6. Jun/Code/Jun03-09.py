@@ -169,11 +169,11 @@ def longestPalindrome2(s: str) -> int:
             result += 2
             character_set.remove(char)
             print(f"\t\tCharacter found in set, removed from set and result updated to {result}")
-            iteration_data.append(["In Set", char, character_set.copy(), result])
+            iteration_data.append([i + 1, char, f"Remove '{char}', result += 2", character_set.copy(), result])
         else:
             character_set.add(char)
             print(f"\t\tCharacter not in set, added to set")
-            iteration_data.append(["Not in Set", char, character_set.copy(), result])
+            iteration_data.append([i + 1, char, f"Add '{char}' to set", character_set.copy(), result])
 
     print("\n--- Final character_set ---")
     pprint(character_set)
@@ -184,7 +184,7 @@ def longestPalindrome2(s: str) -> int:
         print(f"\tCharacters remaining in set, adding 1 to result (result = {result})")
 
     print("\n--- Iteration Summary (Palindrome Length Calculation) ---")
-    headers = ["Status", "Character", "Character Set", "Result"]
+    headers = ["Iteration", "Character", "Action", "Character Set", "Result"]
     print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
 
     print("\n--- Function Returning ---")
