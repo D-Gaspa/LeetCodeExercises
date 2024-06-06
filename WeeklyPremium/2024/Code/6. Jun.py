@@ -1,5 +1,8 @@
 import bisect
+from pprint import pprint
 from typing import List
+
+from tabulate import tabulate
 
 
 # June, 2024
@@ -29,21 +32,37 @@ def longestCommonSubsequence1(arrays: List[List[int]]) -> List[int]:
     The space complexity is O(L), where L is the length of the longest common subsequence.
     This accounts for the space required to store the final list of common subsequences.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tarrays = {arrays}")
 
     def binary_search(array, num):
         """Helper function to perform binary search for 'num' in 'array'."""
+        print(f"\t\tBinary searching for {num} in {array}")
         index = bisect.bisect_left(array, num)
-        if index != len(array) and array[index] == num:  # Check if 'num' exists at the insertion point
-            return True
-        else:
-            return False
+        result = index != len(array) and array[index] == num
+        print(f"\t\tFound: {result}")  # Print search result
+        return result
 
     common_subsequences = []
+    iteration_data = []  # To collect data for iteration summary
 
-    for num in arrays[0]:
-        if all(binary_search(array, num) for array in arrays[1:]):  # Check if 'num' is present in all other arrays
+    print("\n--- Main Loop (Finding Common Elements) ---")
+    for i, num in enumerate(arrays[0]):
+        print(f"\nIteration {i + 1}:")
+        print(f"\tnum = {num}")
+
+        if all(binary_search(array, num) for array in arrays[1:]):
             common_subsequences.append(num)
+            print(f"\t\tAdded to common_subsequences: {common_subsequences}")
 
+        iteration_data.append([i + 1, num, common_subsequences.copy()])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Iteration", "num", "common_subsequences"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"longestCommonSubsequence1 = {common_subsequences}")
     return common_subsequences
 
 
@@ -150,9 +169,9 @@ def problem5_2():
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
 # Test cases for Week 1, June
-arrays = [[1, 3, 4], [1, 4, 7, 9]]
-# longestCommonSubsequence1(arrays)  # Expected output: [1, 4]
-# longestCommonSubsequence2(arrays)  # Expected output: [1, 4]
+arrays = [[2, 3, 6, 8], [1, 2, 3, 5, 6, 7, 10], [2, 3, 4, 6, 9]]
+# longestCommonSubsequence1(arrays)  # Expected output: [2, 3, 6]
+# longestCommonSubsequence2(arrays)  # Expected output: [2, 3, 6]
 
 # Test cases for Week 2, June
 
