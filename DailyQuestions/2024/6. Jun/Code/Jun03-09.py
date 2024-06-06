@@ -332,7 +332,23 @@ def isNStraightHand1(hand: List[int], group_size: int) -> bool:
 
 
 def isNStraightHand2(hand: List[int], group_size: int) -> bool:
-    pass
+    if len(hand) % group_size != 0:
+        return False
+
+    card_count = Counter(hand)
+    min_heap = list(card_count.keys())  # Initialize heap with unique card values
+    heapq.heapify(min_heap)
+
+    while min_heap:
+        current_card = min_heap[0]
+        for i in range(group_size):
+            if card_count[current_card + i] == 0:
+                return False
+            card_count[current_card + i] -= 1
+            if card_count[current_card + i] == 0:  # If count reaches 0, remove from heap
+                if current_card + i != heapq.heappop(min_heap):
+                    return False
+    return True
 
 
 def isNStraightHand3(hand: List[int], group_size: int) -> bool:
