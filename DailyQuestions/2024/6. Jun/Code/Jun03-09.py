@@ -316,6 +316,24 @@ def commonChars2(words: List[str]) -> List[str]:
 
 
 def isNStraightHand1(hand: List[int], group_size: int) -> bool:
+    """
+    This function checks if it's possible to divide the 'hand' into several groups of 'group_size',
+    where each group consists of consecutive cards.
+
+    The function checks if the total number of cards is divisible by the group size, returning False if not.
+    Then the function sorts 'hand' in increasing order.
+    It repeatedly selects the smallest card left ('start_card'),
+    then looks for group_size - 1 cards that follow 'start_card' consecutively.
+    If it finds all of them, it removes them from 'hand' along with 'start_card';
+    if any card is not in 'hand', it returns False right away.
+    The function keeps forming groups in such a way until no cards are left, in which case it returns True.
+
+    The time complexity of this solution is O(n^2) because it uses list.remove() inside a loop.
+    Specifically, 'list.remove(x)' involves scanning the list until finding 'x' and then removing it,
+    which can take up to O(n) time where n is the length of the list.
+    Given that 'remove' is called in a loop, this will result in an overall quadratic time complexity.
+    The space complexity is O(n) due to the storage requirements for the 'hand' list.
+    """
     if len(hand) % group_size != 0:
         return False
 
@@ -332,12 +350,28 @@ def isNStraightHand1(hand: List[int], group_size: int) -> bool:
 
 
 def isNStraightHand2(hand: List[int], group_size: int) -> bool:
+    """
+    This function checks if it's possible to divide the 'hand' into several groups of 'group_size',
+    where each group consists of consecutive cards.
+
+    The function checks if the total number of cards is divisible by the group size, returning False if not.
+    It counts each card's frequency and uses a min-heap to track the smallest card values.
+    It iterates over the heap, checking for group_size - 1 consecutive cards with non-zero counts.
+    If any are missing, it returns False.
+    Otherwise, it decrements the counts and removes cards with a count of 0.
+    If all cards form valid groups, it returns True.
+
+    The time complexity of this solution is O(n log n) due to the use of a heap, where n is the size of the hand.
+    The heap is created with all the unique card values and heappop is used (which has logarithmic time complexity).
+    The space complexity of this solution is O(n), for the card_count and min_heap storage,
+    where n is the number of unique cards.
+    """
     if len(hand) % group_size != 0:
         return False
 
     card_count = Counter(hand)
-    min_heap = list(card_count.keys())  # Initialize heap with unique card values
-    heapq.heapify(min_heap)
+    min_heap = list(card_count.keys())
+    heapq.heapify(min_heap)  # Transform list into heap, in-place, in linear time
 
     while min_heap:
         current_card = min_heap[0]
@@ -345,13 +379,36 @@ def isNStraightHand2(hand: List[int], group_size: int) -> bool:
             if card_count[current_card + i] == 0:
                 return False
             card_count[current_card + i] -= 1
-            if card_count[current_card + i] == 0:  # If count reaches 0, remove from heap
+            if card_count[current_card + i] == 0:
                 if current_card + i != heapq.heappop(min_heap):
                     return False
-    return True
+    return True  # All cards successfully formed groups
 
 
 def isNStraightHand3(hand: List[int], group_size: int) -> bool:
+    """
+    This function checks if it's possible to divide the 'hand' into several groups of 'group_size',
+    where each group consists of consecutive cards.
+
+    The function checks if the total number of cards is divisible by the group size, returning False if not.
+    It then creates a Counter dictionary 'card_count' to count each unique card in the 'hand'.
+    For each 'card' in the 'hand', it looks for the smallest card 'start_card'
+    in the potential group that the 'card' belongs to.
+    It then reduces by 1 the count of 'start_card' and any other card in the same group in 'card_count',
+    and continues doing so until 'start_card' doesn't exist in the 'hand'.
+    If all cards from 'start_card' to the 'card' can be decremented successfully,
+    it moves on to the next potential 'start_card';
+    if any card doesn't exist in the 'hand', it will return False.
+    After all cards are processed and no False has been returned, it will return True meaning that the hand can be
+    divided into groups as required.
+
+    The time complexity of this solution is O(n) because every card is processed at most three times:
+    once when constructing the dictionary, and potentially twice more when forming the groups.
+    We might visit each card twice in the worst case: once on the way down, locating the start card and once on the way
+    up, decrementing and removing the cards of a group, resulting in O(3n) operations, which simplifies to O(n).
+    The space complexity is O(n) because of the Counter dictionary used to count the cards,
+    where n is the total number of cards in the 'hand'.
+    """
     if len(hand) % group_size != 0:
         return False
 
@@ -359,10 +416,13 @@ def isNStraightHand3(hand: List[int], group_size: int) -> bool:
 
     for card in hand:
         start_card = card
+        # Finds the smallest card in the possible consecutive group that 'card' belong to
         while card_count[start_card - 1]:
             start_card -= 1
 
+        # Processes all cards in the possible consecutive group that 'card' belong to
         while start_card <= card:
+
             while card_count[start_card]:
                 for next_card in range(start_card, start_card + group_size):
                     if not card_count[next_card]:
@@ -370,7 +430,7 @@ def isNStraightHand3(hand: List[int], group_size: int) -> bool:
                     card_count[next_card] -= 1
             start_card += 1
 
-    return True
+    return True  # All cards successfully formed groups
 
 
 # <-------------------------------------------------- June 7th, 2024 -------------------------------------------------->
