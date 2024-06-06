@@ -1,5 +1,4 @@
 import bisect
-from pprint import pprint
 from typing import List
 
 from tabulate import tabulate
@@ -84,29 +83,55 @@ def longestCommonSubsequence2(arrays: List[List[int]]) -> List[int]:
     The space complexity is O(K), where K is the maximum length among the input arrays
     (used to store intermediate subsequences).
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tarrays = {arrays}")
+
     common_subsequences = arrays[0]
+    iteration_data = []  # To collect data for iteration summary
 
-    for array in arrays[1:]:
+    print("\n--- Main Loop (Finding Common Subsequences) ---")
+    for i, array in enumerate(arrays[1:], start=1):  # Start from the second array
+        print(f"\nIteration {i}: Comparing with array {array}")
+
         new_subsequence = []
-
         array_index = 0
         common_subseq_index = 0
-
         array_length = len(array)
         common_subseq_length = len(common_subsequences)
+        iteration_steps = []  # To collect data for each step within the iteration
 
         while common_subseq_index < common_subseq_length and array_index < array_length:
+            print(
+                f"\tComparing: common_subsequences[{common_subseq_index}] = {common_subsequences[common_subseq_index]} vs. array[{array_index}] = {array[array_index]}")
             if array[array_index] == common_subsequences[common_subseq_index]:
                 new_subsequence.append(array[array_index])
+                print(f"\t\tMatch found! Added to new_subsequence: {new_subsequence}")
+                print(f"\t\tAdvancing both pointers")
                 common_subseq_index += 1
                 array_index += 1
             elif array[array_index] < common_subsequences[common_subseq_index]:
+                print(f"\t\tAdvancing array_index")
                 array_index += 1
             else:
+                print(f"\t\tAdvancing common_subseq_index")
                 common_subseq_index += 1
 
-        common_subsequences = new_subsequence
+            iteration_steps.append([common_subseq_index, array_index, new_subsequence.copy()])
 
+        # Print Iteration Summary
+        print(f"\n\t--- Iteration {i} Steps Summary ---")
+        headers = ["common_subseq_index", "array_index", "new_subsequence"]
+        print(tabulate(iteration_steps, headers=headers, tablefmt="fancy_grid"))
+
+        common_subsequences = new_subsequence
+        iteration_data.append([i, array, new_subsequence])  # Update summary for this iteration
+
+    print("\n--- Iteration Summary (All Iterations) ---")
+    headers = ["Iteration", "Array Compared", "Resulting Common Subsequence"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"longestCommonSubsequence2 = {common_subsequences}")
     return common_subsequences
 
 
