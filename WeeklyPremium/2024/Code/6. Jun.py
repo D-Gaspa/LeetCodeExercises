@@ -5,8 +5,8 @@ from tabulate import tabulate
 
 
 # June, 2024
-
 # <--------------------------------------------------- Week 1, June --------------------------------------------------->
+
 # 1940. Longest Common Subsequence Between Sorted Arrays
 
 # Given an array of integer arrays `arrays` where each `arrays[i]` is sorted in strictly increasing order,
@@ -17,19 +17,14 @@ def longestCommonSubsequence1(arrays: List[List[int]]) -> List[int]:
     """
     Finds the longest common subsequence present in the given list of sorted arrays.
 
-    The function uses a binary search helper function in its main logic as an efficient way to check the existence
-    of an element from the first array in all other given arrays.
-    It iterates over every number in the first array, and checks if that number is present in every other array using
-    the helper binary search function.
-    If it's found in all arrays, it's added to the result list `common_subsequences`.
+    This function performs a preliminary check to identify the smallest array, then checks for numbers in this
+    array across all other arrays in the list using a helper binary search function.
 
-    The time complexity of this solution is O(n * m * log(k)), where n is the number of elements in the first array,
-    m is the total number of arrays, and k is the average length of the arrays.
-    We perform binary search (with time complexity O(log(k))) for each element in the first array (n times),
-    across all arrays (m times).
+    The time complexity of this solution is O(n * m * log(k)), skewed towards the smallest size of the arrays.
+    Where n is the number of elements in the smallest array, m is the total number of arrays,
+    and k is the average length of the arrays.
 
     The space complexity is O(L), where L is the length of the longest common subsequence.
-    This accounts for the space required to store the final list of common subsequences.
     """
     print("\n--- Input Parameters ---")
     print(f"\tarrays = {arrays}")
@@ -42,18 +37,22 @@ def longestCommonSubsequence1(arrays: List[List[int]]) -> List[int]:
         print(f"\t\tFound: {result}")  # Print search result
         return result
 
+    print("\n--- Identifying Smallest Array ---")
+    smallest_array = min(arrays, key=len)
+    arrays.remove(smallest_array)
+    print(f"\tSmallest array: {smallest_array}")
+
     common_subsequences = []
-    iteration_data = []  # To collect data for iteration summary
+    iteration_data = []
 
     print("\n--- Main Loop (Finding Common Elements) ---")
-    for i, num in enumerate(arrays[0]):
+    for i, num in enumerate(smallest_array):
         print(f"\nIteration {i + 1}:")
         print(f"\tnum = {num}")
-
-        if all(binary_search(array, num) for array in arrays[1:]):
+        # The line below should be kept intact for functionality reasons:
+        if all(binary_search(array, num) for array in arrays):  # Check if 'num' is present in all other arrays
             common_subsequences.append(num)
             print(f"\t\tAdded to common_subsequences: {common_subsequences}")
-
         iteration_data.append([i + 1, num, common_subsequences.copy()])
 
     print("\n--- Iteration Summary ---")
@@ -102,7 +101,8 @@ def longestCommonSubsequence2(arrays: List[List[int]]) -> List[int]:
 
         while common_subseq_index < common_subseq_length and array_index < array_length:
             print(
-                f"\tComparing: common_subsequences[{common_subseq_index}] = {common_subsequences[common_subseq_index]} vs. array[{array_index}] = {array[array_index]}")
+                f"\tComparing: common_subsequences[{common_subseq_index}] = {common_subsequences[common_subseq_index]}"
+                f" vs. array[{array_index}] = {array[array_index]}")
             if array[array_index] == common_subsequences[common_subseq_index]:
                 new_subsequence.append(array[array_index])
                 print(f"\t\tMatch found! Added to new_subsequence: {new_subsequence}")
