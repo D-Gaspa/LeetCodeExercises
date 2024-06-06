@@ -405,23 +405,65 @@ def isNStraightHand2(hand: List[int], group_size: int) -> bool:
     The space complexity of this solution is O(n), for the card_count and min_heap storage,
     where n is the number of unique cards.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\thand = {hand}")
+    print(f"\tgroup_size = {group_size}")
+
+    print("\n--- Preprocessing (Counting Cards) ---")
     if len(hand) % group_size != 0:
+        print("\tThe number of cards is not divisible by the group size.")
+        print("\tReturning False")
         return False
 
     card_count = Counter(hand)
-    min_heap = list(card_count.keys())
-    heapq.heapify(min_heap)  # Transform list into heap, in-place, in linear time
+    print(f"\tCard Counts: {card_count}")
 
+    min_heap = list(card_count.keys())
+    heapq.heapify(min_heap)
+    print(f"\tMin-Heap (Initial): {min_heap}")
+
+    iteration_data = []  # To collect data for the iteration summary table
+    iteration_count = 0
+
+    print("\n--- Main Loop (Building Groups) ---")
     while min_heap:
+        iteration_count += 1
+        print(f"\nIteration {iteration_count}:")
+
         current_card = min_heap[0]
+        print(f"\tCurrent Card (Min-Heap Top): {current_card}")
+        print(f"\t\tMin-Heap: {min_heap}")
+
+        group_formed = True  # Assume the group can be formed unless proven otherwise
         for i in range(group_size):
-            if card_count[current_card + i] == 0:
-                return False
-            card_count[current_card + i] -= 1
-            if card_count[current_card + i] == 0:
-                if current_card + i != heapq.heappop(min_heap):
-                    return False
-    return True  # All cards successfully formed groups
+            card_to_find = current_card + i
+            if card_count[card_to_find] == 0:
+                group_formed = False  # Group cannot be formed
+                print(f"\t\t\tCard {card_to_find} missing or count is zero")
+                break
+            else:
+                print(f"\t\t\tCard {card_to_find} found in counts")
+
+        iteration_data.append([iteration_count, current_card, group_formed, min_heap.copy(), card_count.copy()])
+
+        if group_formed:
+            for i in range(group_size):
+                card_count[current_card + i] -= 1
+                if card_count[current_card + i] == 0:
+                    del card_count[current_card + i]
+                    print(f"\t\t\tRemoved card {current_card + i} from counts")
+                    if current_card + i != heapq.heappop(min_heap):
+                        print("\t\t\tError: Heap inconsistency detected")
+                        return False
+
+    print("\n--- Iteration Summary (Group Formation Attempts) ---")
+    headers = ["Iteration", "Current Card", "Group Formed?", "Min-Heap", "Card Counts"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print("\tAll cards successfully formed groups.")
+    print("\tReturning True")
+    return True
 
 
 def isNStraightHand3(hand: List[int], group_size: int) -> bool:
