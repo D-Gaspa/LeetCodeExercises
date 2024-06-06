@@ -352,7 +352,25 @@ def isNStraightHand2(hand: List[int], group_size: int) -> bool:
 
 
 def isNStraightHand3(hand: List[int], group_size: int) -> bool:
-    pass
+    if len(hand) % group_size != 0:
+        return False
+
+    card_count = Counter(hand)
+
+    for card in hand:
+        start_card = card
+        while card_count[start_card - 1]:
+            start_card -= 1
+
+        while start_card <= card:
+            while card_count[start_card]:
+                for next_card in range(start_card, start_card + group_size):
+                    if not card_count[next_card]:
+                        return False
+                    card_count[next_card] -= 1
+            start_card += 1
+
+    return True
 
 
 # <-------------------------------------------------- June 7th, 2024 -------------------------------------------------->
