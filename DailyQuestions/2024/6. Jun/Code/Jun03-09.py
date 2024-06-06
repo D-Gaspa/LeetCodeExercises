@@ -307,16 +307,18 @@ def commonChars2(words: List[str]) -> List[str]:
 
 
 # <-------------------------------------------------- June 6th, 2024 -------------------------------------------------->
-# 4. Problem
+# 846. Hand of Straights
 
-# Description
+# Given an integer array hand representing the values on Alice's cards and an integer groupSize,
+# determine if Alice can rearrange her cards into groups of groupSize consecutive cards.
+# Return true if possible, otherwise false.
 
 
-def problem4_1():
+def isNStraightHand1(hand: List[int], group_size: int) -> bool:
     pass
 
 
-def problem4_2():
+def isNStraightHand2(hand: List[int], group_size: int) -> bool:
     pass
 
 
