@@ -1,3 +1,4 @@
+import heapq
 from collections import Counter
 from pprint import pprint
 from typing import List
@@ -315,10 +316,26 @@ def commonChars2(words: List[str]) -> List[str]:
 
 
 def isNStraightHand1(hand: List[int], group_size: int) -> bool:
-    pass
+    if len(hand) % group_size != 0:
+        return False
+
+    hand.sort()
+
+    while hand:
+        start_card = hand[0]
+        for i in range(group_size):
+            if start_card + i not in hand:
+                return False
+            hand.remove(start_card + i)
+
+    return True  # All cards successfully formed groups
 
 
 def isNStraightHand2(hand: List[int], group_size: int) -> bool:
+    pass
+
+
+def isNStraightHand3(hand: List[int], group_size: int) -> bool:
     pass
 
 
@@ -382,6 +399,11 @@ words = ["bella", "label", "roller"]
 # commonChars2(words)  # Expected output: ["e", "l", "l"]
 
 # Test cases for june 6th, 2024
+hand = [1, 2, 3, 6, 2, 3, 4, 7, 8]
+groupSize = 3
+# isNStraightHand1(hand, groupSize)  # Expected output: True
+# isNStraightHand2(hand, groupSize)  # Expected output: True
+# isNStraightHand3(hand, groupSize)  # Expected output: True
 
 # Test cases for june 7th, 2024
 
