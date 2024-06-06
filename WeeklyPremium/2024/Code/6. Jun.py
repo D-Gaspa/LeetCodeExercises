@@ -48,7 +48,47 @@ def longestCommonSubsequence1(arrays: List[List[int]]) -> List[int]:
 
 
 def longestCommonSubsequence2(arrays: List[List[int]]) -> List[int]:
-    pass
+    """
+    Finds the longest common subsequence present in the given list of sorted arrays.
+
+    The main logic of the function is based on the two-pointer technique used in iterating through sorted lists
+    for comparison.
+    It iteratively finds the common elements of the first list (starting as the common subsequence) and the next ones.
+    For each list, it runs through the elements of the current common subsequence and the new list side by side.
+    If elements don't match, it advances the index of the smaller element.
+    Every time a common value is found, it is added to the new_subsequence that ultimately replaces the current
+    common_subsequence for next comparisons.
+
+    The time complexity of this function is O(n * m), where n is the total number of lists,
+    and m is the average size of these lists.
+    This is because we are running through each list once, comparing and moving the pointers in a linear fashion.
+    The space complexity is O(K), where K is the maximum length among the input arrays
+    (used to store intermediate subsequences).
+    """
+    common_subsequences = arrays[0]
+
+    for array in arrays[1:]:
+        new_subsequence = []
+
+        array_index = 0
+        common_subseq_index = 0
+
+        array_length = len(array)
+        common_subseq_length = len(common_subsequences)
+
+        while common_subseq_index < common_subseq_length and array_index < array_length:
+            if array[array_index] == common_subsequences[common_subseq_index]:
+                new_subsequence.append(array[array_index])
+                common_subseq_index += 1
+                array_index += 1
+            elif array[array_index] < common_subsequences[common_subseq_index]:
+                array_index += 1
+            else:
+                common_subseq_index += 1
+
+        common_subsequences = new_subsequence
+
+    return common_subsequences
 
 
 # <--------------------------------------------------- Week 2, June --------------------------------------------------->
