@@ -334,19 +334,58 @@ def isNStraightHand1(hand: List[int], group_size: int) -> bool:
     Given that 'remove' is called in a loop, this will result in an overall quadratic time complexity.
     The space complexity is O(n) due to the storage requirements for the 'hand' list.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\thand = {hand}")
+    print(f"\tgroup_size = {group_size}")
+
     if len(hand) % group_size != 0:
+        print("\n--- Decision Point (Divisibility Check) ---")
+        print("\tThe number of cards is not divisible by the group size.")
+        print("\tReturning False")
         return False
 
     hand.sort()
+    print("\n--- After Sorting ---")
+    print(f"\thand = {hand}")
 
+    iteration_data = []  # To collect data for the iteration summary table
+    iteration_count = 0
+
+    print("\n--- Main Loop (Building Groups) ---")
     while hand:
+        iteration_count += 1
+        print(f"\nIteration {iteration_count}:")
         start_card = hand[0]
-        for i in range(group_size):
-            if start_card + i not in hand:
-                return False
-            hand.remove(start_card + i)
+        print(f"\tStart Card: {start_card}")
 
-    return True  # All cards successfully formed groups
+        print(f"\tCard before iteration {iteration_count}: {hand}")
+
+        group = [start_card]
+        for i in range(1, group_size):
+            card_to_find = start_card + i
+            print(f"\t\tLooking for Card: {card_to_find}")
+            if card_to_find not in hand:
+                print("\n--- Decision Point (Consecutive Group Check) ---")
+                print(f"\t\tCard {card_to_find} not found in the remaining hand.")
+                print("\t\tReturning False")
+                return False
+            group.append(card_to_find)  # Build the group
+
+        iteration_data.append([iteration_count, group, hand.copy()])  # Add to summary table data
+
+        for card in group:
+            hand.remove(card)
+
+        print(f"\tCard after iteration {iteration_count}: {hand}")
+
+    print("\n--- Iteration Summary (Formed Groups) ---")
+    headers = ["Iteration", "Group Formed", "Remaining Hand"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print("\tAll cards successfully formed groups.")
+    print("\tReturning True")
+    return True
 
 
 def isNStraightHand2(hand: List[int], group_size: int) -> bool:
