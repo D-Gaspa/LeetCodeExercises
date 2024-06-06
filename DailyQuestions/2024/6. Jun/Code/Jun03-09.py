@@ -490,28 +490,55 @@ def isNStraightHand3(hand: List[int], group_size: int) -> bool:
     The space complexity is O(n) because of the Counter dictionary used to count the cards,
     where n is the total number of cards in the 'hand'.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\thand = {hand}")
+    print(f"\tgroup_size = {group_size}")
+
+    print("\n--- Initial Check (Divisibility) ---")
     if len(hand) % group_size != 0:
+        print(f"\tHand length ({len(hand)}) not divisible by group_size ({group_size}). Returning False.")
         return False
 
+    print("\n--- Card Counting ---")
     card_count = Counter(hand)
+    pprint(card_count)
 
+    print("\n--- Main Loop (Processing Cards) ---")
+    iteration_data = []  # Data collection for iteration summary
     for card in hand:
+        print(f"\n\tProcessing card: {card}")
         start_card = card
-        # Finds the smallest card in the possible consecutive group that 'card' belong to
+        print(f"\t\tInitial start_card: {start_card}")
+
+        # Find the smallest card in the potential group
+        print(f"\t\tFinding smallest start_card:")
         while card_count[start_card - 1]:
             start_card -= 1
+            print(f"\t\t\tstart_card updated to: {start_card}")
 
-        # Processes all cards in the possible consecutive group that 'card' belong to
+        # Process cards in the group
+        print(f"\t\tProcessing group starting from {start_card}:")
         while start_card <= card:
-
             while card_count[start_card]:
+                # Iterate over cards in the group
                 for next_card in range(start_card, start_card + group_size):
-                    if not card_count[next_card]:
+                    if not card_count[next_card]:  # Card not found
+                        print(f"\t\t\tMissing card: {next_card}. Returning False.")
                         return False
                     card_count[next_card] -= 1
+                    print(f"\t\t\tDecremented count of {next_card} to {card_count[next_card]}")
+                    iteration_data.append([card, next_card, card_count.copy()])  # Collect data
             start_card += 1
+            print(f"\t\t\tMoved to next start_card: {start_card}")
 
-    return True  # All cards successfully formed groups
+    # Iteration summary
+    print("\n--- Iteration Summary (Card Processing) ---")
+    headers = ["Card", "Processed Card", "Card Count (After)"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print("All cards successfully formed groups. Returning True.")
+    return True
 
 
 # <-------------------------------------------------- June 7th, 2024 -------------------------------------------------->
