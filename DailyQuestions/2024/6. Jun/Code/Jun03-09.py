@@ -542,16 +542,18 @@ def isNStraightHand3(hand: List[int], group_size: int) -> bool:
 
 
 # <-------------------------------------------------- June 7th, 2024 -------------------------------------------------->
-# 5. Problem
+# 648. Replace Words
 
-# Description
+# Given a dictionary of roots and a sentence, replace all derivatives in the sentence with their corresponding root.
+# If multiple roots can form a derivative, use the shortest root.
+# Return the modified sentence.
 
 
-def problem5_1():
+def replaceWords1(dictionary: List[str], sentence: str) -> str:
     pass
 
 
-def problem5_2():
+def replaceWords2(dictionary: List[str], sentence: str) -> str:
     pass
 
 
@@ -608,6 +610,12 @@ groupSize = 3
 # isNStraightHand3(hand, groupSize)  # Expected output: True
 
 # Test cases for june 7th, 2024
+dictionary = ["cat", "bat", "rat"]
+sentence = "the cattle was rattled by the battery"
+# replaceWords1(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
+dictionary_2 = ["a", "b", "c"]
+sentence_2 = "aadsfasf absbs bbab cadsfafs"
+# replaceWords1(dictionary_2, sentence_2)  # Expected output: "a a b c"
 
 # Test cases for june 8th, 2024
 
