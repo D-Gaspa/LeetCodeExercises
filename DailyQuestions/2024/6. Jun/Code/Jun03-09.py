@@ -559,7 +559,35 @@ def replaceWords1(dictionary: List[str], sentence: str) -> str:
 
 
 def replaceWords2(dictionary: List[str], sentence: str) -> str:
-    pass
+    class TrieNode:
+        def __init__(self):
+            self.children = {}
+            self.is_word_end = False
+
+    def build_trie(words: List[str]) -> TrieNode:
+        root = TrieNode()
+        for word in words:
+            node = root
+            for char in word:
+                if char not in node.children:
+                    node.children[char] = TrieNode()
+                node = node.children[char]
+            node.is_end_of_word = True
+        return root
+
+    root = build_trie(dictionary)
+
+    def shortest_root(word: str) -> str:
+        node = root
+        for index, char in enumerate(word):
+            if char not in node.children:
+                break  # No matching prefix
+            node = node.children[char]
+            if node.is_word_end:
+                return word[:index + 1]  # Found the shortest root
+        return word  # No root found
+
+    return " ".join(shortest_root(word) for word in sentence.split())
 
 
 def replaceWords3(dictionary: List[str], sentence: str) -> str:
