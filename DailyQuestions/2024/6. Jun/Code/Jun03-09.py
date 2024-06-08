@@ -566,13 +566,51 @@ def replaceWords1(dictionary: List[str], sentence: str) -> str:
     against the word using the startswith method, which in the worst case can take O(m) time.
     The space complexity is O(n) as the function stores the modified words in a list before joining them.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tdictionary = {dictionary}")
+    print(f"\tsentence = {sentence}")
+
+    print("\n--- Splitting Sentence into Words ---")
+    words = sentence.split()
+    print(f"\twords = {words}")
 
     def shortest_root(word: str) -> str:
-        """Returns the word with the shortest root from the dictionary that the word starts with"""
-        replacements = [root for root in dictionary if word.startswith(root)]
-        return min(replacements, key=len, default=word)
+        print(f"\n--- Processing Word: '{word}' ---")
 
-    return " ".join([shortest_root(word) for word in sentence.split()])
+        print("\tChecking for Replacements:")
+        replacements = []
+        for root in dictionary:
+            print(f"\t\tTesting Root: '{root}'")
+            if word.startswith(root):
+                replacements.append(root)
+                print(f"\t\t\tWord starts with '{root}'. Adding to replacements: {replacements}")
+
+        print(f"\tPossible Replacements Found: {replacements}")
+        if replacements:
+            shortest = min(replacements, key=len)
+            print(f"\tShortest Replacement Selected: '{shortest}'")
+            return shortest
+        else:
+            print("\tNo Replacements Found. Returning Original Word.")
+            return word
+
+    print("\n--- Replacing Words with Shortest Roots ---")
+    replaced_words = []
+    for word in words:
+        replaced = shortest_root(word)
+        replaced_words.append(replaced)
+
+    print("\n--- Iteration Summary (Word Replacements) ---")
+    headers = ["Original Word", "Replaced Word"]
+    table_data = [[original, replaced] for original, replaced in zip(words, replaced_words)]
+    print(tabulate(table_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Joining Replaced Words into Sentence ---")
+    result = " ".join(replaced_words)
+    print(f"\tResult: '{result}'")
+
+    print("\n--- Function Returning ---")
+    return result
 
 
 def replaceWords2(dictionary: List[str], sentence: str) -> str:
@@ -730,7 +768,7 @@ groupSize = 3
 # Test cases for june 7th, 2024
 dictionary = ["cat", "bat", "rat"]
 sentence = "the cattle was rattled by the battery"
-# replaceWords1(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
+replaceWords1(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
 # replaceWords2(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
 # replaceWords3(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
 
