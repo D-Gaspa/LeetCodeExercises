@@ -576,6 +576,26 @@ def replaceWords1(dictionary: List[str], sentence: str) -> str:
 
 
 def replaceWords2(dictionary: List[str], sentence: str) -> str:
+    """
+    Replaces all words in a sentence with their shortest root available in the given dictionary.
+
+    The first part of the function creates a Trie (prefix tree) using the dictionary.
+    Each character forms a node and word completions are marked using 'is_word_end' flag.
+    The initial building of the Trie allows for efficient prefix searches later on.
+
+    In the 'shortest_root' function, the Trie is traversed character by character for each word in the sentence.
+    If a word end is encountered during traversal, it returns the prefix up to that point.
+    If no matching root is found, it returns the original word.
+    The main function splits the sentence into words, replaces each word with the shortest root (if available)
+    and reassembles the sentence.
+
+    The time complexity is O(m+n), where m is the number of characters in all words of the dictionary and n is the
+    total number of characters in all words of the sentence.
+    Building the Trie takes O(m) time and finding the shortest root for each word in the sentence takes O(n) time.
+
+    The space complexity of this function is O(m+n), as we're storing all characters in the Trie and the new sentence.
+    """
+
     class TrieNode:
         def __init__(self):
             self.children = {}
@@ -589,7 +609,7 @@ def replaceWords2(dictionary: List[str], sentence: str) -> str:
                 if char not in node.children:
                     node.children[char] = TrieNode()
                 node = node.children[char]
-            node.is_end_of_word = True
+            node.is_word_end = True
         return root
 
     root = build_trie(dictionary)
@@ -598,11 +618,11 @@ def replaceWords2(dictionary: List[str], sentence: str) -> str:
         node = root
         for index, char in enumerate(word):
             if char not in node.children:
-                break  # No matching prefix
+                break
             node = node.children[char]
             if node.is_word_end:
-                return word[:index + 1]  # Found the shortest root
-        return word  # No root found
+                return word[:index + 1]  # Shortest root found
+        return word
 
     return " ".join(shortest_root(word) for word in sentence.split())
 
