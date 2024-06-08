@@ -211,7 +211,7 @@ def commonChars1(words: List[str]) -> List[str]:
     This operation is performed by 'new_common_chars',
     which is then assigned back to 'common_chars' at the end of each iteration.
 
-    The time complexity of this solution is O(n*m^2) where n is the number of words,
+    The time complexity of this solution is O(n * m^2) where n is the number of words,
     and m is the average length of each word.
     The outer loop runs n times and the inner loop m times.
     Within the inner loop, the 'remove' operation is performed which can take up to m operations in the worst-case
@@ -271,7 +271,7 @@ def commonChars2(words: List[str]) -> List[str]:
     thus effectively finding the common characters.
     Finally, 'elements()' method is used to generate the list of common characters from the updated 'Counter'.
 
-    The time complexity of this solution is O(n*m), where n is the number of words,
+    The time complexity of this solution is O(n * m), where n is the number of words,
     and m is the average length of each word.
     This is because for each word, the function runs through each character to update the Counter.
     The space complexity is O(1) as the size of the `Counter` used to store the character counts is limited by the
@@ -560,11 +560,11 @@ def replaceWords1(dictionary: List[str], sentence: str) -> str:
     The main function then takes a sentence, splits it into words, and calls 'shortest_root' for each word.
     The result is then rejoined into a sentence with the roots replacing the original words.
 
-    The time complexity of this solution is O(n * m) where n is the number of words in the sentence,
-    and m is the number of roots in the dictionary.
-    This is due to the two nested loops (one explicit and one implicit in startswith() function).
-    The space complexity is O(n) where n is the number of words in the input sentence.
-    This is because the function stores the modified words in a list before joining them back into a sentence.
+    The time complexity of this solution is O(n * d * m) where n is the number of words in the sentence,
+    d is the number of words in the dictionary, and m is the average length of these words.
+    This is due to the nested loop structure where each word is checked against each root, and each root is checked
+    against the word using the startswith method, which in the worst case can take O(m) time.
+    The space complexity is O(n) as the function stores the modified words in a list before joining them.
     """
 
     def shortest_root(word: str) -> str:
@@ -589,11 +589,13 @@ def replaceWords2(dictionary: List[str], sentence: str) -> str:
     The main function splits the sentence into words, replaces each word with the shortest root (if available)
     and reassembles the sentence.
 
-    The time complexity is O(m+n), where m is the number of characters in all words of the dictionary and n is the
-    total number of characters in all words of the sentence.
-    Building the Trie takes O(m) time and finding the shortest root for each word in the sentence takes O(n) time.
+    The time complexity is O(d * m + n * w) where d is the number of words in the dictionary, m is the average length
+    of these words, n is the number of words in the sentence, and w is the average length of the sentence words.
+    This is because, when building the Trie, each word is traversed character by character making it O(d * m).
+    Then, we call the 'shortest_root' function for each word in the sentence, and the Trie is traversed over the
+    characters of the sentence words, making it O(n * w).
 
-    The space complexity of this function is O(m+n), as we're storing all characters in the Trie and the new sentence.
+    The space complexity is (d * m + n * w), as we're storing all characters in the Trie and the new sentence.
     """
 
     class TrieNode:
@@ -628,6 +630,32 @@ def replaceWords2(dictionary: List[str], sentence: str) -> str:
 
 
 def replaceWords3(dictionary: List[str], sentence: str) -> str:
+    """
+    Replaces all words in a sentence with their shortest root available in the given dictionary.
+
+    The main context of the function is that it generates a dictionary 'word_lengths'
+    where key-value pairs are the words in the dictionary and their lengths respectively.
+    It then identifies and stores the minimum and maximum lengths of words in the dictionary for later use.
+    The function then splits the sentence into individual words.
+
+    For each word in the sentence, it checks each substring of the word from the length of the shortest to either the
+    length of the longest word in the dictionary or the length of the original word; whichever is smallest.
+    If it finds a matching substring in the dictionary, it stores the substring as the replacement for the word and
+    breaks out of the loop to avoid longer roots.
+    It then appends the replacement word to 'modified_sentence_words' list.
+    Finally, it joins all the words in the 'modified_sentence_words' list to recreate the sentence.
+
+    The time complexity of this solution is O(d * m + n * t) where d is the number of words in the dictionary,
+    m is the average length of these words, n is the number of words in the sentence, and t is the maximum possible
+    length of relevant substring checks for a word in the sentence.
+    For each word in the sentence, we are only creating substrings from the minimum length of dictionary words to the
+    minimum length between the maximum length of dictionary words and the length of the current word;
+    which is substantially fewer operations than checking every character.
+    Hence, the time complexity is O(n * t).
+    Building the 'word_lengths' dictionary takes O(d * m) time as we iterate over each word and store its length.
+
+    The space complexity is O(n + d) because we are storing n words from the sentence and d words from the dictionary.
+    """
     word_lengths = {word: len(word) for word in dictionary}
     min_length, max_length = min(word_lengths.values()), max(word_lengths.values())
 
@@ -643,6 +671,7 @@ def replaceWords3(dictionary: List[str], sentence: str) -> str:
                 replacement = substring
                 break
         modified_sentence_words.append(replacement)
+
     return " ".join(modified_sentence_words)
 
 
