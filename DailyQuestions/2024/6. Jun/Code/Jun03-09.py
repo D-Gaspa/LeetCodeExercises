@@ -506,7 +506,7 @@ def isNStraightHand3(hand: List[int], group_size: int) -> bool:
     print("\n--- Main Loop (Processing Cards) ---")
     iteration_data = []  # Data collection for iteration summary
     for card in hand:
-        print(f"\n\tProcessing card: {card}")
+        print(f"\n\tProcessing card in hand: {card}")
         start_card = card
         print(f"\t\tInitial start_card: {start_card}")
 
