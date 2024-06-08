@@ -550,6 +550,23 @@ def isNStraightHand3(hand: List[int], group_size: int) -> bool:
 
 
 def replaceWords1(dictionary: List[str], sentence: str) -> str:
+    """
+    Replaces all words in a sentence with their shortest root available in the given dictionary.
+
+    The function is divided into two parts, first with the nested function 'shortest_root';
+    in this function, a check is performed for each word to see if it starts with a root found in the dictionary.
+    If multiple roots are found, it returns the shortest one.
+    If no roots are found, it returns the original word.
+    The main function then takes a sentence, splits it into words, and calls 'shortest_root' for each word.
+    The result is then rejoined into a sentence with the roots replacing the original words.
+
+    The time complexity of this solution is O(n * m) where n is the number of words in the sentence,
+    and m is the number of roots in the dictionary.
+    This is due to the two nested loops (one explicit and one implicit in startswith() function).
+    The space complexity is O(n) where n is the number of words in the input sentence.
+    This is because the function stores the modified words in a list before joining them back into a sentence.
+    """
+
     def shortest_root(word: str) -> str:
         """Returns the word with the shortest root from the dictionary that the word starts with"""
         replacements = [root for root in dictionary if word.startswith(root)]
