@@ -732,23 +732,55 @@ def replaceWords3(dictionary: List[str], sentence: str) -> str:
 
     The space complexity is O(n + d) because we are storing n words from the sentence and d words from the dictionary.
     """
-    word_lengths = {word: len(word) for word in dictionary}
-    min_length, max_length = min(word_lengths.values()), max(word_lengths.values())
+    print("\n--- Input Parameters ---")
+    print(f"\tdictionary = {dictionary}")
+    print(f"\tsentence = {sentence}")
 
+    print("\n--- Building Word Length Dictionary ---")
+    word_lengths = {word: len(word) for word in dictionary}
+    print(f"\tword_lengths = {word_lengths}")
+
+    print("\n--- Determining Minimum and Maximum Word Lengths ---")
+    min_length = min(word_lengths.values())
+    max_length = max(word_lengths.values())
+    print(f"\tmin_length = {min_length}, max_length = {max_length}")
+
+    print("\n--- Splitting Sentence into Words ---")
     words = sentence.split()
+    print(f"\twords = {words}")
 
     modified_sentence_words = []
-    for word in words:
-        replacement = word
+    for i, word in enumerate(words):
+        print(f"\n--- Processing Word {i+1}: '{word}' ---")
 
+        replacement = word
+        print(f"\tInitial replacement = '{replacement}'")
+
+        print("\tChecking Substrings:")
         for index in range(min_length, min(max_length, len(word)) + 1):
             substring = word[:index]
+            print(f"\t\tSubstring: '{substring}'")
+
             if substring in word_lengths:
                 replacement = substring
+                print(f"\t\t\tFound in dictionary! Updating replacement to '{replacement}'")
                 break
-        modified_sentence_words.append(replacement)
+            else:
+                print(f"\t\t\tNot found in dictionary.")
 
-    return " ".join(modified_sentence_words)
+        modified_sentence_words.append(replacement)
+        print(f"\tFinal replacement for '{word}': '{replacement}'")
+
+    print("\n--- Iteration Summary (Word Replacements) ---")
+    headers = ["Original Word", "Replaced Word"]
+    table_data = [[original, replaced] for original, replaced in zip(words, modified_sentence_words)]
+    print(tabulate(table_data, headers=headers, tablefmt="fancy_grid"))
+
+    result = " ".join(modified_sentence_words)
+    print(f"\tResult: '{result}'")
+
+    print("\n--- Function Returning ---")
+    return result
 
 
 # <-------------------------------------------------- June 8th, 2024 -------------------------------------------------->
@@ -807,7 +839,7 @@ groupSize = 3
 dictionary = ["cat", "bat", "rat"]
 sentence = "the cattle was rattled by the battery"
 # replaceWords1(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
-replaceWords2(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
+# replaceWords2(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
 # replaceWords3(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
 
 # Test cases for june 8th, 2024
