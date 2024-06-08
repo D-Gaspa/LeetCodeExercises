@@ -635,6 +635,9 @@ def replaceWords2(dictionary: List[str], sentence: str) -> str:
 
     The space complexity is (d * m + n * w), as we're storing all characters in the Trie and the new sentence.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tdictionary = {dictionary}")
+    print(f"\tsentence = {sentence}")
 
     class TrieNode:
         def __init__(self):
@@ -642,29 +645,64 @@ def replaceWords2(dictionary: List[str], sentence: str) -> str:
             self.is_word_end = False
 
     def build_trie(words: List[str]) -> TrieNode:
+        print("\n--- Building Trie ---")
+
         root = TrieNode()
+
         for word in words:
+            print(f"\tAdding word: '{word}'")
             node = root
             for char in word:
+                print(f"\t\tProcessing character: '{char}'")
                 if char not in node.children:
+                    print(f"\t\t\tAdding new node for '{char}'")
                     node.children[char] = TrieNode()
                 node = node.children[char]
             node.is_word_end = True
+            print(f"\t\tMarked end of word: '{word}'")
+
         return root
 
     root = build_trie(dictionary)
 
     def shortest_root(word: str) -> str:
+        print(f"\n--- Finding Shortest Root for '{word}' ---")
+
         node = root
         for index, char in enumerate(word):
+            print(f"\tChecking character: '{char}'")
             if char not in node.children:
-                break
+                print(f"\t\tCharacter not found in Trie. Returning original word: '{word}'")
+                return word
             node = node.children[char]
             if node.is_word_end:
+                print(f"\t\tFound root: '{word[:index + 1]}'")
                 return word[:index + 1]  # Shortest root found
+
+        print(f"\tNo root found. Returning original word: '{word}'")
         return word
 
-    return " ".join(shortest_root(word) for word in sentence.split())
+    print("\n--- Splitting Sentence into Words ---")
+    words = sentence.split()
+    print(f"\tInitial words: {words}")
+
+    print("\n--- Replacing Words with Shortest Roots ---")
+    replaced_words = []
+    for word in words:
+        replaced_word = shortest_root(word)
+        replaced_words.append(replaced_word)
+
+    print("\n--- Iteration Summary (Word Replacements) ---")
+    headers = ["Word", "Replaced With"]
+    iteration_data = [[words[i], replaced_words[i]] for i in range(len(words))]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    result = " ".join(replaced_words)
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal result: '{result}'")
+
+    return result
 
 
 def replaceWords3(dictionary: List[str], sentence: str) -> str:
@@ -768,8 +806,8 @@ groupSize = 3
 # Test cases for june 7th, 2024
 dictionary = ["cat", "bat", "rat"]
 sentence = "the cattle was rattled by the battery"
-replaceWords1(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
-# replaceWords2(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
+# replaceWords1(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
+replaceWords2(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
 # replaceWords3(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
 
 # Test cases for june 8th, 2024
