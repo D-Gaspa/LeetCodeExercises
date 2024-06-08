@@ -591,7 +591,22 @@ def replaceWords2(dictionary: List[str], sentence: str) -> str:
 
 
 def replaceWords3(dictionary: List[str], sentence: str) -> str:
-    pass
+    word_lengths = {word: len(word) for word in dictionary}
+    min_length, max_length = min(word_lengths.values()), max(word_lengths.values())
+
+    words = sentence.split()
+
+    modified_sentence_words = []
+    for word in words:
+        replacement = word
+
+        for index in range(min_length, min(max_length, len(word)) + 1):
+            substring = word[:index]
+            if substring in word_lengths:
+                replacement = substring
+                break
+        modified_sentence_words.append(replacement)
+    return " ".join(modified_sentence_words)
 
 
 # <-------------------------------------------------- June 8th, 2024 -------------------------------------------------->
