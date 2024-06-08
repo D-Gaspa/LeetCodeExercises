@@ -550,10 +550,19 @@ def isNStraightHand3(hand: List[int], group_size: int) -> bool:
 
 
 def replaceWords1(dictionary: List[str], sentence: str) -> str:
-    pass
+    def shortest_root(word: str) -> str:
+        """Returns the word with the shortest root from the dictionary that the word starts with"""
+        replacements = [root for root in dictionary if word.startswith(root)]
+        return min(replacements, key=len, default=word)
+
+    return " ".join([shortest_root(word) for word in sentence.split()])
 
 
 def replaceWords2(dictionary: List[str], sentence: str) -> str:
+    pass
+
+
+def replaceWords3(dictionary: List[str], sentence: str) -> str:
     pass
 
 
@@ -613,9 +622,8 @@ groupSize = 3
 dictionary = ["cat", "bat", "rat"]
 sentence = "the cattle was rattled by the battery"
 # replaceWords1(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
-dictionary_2 = ["a", "b", "c"]
-sentence_2 = "aadsfasf absbs bbab cadsfafs"
-# replaceWords1(dictionary_2, sentence_2)  # Expected output: "a a b c"
+# replaceWords2(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
+# replaceWords3(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
 
 # Test cases for june 8th, 2024
 
