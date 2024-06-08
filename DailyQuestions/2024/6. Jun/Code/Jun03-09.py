@@ -371,10 +371,10 @@ def isNStraightHand1(hand: List[int], group_size: int) -> bool:
                 return False
             group.append(card_to_find)  # Build the group
 
-        iteration_data.append([iteration_count, group, hand.copy()])  # Add to summary table data
-
         for card in group:
             hand.remove(card)
+
+        iteration_data.append([iteration_count, group, hand.copy()])  # Add to summary table data
 
         print(f"\tCard after iteration {iteration_count}: {hand}")
 
@@ -444,8 +444,6 @@ def isNStraightHand2(hand: List[int], group_size: int) -> bool:
             else:
                 print(f"\t\t\tCard {card_to_find} found in counts")
 
-        iteration_data.append([iteration_count, current_card, group_formed, min_heap.copy(), card_count.copy()])
-
         if group_formed:
             for i in range(group_size):
                 card_count[current_card + i] -= 1
@@ -455,6 +453,8 @@ def isNStraightHand2(hand: List[int], group_size: int) -> bool:
                     if current_card + i != heapq.heappop(min_heap):
                         print("\t\t\tError: Heap inconsistency detected")
                         return False
+
+        iteration_data.append([iteration_count, current_card, group_formed, min_heap.copy(), card_count.copy()])
 
     print("\n--- Iteration Summary (Group Formation Attempts) ---")
     headers = ["Iteration", "Current Card", "Group Formed?", "Min-Heap", "Card Counts"]
