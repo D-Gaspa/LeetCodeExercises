@@ -649,7 +649,7 @@ def replaceWords3(dictionary: List[str], sentence: str) -> str:
     m is the average length of these words, n is the number of words in the sentence, and t is the maximum possible
     length of relevant substring checks for a word in the sentence.
     For each word in the sentence, we are only creating substrings from the minimum length of dictionary words to the
-    minimum length between the maximum length of dictionary words and the length of the current word;
+    minimum length between the maximum length of dictionary words and the length of the current word,
     which is substantially fewer operations than checking every character.
     Hence, the time complexity is O(n * t).
     Building the 'word_lengths' dictionary takes O(d * m) time as we iterate over each word and store its length.
