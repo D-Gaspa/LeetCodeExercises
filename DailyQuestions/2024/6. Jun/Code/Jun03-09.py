@@ -784,16 +784,17 @@ def replaceWords3(dictionary: List[str], sentence: str) -> str:
 
 
 # <-------------------------------------------------- June 8th, 2024 -------------------------------------------------->
-# 6. Problem
+# 523. Continuous Subarray Sum
 
-# Description
+# Given an integer array 'nums' and an integer 'k', return true if 'nums' has a continuous subarray of size at least two
+# whose elements sum up to a multiple of 'k', or false otherwise.
 
 
-def problem6_1():
+def checkSubarraySum1(nums: List[int], k: int) -> bool:
     pass
 
 
-def problem6_2():
+def checkSubarraySum2(nums: List[int], k: int) -> bool:
     pass
 
 
