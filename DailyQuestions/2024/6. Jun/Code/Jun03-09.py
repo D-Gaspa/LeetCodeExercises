@@ -868,11 +868,20 @@ def checkSubarraySum1(nums: List[int], k: int) -> bool:
 
 
 def subarraysDivByK1(nums: List[int], k: int) -> int:
-    pass
+    remainder_counts = {0: 1}  # Store frequencies of remainders
+    prefix_sum, subarray_count = 0, 0
 
+    for num in nums:
+        prefix_sum += num
+        remainder = prefix_sum % k
 
-def subarraysDivByK2(nums: List[int], k: int) -> int:
-    pass
+        if remainder in remainder_counts:
+            subarray_count += remainder_counts[remainder]
+            remainder_counts[remainder] += 1
+        else:
+            remainder_counts[remainder] = 1
+
+    return subarray_count
 
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
@@ -912,3 +921,7 @@ k = 6
 # checkSubarraySum1(nums, k)  # Expected output: True
 
 # Test cases for june 9th, 2024
+nums_2 = [4, 5, 0, -2, -3, 1]
+k_2 = 5
+
+subarraysDivByK1(nums_2, k_2)  # Expected output: 7
