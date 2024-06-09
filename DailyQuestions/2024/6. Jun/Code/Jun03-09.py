@@ -861,16 +861,17 @@ def checkSubarraySum1(nums: List[int], k: int) -> bool:
 
 
 # <-------------------------------------------------- June 9th, 2024 -------------------------------------------------->
-# 7. Problem
+# 974. Subarray Sums Divisible by K
 
-# Description
+# Given an integer array nums and an integer k, return the number of non-empty contiguous subarrays that have a sum
+# divisible by k.
 
 
-def problem7_1():
+def subarraysDivByK1(nums: List[int], k: int) -> int:
     pass
 
 
-def problem7_2():
+def subarraysDivByK2(nums: List[int], k: int) -> int:
     pass
 
 
