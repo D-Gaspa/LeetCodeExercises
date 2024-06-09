@@ -839,7 +839,7 @@ groupSize = 3
 dictionary = ["cat", "bat", "rat"]
 sentence = "the cattle was rattled by the battery"
 # replaceWords1(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
-replaceWords2(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
+# replaceWords2(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
 # replaceWords3(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
 
 # Test cases for june 8th, 2024
