@@ -882,20 +882,49 @@ def subarraysDivByK1(nums: List[int], k: int) -> int:
     The space complexity is O(min(n, k)) for the dictionary as it can store at most k remainders.
     If k is larger than n, it stores at most n remainders.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tnums = {nums}")
+    print(f"\tk = {k}")
+
+    print("\n--- Main Loop (Building Count Dictionary) ---")
     remainder_counts = {0: 1}
     prefix_sum = 0
     subarray_count = 0
 
-    for num in nums:
+    iteration_data = []  # To collect data for iteration summary table
+    for index, num in enumerate(nums):
+        print(f"\nIteration {index + 1}:")
+        print(f"\tNumber: {num}")
+
         prefix_sum += num
+        print(f"\tPrefix Sum (Updated): {prefix_sum}")
+        print(f"\tCurrent remainder count dictionary: {remainder_counts}")
+
         remainder = prefix_sum % k
+        print(f"\tRemainder ({prefix_sum} % {k}): {remainder}")
 
         if remainder in remainder_counts:
+            print(f"\t\tRemainder found in dictionary with count: {remainder_counts[remainder]}")
+            print(f"\t\tTotal subarrays divisible by {k} so far ({subarray_count} + {remainder_counts[remainder]} = "
+                  f"{subarray_count + remainder_counts[remainder]})")
             subarray_count += remainder_counts[remainder]
             remainder_counts[remainder] += 1
+            print(f"\t\tUpdated count for remainder {remainder}: {remainder_counts[remainder]}")
         else:
+            print(f"\t\tRemainder not found. Adding to dictionary.")
             remainder_counts[remainder] = 1
 
+        iteration_data.append([index + 1, num, prefix_sum, remainder, subarray_count, remainder_counts.copy()])
+
+    print("\n--- Iteration Summary (Remainder Counts & Subarray Count) ---")
+    headers = ["Iteration", "Number", "Prefix Sum", "Remainder", "Subarray Count", "Remainder Counts"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Final Remainder Counts Dictionary ---")
+    pprint(remainder_counts)  # Use pprint for better formatting
+
+    print("\n--- Function Returning ---")
+    print(f"Total subarrays divisible by {k}: {subarray_count}")
     return subarray_count
 
 
@@ -938,5 +967,4 @@ k = 6
 # Test cases for june 9th, 2024
 nums_2 = [4, 5, 0, -2, -3, 1]
 k_2 = 5
-
-subarraysDivByK1(nums_2, k_2)  # Expected output: 7
+# subarraysDivByK1(nums_2, k_2)  # Expected output: 7
