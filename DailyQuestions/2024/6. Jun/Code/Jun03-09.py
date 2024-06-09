@@ -868,8 +868,23 @@ def checkSubarraySum1(nums: List[int], k: int) -> bool:
 
 
 def subarraysDivByK1(nums: List[int], k: int) -> int:
-    remainder_counts = {0: 1}  # Store frequencies of remainders
-    prefix_sum, subarray_count = 0, 0
+    """
+    Counts the number of contiguous subarrays in a given list whose sum is divisible by k.
+
+    The function uses a hashmap to keep track of the frequencies of remainders of the cumulative sums when divided by k.
+    By maintaining the count of these remainders,
+    it efficiently counts the number of subarrays that have a sum divisible by k.
+    The key insight is that if two prefix sums have the same remainder when divided by k, their difference is a
+    multiple of k, which implies that the subarray between these two sums has a sum divisible by k.
+
+    The time complexity of this solution is O(n), where n is the length of the input array.
+    This is because each element in the array is processed exactly once.
+    The space complexity is O(min(n, k)) for the dictionary as it can store at most k remainders.
+    If k is larger than n, it stores at most n remainders.
+    """
+    remainder_counts = {0: 1}
+    prefix_sum = 0
+    subarray_count = 0
 
     for num in nums:
         prefix_sum += num
