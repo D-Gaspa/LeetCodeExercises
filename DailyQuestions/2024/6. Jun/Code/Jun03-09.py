@@ -751,7 +751,7 @@ def replaceWords3(dictionary: List[str], sentence: str) -> str:
 
     modified_sentence_words = []
     for i, word in enumerate(words):
-        print(f"\n--- Processing Word {i+1}: '{word}' ---")
+        print(f"\n--- Processing Word {i + 1}: '{word}' ---")
 
         replacement = word
         print(f"\tInitial replacement = '{replacement}'")
@@ -791,11 +791,34 @@ def replaceWords3(dictionary: List[str], sentence: str) -> str:
 
 
 def checkSubarraySum1(nums: List[int], k: int) -> bool:
-    pass
+    """
+    Determines if there exists a continuous subarray of at least two elements in the given list `nums`
+    whose sum is a multiple of `k`.
 
+    The function uses a hashmap to store the remainders of cumulative sums when divided by `k`.
+    By storing the first index where each remainder is seen, we can check if a later occurrence
+    of the same remainder indicates a valid subarray.
+    This is because if two cumulative sums have the same remainder when divided by `k`,
+    their difference is a multiple of `k`.
 
-def checkSubarraySum2(nums: List[int], k: int) -> bool:
-    pass
+    The time complexity of this solution is O(n) where n is the length of the input array.
+    This is because every element in the array is processed exactly once.
+    The space complexity is O(min(n, k)) for the dictionary as it can store at most k remainders.
+    If k is larger than n, it stores at most n remainders.
+    """
+    accumulated_mod_k = 0
+    mod_k_seen_map = {0: -1}  # Dictionary to store the first occurrence of each remainder
+
+    for index in range(len(nums)):
+        accumulated_mod_k += nums[index]
+        accumulated_mod_k %= k
+
+        if accumulated_mod_k not in mod_k_seen_map:
+            mod_k_seen_map[accumulated_mod_k] = index
+        elif index - mod_k_seen_map[accumulated_mod_k] >= 2:
+            return True  # Valid subarray is found
+
+    return False  # No valid subarray found
 
 
 # <-------------------------------------------------- June 9th, 2024 -------------------------------------------------->
@@ -844,5 +867,8 @@ sentence = "the cattle was rattled by the battery"
 # replaceWords3(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
 
 # Test cases for june 8th, 2024
+nums = [23, 2, 6, 4, 7]
+k = 6
+# checkSubarraySum1(nums, k)  # Expected output: True
 
 # Test cases for june 9th, 2024
