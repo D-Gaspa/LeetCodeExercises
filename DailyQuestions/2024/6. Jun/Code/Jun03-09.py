@@ -806,19 +806,58 @@ def checkSubarraySum1(nums: List[int], k: int) -> bool:
     The space complexity is O(min(n, k)) for the dictionary as it can store at most k remainders.
     If k is larger than n, it stores at most n remainders.
     """
-    accumulated_mod_k = 0
-    mod_k_seen_map = {0: -1}  # Dictionary to store the first occurrence of each remainder
+    print("\n--- Input Parameters ---")
+    print(f"\tnums = {nums}")
+    print(f"\tk = {k}")
 
+    # initialization of two variables
+    was_found = False
+    accumulated_mod_k = 0
+    mod_k_seen_map = {0: -1}
+    print("\n--- Initialization ---")
+    print(f"\taccumulated_mod_k = {accumulated_mod_k}")
+    print(f"\tmod_k_seen_map = {mod_k_seen_map} ")
+
+    print("\n--- Main Loop (Processing Nums Array) ---")
+    iteration_data = []
     for index in range(len(nums)):
+        print(f"\nBeginning of Iteration {index + 1}:\n")
+        print(f"\tCurrent Index: {index}")
+        print(f"\tCurrent Number: {nums[index]}")
+
+        print("\tCalculating Accumulated Remainder:")
+        previous_accumulated_mod_k = accumulated_mod_k
         accumulated_mod_k += nums[index]
         accumulated_mod_k %= k
+        print(f"\tUpdated accumulated_mod_k: "
+              f"({previous_accumulated_mod_k} + {nums[index]}) % {k} = {accumulated_mod_k}")
 
         if accumulated_mod_k not in mod_k_seen_map:
             mod_k_seen_map[accumulated_mod_k] = index
+            print(f"\tNew remainder found. Updating mod_k_seen_map to: {mod_k_seen_map}")
         elif index - mod_k_seen_map[accumulated_mod_k] >= 2:
-            return True  # Valid subarray is found
+            print(f"\tA Valid subarray found. Returning True.")
+            was_found = True
+        else:
+            print(f"\tThe subarray is not of size at least 2.")
 
-    return False  # No valid subarray found
+        iteration_data.append([index + 1, nums[index], accumulated_mod_k,
+                               mod_k_seen_map.copy()])  # add copy so that reference doesn't get updated
+
+        if was_found:
+            break
+
+    print("\n--- Iteration Summary (Nums Processing) ---")
+    headers = ["Iteration", "Number", "Accumulated Mod k", "Remainder Seen Map"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    if was_found:
+        print("A valid subarray was found. Returning True.")
+        return True
+
+    print("No valid subarray found. Returning False.")
+    return False
 
 
 # <-------------------------------------------------- June 9th, 2024 -------------------------------------------------->
