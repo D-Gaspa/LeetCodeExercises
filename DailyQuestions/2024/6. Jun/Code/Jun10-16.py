@@ -13,6 +13,18 @@ from tabulate import tabulate
 
 
 def heightChecker1(heights: List[int]) -> int:
+    """
+    Counts the number of students who are not standing in their expected height order.
+
+    This function first creates a sorted copy of the input 'heights' list, representing the expected order.
+    It then iterates through both the original and sorted lists, comparing corresponding elements at each index.
+    If a mismatch is found (indicating a student out of order), the `unexpected_heights` counter is incremented.
+    Finally, the function returns the total count of students not in their expected positions.
+
+    The time complexity of this solution is O(n log n) due to the sorting operation,
+    where n is the length of the 'heights' list.
+    The space complexity is O(n) because a new list 'expected' is created to store the sorted heights.
+    """
     expected = sorted(heights)
     unexpected_heights = 0
 
