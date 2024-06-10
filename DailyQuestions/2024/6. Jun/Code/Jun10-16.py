@@ -3,23 +3,26 @@ from typing import List
 
 from tabulate import tabulate
 
-# Week X: Month day th - Month day th, 2024
+# Week 3: June 10th - June 16th, 2024
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
-# 1. Problem
+# <------------------------------------------------- June 10th, 2024 ------------------------------------------------->
+# 1051. Height Checker
 
-# Description
-
-
-def problem1_1():
-    pass
+# Given an integer array heights representing the current order of students' heights in line,
+# return the number of indices where heights[i] does not match the expected non-decreasing order of heights.
 
 
-def problem1_2():
-    pass
+def heightChecker1(heights: List[int]) -> int:
+    expected = sorted(heights)
+    unexpected_heights = 0
+
+    for index in range(len(heights)):
+        if heights[index] != expected[index]:
+            unexpected_heights += 1
+    return unexpected_heights
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <------------------------------------------------- June 11th, 2024 ------------------------------------------------->
 # 2. Problem
 
 # Description
@@ -33,7 +36,7 @@ def problem2_2():
     pass
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <------------------------------------------------- June 12th, 2024 ------------------------------------------------->
 # 3. Problem
 
 # Description
@@ -47,7 +50,7 @@ def problem3_2():
     pass
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <------------------------------------------------- June 13th, 2024 ------------------------------------------------->
 # 4. Problem
 
 # Description
@@ -61,7 +64,7 @@ def problem4_2():
     pass
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <------------------------------------------------- June 14th, 2024 ------------------------------------------------->
 # 5. Problem
 
 # Description
@@ -75,7 +78,7 @@ def problem5_2():
     pass
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <------------------------------------------------- June 15th, 2024 ------------------------------------------------->
 # 6. Problem
 
 # Description
@@ -89,7 +92,7 @@ def problem6_2():
     pass
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <------------------------------------------------- June 16th, 2024 ------------------------------------------------->
 # 7. Problem
 
 # Description
@@ -106,6 +109,8 @@ def problem7_2():
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
 # Test cases for month day th, 2024
+heights = [1, 1, 4, 2, 1, 3]
+# heightChecker1(heights))  # Expected output: 3
 
 # Test cases for month day th, 2024
 
