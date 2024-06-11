@@ -75,32 +75,72 @@ def heightChecker2(heights: List[int]) -> int:
     There are also two other O(n) operations: creating the expected list and comparing the elements.
     The space complexity is O(n + k) for storing the copied list and the counts in the dictionary.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\theights = {heights}")
 
+    # Counting Sort (Inner Function)
     def counting_sort(arr: List[int]) -> None:
         """Perform counting sort on the input array in-place."""
+        print("\n--- Counting Sort (Inner Function) ---")
         min_val, max_val = min(arr), max(arr)
+        print(f"\tMinimum Value: {min_val}, Maximum Value: {max_val}")
 
-        # Create a dictionary to count occurrences of each value
+        # Building Count Dictionary
+        print("\n\t--- Building Count Dictionary ---")
         counts_map = {}
         for num in arr:
-            if num in counts_map:
-                counts_map[num] += 1
-            else:
-                counts_map[num] = 1
+            print(f"\t\tProcessing number: {num}")
+            counts_map[num] = counts_map.get(num, 0) + 1
+            print(f"\t\tUpdated counts_map: {counts_map}")
 
-        # Reconstruct the array based on the counts
+        # Reconstructing the Array
+        print("\n\t--- Reconstructing the Array ---")
         index = 0
+        reconstruction_data = []
         for val in range(min_val, max_val + 1):
+            print(f"\t\tProcessing value: {val}")
             if val in counts_map:
                 count = counts_map[val]
+                print(f"\t\t\tCount of {val}: {count}")
                 for _ in range(count):
                     arr[index] = val
                     index += 1
+                    print(f"\t\t\tAdded {val} to the array at index {index - 1}")
+                    reconstruction_data.append([val, index, arr.copy()])
+            else:
+                print(f"\t\t\tValue {val} not found in counts_map, skipping.")
 
+        print("\n\t--- Reconstruction Summary ---")
+        headers = ["Value", "Index", "Array (After Insertion)"]
+        print(tabulate(reconstruction_data, headers=headers, tablefmt="fancy_grid"))
+
+    # Copying and Sorting 'heights'
+    print("\n--- Copying and Sorting Heights ---")
     expected = heights[:]
+    print(f"\texpected (Before Sort) = {expected}")
     counting_sort(expected)
+    print(f"\texpected (After Sort) = {expected}")
 
-    return sum(h1 != h2 for h1, h2 in zip(heights, expected))
+    # Comparing Heights and Counting Mismatches
+    print("\n--- Comparing Heights and Counting Mismatches ---")
+    unexpected_heights = 0
+    comparison_data = []
+
+    for h1, h2 in zip(heights, expected):
+        print(f"\tComparing: {h1} (original) vs. {h2} (expected)")
+        if h1 != h2:
+            unexpected_heights += 1
+            print("\t\tMismatch found, incrementing unexpected_heights counter.")
+        comparison_data.append([h1, h2, unexpected_heights])
+
+    print("\n--- Comparison Summary ---")
+    headers = ["heights[i]", "expected[i]", "Total Mismatches"]
+    print(tabulate(comparison_data, headers=headers, tablefmt="fancy_grid"))
+
+    # Returning the Result
+    print("\n--- Function Returning ---")
+    print(f"\tUnexpected heights: {unexpected_heights}")
+    return unexpected_heights
 
 
 # <------------------------------------------------- June 11th, 2024 ------------------------------------------------->
@@ -191,7 +231,7 @@ def problem7_2():
 
 # Test cases for month day th, 2024
 heights = [1, 1, 4, 2, 1, 3]
-heightChecker1(heights)  # Expected output: 3
+# heightChecker1(heights)  # Expected output: 3
 # heightChecker2(heights)  # Expected output: 3
 
 # Test cases for month day th, 2024
