@@ -144,16 +144,18 @@ def heightChecker2(heights: List[int]) -> int:
 
 
 # <------------------------------------------------- June 11th, 2024 ------------------------------------------------->
-# 2. Problem
+# 1122. Relative Sort Array
 
-# Description
+# Given two arrays `arr1` and `arr2`, where `arr2` elements are distinct, and all elements in `arr2` are also in `arr1`.
+# Sort the elements of `arr1` such that the relative ordering of items in `arr1` is the same as in `arr2`.
+# Elements that do not appear in `arr2` should be placed at the end of `arr1` in **ascending** order.
 
 
-def problem2_1():
+def relativeSortArray1(arr1: List[int], arr2: List[int]) -> List[int]:
     pass
 
 
-def problem2_2():
+def relativeSortArray2(arr1: List[int], arr2: List[int]) -> List[int]:
     pass
 
 
