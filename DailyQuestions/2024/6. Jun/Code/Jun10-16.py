@@ -153,6 +153,20 @@ def heightChecker2(heights: List[int]) -> int:
 
 
 def relativeSortArray1(arr1: List[int], arr2: List[int]) -> List[int]:
+    """
+    Sorts arr1 such that elements are ordered as in arr2, with remaining elements in ascending order.
+
+    This function uses a defaultdict to store the frequency of each element in arr1.
+    It iterates through arr2, appending elements to the result list based on their frequency.
+    Remaining elements not found in arr2 are sorted and appended at the end.
+
+    The time complexity of this solution is O(n + m + r log r), where:
+        - n is the length of arr1 (time to build the frequency map).
+        - m is the length of arr2 (time to process arr2 and append based on frequencies).
+        - r is the number of elements in arr1 that are NOT present in arr2 (time to sort remaining elements).
+    Here, r can vary from 0 to n, so the worst-case time complexity is O(n log n).
+    The space complexity is O(n) to store the frequency counts in the hashmap and the result list.
+    """
     counts_dict = defaultdict(int)
     for num in arr1:
         counts_dict[num] += 1
