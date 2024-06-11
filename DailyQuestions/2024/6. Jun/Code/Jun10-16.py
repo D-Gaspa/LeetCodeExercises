@@ -1,3 +1,4 @@
+from collections import defaultdict
 from typing import List
 
 from tabulate import tabulate
@@ -148,11 +149,30 @@ def heightChecker2(heights: List[int]) -> int:
 
 # Given two arrays `arr1` and `arr2`, where `arr2` elements are distinct, and all elements in `arr2` are also in `arr1`.
 # Sort the elements of `arr1` such that the relative ordering of items in `arr1` is the same as in `arr2`.
-# Elements that do not appear in `arr2` should be placed at the end of `arr1` in **ascending** order.
+# Elements that do not appear in `arr2` should be placed at the end of `arr1` in ascending order.
 
 
 def relativeSortArray1(arr1: List[int], arr2: List[int]) -> List[int]:
-    pass
+    counts_dict = defaultdict(int)
+    for num in arr1:
+        counts_dict[num] += 1
+
+    # Add elements as per relative order
+    result = []
+    for num in arr2:
+        for _ in range(counts_dict[num]):
+            result.append(num)
+            counts_dict[num] -= 1
+
+    # Add remaining elements in ascending order
+    remaining = []
+    for num, count in counts_dict.items():
+        for _ in range(count):
+            remaining.append(num)
+
+    result.extend(sorted(remaining))
+
+    return result
 
 
 def relativeSortArray2(arr1: List[int], arr2: List[int]) -> List[int]:
@@ -237,6 +257,10 @@ heights = [1, 1, 4, 2, 1, 3]
 # heightChecker2(heights)  # Expected output: 3
 
 # Test cases for month day th, 2024
+arr1 = [2, 3, 1, 3, 2, 4, 6, 7, 9, 2, 19]
+arr2 = [2, 1, 4, 3, 9, 6]
+# relativeSortArray1(arr1, arr2)  # Expected output: [2,2,2,1,4,3,3,9,6,7,19]
+# relativeSortArray2(arr1, arr2)  # Expected output: [2,2,2,1,4,3,3,9,6,7,19]
 
 # Test cases for month day th, 2024
 
