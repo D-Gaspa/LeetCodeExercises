@@ -176,7 +176,26 @@ def relativeSortArray1(arr1: List[int], arr2: List[int]) -> List[int]:
 
 
 def relativeSortArray2(arr1: List[int], arr2: List[int]) -> List[int]:
-    pass
+    max_val = max(arr1)
+    count = [0] * (max_val + 1)
+
+    for num in arr1:
+        count[num] += 1
+
+    # Add elements as per relative order
+    result = []
+    for num in arr2:
+        while count[num] > 0:
+            result.append(num)
+            count[num] -= 1
+
+    # Add remaining elements in ascending order
+    for num in range(max_val + 1):
+        while count[num] > 0:
+            result.append(num)
+            count[num] -= 1
+
+    return result
 
 
 # <------------------------------------------------- June 12th, 2024 ------------------------------------------------->
