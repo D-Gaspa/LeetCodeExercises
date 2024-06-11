@@ -166,8 +166,8 @@ def problem7_2():
 
 # Test cases for month day th, 2024
 heights = [1, 1, 4, 2, 1, 3]
-heightChecker1(heights)  # Expected output: 3
-heightChecker2(heights)  # Expected output: 3
+# heightChecker1(heights)  # Expected output: 3
+# heightChecker2(heights)  # Expected output: 3
 
 # Test cases for month day th, 2024
 
