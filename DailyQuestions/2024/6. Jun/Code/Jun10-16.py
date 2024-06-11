@@ -160,10 +160,10 @@ def relativeSortArray1(arr1: List[int], arr2: List[int]) -> List[int]:
     It iterates through arr2, appending elements to the result list based on their frequency.
     Remaining elements not found in arr2 are sorted and appended at the end.
 
-    The time complexity of this solution is O(n + m + r log r), where:
-        - n is the length of arr1 (time to build the frequency map).
-        - m is the length of arr2 (time to process arr2 and append based on frequencies).
-        - r is the number of elements in arr1 that are NOT present in arr2 (time to sort remaining elements).
+    The time complexity of this solution is O(n + m + r log r), where n is the length of arr1, m is the length of arr2,
+    and r is the number of elements in arr1 that are not present in arr2.
+    This is because we iterate through arr1 to count frequencies O(n), then iterate through arr2 to add elements
+    O(m), and finally sort the remaining elements O(r log r).
     Here, r can vary from 0 to n, so the worst-case time complexity is O(n log n).
     The space complexity is O(n) to store the frequency counts in the hashmap and the result list.
     """
@@ -190,6 +190,23 @@ def relativeSortArray1(arr1: List[int], arr2: List[int]) -> List[int]:
 
 
 def relativeSortArray2(arr1: List[int], arr2: List[int]) -> List[int]:
+    """
+    Sorts arr1 such that elements are ordered as in arr2, with remaining elements in ascending order.
+
+    This function employs a counting sort strategy.
+    It first determines the maximum value in arr1 to create a count array that can store frequencies of all elements
+    After counting element occurrences in arr1,
+    it constructs the sorted result by iterating over arr2 and appending elements based on their frequencies.
+    Remaining elements not in arr2 are then added in ascending order.
+
+    The time complexity of this solution is O(n + m + k), where n is the length of arr1, m is the length of arr2,
+    and k is the range of values in arr1 (max value + 1).
+    Finding the maximum value takes O(n) time, and counting frequencies takes O(n).
+    Adding elements based on arr2 takes O(n + m) time, and adding remaining elements takes O(n + k) time.
+    Hence, the overall time complexity is O(n + m + k).
+
+    The space complexity is O(k) to store the count array.
+    """
     max_val = max(arr1)
     count = [0] * (max_val + 1)
 
