@@ -1,7 +1,7 @@
-from pprint import pprint
 from typing import List
 
 from tabulate import tabulate
+
 
 # Week 3: June 10th - June 16th, 2024
 
@@ -25,12 +25,37 @@ def heightChecker1(heights: List[int]) -> int:
     where n is the length of the 'heights' list.
     The space complexity is O(n) because a new list 'expected' is created to store the sorted heights.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\theights = {heights}")
+
+    # Sorting Heights
+    print("\n--- Sorting Heights ---")
     expected = sorted(heights)
+    print(f"\texpected (Sorted Heights) = {expected}")
+
+    # Comparing Heights and Counting Mismatches
+    print("\n--- Comparing Heights and Counting Mismatches ---")
     unexpected_heights = 0
+    iteration_data = []
 
     for index in range(len(heights)):
+        print(f"\n\tIteration {index + 1}:")
+        print(f"\t\theights[{index}] = {heights[index]}, expected[{index}] = {expected[index]}")
+
         if heights[index] != expected[index]:
             unexpected_heights += 1
+            print(f"\t\tMismatch found, incrementing counter (unexpected_heights = {unexpected_heights})")
+
+        iteration_data.append([index + 1, heights[index], expected[index], unexpected_heights])
+
+    # Display Iteration Summary Table
+    print("\n--- Iteration Summary (Comparison Results) ---")
+    headers = ["Iteration", "heights[index]", "expected[index]", "Total Mismatches"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    # Returning the Result
+    print("\n--- Function Returning ---")
+    print(f"\tUnexpected heights: {unexpected_heights}")
     return unexpected_heights
 
 
@@ -166,7 +191,7 @@ def problem7_2():
 
 # Test cases for month day th, 2024
 heights = [1, 1, 4, 2, 1, 3]
-# heightChecker1(heights)  # Expected output: 3
+heightChecker1(heights)  # Expected output: 3
 # heightChecker2(heights)  # Expected output: 3
 
 # Test cases for month day th, 2024
