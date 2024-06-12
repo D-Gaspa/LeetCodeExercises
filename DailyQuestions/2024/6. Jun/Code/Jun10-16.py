@@ -270,16 +270,29 @@ def relativeSortArray2(arr1: List[int], arr2: List[int]) -> List[int]:
 
 
 def sortColors1(nums: List[int]) -> None:
+    """
+    Sorts an array of integers containing only 0, 1, and 2 in-place.
+
+    The function uses an algorithm similar to counting sort to do in-place sorting.
+    It first counts the frequency of each color (0, 1, and 2 representing red, white, and blue respectively)
+    and stores it in the 'color_counts' list.
+    Subsequently, it rebuilds the `nums` list by placing the correct number of each color in the appropriate order.
+    This approach avoids comparisons and leverages the limited value range for an efficient sorting process.
+
+    The time complexity of this solution is O(n) due to two linear iterations over the input list `nums`:
+    one for counting and another for reconstruction.
+    The space complexity is O(1) as it uses a fixed-size list `color_counts` to store counts of three colors.
+    """
     color_counts = [0, 0, 0]
 
     for num in nums:
         color_counts[num] += 1
 
-    i = 0
+    index = 0
     for color in range(3):  # for red, white, and blue
         for _ in range(color_counts[color]):
-            nums[i] = color
-            i += 1
+            nums[index] = color
+            index += 1
 
 
 def sortColors2(nums: List[int]) -> None:
