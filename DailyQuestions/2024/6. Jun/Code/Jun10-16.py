@@ -262,16 +262,18 @@ def relativeSortArray2(arr1: List[int], arr2: List[int]) -> List[int]:
 
 
 # <------------------------------------------------- June 12th, 2024 ------------------------------------------------->
-# 3. Problem
+# 75. Sort Colors
 
-# Description
+# Given an array `nums` with `n` objects colored red, white, or blue, sort them in-place (without using built-in sort)
+# so that objects of the same color are adjacent, with the colors in the order red, white, and blue.
+# We will use the integers `0`, `1`, and `2` to represent the color red, white, and blue, respectively.
 
 
-def problem3_1():
+def sortColors1(nums: List[int]) -> None:
     pass
 
 
-def problem3_2():
+def sortColors2(nums: List[int]) -> None:
     pass
 
 
