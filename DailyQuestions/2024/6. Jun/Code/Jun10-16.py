@@ -270,12 +270,20 @@ def relativeSortArray2(arr1: List[int], arr2: List[int]) -> List[int]:
 
 
 def sortColors1(nums: List[int]) -> None:
-    pass
+    color_counts = [0, 0, 0]
+
+    for num in nums:
+        color_counts[num] += 1
+
+    i = 0
+    for color in range(3):  # for red, white, and blue
+        for _ in range(color_counts[color]):
+            nums[i] = color
+            i += 1
 
 
 def sortColors2(nums: List[int]) -> None:
     pass
-
 
 # <------------------------------------------------- June 13th, 2024 ------------------------------------------------->
 # 4. Problem
@@ -347,6 +355,9 @@ arr2 = [2, 1, 4, 3, 9, 6]
 # relativeSortArray2(arr1, arr2)  # Expected output: [2,2,2,1,4,3,3,9,6,7,19]
 
 # Test cases for month day th, 2024
+nums = [2, 0, 2, 1, 1, 0]
+sortColors1(nums)  # Expected output: [0,0,1,1,2,2]
+sortColors2(nums)  # Expected output: [0,0,1,1,2,2]
 
 # Test cases for month day th, 2024
 
