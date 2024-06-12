@@ -296,6 +296,23 @@ def sortColors1(nums: List[int]) -> None:
 
 
 def sortColors2(nums: List[int]) -> None:
+    """
+    Sorts an array of integers containing only 0, 1, and 2 in-place.
+
+    The function uses a variation of the three-way partitioning quicksort algorithm, often referred to as the
+    Dutch national flag problem, to sort the array in-place.
+    It maintains three pointers: 'left_index' to track the position to place the next '0' (red), 'current_index'
+    for the currently evaluating number, and 'right_index' to place the next '2' (blue).
+    If the current number is '0', it swaps this number with the number at 'left_index' position,
+    then moves both 'left_index' and 'current_index' one step to the right.
+    If it's '1', it leaves the number in place and just moves 'current_index'.
+    If it's '2', it swaps this number with the number at 'right_index' position and decrements 'right_index'.
+
+    The time complexity of this solution is O(n) because we perform a single pass over the list 'nums'.
+    The space complexity is O(1) because we only used a few integer variables and didn't use any additional
+    data structure that scales with the size of the input.
+    """
+
     left_index = 0  # Position to place the next '0'
     current_index = 0  # Current index being evaluated
     right_index = len(nums) - 1  # Position to place the next '2'
