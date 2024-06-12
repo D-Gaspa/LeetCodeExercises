@@ -222,25 +222,42 @@ def relativeSortArray2(arr1: List[int], arr2: List[int]) -> List[int]:
 
     The space complexity is O(k) to store the count array.
     """
-    max_val = max(arr1)
-    count = [0] * (max_val + 1)
+    print("\n--- Input Parameters ---")
+    print(f"\tarr1 = {arr1}")
+    print(f"\tarr2 = {arr2}")
 
+    print("\n--- Finding Maximum Value in arr1 ---")
+    max_val = max(arr1)
+    print(f"\tMax value: {max_val}")
+
+    print("\n--- Building Count Array ---")
+    count = [0] * (max_val + 1)
     for num in arr1:
         count[num] += 1
+        print(f"\tProcessed {num}, count: {count[num]}")  # Show an updated count array
 
-    # Add elements as per relative order
+    print("\n\tCount Array:", count)
+
+    print("\n--- Appending Elements from arr2 Based on Count ---")
     result = []
     for num in arr2:
+        print(f"\n\tProcessing num {num}")
+        print(f"\t\tCount of {num}: {count[num]}")
         while count[num] > 0:
             result.append(num)
             count[num] -= 1
+            print(f"\t\tAppended {num}, updated result: {result}, count[{num}]: {count[num]}")
+    print("\n\tResult after processing arr2:", result)
 
-    # Add remaining elements in ascending order
+    print("\n--- Appending Remaining Elements in Ascending Order ---")
     for num in range(max_val + 1):
         while count[num] > 0:
             result.append(num)
             count[num] -= 1
+            print(f"\t\tAppended {num}, updated result: {result}, count[{num}]: {count[num]}")
+    print(f"\n\tFinal Result: {result}")
 
+    print("\n--- Function Returning ---")
     return result
 
 
@@ -324,7 +341,7 @@ heights = [1, 1, 4, 2, 1, 3]
 # Test cases for month day th, 2024
 arr1 = [2, 3, 1, 3, 2, 4, 6, 7, 9, 2, 19]
 arr2 = [2, 1, 4, 3, 9, 6]
-relativeSortArray1(arr1, arr2)  # Expected output: [2,2,2,1,4,3,3,9,6,7,19]
+# relativeSortArray1(arr1, arr2)  # Expected output: [2,2,2,1,4,3,3,9,6,7,19]
 # relativeSortArray2(arr1, arr2)  # Expected output: [2,2,2,1,4,3,3,9,6,7,19]
 
 # Test cases for month day th, 2024
