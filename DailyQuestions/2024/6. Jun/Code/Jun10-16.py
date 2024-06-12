@@ -283,7 +283,20 @@ def sortColors1(nums: List[int]) -> None:
 
 
 def sortColors2(nums: List[int]) -> None:
-    pass
+    left_index = 0  # Position to place the next '0'
+    current_index = 0  # Current index being evaluated
+    right_index = len(nums) - 1  # Position to place the next '2'
+
+    while current_index <= right_index:
+        if nums[current_index] == 0:
+            nums[left_index], nums[current_index] = nums[current_index], nums[left_index]
+            left_index += 1
+            current_index += 1
+        elif nums[current_index] == 1:
+            current_index += 1
+        else:
+            nums[current_index], nums[right_index] = nums[right_index], nums[current_index]
+            right_index -= 1
 
 # <------------------------------------------------- June 13th, 2024 ------------------------------------------------->
 # 4. Problem
