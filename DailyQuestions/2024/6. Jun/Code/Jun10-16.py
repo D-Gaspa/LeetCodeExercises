@@ -167,25 +167,40 @@ def relativeSortArray1(arr1: List[int], arr2: List[int]) -> List[int]:
     Here, r can vary from 0 to n, so the worst-case time complexity is O(n log n).
     The space complexity is O(n) to store the frequency counts in the hashmap and the result list.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tarr1 = {arr1}")
+    print(f"\tarr2 = {arr2}")
+
+    print("\n--- Building Frequency Dictionary ---")
     counts_dict = defaultdict(int)
     for num in arr1:
         counts_dict[num] += 1
+        print(f"\tProcessed {num}, counts_dict: {dict(counts_dict)}")  # Show updated dictionary
 
-    # Add elements as per relative order
+    print("\n--- Appending Elements from arr2 ---")
     result = []
     for num in arr2:
-        for _ in range(counts_dict[num]):
+        print(f"\n\tProcessing num {num} with count: {counts_dict[num]}")
+        while counts_dict[num] > 0:
             result.append(num)
             counts_dict[num] -= 1
+            print(f"\t\tAppended {num}, updated result: {result}, counts_dict[{num}]: {counts_dict[num]}")
+    print("\n\tResult after processing arr2:", result)
 
-    # Add remaining elements in ascending order
+    print("\n--- Collecting Remaining Elements Not in arr2 ---")
     remaining = []
     for num, count in counts_dict.items():
-        for _ in range(count):
-            remaining.append(num)
+        if count > 0:  # Check if the count is greater than 0
+            remaining.extend([num] * count)  # Append as many times as its count
+            print(f"\t\tAdded {num} (count: {count}) to remaining: {remaining}")
 
-    result.extend(sorted(remaining))
+    print("\n--- Sorting Remaining Elements ---")
+    remaining.sort()  # In-place sort
+    print(f"\tSorted remaining: {remaining}")
+    result.extend(remaining)
+    print(f"\tFinal Result: {result}")
 
+    print("\n--- Function Returning ---")
     return result
 
 
@@ -309,7 +324,7 @@ heights = [1, 1, 4, 2, 1, 3]
 # Test cases for month day th, 2024
 arr1 = [2, 3, 1, 3, 2, 4, 6, 7, 9, 2, 19]
 arr2 = [2, 1, 4, 3, 9, 6]
-# relativeSortArray1(arr1, arr2)  # Expected output: [2,2,2,1,4,3,3,9,6,7,19]
+relativeSortArray1(arr1, arr2)  # Expected output: [2,2,2,1,4,3,3,9,6,7,19]
 # relativeSortArray2(arr1, arr2)  # Expected output: [2,2,2,1,4,3,3,9,6,7,19]
 
 # Test cases for month day th, 2024
