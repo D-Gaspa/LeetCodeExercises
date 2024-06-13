@@ -1,4 +1,5 @@
 import bisect
+from collections import defaultdict
 from typing import List
 
 from tabulate import tabulate
@@ -136,17 +137,27 @@ def longestCommonSubsequence2(arrays: List[List[int]]) -> List[int]:
 
 
 # <--------------------------------------------------- Week 2, June --------------------------------------------------->
-# 2. Problem
+# 2083. Substrings That Begin and End With the Same Letter
 
-# Description
-
-
-def problem2_1():
-    pass
+# You are given a 0-indexed string 's' consisting of only lowercase English letters.
+# Return the number of substrings in 's' that begin and end with the same character.
+# A substring is a contiguous non-empty sequence of characters within a string.
 
 
-def problem2_2():
-    pass
+def numberOfSubstrings1(s: str) -> int:
+    result = 0
+    letter_counts = defaultdict(int)
+
+    for letter in s:
+        letter_counts[letter] += 1
+
+    for count in letter_counts.values():
+        result += count * (count + 1) // 2
+
+    # Alternative one-liner solution using Counter which effectively does the same thing:
+    # return sum(count * (count + 1) // 2 for count in Counter(s).values())
+
+    return result
 
 
 # <--------------------------------------------------- Week 3, June --------------------------------------------------->
@@ -199,6 +210,10 @@ arrays = [[2, 3, 6, 8], [1, 2, 3, 5, 6, 7, 10], [2, 3, 4, 6, 9]]
 # longestCommonSubsequence2(arrays)  # Expected output: [2, 3, 6]
 
 # Test cases for Week 2, June
+s = "abcba"
+numberOfSubstrings1(s)  # Expected output: 7
+s = "abacad"
+numberOfSubstrings1(s)  # Expected output: 9
 
 # Test cases for Week 3, June
 
