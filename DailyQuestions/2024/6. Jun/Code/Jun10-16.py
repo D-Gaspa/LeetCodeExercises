@@ -385,6 +385,20 @@ def sortColors2(nums: List[int]) -> None:
 
 
 def minMovesToSeat1(seats: List[int], students: List[int]) -> int:
+    """
+    Calculates the minimum number of moves required to seat each student in a corresponding seat.
+
+    This function first sorts both the `seats` and `students` lists in ascending order.
+    Then, it iterates through each corresponding seat-student pair,
+    calculates the absolute difference between their positions, and accumulates this into the `moves` variable.
+    The underlying idea is that the optimal strategy involves matching the lowest-ranked student with the lowest-ranked
+    seat, the second-lowest with the second-lowest, and so on.
+
+    The time complexity of this solution is O(n log n) due to the sorting of the lists.
+    The iteration and calculations within the loop take O(n), but the sorting dominates the overall complexity.
+    The space complexity is O(n) due to the implementation of Python's `sort()` method, which may use up to O(n)
+    additional space in some cases (especially for versions prior to Python 3.11).
+    """
     moves = 0
     seats.sort()
     students.sort()
