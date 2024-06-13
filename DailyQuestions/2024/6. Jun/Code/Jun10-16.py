@@ -389,14 +389,30 @@ def minMovesToSeat1(seats: List[int], students: List[int]) -> int:
     seats.sort()
     students.sort()
 
-    for seats, students in zip(seats, students):
-        moves += abs(students - seats)
+    for seat, student in zip(seats, students):
+        moves += abs(student - seat)
 
     return moves
 
 
 def minMovesToSeat2(seats: List[int], students: List[int]) -> int:
-    pass
+    max_position = max(max(seats), max(students))
+
+    # Stores difference between number of seats and students at each position
+    differences = [0] * (max_position + 1)
+
+    for position in seats:
+        differences[position] += 1
+
+    for position in students:
+        differences[position] -= 1
+
+    moves, unmatched = 0, 0
+    for difference in differences:
+        unmatched += difference
+        moves += abs(unmatched)
+
+    return moves
 
 
 # <------------------------------------------------- June 14th, 2024 ------------------------------------------------->
@@ -462,7 +478,8 @@ nums = [2, 0, 2, 1, 1, 0]
 # Test cases for month day th, 2024
 seats = [4, 1, 5, 9]
 students = [1, 3, 2, 6]
-minMovesToSeat1(seats, students)  # Expected output: 7
+# minMovesToSeat1(seats, students)  # Expected output: 7
+# minMovesToSeat2(seats, students)  # Expected output: 7
 
 # Test cases for month day th, 2024
 
