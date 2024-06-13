@@ -446,22 +446,45 @@ def minMovesToSeat2(seats: List[int], students: List[int]) -> int:
     The space complexity is O(max(seats, students)) due to the `differences` list, which scales with the maximum value
     in the input lists.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tseats = {seats}")
+    print(f"\tstudents = {students}")
+
     max_position = max(max(seats), max(students))
+    print(f"\n--- Maximum Position: {max_position} ---")
 
     # Stores difference between the number of seats and students at each position
     differences = [0] * (max_position + 1)
+    print(f"\n--- Initialized Differences Array: {differences} ---")
 
-    # Update the number of seats and students at each position
-    for seat, student in zip(seats, students):
+    print("\n--- Updating Differences ---")
+    diff_iteration_data = []
+    for i, (seat, student) in enumerate(zip(seats, students)):
         differences[seat] += 1
         differences[student] -= 1
+        print(f"\tIteration {i + 1}:  seat={seat}, student={student}, differences={differences}")
+        diff_iteration_data.append([i + 1, seat, student, differences.copy()])  # Copy is important here
 
-    # Calculate the number of moves needed to seat the students
+    print("\n--- Iteration Summary (Differences) ---")
+    headers = ["Iteration", "Seat", "Student", "Differences"]
+    print(tabulate(diff_iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Calculating Moves ---")
     moves, unmatched = 0, 0
-    for difference in differences:
+    move_iteration_data = []
+    for i, difference in enumerate(differences):
         unmatched += difference
         moves += abs(unmatched)
+        print(f"\tPosition {i}: difference = {difference}, unmatched = {unmatched}, moves = "
+              f"{moves - abs(unmatched)} + abs({unmatched}) = {moves}")
+        move_iteration_data.append([i, difference, unmatched, moves])
 
+    print("\n--- Iteration Summary (Moves Calculation) ---")
+    headers = ["Position", "Difference", "Unmatched", "Moves"]
+    print(tabulate(move_iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tMinimum Moves: {moves}")
     return moves
 
 
