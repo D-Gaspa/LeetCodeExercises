@@ -392,21 +392,23 @@ def minMovesToSeat1(seats: List[int], students: List[int]) -> int:
     for seat, student in zip(seats, students):
         moves += abs(student - seat)
 
+    # Alternatively, in a single line using list comprehension:
+    # return sum(abs(student - seat) for seat, student in zip(sorted(seats), sorted(students)))
     return moves
 
 
 def minMovesToSeat2(seats: List[int], students: List[int]) -> int:
     max_position = max(max(seats), max(students))
 
-    # Stores difference between number of seats and students at each position
+    # Stores difference between the number of seats and students at each position
     differences = [0] * (max_position + 1)
 
-    for position in seats:
-        differences[position] += 1
+    # Update the number of seats and students at each position
+    for seat, student in zip(seats, students):
+        differences[seat] += 1
+        differences[student] -= 1
 
-    for position in students:
-        differences[position] -= 1
-
+    # Calculate the number of moves needed to seat the students
     moves, unmatched = 0, 0
     for difference in differences:
         unmatched += difference
