@@ -161,18 +161,35 @@ def numberOfSubstrings1(s: str) -> int:
     The space complexity is O(1) because the 'letter_counts' dictionary stores counts for at most 26
     different characters (lowercase English letters), so the space usage doesn't scale with the length of 's'.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\ts: {s}")
+
     result = 0
     letter_counts = defaultdict(int)
 
+    print("\n--- First Loop (Counting Letters) ---")
+    iteration_data = []
     for letter in s:
+        print(f"\tProcessing letter: {letter}")
         letter_counts[letter] += 1
+        print(f"\t\t Updated letter_counts: {letter_counts}")
+        iteration_data.append([letter, letter_counts.copy()])  # Store data for iteration summary
 
+    print("\n--- Iteration Summary (Letter Counts) ---")
+    print(tabulate(iteration_data, headers=["Letter", "Letter Counts"], tablefmt="fancy_grid"))
+
+    print("\n--- Second Loop (Calculating Substrings) ---")
     for count in letter_counts.values():
+        print(f"\tProcessing count: {count}")
+        print(f"\t\tAdding ({count} * ({count} + 1) // 2 = {count * (count + 1) // 2}) to result ({result})")
         result += count * (count + 1) // 2
+        print(f"\t\t Updated result: {result}")
 
-    # Alternative one-liner solution using Counter which effectively does the same thing:
+    # Alternative one-liner solution (commented out):
     # return sum(count * (count + 1) // 2 for count in Counter(s).values())
 
+    print("\n--- Function Returning ---")
+    print(f"\tResult: {result}")
     return result
 
 
