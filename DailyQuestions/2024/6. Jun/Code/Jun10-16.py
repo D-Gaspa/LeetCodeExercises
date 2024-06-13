@@ -374,6 +374,7 @@ def sortColors2(nums: List[int]) -> None:
     print("\n--- Function Returning ---")
     print(f"\tSorted nums: {nums}")
 
+
 # <------------------------------------------------- June 13th, 2024 ------------------------------------------------->
 # 2037. Minimum Number of Moves to Seat Everyone
 
@@ -383,11 +384,18 @@ def sortColors2(nums: List[int]) -> None:
 # same seat, even if initially, multiple seats or students may occupy the same position.
 
 
-def problem4_1():
-    pass
+def minMovesToSeat1(seats: List[int], students: List[int]) -> int:
+    moves = 0
+    seats.sort()
+    students.sort()
+
+    for seats, students in zip(seats, students):
+        moves += abs(students - seats)
+
+    return moves
 
 
-def problem4_2():
+def minMovesToSeat2(seats: List[int], students: List[int]) -> int:
     pass
 
 
@@ -452,6 +460,9 @@ nums = [2, 0, 2, 1, 1, 0]
 # sortColors2(nums)  # Expected output: [0,0,1,1,2,2]
 
 # Test cases for month day th, 2024
+seats = [4, 1, 5, 9]
+students = [1, 3, 2, 6]
+minMovesToSeat1(seats, students)  # Expected output: 7
 
 # Test cases for month day th, 2024
 
