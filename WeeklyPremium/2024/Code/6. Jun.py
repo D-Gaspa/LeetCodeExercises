@@ -145,6 +145,22 @@ def longestCommonSubsequence2(arrays: List[List[int]]) -> List[int]:
 
 
 def numberOfSubstrings1(s: str) -> int:
+    """
+    Calculates the number of substrings in a string 's' that begin and end with the same character.
+
+    The function first creates a frequency dictionary 'letter_counts', which uses the defaultdict data structure to
+    count the occurrences of each character in the string 's'.
+    It then iterates over the values in the 'letter_counts' to calculate the total number of substrings that begin and
+    end with the same character.
+    The calculation count * (count + 1) // 2 derives from the formula to calculate the sum of the first 'n' integers,
+    as each letter can form a substring with every other occurrence of the same letter, including itself.
+
+    The time complexity of this solution is O(n), where 'n' is the length of the string 's'.
+    This is because we iterate through the string once to count the occurrences of each character.
+    The loop over the values in the 'letter_counts' dictionary has a constant number of iterations (26 at most).
+    The space complexity is O(1) because the 'letter_counts' dictionary stores counts for at most 26
+    different characters (lowercase English letters), so the space usage doesn't scale with the length of 's'.
+    """
     result = 0
     letter_counts = defaultdict(int)
 
@@ -210,10 +226,8 @@ arrays = [[2, 3, 6, 8], [1, 2, 3, 5, 6, 7, 10], [2, 3, 4, 6, 9]]
 # longestCommonSubsequence2(arrays)  # Expected output: [2, 3, 6]
 
 # Test cases for Week 2, June
-s = "abcba"
-numberOfSubstrings1(s)  # Expected output: 7
-s = "abacad"
-numberOfSubstrings1(s)  # Expected output: 9
+s = "abacabd"
+# numberOfSubstrings1(s)  # Expected output: 11
 
 # Test cases for Week 3, June
 
