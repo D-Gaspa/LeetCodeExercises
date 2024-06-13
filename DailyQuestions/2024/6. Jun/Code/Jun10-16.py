@@ -412,6 +412,23 @@ def minMovesToSeat1(seats: List[int], students: List[int]) -> int:
 
 
 def minMovesToSeat2(seats: List[int], students: List[int]) -> int:
+    """
+    Calculates the minimum number of moves required to seat each student in a corresponding seat.
+
+    This function uses a counting approach where it first finds the maximum position among both seats and students.
+    Then, it creates a list `differences` to track the net difference (seats - students) at each position.
+    Positive values indicate excess seats, negative values indicate excess students.
+    By iterating through the differences, the function keeps track of the cumulative mismatch (`unmatched`)
+    and adds the absolute value of this mismatch to the total `moves`.
+    This works because each unmatched student at a position needs to be moved, and the absolute value
+    of the mismatch represents the minimum distance they need to travel to find an available seat.
+
+    The time complexity is O(n + max(seats, students)) because we iterate over both lists once and then over a list
+    whose size depends on the maximum value in either input list.
+    In many cases, this might be faster than the O(n log n) sorting solution.
+    The space complexity is O(max(seats, students)) due to the `differences` list, which scales with the maximum value
+    in the input lists.
+    """
     max_position = max(max(seats), max(students))
 
     # Stores difference between the number of seats and students at each position
