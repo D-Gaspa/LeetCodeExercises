@@ -399,15 +399,32 @@ def minMovesToSeat1(seats: List[int], students: List[int]) -> int:
     The space complexity is O(n) due to the implementation of Python's `sort()` method, which may use up to O(n)
     additional space in some cases (especially for versions prior to Python 3.11).
     """
-    moves = 0
+    print("\n--- Input Parameters ---")
+    print(f"\tseats = {seats}")
+    print(f"\tstudents = {students}")
+
+    print("\n--- Sorting Seats and Students ---")
     seats.sort()
     students.sort()
+    print(f"\tSorted seats: {seats}")
+    print(f"\tSorted students: {students}")
 
-    for seat, student in zip(seats, students):
-        moves += abs(student - seat)
+    print("\n--- Calculating Moves ---")
+    moves = 0
+    iteration_data = []  # Collect data for iteration summary
+    for i, (seat, student) in enumerate(zip(seats, students)):
+        move = abs(student - seat)
+        moves += move
+        print(f"\tIteration {i + 1}:")
+        print(f"\t\tSeat: {seat}, Student: {student}, Move: {move}, Total Moves: {moves}")
+        iteration_data.append([i + 1, seat, student, move, moves])
 
-    # Alternatively, in a single line using list comprehension:
-    # return sum(abs(student - seat) for seat, student in zip(sorted(seats), sorted(students)))
+    print("\n--- Iteration Summary (Moves) ---")
+    headers = ["Iteration", "Seat", "Student", "Move", "Total Moves"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tMinimum Moves: {moves}")
     return moves
 
 
