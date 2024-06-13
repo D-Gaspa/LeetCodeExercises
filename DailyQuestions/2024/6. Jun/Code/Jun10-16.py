@@ -375,9 +375,12 @@ def sortColors2(nums: List[int]) -> None:
     print(f"\tSorted nums: {nums}")
 
 # <------------------------------------------------- June 13th, 2024 ------------------------------------------------->
-# 4. Problem
+# 2037. Minimum Number of Moves to Seat Everyone
 
-# Description
+# Given two arrays seats and students of length n, representing the positions of n seats and n students in a room,
+# you can adjust the position of each student by 1 unit any number of times.
+# The task is to find the minimum number of moves required to seat all students such that no two students share the
+# same seat, even if initially, multiple seats or students may occupy the same position.
 
 
 def problem4_1():
