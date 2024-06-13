@@ -283,16 +283,36 @@ def sortColors1(nums: List[int]) -> None:
     one for counting and another for reconstruction.
     The space complexity is O(1) as it uses a fixed-size list `color_counts` to store counts of three colors.
     """
-    color_counts = [0, 0, 0]
+    print("\n--- Input Parameters ---")
+    print(f"\tnums = {nums}")  # Display input list
 
-    for num in nums:
+    print("\n--- Main Loop (Counting Colors) ---")
+    color_counts = [0, 0, 0]  # Initialize color counts
+    iteration_data = []  # Collect data for iteration summary
+
+    for i, num in enumerate(nums):
+        print(f"\n\tIteration {i + 1}:")
+        print(f"\t\tNumber: {num}")
         color_counts[num] += 1
+        print(f"\t\tColor Counts (0=Red, 1=White, 2=Blue): {color_counts}")
+        iteration_data.append([i + 1, num, color_counts.copy()])
 
+    print("\n--- Iteration Summary (Color Counts) ---")
+    headers = ["Iteration", "Number", "Color Counts"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Main Loop (Reconstructing Array) ---")
     index = 0
-    for color in range(3):  # for red, white, and blue
+    for color in range(3):
+        print(f"\n\tColor {color}:")
         for _ in range(color_counts[color]):
+            print(f"\t\tPlacing color {color} at index {index}")
             nums[index] = color
             index += 1
+            print(f"\t\tUpdated nums: {nums}")
+
+    print("\n--- Function Returning ---")
+    print(f"\tSorted nums: {nums}")
 
 
 def sortColors2(nums: List[int]) -> None:
