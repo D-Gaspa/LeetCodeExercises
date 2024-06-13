@@ -284,7 +284,7 @@ def sortColors1(nums: List[int]) -> None:
     The space complexity is O(1) as it uses a fixed-size list `color_counts` to store counts of three colors.
     """
     print("\n--- Input Parameters ---")
-    print(f"\tnums = {nums}")  # Display input list
+    print(f"\tnums = {nums}")  # Display the input list
 
     print("\n--- Main Loop (Counting Colors) ---")
     color_counts = [0, 0, 0]  # Initialize color counts
@@ -332,21 +332,47 @@ def sortColors2(nums: List[int]) -> None:
     The space complexity is O(1) because we only used a few integer variables and didn't use any additional
     data structure that scales with the size of the input.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tnums = {nums}")  # Display an input list
 
+    print("\n--- Main Loop (Dutch National Flag Algorithm) ---")
     left_index = 0  # Position to place the next '0'
     current_index = 0  # Current index being evaluated
     right_index = len(nums) - 1  # Position to place the next '2'
+    iteration_data = [[left_index, current_index, right_index, nums.copy()]]
 
     while current_index <= right_index:
+        print(f"\n\tWhile current_index ({current_index}) <= right_index ({right_index}):")
+        print(f"\t\tleft_index = {left_index}, current_index = {current_index}, right_index = {right_index}")
+        print(f"\t\tnums = {nums}")
+
         if nums[current_index] == 0:
+            print("\t\tCondition: nums[current_index] == 0")
+            print(f"\t\tSwapping 0 with element at left_index ({nums[left_index]})")
+            print(f"\t\tIncrementing left_index {left_index} and current_index {current_index} by 1")
             nums[left_index], nums[current_index] = nums[current_index], nums[left_index]
             left_index += 1
             current_index += 1
         elif nums[current_index] == 1:
+            print("\t\tCondition: nums[current_index] == 1")
+            print("\t\tSkipping 1 (already in correct position)")
+            print(f"\t\tIncrementing current_index {current_index} by 1")
             current_index += 1
-        else:
+        else:  # nums[current_index] == 2
+            print("\t\tCondition: nums[current_index] == 2")
+            print(f"\t\tSwapping 2 with element at right_index ({nums[right_index]})")
+            print(f"\t\tDecrementing right_index {right_index} by 1")
             nums[current_index], nums[right_index] = nums[right_index], nums[current_index]
             right_index -= 1
+
+        iteration_data.append([left_index, current_index, right_index, nums.copy()])
+
+    print("\n--- Iteration Summary (Pointer Positions and Array State) ---")
+    headers = ["left_index", "current_index", "right_index", "nums"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tSorted nums: {nums}")
 
 # <------------------------------------------------- June 13th, 2024 ------------------------------------------------->
 # 4. Problem
@@ -419,8 +445,8 @@ arr2 = [2, 1, 4, 3, 9, 6]
 
 # Test cases for month day th, 2024
 nums = [2, 0, 2, 1, 1, 0]
-sortColors1(nums)  # Expected output: [0,0,1,1,2,2]
-sortColors2(nums)  # Expected output: [0,0,1,1,2,2]
+# sortColors1(nums)  # Expected output: [0,0,1,1,2,2]
+# sortColors2(nums)  # Expected output: [0,0,1,1,2,2]
 
 # Test cases for month day th, 2024
 
