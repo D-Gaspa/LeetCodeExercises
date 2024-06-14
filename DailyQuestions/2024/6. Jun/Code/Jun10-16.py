@@ -498,6 +498,20 @@ def minMovesToSeat2(seats: List[int], students: List[int]) -> int:
 
 def minIncrementForUnique1(nums: List[int]) -> int:
     moves = 0
+    prev = -1  # Initialize with a value smaller than anything in nums
+
+    for num in sorted(nums):
+        if num <= prev:
+            moves += prev - num + 1
+            prev += 1
+        else:
+            prev = num
+
+    return moves
+
+
+def minIncrementForUnique2(nums: List[int]) -> int:
+    moves = 0
     num_counts = [0] * (max(nums) + 1)
 
     for num in nums:
