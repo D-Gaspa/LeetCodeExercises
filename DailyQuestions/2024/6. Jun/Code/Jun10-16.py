@@ -497,6 +497,21 @@ def minMovesToSeat2(seats: List[int], students: List[int]) -> int:
 
 
 def minIncrementForUnique1(nums: List[int]) -> int:
+    """
+    Calculates the minimum number of increments needed to make all elements in a list unique.
+
+    The function sorts the list of numbers first, and uses a variable 'prev' to keep track of the previous number.
+    Then it iterates over the sorted numbers, and for each number, it checks if it is smaller or equal to 'prev'.
+    If it is, that means this number is a duplicate and the function increments 'moves' by the difference between
+    'prev' and this number plus one, effectively making the duplicate a new unique number one greater than 'prev'.
+    The 'prev' is then updated to this new unique number.
+    If the number is not smaller or equal to 'prev', 'prev' is simply updated to this number.
+    In the end, the function returns the total number of increments ('moves').
+
+    The time complexity of this function is O(n log n) due to the sorting operation,
+    where n is the length of the input list.
+    The space complexity is O(n) due to the space required to sort 'nums'.
+    """
     moves = 0
     prev = -1  # Initialize with a value smaller than anything in nums
 
