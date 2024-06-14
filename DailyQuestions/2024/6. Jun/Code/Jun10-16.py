@@ -526,6 +526,22 @@ def minIncrementForUnique1(nums: List[int]) -> int:
 
 
 def minIncrementForUnique2(nums: List[int]) -> int:
+    """
+    Calculates the minimum number of increments needed to make all elements in a list unique.
+
+    This function uses a counting-based approach.
+    It creates an array `num_counts` where the index represents a number and the value of that index is the count of
+    occurrences of that number in the input list `nums`.
+    It then iterates through `num_counts`, propagating excess duplicates to the next index (incrementing the number)
+    and tracking the total `moves` needed.
+    If there are duplicates at the last index, it calculates the sum of consecutive increments required to make them
+    unique using the formula for the sum of first n natural numbers.
+
+    The time complexity of this function is O(n + m), where n is the length of the input list and m is the maximum
+    value in the list `max(nums)`.
+    This is because we iterate through the list once and potentially through the `num_counts` array once.
+    The space complexity is O(m), where m is the maximum value in the list, due to the size of the `num_counts` array.
+    """
     moves = 0
     num_counts = [0] * (max(nums) + 1)
 
