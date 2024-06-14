@@ -498,17 +498,22 @@ def minMovesToSeat2(seats: List[int], students: List[int]) -> int:
 
 def minIncrementForUnique1(nums: List[int]) -> int:
     moves = 0
-    num_counts = [0] * (len(nums) + max(nums) + 1)
+    num_counts = [0] * (max(nums) + 1)
 
     for num in nums:
         num_counts[num] += 1
 
-    for index in range(len(num_counts)):
+    for index in range(len(num_counts) - 1):
         if num_counts[index] <= 1:
             continue
         duplicates = num_counts[index] - 1
         num_counts[index + 1] += duplicates
         moves += duplicates
+
+    if num_counts[-1] > 1:
+        # Using the formula for the sum of first n natural numbers: n * (n + 1) / 2, where n is the number of duplicates
+        n = num_counts[-1] - 1
+        moves += n * (n + 1) // 2
 
     return moves
 
@@ -566,8 +571,8 @@ students = [1, 3, 2, 6]
 # minMovesToSeat2(seats, students)  # Expected output: 7
 
 # Test cases for month day th, 2024
-nums_2 = [2, 2, 2, 1]
-minIncrementForUnique1(nums_2)  # Expected output: 3
+nums_2 = [3, 2, 1, 2, 1, 7]
+# minIncrementForUnique1(nums_2)  # Expected output: 6
 
 # Test cases for month day th, 2024
 
