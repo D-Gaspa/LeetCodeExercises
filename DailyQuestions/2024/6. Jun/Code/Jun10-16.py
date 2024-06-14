@@ -489,17 +489,28 @@ def minMovesToSeat2(seats: List[int], students: List[int]) -> int:
 
 
 # <------------------------------------------------- June 14th, 2024 ------------------------------------------------->
-# 5. Problem
+# 945. Minimum Increment to Make Array Unique
 
-# Description
-
-
-def problem5_1():
-    pass
+# You are given an integer array nums.
+# In one move, you can pick an index i where 0 <= i < nums.length and increment nums[i] by 1.
+# Return the minimum number of moves to make every value in nums unique.
 
 
-def problem5_2():
-    pass
+def minIncrementForUnique1(nums: List[int]) -> int:
+    moves = 0
+    num_counts = [0] * (len(nums) + max(nums) + 1)
+
+    for num in nums:
+        num_counts[num] += 1
+
+    for index in range(len(num_counts)):
+        if num_counts[index] <= 1:
+            continue
+        duplicates = num_counts[index] - 1
+        num_counts[index + 1] += duplicates
+        moves += duplicates
+
+    return moves
 
 
 # <------------------------------------------------- June 15th, 2024 ------------------------------------------------->
@@ -555,6 +566,8 @@ students = [1, 3, 2, 6]
 # minMovesToSeat2(seats, students)  # Expected output: 7
 
 # Test cases for month day th, 2024
+nums_2 = [2, 2, 2, 1]
+minIncrementForUnique1(nums_2)  # Expected output: 3
 
 # Test cases for month day th, 2024
 
