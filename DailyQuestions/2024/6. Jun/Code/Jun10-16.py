@@ -512,16 +512,42 @@ def minIncrementForUnique1(nums: List[int]) -> int:
     where n is the length of the input list.
     The space complexity is O(n) due to the space required to sort 'nums'.
     """
-    moves = 0
-    prev = -1  # Initialize with a value smaller than anything in nums
+    print("\n--- Input Parameters ---")
+    print(f"\tnums = {nums}")
 
-    for num in sorted(nums):
+    moves = 0
+    prev = -1
+    iteration_data = []  # To store data for iteration summary
+
+    print("\n--- Main Loop (Making Elements Unique) ---")
+    for idx, num in enumerate(sorted(nums)):
+        print(f"\nIteration {idx + 1}:")
+        print(f"\tNumber: {num}")
+        print(f"\tPrevious Value (prev): {prev}")
+        increment = 0
+
+        print(f"\t--- Decision Point: Checking if {num} <= {prev} ---")
         if num <= prev:
-            moves += prev - num + 1
-            prev += 1
+            increment = prev - num + 1
+            print(f"\t\tDuplicate found. Incrementing by {prev} - {num} + 1 = {increment}")
+            moves += increment
+            prev += 1  # Update prev to the new unique value
         else:
+            print(f"\t\tNo duplicate. Moving to next number.")
             prev = num
 
+        print(f"\tUpdated prev: {prev}")
+        print(f"\tTotal moves so far: {moves}")
+
+        # Collect data for iteration summary
+        iteration_data.append([idx + 1, num, prev, increment if num <= prev else 0, moves])
+
+    print("\n--- Iteration Summary (Increment Details) ---")
+    headers = ["Iteration", "Number", "Prev", "Increment", "Total Moves"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal Minimum Increments: {moves}")
     return moves
 
 
@@ -618,6 +644,7 @@ students = [1, 3, 2, 6]
 # Test cases for month day th, 2024
 nums_2 = [3, 2, 1, 2, 1, 7]
 # minIncrementForUnique1(nums_2)  # Expected output: 6
+# minIncrementForUnique2(nums_2)  # Expected output: 6
 
 # Test cases for month day th, 2024
 
