@@ -656,33 +656,33 @@ def problem7_2():
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
-# Test cases for month day th, 2024
+# Test cases for June 10th, 2024
 heights = [1, 1, 4, 2, 1, 3]
 # heightChecker1(heights)  # Expected output: 3
 # heightChecker2(heights)  # Expected output: 3
 
-# Test cases for month day th, 2024
+# Test cases for June 11th, 2024
 arr1 = [2, 3, 1, 3, 2, 4, 6, 7, 9, 2, 19]
 arr2 = [2, 1, 4, 3, 9, 6]
 # relativeSortArray1(arr1, arr2)  # Expected output: [2,2,2,1,4,3,3,9,6,7,19]
 # relativeSortArray2(arr1, arr2)  # Expected output: [2,2,2,1,4,3,3,9,6,7,19]
 
-# Test cases for month day th, 2024
+# Test cases for June 12th, 2024
 nums = [2, 0, 2, 1, 1, 0]
 # sortColors1(nums)  # Expected output: [0,0,1,1,2,2]
 # sortColors2(nums)  # Expected output: [0,0,1,1,2,2]
 
-# Test cases for month day th, 2024
+# Test cases for June 13th, 2024
 seats = [4, 1, 5, 9]
 students = [1, 3, 2, 6]
 # minMovesToSeat1(seats, students)  # Expected output: 7
 # minMovesToSeat2(seats, students)  # Expected output: 7
 
-# Test cases for month day th, 2024
+# Test cases for June 14th, 2024
 nums_2 = [3, 2, 1, 2, 1, 3]
 # minIncrementForUnique1(nums_2)  # Expected output: 6
 # minIncrementForUnique2(nums_2)  # Expected output: 6
 
-# Test cases for month day th, 2024
+# Test cases for June 15th, 2024
 
-# Test cases for month day th, 2024
+# Test cases for June 16th, 2024
