@@ -519,8 +519,12 @@ def minIncrementForUnique1(nums: List[int]) -> int:
     prev = -1
     iteration_data = []  # To store data for iteration summary
 
+    nums.sort()  # Sort the input list
+    print("\n--- Sorted List ---")
+    print(f"\tSorted nums: {nums}")
+
     print("\n--- Main Loop (Making Elements Unique) ---")
-    for idx, num in enumerate(sorted(nums)):
+    for idx, num in enumerate(nums):
         print(f"\nIteration {idx + 1}:")
         print(f"\tNumber: {num}")
         print(f"\tPrevious Value (prev): {prev}")
@@ -568,24 +572,57 @@ def minIncrementForUnique2(nums: List[int]) -> int:
     This is because we iterate through the list once and potentially through the `num_counts` array once.
     The space complexity is O(m), where m is the maximum value in the list, due to the size of the `num_counts` array.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tnums = {nums}")
+
     moves = 0
-    num_counts = [0] * (max(nums) + 1)
+    max_num = max(nums)
+    num_counts = [0] * (max_num + 1)
 
-    for num in nums:
+    iteration_data = []
+
+    print("\n--- Main Loop (Building Count Dictionary) ---")
+    for index, num in enumerate(nums):
+        print(f"\n\tIteration {index + 1}:")
+        print(f"\t\tNumber: {num}")
+
         num_counts[num] += 1
+        print(f"\t\tIncrementing count for {num}: {num_counts}")
+        iteration_data.append([index + 1, num, num_counts.copy()])
 
+    print("\n--- Iteration Summary (num_counts Updates) ---")
+    headers = ["Iteration", "Number", "num_counts"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Main Loop (Propagating Duplicates) ---")
     for index in range(len(num_counts) - 1):
+        print(f"\n\tIndex: {index}")
+        print(f"\t\tCount at index: {num_counts[index]}")
+
+        print("\t--- Decision Point (Duplicate Check) ---")
         if num_counts[index] <= 1:
+            print(f"\t\tNo duplicates or single occurrence. Moving to next index.")
             continue
+
+        print(f"\t\tNum_counts before increment: {num_counts}")
+
         duplicates = num_counts[index] - 1
+        print(f"\t\t{duplicates} duplicates found.")
         num_counts[index + 1] += duplicates
+        print(f"\t\tPropagating {duplicates} duplicates to the next index ({index + 1}): {num_counts}")
         moves += duplicates
 
-    if num_counts[-1] > 1:
-        # Using the formula for the sum of first n natural numbers: n * (n + 1) / 2, where n is the number of duplicates
-        n = num_counts[-1] - 1
-        moves += n * (n + 1) // 2
+        print(f"\t\tTotal moves so far: {moves}")
 
+    print("\n--- Final Check (Last Index Duplicates) ---")
+    if num_counts[-1] > 1:
+        n = num_counts[-1] - 1
+        print(f"\t{n} duplicates found at the last index.")
+        moves += n * (n + 1) // 2
+        print(f"\t\tIncrementing moves by {n * (n + 1) // 2} (sum of first {n} natural numbers)")
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal Minimum Increments: {moves}")
     return moves
 
 
@@ -642,7 +679,7 @@ students = [1, 3, 2, 6]
 # minMovesToSeat2(seats, students)  # Expected output: 7
 
 # Test cases for month day th, 2024
-nums_2 = [3, 2, 1, 2, 1, 7]
+nums_2 = [3, 2, 1, 2, 1, 3]
 # minIncrementForUnique1(nums_2)  # Expected output: 6
 # minIncrementForUnique2(nums_2)  # Expected output: 6
 
