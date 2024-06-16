@@ -731,18 +731,56 @@ def minPatches1(nums: List[int], n: int) -> int:
     and it doubles `possible_patch` until it is larger than `n` (which takes O(log(n))).
     The space complexity is O(1) because it doesn't create any new data structures that grow with the size of the input.
     """
+    # --- Input Parameters ---
+    print("\n--- Input Parameters ---")
+    print(f"\tnums = {nums}")
+    print(f"\tn = {n}")
+
+    # --- Initialization ---
     patches = 0
     possible_patch = 1
-
     index = 0
-    while possible_patch <= n:
-        if index < len(nums) and nums[index] <= possible_patch:
+
+    # --- Main Loop (Greedy Patching) ---
+    print("\n--- Main Loop (Greedy Patching) ---")
+    iterations = 0
+    while possible_patch <= n and index < len(nums):
+        iterations += 1
+        print(f"\nIteration {iterations}:")
+        if iterations > 1:
+            print(f"\tCurrent coverage: [1, {possible_patch})")
+        else:
+            print(f"\tInitial coverage: No coverage yet")
+        print(f"\tCurrent possible_patch: {possible_patch}")
+
+        print(f"\tChecking if nums[{index}] = {nums[index]} is within the range [1, {possible_patch})")
+        if nums[index] <= possible_patch:
+            print(f"\t\tIn range. Updating possible_patch to {possible_patch} + {nums[index]} = "
+                  f"{possible_patch + nums[index]}")
             possible_patch += nums[index]
             index += 1
         else:
+            print(f"\t\tOut of range. Doubling possible_patch to {possible_patch * 2}")
+            print(f"\t\tAdding patch: {patches} + 1 = {patches + 1}")
             possible_patch *= 2
             patches += 1
 
+    while possible_patch <= n:
+        iterations += 1
+        print(f"\nIteration {iterations}:")
+        print(f"\tCurrent coverage: [1, {possible_patch})")
+        print(f"\tCurrent possible_patch: {possible_patch}")
+        print(f"\tPossible_patch {possible_patch} is not covering {n} yet. Doubling possible_patch to "
+              f"{possible_patch * 2})")
+        print(f"\tAdding patch: {patches} + 1 = {patches + 1}")
+        possible_patch *= 2
+        patches += 1
+
+    print(f"\nFinally, n = {n} is covered by the range [1, {possible_patch})")
+
+    # --- Function Returning ---
+    print("\n--- Function Returning ---")
+    print(f"\tMinimum patches required: {patches}")
     return patches
 
 
