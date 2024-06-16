@@ -1,3 +1,4 @@
+import heapq
 from collections import defaultdict
 from typing import List
 
@@ -627,16 +628,35 @@ def minIncrementForUnique2(nums: List[int]) -> int:
 
 
 # <------------------------------------------------- June 15th, 2024 ------------------------------------------------->
-# 6. Problem
+# 502. IPO
 
-# Description
+# LeetCode is planning its IPO and wants to maximize its capital by completing at most `k` distinct projects,
+# each with a certain profit `profits[i]` and a minimum starting capital `capital[i]`.
+# Initially, LeetCode has `w` capital, and the task is to select a list of `n` projects that maximizes the
+# final capital, considering that the profit from a completed project increases the total capital.
 
 
-def problem6_1():
-    pass
+def findMaximizedCapital1(k: int, w: int, profits: List[int], capital: List[int]) -> int:
+    if w > max(capital):
+        return w + sum(heapq.nlargest(k, profits))
+
+    projects = list(zip(capital, profits))
+    heapq.heapify(projects)
+    possible_projects = []
+
+    for _ in range(k):
+        while projects and projects[0][0] <= w:
+            _, profit = heapq.heappop(projects)
+            # Since we are using a min heap, we negate the profit so that the largest profit is at the top
+            heapq.heappush(possible_projects, -profit)
+        if not possible_projects:
+            break
+        w -= heapq.heappop(possible_projects)
+
+    return w
 
 
-def problem6_2():
+def findMaximizedCapital2(k: int, w: int, profits: List[int], capital: List[int]) -> int:
     pass
 
 
@@ -684,5 +704,11 @@ nums_2 = [3, 2, 1, 2, 1, 3]
 # minIncrementForUnique2(nums_2)  # Expected output: 6
 
 # Test cases for June 15th, 2024
+k = 2
+w = 0
+profits = [1, 2, 3]
+capital = [0, 1, 1]
+findMaximizedCapital1(k, w, profits, capital)  # Expected output: 4
+findMaximizedCapital2(k, w, profits, capital)  # Expected output: 4
 
 # Test cases for June 16th, 2024
