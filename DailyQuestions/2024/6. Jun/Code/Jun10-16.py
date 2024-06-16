@@ -712,11 +712,20 @@ def findMaximizedCapital1(k: int, w: int, profits: List[int], capital: List[int]
 
 
 def minPatches1(nums: List[int], n: int) -> int:
-    pass
+    patches = 0
+    possible_patch = 1
 
+    index = 0
+    while possible_patch <= n:
+        if index < len(nums) and nums[index] <= possible_patch:
+            possible_patch += nums[index]
+            index += 1
+        else:
+            possible_patch *= 2
+            patches += 1
 
-def minPatches2(nums: List[int], n: int) -> int:
-    pass
+    print(patches)
+    return patches
 
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
@@ -753,6 +762,7 @@ k = 3
 w = 0
 profits = [1, 2, 3, 4, 5]
 capital = [0, 1, 1, 3, 3]
-findMaximizedCapital1(k, w, profits, capital)  # Expected output: 9
+# findMaximizedCapital1(k, w, profits, capital)  # Expected output: 9
 
 # Test cases for June 16th, 2024
+minPatches1([1, 5, 10], 50)  # Expected output: 4
