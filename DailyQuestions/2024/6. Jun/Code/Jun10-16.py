@@ -637,6 +637,26 @@ def minIncrementForUnique2(nums: List[int]) -> int:
 
 
 def findMaximizedCapital1(k: int, w: int, profits: List[int], capital: List[int]) -> int:
+    """
+    Finds the maximum capital achievable by completing at most 'k' projects given initial capital 'w',
+    project profits, and capital requirements.
+
+    This function uses a greedy approach with two heaps to optimize project selection.
+    It first checks whether the initial capital 'w' is more than the maximum capital required across all projects.
+    If it is, it simply returns the initial capital plus the total profits from the 'k' most profitable projects.
+    If not, the function manages the projects using two heap data structures - one min-heap for 'projects'
+    sorted by their capital requirements and the other (max-heap) for 'possible_projects'
+    storing the profits negatively for getting the maximum profit as the heap head (since Python has only min-heap).
+    The function loops 'k' times (or up to the number of possible projects), each time adding affordable projects to
+    the 'possible_projects' heap, and removing ("finishing") the most profitable project from 'possible_projects'
+    heap while adding its profit to our current capital 'w'.
+    This way, we ensure that at each step, we are choosing the project which is affordable and gives the maximum profit.
+
+    The time complexity of this solution is O(n log n), where `n` is the number of projects.
+    This is because the solution involves transforming the list into a heap
+    (O(n log n)) and performing up to k heap operations (O(k log n)), giving a total of O(n log n) since k <= n.
+    The space complexity is O(n) due to the storage requirements for the heaps.
+    """
     if w > max(capital):
         return w + sum(heapq.nlargest(k, profits))
 
@@ -647,7 +667,7 @@ def findMaximizedCapital1(k: int, w: int, profits: List[int], capital: List[int]
     for _ in range(k):
         while projects and projects[0][0] <= w:
             _, profit = heapq.heappop(projects)
-            # Since we are using a min heap, we negate the profit so that the largest profit is at the top
+            # Use negation to turn the min-heap into a max-heap based on profit.
             heapq.heappush(possible_projects, -profit)
         if not possible_projects:
             break
@@ -660,16 +680,15 @@ def findMaximizedCapital2(k: int, w: int, profits: List[int], capital: List[int]
     if w > max(capital):
         return w + sum(heapq.nlargest(k, profits))
 
-    possible_projects = []
-    future_projects = []
+    possible_projects = []  # Max heap based on the highest profit
+    future_projects = []  # Min heap based on the lowest capital required
 
     for index in range(len(profits)):
         profit, proj_capital = profits[index], capital[index]
 
-        # If the project can be afforded, add it to the heap of possible projects
         if proj_capital <= w:
-            heapq.heappush(possible_projects, (-profit, -proj_capital))
-        else:  # Otherwise, add it to the heap of future projects
+            heapq.heappush(possible_projects, (-profit, -proj_capital))  # Negate profit for max heap
+        else:
             heapq.heappush(future_projects, (proj_capital, -profit))
 
     heapq.heapify(possible_projects)
@@ -680,9 +699,10 @@ def findMaximizedCapital2(k: int, w: int, profits: List[int], capital: List[int]
         w -= profit
         k -= 1
 
-        # Check if any future projects can be added to the possible projects heap after increasing the capital
         while len(future_projects) > 0 and w >= future_projects[0][0]:
             proj_capital, profit = heapq.heappop(future_projects)
+
+            # Since profit was negated earlier, we don't need to negate it here
             heapq.heappush(possible_projects, (profit, -proj_capital))
 
     return w
@@ -732,11 +752,11 @@ nums_2 = [3, 2, 1, 2, 1, 3]
 # minIncrementForUnique2(nums_2)  # Expected output: 6
 
 # Test cases for June 15th, 2024
-k = 2
+k = 3
 w = 0
-profits = [1, 2, 3]
-capital = [0, 1, 1]
-findMaximizedCapital1(k, w, profits, capital)  # Expected output: 4
-findMaximizedCapital2(k, w, profits, capital)  # Expected output: 4
+profits = [1, 2, 3, 4, 5]
+capital = [0, 1, 1, 3, 3]
+findMaximizedCapital1(k, w, profits, capital)  # Expected output: 9
+findMaximizedCapital2(k, w, profits, capital)  # Expected output: 9
 
 # Test cases for June 16th, 2024
