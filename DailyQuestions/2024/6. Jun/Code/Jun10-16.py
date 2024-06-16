@@ -657,7 +657,35 @@ def findMaximizedCapital1(k: int, w: int, profits: List[int], capital: List[int]
 
 
 def findMaximizedCapital2(k: int, w: int, profits: List[int], capital: List[int]) -> int:
-    pass
+    if w > max(capital):
+        return w + sum(heapq.nlargest(k, profits))
+
+    possible_projects = []
+    future_projects = []
+
+    for index in range(len(profits)):
+        profit, proj_capital = profits[index], capital[index]
+
+        # If the project can be afforded, add it to the heap of possible projects
+        if proj_capital <= w:
+            heapq.heappush(possible_projects, (-profit, -proj_capital))
+        else:  # Otherwise, add it to the heap of future projects
+            heapq.heappush(future_projects, (proj_capital, -profit))
+
+    heapq.heapify(possible_projects)
+    heapq.heapify(future_projects)
+
+    while k > 0 and len(possible_projects) > 0:
+        profit, proj_capital = heapq.heappop(possible_projects)
+        w -= profit
+        k -= 1
+
+        # Check if any future projects can be added to the possible projects heap after increasing the capital
+        while len(future_projects) > 0 and w >= future_projects[0][0]:
+            proj_capital, profit = heapq.heappop(future_projects)
+            heapq.heappush(possible_projects, (profit, -proj_capital))
+
+    return w
 
 
 # <------------------------------------------------- June 16th, 2024 ------------------------------------------------->
