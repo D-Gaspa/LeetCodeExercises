@@ -715,20 +715,20 @@ def minPatches1(nums: List[int], n: int) -> int:
     """
     Determines the minimum number of patches required to make a sorted list of numbers cover all integers from 1 to n.
 
-    The function uses a Greedy algorithm approach.
-    It starts with `possible_patch` as 1 (the lower bound) which is the smallest possible number we can form,
+    The function uses a greedy algorithm approach.
+    It starts with `possible_patch` as 1 (the smallest possible number we need to form),
     and `patches` as 0 (the count of patches needed).
-    It then traverses 'nums', checking each number to see if it is within the range of [1, possible_patch).
+    It then traverses `nums`, checking each number to see if it is within the current range [1, possible_patch).
     If a `nums` element can be added to the range without leaving a gap, we update `possible_patch` to include it.
-    If not (where a gap would be created), a patch is necessary, and we double `possible_patch` to cover the gap.
-    We double `possible_patch` because if we can cover all numbers from [1, possible_patch) with the current list,
-    then we will cover all numbers from [1, 2 * possible_patch) by adding `possible_patch` to the list.
+    If not, a patch is necessary, and we double `possible_patch` to cover the gap.
+    Doubling `possible_patch` ensures that if we can cover all numbers in [1, possible_patch) with the current list,
+    we can cover all numbers in [1, 2 * possible_patch) by adding `possible_patch` to the list.
     The optimal patch is always `possible_patch`, as it is the smallest integer outside the current range.
-    The function continues this process until `possible_patch` exceeds 'n'.
+    The function continues this process until `possible_patch` exceeds `n`.
 
     The time complexity of this solution is O(m + log(n)) because in the worst-case scenario,
-    it iterates over each element in nums (which takes O(m), where 'm' is the size of nums),
-    and it doubles the `possible_patch` until it is larger than 'n' (which takes O(log(n))).
+    it iterates over each element in `nums` (which takes O(m), where `m` is the size of `nums`),
+    and it doubles `possible_patch` until it is larger than `n` (which takes O(log(n))).
     The space complexity is O(1) because it doesn't create any new data structures that grow with the size of the input.
     """
     patches = 0
