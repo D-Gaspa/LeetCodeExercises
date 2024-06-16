@@ -646,7 +646,7 @@ def findMaximizedCapital1(k: int, w: int, profits: List[int], capital: List[int]
     If it is, it simply returns the initial capital plus the total profits from the 'k' most profitable projects.
     If not, the function manages the projects using two heap data structures - one min-heap for 'projects'
     sorted by their capital requirements and the other (max-heap) for 'possible_projects'
-    storing the profits negatively for getting the maximum profit as the heap head (since Python has only min-heap).
+    storing the profits negatively for getting the maximum profit as the heap head (since heapq is a min-heap).
     The function loops 'k' times (or up to the number of possible projects), each time adding affordable projects to
     the 'possible_projects' heap, and removing ("finishing") the most profitable project from 'possible_projects'
     heap while adding its profit to our current capital 'w'.
@@ -657,54 +657,49 @@ def findMaximizedCapital1(k: int, w: int, profits: List[int], capital: List[int]
     (O(n log n)) and performing up to k heap operations (O(k log n)), giving a total of O(n log n) since k <= n.
     The space complexity is O(n) due to the storage requirements for the heaps.
     """
-    if w > max(capital):
-        return w + sum(heapq.nlargest(k, profits))
+    print("\n--- Input Parameters ---")
+    print(f"\tk = {k}")
+    print(f"\tw = {w}")
+    print(f"\tprofits = {profits}")
+    print(f"\tcapital = {capital}")
 
+    print("\n--- Initial Check ---")
+    if w >= max(capital):
+        print("\tAll projects are affordable initially.")
+        result = w + sum(heapq.nlargest(k, profits))
+        print(f"\tResult: {result}")
+        return result
+
+    print("\n--- Project Heap Initialization ---")
     projects = list(zip(capital, profits))
     heapq.heapify(projects)
-    possible_projects = []
+    print(f"\tprojects (min-heap by capital): {projects}")
 
-    for _ in range(k):
+    possible_projects = []  # Max-heap of affordable projects (by profit)
+
+    print("\n--- Main Loop (Project Selection) ---")
+    for i in range(k):
+        print(f"\nIteration {i + 1}:")
+        print(f"\tCurrent capital (w): {w}")
+
+        print("\t\tAdding Affordable Projects:")
+        print(f"\t\t\tProjects available: {projects}")
         while projects and projects[0][0] <= w:
-            _, profit = heapq.heappop(projects)
-            # Use negation to turn the min-heap into a max-heap based on profit.
-            heapq.heappush(possible_projects, -profit)
+            cap, prof = heapq.heappop(projects)
+            heapq.heappush(possible_projects, -prof)  # Negate for max-heap behavior
+            print(f"\t\t\tProject (capital={cap}, profit={prof}) added to possible_projects")
+
         if not possible_projects:
+            print("\t\tNo more affordable projects. Exiting loop.")
             break
-        w -= heapq.heappop(possible_projects)
 
-    return w
+        print(f"\t\tPossible Projects (max-heap by profit): {possible_projects}")
+        max_profit = -heapq.heappop(possible_projects)  # Get and negate max profit
+        w += max_profit
+        print(f"\t\tChose project with profit {max_profit}. Updated capital: {w}")
 
-
-def findMaximizedCapital2(k: int, w: int, profits: List[int], capital: List[int]) -> int:
-    if w > max(capital):
-        return w + sum(heapq.nlargest(k, profits))
-
-    possible_projects = []  # Max heap based on the highest profit
-    future_projects = []  # Min heap based on the lowest capital required
-
-    for index in range(len(profits)):
-        profit, proj_capital = profits[index], capital[index]
-
-        if proj_capital <= w:
-            heapq.heappush(possible_projects, (-profit, -proj_capital))  # Negate profit for max heap
-        else:
-            heapq.heappush(future_projects, (proj_capital, -profit))
-
-    heapq.heapify(possible_projects)
-    heapq.heapify(future_projects)
-
-    while k > 0 and len(possible_projects) > 0:
-        profit, proj_capital = heapq.heappop(possible_projects)
-        w -= profit
-        k -= 1
-
-        while len(future_projects) > 0 and w >= future_projects[0][0]:
-            proj_capital, profit = heapq.heappop(future_projects)
-
-            # Since profit was negated earlier, we don't need to negate it here
-            heapq.heappush(possible_projects, (profit, -proj_capital))
-
+    print("\n--- Function Returning ---")
+    print(f"\tFinal capital: {w}")
     return w
 
 
@@ -757,6 +752,5 @@ w = 0
 profits = [1, 2, 3, 4, 5]
 capital = [0, 1, 1, 3, 3]
 findMaximizedCapital1(k, w, profits, capital)  # Expected output: 9
-findMaximizedCapital2(k, w, profits, capital)  # Expected output: 9
 
 # Test cases for June 16th, 2024
