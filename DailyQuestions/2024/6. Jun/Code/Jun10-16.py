@@ -704,16 +704,18 @@ def findMaximizedCapital1(k: int, w: int, profits: List[int], capital: List[int]
 
 
 # <------------------------------------------------- June 16th, 2024 ------------------------------------------------->
-# 7. Problem
+# 330. Patching Array
 
-# Description
+# Given a sorted integer array `nums` and an integer `n`, add/patch elements to the array such that any number in
+# the range `[1, n]` inclusive can be formed by the sum of some elements in the array.
+# Return the minimum number of patches required.
 
 
-def problem7_1():
+def minPatches1(nums: List[int], n: int) -> int:
     pass
 
 
-def problem7_2():
+def minPatches2(nums: List[int], n: int) -> int:
     pass
 
 
