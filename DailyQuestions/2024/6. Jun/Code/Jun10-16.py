@@ -758,7 +758,6 @@ def minPatches1(nums: List[int], n: int) -> int:
 
         prev_index = index
         prev_possible_patch = possible_patch
-        is_n_covered = "No"
 
         print(f"\tChecking if nums[{index}] = {nums[index]} is within the range [1, {possible_patch})")
         if nums[index] <= possible_patch:
@@ -774,8 +773,8 @@ def minPatches1(nums: List[int], n: int) -> int:
             possible_patch *= 2
             patches += 1
 
-        iteration_data.append([iterations, prev_possible_patch, current_coverage, is_n_covered, prev_index,
-                               nums[prev_index], action, patches])
+        iteration_data.append([iterations, prev_possible_patch, current_coverage, prev_index, nums[prev_index], action,
+                               patches])
 
     while possible_patch <= n:
         iterations += 1
@@ -791,15 +790,14 @@ def minPatches1(nums: List[int], n: int) -> int:
         possible_patch *= 2
         patches += 1
 
-        iteration_data.append([iterations, prev_possible_patch, f"[1, {prev_possible_patch})", "No", index, "N/A",
-                               action, patches])
+        iteration_data.append([iterations, prev_possible_patch, f"[1, {prev_possible_patch})", index, "N/A", action,
+                               patches])
 
     print(f"\nFinally, n = {n} is covered by the range [1, {possible_patch})")
 
     # --- Iteration Summary ---
     print("\n--- Iteration Summary ---")
-    headers = ["Iteration", "Possible Patch", "Current Coverage", f"Is `n` = {n} Covered?", "Index", "Num", "Action",
-               "Patches"]
+    headers = ["Iteration", "Possible Patch", "Current Coverage", "Index", "Num", "Action", "Patches"]
     print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
 
     # --- Function Returning ---
