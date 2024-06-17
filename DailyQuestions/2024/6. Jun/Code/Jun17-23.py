@@ -12,6 +12,22 @@ from tabulate import tabulate
 
 
 def judgeSquareSum1(c: int) -> bool:
+    """
+    Determines if a given non-negative integer 'c' can be expressed as the sum of squares of two integers 'a' and 'b'.
+
+    The function uses a two-pointer technique starting from 0 and square root of 'c'.
+    It then iteratively checks the sum of squares of the two pointers, 'start_index' and 'end_index'.
+    If the sum is less than 'c', it increases the start_index to get a larger sum.
+    If it's greater than 'c', it reduces the end_index to get a smaller sum.
+    If it's equal to 'c', the function immediately returns True because it has found the pair of numbers.
+    If no pair satisfying the condition is found after the loop, it returns False.
+    This approach works because for every value of 'c', if there exist two numbers 'a' and 'b' such that a^2 + b^2 = c,
+    then 'a' and 'b' must each be less than or equal to sqrt(c).
+
+    The time complexity of this function is O(√c) because in the worst case,
+    the while loop iterates up to the square root of c times.
+    The space complexity is O(1) as it uses a constant amount of extra space.
+    """
     start_index = 0
     end_index = int(math.sqrt(c))
 
