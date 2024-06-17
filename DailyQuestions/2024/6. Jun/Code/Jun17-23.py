@@ -27,7 +27,17 @@ def judgeSquareSum1(c: int) -> bool:
 
 
 def judgeSquareSum2(c: int) -> bool:
-    pass
+    index = 2
+    while index * index <= c:
+        divisors_count = 0
+        if c % index == 0:
+            while c % index == 0:
+                divisors_count += 1
+                c //= index
+            if divisors_count % 2 and index % 4 == 3:
+                return False
+        index += 1
+    return c % 4 != 3
 
 # <------------------------------------------------- June 18th, 2024 ------------------------------------------------->
 # 2. Problem
@@ -117,6 +127,7 @@ def problem7_2():
 
 # Test cases for June 17th, 2024
 # judgeSquareSum1(20)  # Expected output: True
+# judgeSquareSum2(20)  # Expected output: True
 
 # Test cases for June 18th, 2024
 
