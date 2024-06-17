@@ -740,6 +740,7 @@ def minPatches1(nums: List[int], n: int) -> int:
     patches = 0
     possible_patch = 1
     index = 0
+    iteration_data = []  # Collect data for iteration summary
 
     # --- Main Loop (Greedy Patching) ---
     print("\n--- Main Loop (Greedy Patching) ---")
@@ -748,22 +749,33 @@ def minPatches1(nums: List[int], n: int) -> int:
         iterations += 1
         print(f"\nIteration {iterations}:")
         if iterations > 1:
+            current_coverage = f"[1, {possible_patch})"
             print(f"\tCurrent coverage: [1, {possible_patch})")
         else:
+            current_coverage = "No coverage yet"
             print(f"\tInitial coverage: No coverage yet")
         print(f"\tCurrent possible_patch: {possible_patch}")
+
+        prev_index = index
+        prev_possible_patch = possible_patch
+        is_n_covered = "No"
 
         print(f"\tChecking if nums[{index}] = {nums[index]} is within the range [1, {possible_patch})")
         if nums[index] <= possible_patch:
             print(f"\t\tIn range. Updating possible_patch to {possible_patch} + {nums[index]} = "
                   f"{possible_patch + nums[index]}")
+            action = f"Add `nums[{index}]` = {nums[index]} to `possible_patch` and increment index"
             possible_patch += nums[index]
             index += 1
         else:
             print(f"\t\tOut of range. Doubling possible_patch to {possible_patch * 2}")
             print(f"\t\tAdding patch: {patches} + 1 = {patches + 1}")
+            action = f"Patch needed. Double `possible_patch` to {possible_patch * 2}"
             possible_patch *= 2
             patches += 1
+
+        iteration_data.append([iterations, prev_possible_patch, current_coverage, is_n_covered, prev_index,
+                               nums[prev_index], action, patches])
 
     while possible_patch <= n:
         iterations += 1
@@ -773,10 +785,22 @@ def minPatches1(nums: List[int], n: int) -> int:
         print(f"\tPossible_patch {possible_patch} is not covering {n} yet. Doubling possible_patch to "
               f"{possible_patch * 2})")
         print(f"\tAdding patch: {patches} + 1 = {patches + 1}")
+
+        prev_possible_patch = possible_patch
+        action = f"Patch needed. Double `possible_patch` to {possible_patch * 2}"
         possible_patch *= 2
         patches += 1
 
+        iteration_data.append([iterations, prev_possible_patch, f"[1, {prev_possible_patch})", "No", index, "N/A",
+                               action, patches])
+
     print(f"\nFinally, n = {n} is covered by the range [1, {possible_patch})")
+
+    # --- Iteration Summary ---
+    print("\n--- Iteration Summary ---")
+    headers = ["Iteration", "Possible Patch", "Current Coverage", f"Is `n` = {n} Covered?", "Index", "Num", "Action",
+               "Patches"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
 
     # --- Function Returning ---
     print("\n--- Function Returning ---")
@@ -821,4 +845,4 @@ capital = [0, 1, 1, 3, 3]
 # findMaximizedCapital1(k, w, profits, capital)  # Expected output: 9
 
 # Test cases for June 16th, 2024
-minPatches1([1, 5, 10], 50)  # Expected output: 4
+# minPatches1([1, 5, 10], 50)  # Expected output: 4
