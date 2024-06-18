@@ -103,17 +103,92 @@ def judgeSquareSum2(c: int) -> bool:
     performs division operations for each prime factor (log c).
     The space complexity is O(1) as it uses a constant amount of extra space.
     """
+    # Input Parameters
+    print("\n--- Input Parameters ---")
+    print(f"\tc = {c}")
+
+    # Initialization
+    print("\n--- Initialization ---")
     index = 2
+    original_c = c  # Store the original value of c for later reference
+    print(f"\tindex = {index}")
+
+    # Main Loop (Checking Prime Factors)
+    print("\n--- Main Loop (Checking Prime Factors) ---")
+    iteration_data = []  # To collect data for the iteration summary
+    iteration = 0
     while index * index <= c:
+        needs_iteration_data = True
+        iteration += 1
+        print(f"\nWhile {index}^2 <= {c}: (Iteration {iteration})")
         divisors_count = 0
+
+        # Decision Point 1 (Divisibility)
+        print(f"\tDecision Point 1 (Divisibility):")
         if c % index == 0:
+            print(f"\t\tc is divisible by {index}")
+
+            # Inner Loop (Counting Divisors)
+            print("\t\tInner Loop (Counting Divisors):")
             while c % index == 0:
                 divisors_count += 1
                 c //= index
-            if divisors_count % 2 and index % 4 == 3:
-                return False
+                print(f"\t\t\tdivisors_count = {divisors_count}, c = {c}")
+
+            print(f"\t\t\t{index}^({divisors_count}) is a factor of c")
+
+            # Decision Point 2 (Odd Exponent and Form)
+            is_odd_exponent = divisors_count % 2 == 1
+            is_form_4k_plus_3 = index % 4 == 3
+
+            print(f"\t\tDecision Point 2 (Odd Exponent and Form):")
+            if not is_form_4k_plus_3:
+                print(f"\t\t\t{index} is not of the form 4k + 3, continuing")
+                action = "Continue"
+            else:
+                print(f"\t\t\t{index} is of the form 4k + 3")
+                if is_odd_exponent:
+                    print(f"\t\t\t{index} has an odd exponent, returning False")
+                    action = f"Return False (Odd exponent and form 4k + 3)"
+                else:
+                    print(f"\t\t\t{index} has an even exponent, continuing")
+                    action = "Continue (Even exponent)"
+
+            # Iteration Summary Data
+            iteration_data.append([iteration, index, divisors_count, c, "True" if index % 4 == 3 else "False", action])
+            needs_iteration_data = False
+
+            if is_odd_exponent and is_form_4k_plus_3:
+                result = False
+                break
+        else:
+            print(f"\t\tc is not divisible by {index}")
+
+        if needs_iteration_data:
+            iteration_data.append([iteration, index, divisors_count, c, "False", "Continue"])
+
         index += 1
-    return c % 4 != 3
+
+    else:  # Loop completed without finding a disqualifying factor
+        # Decision Point 3 (Remaining Value)
+        print("\n--- Decision Point 3 (Remaining Value) ---")
+        print(f"\tRemaining value of c after factorization: {c}")
+        if c % 4 != 3:
+            print(f"\t\tRemaining value is not of the form 4k + 3, returning True")
+            result = True
+        else:
+            print(f"\t\tRemaining value is of the form 4k + 3, returning False")
+            result = False
+
+    # Iteration Summary Table
+    print("\n--- Iteration Summary ---")
+    headers = ["Iteration", "'index'", "'divisors_count'", "'c'", "`index % 4 == 3`", "`Result`"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    # Function Return
+    print("\n--- Function Returning ---")
+    print(f"\tInput c = {original_c}, Result: {result}")  # Print original input for clarity
+    return result
 
 
 # <------------------------------------------------- June 18th, 2024 ------------------------------------------------->
