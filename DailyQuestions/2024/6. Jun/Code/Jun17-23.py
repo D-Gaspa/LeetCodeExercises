@@ -1,7 +1,5 @@
 import math
-from typing import List
 
-from tabulate import tabulate
 
 # Week 3: June 17th - June 23rd, 2024
 
@@ -43,6 +41,30 @@ def judgeSquareSum1(c: int) -> bool:
 
 
 def judgeSquareSum2(c: int) -> bool:
+    """
+    Determines if a given non-negative integer 'c' can be expressed as the sum of squares of two integers 'a' and 'b'.
+
+    The function uses properties from number theory, particularly Fermat's theorem on sums of two squares.
+    According to the theorem, a non-negative integer can be expressed as a sum of two squares if and only if every
+    prime factor of the form (4k + 3) has an even exponent in the factorization of 'c'.
+    This is because a prime of the form (4k + 3) cannot be expressed as the sum of two squares (as opposed to primes of
+    the form 4k + 1 which can always be expressed as the sum of two squares).
+    When a prime of the form (4k + 3) appears with an even exponent in the prime factorization of 'c',
+    its contribution to the overall sum of squares can be paired off and effectively neutralized.
+    However, if such a prime appears with an odd exponent, it cannot be paired off, and its presence fundamentally
+    prevents 'c' from being expressed as the sum of two squares.
+
+    The function iterates through possible prime factors up to the square root of 'c'.
+    For each factor, it counts the number of times it divides 'c'.
+    If a prime factor of the form (4k + 3) divides 'c' an odd number of times, the function returns False.
+    Additionally, after factoring out all smaller primes, if the remaining part of 'c' is a prime of the form (4k + 3),
+    the function also returns False.
+    If no such prime factors are found, the function returns True.
+
+    The time complexity of this solution is O(√c log c) because it iterates up to the square root of 'c' and
+    performs division operations for each prime factor (log c).
+    The space complexity is O(1) as it uses a constant amount of extra space.
+    """
     index = 2
     while index * index <= c:
         divisors_count = 0
@@ -54,6 +76,7 @@ def judgeSquareSum2(c: int) -> bool:
                 return False
         index += 1
     return c % 4 != 3
+
 
 # <------------------------------------------------- June 18th, 2024 ------------------------------------------------->
 # 2. Problem
@@ -142,8 +165,8 @@ def problem7_2():
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
 # Test cases for June 17th, 2024
-# judgeSquareSum1(20)  # Expected output: True
-# judgeSquareSum2(20)  # Expected output: True
+# judgeSquareSum1(98)  # Expected output: True
+# judgeSquareSum2(98)  # Expected output: True
 
 # Test cases for June 18th, 2024
 
