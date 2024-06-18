@@ -204,17 +204,38 @@ def judgeSquareSum2(c: int) -> bool:
 
 
 def maxProfitAssignment1(difficulty: List[int], profit: List[int], worker: List[int]) -> int:
+    """
+    Calculates the maximum total profit that workers can achieve based on their abilities and the given jobs'
+    difficulties and profits.
+
+    The function first determines the maximum ability of all workers, then initializes a list to store the maximum
+    profit for each level of difficulty up to this maximum ability.
+    By iterating through each job's difficulty and profit, it updates this list to ensure it captures the highest
+    profit available for each difficulty level up to the maximum ability.
+    The function then adjusts this list so that for any given difficulty, it reflects the highest-profit achievable
+    up to that difficulty level, because a job with a lower difficulty may have a higher profit.
+    Finally, it sums up the highest possible profit for each worker based on their respective abilities.
+
+    The time complexity of this solution is O(n + m + max_ability), where `n` is the number of jobs,
+    `m` is the number of workers, and `max_ability` is the maximum ability of any worker.
+    This is because it iterates through the difficulties and profits once (O(n)),
+    the range of abilities (O(max_ability)), and the workers once (O(m)).
+    The space complexity is O(maxA) due to the list storing maximum profits per difficulty level.
+    """
     max_ability = max(worker)
 
     max_profit_per_diff = [0] * (max_ability + 1)
 
+    # Build the maximum profit for each difficulty level up to max_ability.
     for diff, prof in zip(difficulty, profit):
         if diff <= max_ability:
             max_profit_per_diff[diff] = max(max_profit_per_diff[diff], prof)
 
+    # Accumulate the maximum profit so far for each difficulty level.
     for index in range(1, max_ability + 1):
         max_profit_per_diff[index] = max(max_profit_per_diff[index], max_profit_per_diff[index - 1])
 
+    # Compute and return the total maximum profit for all workers.
     return sum(max_profit_per_diff[ability] for ability in worker)
 
 
