@@ -219,7 +219,20 @@ def maxProfitAssignment1(difficulty: List[int], profit: List[int], worker: List[
 
 
 def maxProfitAssignment2(difficulty: List[int], profit: List[int], worker: List[int]) -> int:
-    pass
+    jobs = sorted(zip(difficulty, profit))
+
+    max_profit_so_far = 0
+    for index, job in enumerate(jobs):
+        max_profit_so_far = max(max_profit_so_far, job[1])
+        jobs[index] = (job[0], max_profit_so_far)
+
+    total_profit = 0
+    for ability in worker:
+        index = bisect_right(jobs, (ability, float('inf')))
+        if index > 0:
+            total_profit += jobs[index - 1][1]
+
+    return total_profit
 
 
 def maxProfitAssignment3(difficulty: List[int], profit: List[int], worker: List[int]) -> int:
@@ -306,9 +319,9 @@ def problem7_2():
 difficulty = [2, 4, 6, 8, 10]
 profit = [10, 20, 30, 40, 50]
 worker = [4, 5, 6, 7]
-maxProfitAssignment1(difficulty, profit, worker)  # Expected output: 100
-maxProfitAssignment2(difficulty, profit, worker)  # Expected output: 100
-maxProfitAssignment3(difficulty, profit, worker)  # Expected output: 100
+# maxProfitAssignment1(difficulty, profit, worker)  # Expected output: 100
+# maxProfitAssignment2(difficulty, profit, worker)  # Expected output: 100
+# maxProfitAssignment3(difficulty, profit, worker)  # Expected output: 100
 
 # Test cases for June 19th, 2024
 
