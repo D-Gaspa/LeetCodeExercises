@@ -236,7 +236,17 @@ def maxProfitAssignment2(difficulty: List[int], profit: List[int], worker: List[
 
 
 def maxProfitAssignment3(difficulty: List[int], profit: List[int], worker: List[int]) -> int:
-    pass
+    jobs = sorted(zip(difficulty, profit))
+    total_profit = 0
+
+    diff_max_profit, index = 0, 0
+    for ability in sorted(worker):
+        while index < len(jobs) and jobs[index][0] <= ability:
+            diff_max_profit = max(diff_max_profit, jobs[index][1])
+            index += 1
+        total_profit += diff_max_profit
+
+    return total_profit
 
 
 # <------------------------------------------------- June 19th, 2024 ------------------------------------------------->
