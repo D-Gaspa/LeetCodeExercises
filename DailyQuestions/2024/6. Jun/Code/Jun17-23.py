@@ -1,4 +1,5 @@
 import math
+from typing import List
 
 from tabulate import tabulate
 
@@ -192,16 +193,20 @@ def judgeSquareSum2(c: int) -> bool:
 
 
 # <------------------------------------------------- June 18th, 2024 ------------------------------------------------->
-# 2. Problem
+# 826. Most Profit Assigning Work
 
-# Description
+# Given n jobs each with a difficulty and profit, and m workers each with an ability,
+# assign each worker at most one job that they can complete
+# (i.e., a job with difficulty at most equal to the worker's ability) to maximize the profit.
+# A job can be completed multiple times, and if a worker cannot complete any job, their profit is $0.
+# Return the maximum profit achievable.
 
 
-def problem2_1():
+def maxProfitAssignment1(difficulty: List[int], profit: List[int], worker: List[int]) -> int:
     pass
 
 
-def problem2_2():
+def maxProfitAssignment2(difficulty: List[int], profit: List[int], worker: List[int]) -> int:
     pass
 
 
