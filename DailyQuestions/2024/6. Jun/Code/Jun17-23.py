@@ -220,7 +220,7 @@ def maxProfitAssignment1(difficulty: List[int], profit: List[int], worker: List[
     `m` is the number of workers, and `max_ability` is the maximum ability of any worker.
     This is because it iterates through the difficulties and profits once (O(n)),
     the range of abilities (O(max_ability)), and the workers once (O(m)).
-    The space complexity is O(maxA) due to the list storing maximum profits per difficulty level.
+    The space complexity is O(max_ability) due to the list storing maximum profits per difficulty level.
     """
     max_ability = max(worker)
 
@@ -240,8 +240,26 @@ def maxProfitAssignment1(difficulty: List[int], profit: List[int], worker: List[
 
 
 def maxProfitAssignment2(difficulty: List[int], profit: List[int], worker: List[int]) -> int:
+    """
+    Calculates the maximum total profit that workers can achieve based on their abilities and the given jobs'
+    difficulties and profits.
+
+    This function first sorts the jobs by difficulty while pairing each job with its corresponding profit.
+    It then processes these sorted jobs to create a list where each job entry holds the highest profit available
+    up to that difficulty level.
+    This transformation ensures that for any worker's ability, we can quickly find the best possible profit they can
+    achieve using binary search.
+    By summing up the maximum achievable profits for all workers, the function computes the total maximum profit.
+
+    The time complexity of this solution is O((n + m) log n), where `n` is the number of jobs, and `m` is the number of
+    workers.
+    This is because sorting the jobs takes O(n log n) and each worker's job search takes O(log n) due to
+    binary search, repeated `m` times; hence, the total time complexity is O(n log n + m log n) = O((n + m) log n).
+    The space complexity is O(n) for storing the processed job list.
+    """
     jobs = sorted(zip(difficulty, profit))
 
+    # Transform the job list to ensure each job entry reflects the highest profit up to that difficulty level
     max_profit_so_far = 0
     for index, job in enumerate(jobs):
         max_profit_so_far = max(max_profit_so_far, job[1])
@@ -249,6 +267,7 @@ def maxProfitAssignment2(difficulty: List[int], profit: List[int], worker: List[
 
     total_profit = 0
     for ability in worker:
+        # Use binary search to find the highest-profit job that the worker can do
         index = bisect_right(jobs, (ability, float('inf')))
         if index > 0:
             total_profit += jobs[index - 1][1]
@@ -257,6 +276,10 @@ def maxProfitAssignment2(difficulty: List[int], profit: List[int], worker: List[
 
 
 def maxProfitAssignment3(difficulty: List[int], profit: List[int], worker: List[int]) -> int:
+    """
+    Calculates the maximum total profit that workers can achieve based on their abilities and the given jobs'
+    difficulties and profits.
+    """
     jobs = sorted(zip(difficulty, profit))
     total_profit = 0
 
