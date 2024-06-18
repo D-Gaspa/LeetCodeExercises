@@ -1,5 +1,7 @@
 import math
 
+from tabulate import tabulate
+
 
 # Week 3: June 17th - June 23rd, 2024
 
@@ -26,18 +28,60 @@ def judgeSquareSum1(c: int) -> bool:
     the while loop iterates up to the square root of 'c' times.
     The space complexity is O(1) as it uses a constant amount of extra space.
     """
+    # Input Parameters
+    print("\n--- Input Parameters ---")
+    print(f"\tc = {c}")
+
+    # Initialization
+    print("\n--- Initialization ---")
     start_index = 0
     end_index = int(math.sqrt(c))
+    print(f"\tstart_index = {start_index}")
+    print(f"\tend_index = {end_index}")
 
+    # Main Loop (Two-Pointer Search)
+    print("\n--- Main Loop (Two-Pointer Search) ---")
+    iteration_data = []  # To collect data for the iteration summary
+    iteration = 0
     while start_index <= end_index:
-        squares_sum = start_index * start_index + end_index * end_index  # a * a instead of a ** 2 because it's faster
+        iteration += 1
+        print(f"\nWhile {start_index} <= {end_index}: (Iteration {iteration})")
+        squares_sum = start_index * start_index + end_index * end_index
+        print(f"\tsquares_sum = {squares_sum} ({start_index}^2 + {end_index}^2)")
+
+        # Decision Point
+        print("\tDecision Point:")
         if squares_sum < c:
+            print(f"\t\tsquares_sum ({squares_sum}) < c ({c}), increasing start_index to {start_index + 1}")
+            iteration_data.append([iteration, start_index, end_index, squares_sum, f"{squares_sum} < {c}",
+                                   "`start_index += 1`"])
             start_index += 1
         elif squares_sum > c:
+            print(f"\t\tsquares_sum ({squares_sum}) > c ({c}), decreasing end_index to {end_index - 1}")
+            iteration_data.append([iteration, start_index, end_index, squares_sum, f"{squares_sum} > {c}",
+                                   "`end_index -= 1`"])
             end_index -= 1
         else:
-            return True
-    return False
+            print(f"\t\tsquares_sum ({squares_sum}) == c ({c}), returning True")
+            # Iteration Summary Data
+            iteration_data.append([iteration, start_index, end_index, squares_sum, f"{squares_sum} == {c}",
+                                   "Return True"])
+            result = True
+            break
+
+    else:  # No solution found in the loop
+        print("\tNo solution found within the loop.")
+        result = False
+
+    # Iteration Summary Table
+    print("\n--- Iteration Summary ---")
+    headers = ["Iteration", "`start_index`", "`end_index`", "`squares_sum`", "Comparison", "Action"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    # Function Return
+    print("\n--- Function Returning ---")
+    print(f"\tResult: {result}")
+    return result
 
 
 def judgeSquareSum2(c: int) -> bool:
@@ -47,12 +91,6 @@ def judgeSquareSum2(c: int) -> bool:
     The function uses properties from number theory, particularly Fermat's theorem on sums of two squares.
     According to the theorem, a non-negative integer can be expressed as a sum of two squares if and only if every
     prime factor of the form (4k + 3) has an even exponent in the factorization of 'c'.
-    This is because a prime of the form (4k + 3) cannot be expressed as the sum of two squares (as opposed to primes of
-    the form 4k + 1 which can always be expressed as the sum of two squares).
-    When a prime of the form (4k + 3) appears with an even exponent in the prime factorization of 'c',
-    its contribution to the overall sum of squares can be paired off and effectively neutralized.
-    However, if such a prime appears with an odd exponent, it cannot be paired off, and its presence fundamentally
-    prevents 'c' from being expressed as the sum of two squares.
 
     The function iterates through possible prime factors up to the square root of 'c'.
     For each factor, it counts the number of times it divides 'c'.
