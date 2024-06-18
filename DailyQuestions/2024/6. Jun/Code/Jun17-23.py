@@ -1,4 +1,5 @@
 import math
+from bisect import bisect_right
 from typing import List
 
 from tabulate import tabulate
@@ -203,10 +204,25 @@ def judgeSquareSum2(c: int) -> bool:
 
 
 def maxProfitAssignment1(difficulty: List[int], profit: List[int], worker: List[int]) -> int:
-    pass
+    max_ability = max(worker)
+
+    max_profit_per_diff = [0] * (max_ability + 1)
+
+    for diff, prof in zip(difficulty, profit):
+        if diff <= max_ability:
+            max_profit_per_diff[diff] = max(max_profit_per_diff[diff], prof)
+
+    for index in range(1, max_ability + 1):
+        max_profit_per_diff[index] = max(max_profit_per_diff[index], max_profit_per_diff[index - 1])
+
+    return sum(max_profit_per_diff[ability] for ability in worker)
 
 
 def maxProfitAssignment2(difficulty: List[int], profit: List[int], worker: List[int]) -> int:
+    pass
+
+
+def maxProfitAssignment3(difficulty: List[int], profit: List[int], worker: List[int]) -> int:
     pass
 
 
@@ -287,6 +303,12 @@ def problem7_2():
 # judgeSquareSum2(98)  # Expected output: True
 
 # Test cases for June 18th, 2024
+difficulty = [2, 4, 6, 8, 10]
+profit = [10, 20, 30, 40, 50]
+worker = [4, 5, 6, 7]
+maxProfitAssignment1(difficulty, profit, worker)  # Expected output: 100
+maxProfitAssignment2(difficulty, profit, worker)  # Expected output: 100
+maxProfitAssignment3(difficulty, profit, worker)  # Expected output: 100
 
 # Test cases for June 19th, 2024
 
