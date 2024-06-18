@@ -279,16 +279,29 @@ def maxProfitAssignment3(difficulty: List[int], profit: List[int], worker: List[
     """
     Calculates the maximum total profit that workers can achieve based on their abilities and the given jobs'
     difficulties and profits.
+
+    This function sorts the jobs by difficulty and pairs them with their respective profits.
+    It also sorts the workers based on their abilities.
+    As it iterates through the sorted workers, it keeps track of the maximum profit available for any job that a
+    worker can perform up to their ability.
+    By accumulating this maximum profit for each worker, it computes the total maximum profit that can be achieved.
+
+    The time complexity of this solution is O(n log n + m log m), where `n` is the number of jobs and `m` is the
+    number of workers as the jobs and workers are sorted (taking O(n log n) and O(m log m) time, respectively).
+    The space complexity is O(n) for storing the sorted list of jobs.
     """
+
     jobs = sorted(zip(difficulty, profit))
     total_profit = 0
 
-    diff_max_profit, index = 0, 0
+    max_profit_so_far, index = 0, 0
+
     for ability in sorted(worker):
+        # Update the maximum profit for jobs within the current worker's ability
         while index < len(jobs) and jobs[index][0] <= ability:
-            diff_max_profit = max(diff_max_profit, jobs[index][1])
+            max_profit_so_far = max(max_profit_so_far, jobs[index][1])
             index += 1
-        total_profit += diff_max_profit
+        total_profit += max_profit_so_far
 
     return total_profit
 
