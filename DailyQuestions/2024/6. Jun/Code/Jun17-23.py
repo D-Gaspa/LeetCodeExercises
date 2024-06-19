@@ -420,16 +420,18 @@ def maxProfitAssignment3(difficulty: List[int], profit: List[int], worker: List[
 
 
 # <------------------------------------------------- June 19th, 2024 ------------------------------------------------->
-# 3. Problem
+# 1482. Minimum Number of Days to Make m Bouquets
 
-# Description
+# Given an integer array bloom_day, and integers `m` and `k`, determine the minimum number of days to wait to make `m`
+# bouquets from the garden, each requiring `k` adjacent flowers.
+# If it's impossible to make m bouquets, return -1.
 
 
-def problem3_1():
+def minDays1(bloom_day: List[int], m: int, k: int) -> int:
     pass
 
 
-def problem3_2():
+def minDays2(bloom_day: List[int], m: int, k: int) -> int:
     pass
 
 
@@ -504,6 +506,9 @@ worker = [10, 5, 7, 12, 8]
 # maxProfitAssignment3(difficulty, profit, worker)  # Expected output: 170
 
 # Test cases for June 19th, 2024
+bloomDay = [1, 10, 3, 10, 2]
+m = 3
+k = 1
 
 # Test cases for June 20th, 2024
 
