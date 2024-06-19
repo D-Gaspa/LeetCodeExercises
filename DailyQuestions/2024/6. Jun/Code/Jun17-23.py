@@ -336,7 +336,7 @@ def maxProfitAssignment2(difficulty: List[int], profit: List[int], worker: List[
     print("\n--- Calculating Total Profit (Worker Loop) ---")
     total_profit = 0
     for i, ability in enumerate(worker):
-        print(f"\n\tIteration {i + 1}/{len(worker)}:")
+        print(f"\n\tWorker {i + 1}/{len(worker)}:")
         print(f"\t\tWorker ability: {ability}")
         index = bisect_right(jobs, (ability, float('inf')))
         print(f"\t\tJob index found: {index}")
@@ -369,19 +369,53 @@ def maxProfitAssignment3(difficulty: List[int], profit: List[int], worker: List[
     number of workers as the jobs and workers are sorted (taking O(n log n) and O(m log m) time, respectively).
     The space complexity is O(n) for storing the sorted list of jobs.
     """
+    # --- Input Parameters ---
+    print("\n--- Input Parameters ---")
+    print(f"\tdifficulty = {difficulty}")
+    print(f"\tprofit = {profit}")
+    print(f"\tworker = {worker}")
 
+    # --- Sort Jobs and Workers ---
+    print("\n--- Sorting Jobs and Workers ---")
     jobs = sorted(zip(difficulty, profit))
+    worker.sort()  # Sort workers in-place for efficiency
+    print(f"\tjobs (sorted) = {jobs}")
+    print(f"\tworker (sorted) = {worker}")
+
+    # --- Main Loop (Calculate Total Profit) ---
+    print("\n--- Main Loop (Calculate Total Profit) ---")
     total_profit = 0
+    max_profit_so_far, job_index = 0, 0
+    iteration_data = []  # Collect data for iteration summary table
+    for i, ability in enumerate(worker):
+        print(f"\n\tWorker {i + 1}/{len(worker)}:")
+        print(f"\t\tCurrent worker ability: {ability}")
 
-    max_profit_so_far, index = 0, 0
+        print(f"\t\tCurrent max_profit_so_far: {max_profit_so_far}")
 
-    for ability in sorted(worker):
-        # Update the maximum profit for jobs within the current worker's ability
-        while index < len(jobs) and jobs[index][0] <= ability:
-            max_profit_so_far = max(max_profit_so_far, jobs[index][1])
-            index += 1
+        # --- Inner Loop (Update Max Profit) ---
+        while job_index < len(jobs) and jobs[job_index][0] <= ability:
+            print(f"\t\t\tConsidering job: {jobs[job_index]}")
+            if max_profit_so_far < jobs[job_index][1]:
+                print(f"\t\t\tUpdated max_profit_so_far to {jobs[job_index][1]}")
+            else:
+                print(f"\t\t\tKeeping max_profit_so_far at {max_profit_so_far}")
+            max_profit_so_far = max(max_profit_so_far, jobs[job_index][1])
+            job_index += 1
+
+        print(f"\t\tTotal profit updated to: {total_profit} + {max_profit_so_far} = {total_profit + max_profit_so_far}")
+        print(f"\t\tNext job: {jobs[job_index]}")
         total_profit += max_profit_so_far
+        iteration_data.append([i + 1, ability, max_profit_so_far, total_profit])
 
+    # --- Iteration Summary ---
+    print("\n--- Iteration Summary ---")
+    headers = ["Iteration", "Worker Ability", "Max Profit So Far", "Total Profit"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    # --- Final Result ---
+    print("\n--- Final Result ---")
+    print(f"\tTotal Profit: {total_profit}")
     return total_profit
 
 
