@@ -253,11 +253,15 @@ def maxProfitAssignment1(difficulty: List[int], profit: List[int], worker: List[
     print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
 
     print("\n--- Second Loop (Propagating Maximum Profits) ---")
+    copy_max_profit_per_diff = max_profit_per_diff.copy()
     for index in range(1, max_ability + 1):
-        print(f"\n\tIteration {index}:")
+        print(f"\n\tIteration {index}/{max_ability}:")
         old_profit = max_profit_per_diff[index]
         max_profit_per_diff[index] = max(max_profit_per_diff[index], max_profit_per_diff[index - 1])
         print(f"\t\tUpdated max_profit_per_diff[{index}]: {old_profit} -> {max_profit_per_diff[index]}")
+
+    print(f"\nPrevious Max Profits: {copy_max_profit_per_diff}")
+    print(f"Updated Max Profits: {max_profit_per_diff}")
 
     print("\n--- Calculating Total Profit ---")
     total_profit = 0
@@ -265,6 +269,8 @@ def maxProfitAssignment1(difficulty: List[int], profit: List[int], worker: List[
         print(f"\n\tWorker {i + 1}:")
         print(f"\t\tAbility: {ability}")
         print(f"\t\tMaximum Profit: {max_profit_per_diff[ability]}")
+        print(f"\t\tCurrent Total Profit: ({total_profit} + {max_profit_per_diff[ability]}) = "
+              f"{total_profit + max_profit_per_diff[ability]}")
         total_profit += max_profit_per_diff[ability]
 
     print(f"\tTotal Profit: {total_profit}")
@@ -417,12 +423,12 @@ def problem7_2():
 # judgeSquareSum2(98)  # Expected output: True
 
 # Test cases for June 18th, 2024
-difficulty = [2, 4, 6, 8, 10]
-profit = [10, 20, 30, 40, 50]
-worker = [4, 5, 6, 7]
-maxProfitAssignment1(difficulty, profit, worker)  # Expected output: 100
-# maxProfitAssignment2(difficulty, profit, worker)  # Expected output: 100
-# maxProfitAssignment3(difficulty, profit, worker)  # Expected output: 100
+difficulty = [5, 12, 2, 6, 15, 7, 9]
+profit = [10, 30, 20, 25, 50, 35, 40]
+worker = [10, 5, 7, 12, 8]
+# maxProfitAssignment1(difficulty, profit, worker)  # Expected output: 170
+# maxProfitAssignment2(difficulty, profit, worker)  # Expected output: 170
+# maxProfitAssignment3(difficulty, profit, worker)  # Expected output: 170
 
 # Test cases for June 19th, 2024
 
