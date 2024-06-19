@@ -289,6 +289,11 @@ def maxProfitAssignment2(difficulty: List[int], profit: List[int], worker: List[
     up to that difficulty level.
     This transformation ensures that for any worker's ability, we can quickly find the best possible profit they can
     achieve using binary search.
+    Since we are dealing with a tuple of (difficulty, profit), the binary search is performed on the difficulty values,
+    and the other value (profit) is used with 'float('inf')' as the upper bound for the binary search.
+    This way, we ensure that `bisect_right` will find the index where a worker's ability can be inserted in the sorted
+    job list with the highest profit available up to that difficulty.
+    We subtract 1 to get the index of the highest-paying job the worker can perform.
     By summing up the maximum achievable profits for all workers, the function computes the total maximum profit.
 
     The time complexity of this solution is O((n + m) log n), where `n` is the number of jobs, and `m` is the number of
@@ -297,21 +302,55 @@ def maxProfitAssignment2(difficulty: List[int], profit: List[int], worker: List[
     binary search, repeated `m` times; hence, the total time complexity is O(n log n + m log n) = O((n + m) log n).
     The space complexity is O(n) for storing the processed job list.
     """
-    jobs = sorted(zip(difficulty, profit))
+    # --- Input Parameters ---
+    print("\n--- Input Parameters ---")
+    print(f"\tdifficulty = {difficulty}")
+    print(f"\tprofit = {profit}")
+    print(f"\tworker = {worker}")
 
-    # Transform the job list to ensure each job entry reflects the highest profit up to that difficulty level
+    # --- Sorting Jobs by Difficulty ---
+    print("\n--- Sorting Jobs by Difficulty ---")
+    jobs = sorted(zip(difficulty, profit))
+    print(f"\tjobs (sorted) = {jobs}")
+
+    # --- Main Loop (Transforming Jobs with Max Profit) ---
+    print("\n--- Main Loop (Transforming Jobs with Max Profit) ---")
     max_profit_so_far = 0
+    iteration_data_1 = []  # Collect data for iteration summary table
     for index, job in enumerate(jobs):
+        print(f"\n\tIteration {index + 1}/{len(jobs)}:")
+        print(f"\t\tCurrent job: {job}")
         max_profit_so_far = max(max_profit_so_far, job[1])
         jobs[index] = (job[0], max_profit_so_far)
+        print(f"\t\tUpdated job: {jobs[index]}")
+        iteration_data_1.append([index + 1, job, max_profit_so_far, jobs[index]])
 
+    # --- Iteration Summary (Transformed Jobs) ---
+    print("\n--- Iteration Summary (Transformed Jobs) ---")
+    headers = ["Iteration", "Original Job", "Max Profit So Far", "Updated Job"]
+    print(tabulate(iteration_data_1, headers=headers, tablefmt="fancy_grid"))
+
+    print(f"\nJobs with maximum profit: {jobs}")
+
+    # --- Calculating Total Profit (Worker Loop) ---
+    print("\n--- Calculating Total Profit (Worker Loop) ---")
     total_profit = 0
-    for ability in worker:
-        # Use binary search to find the highest-profit job that the worker can do
+    for i, ability in enumerate(worker):
+        print(f"\n\tIteration {i + 1}/{len(worker)}:")
+        print(f"\t\tWorker ability: {ability}")
         index = bisect_right(jobs, (ability, float('inf')))
+        print(f"\t\tJob index found: {index}")
         if index > 0:
-            total_profit += jobs[index - 1][1]
+            profit = jobs[index - 1][1]
+            print(f"\t\tProfit from job: {profit}")
+            print(f"\t\tTotal profit so far: {total_profit} + {profit} = {total_profit + profit}")
+            total_profit += profit
+        else:
+            print(f"\t\tNo suitable job found.")
 
+    # --- Final Result ---
+    print("\n--- Final Result ---")
+    print(f"\tTotal Profit: {total_profit}")
     return total_profit
 
 
