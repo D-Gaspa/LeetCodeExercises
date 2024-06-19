@@ -222,21 +222,55 @@ def maxProfitAssignment1(difficulty: List[int], profit: List[int], worker: List[
     the range of abilities (O(max_ability)), and the workers once (O(m)).
     The space complexity is O(max_ability) due to the list storing maximum profits per difficulty level.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tdifficulty = {difficulty}")
+    print(f"\tprofit = {profit}")
+    print(f"\tworker = {worker}")
+
+    print("\n--- Preprocessing: Finding Maximum Ability ---")
     max_ability = max(worker)
+    print(f"\tmax_ability = {max_ability}")
 
+    print("\n--- Main Loop (Building Max Profit Array) ---")
     max_profit_per_diff = [0] * (max_ability + 1)
+    iteration_data = []  # To collect data for the iteration summary
+    for i, (diff, prof) in enumerate(zip(difficulty, profit)):
+        print(f"\n\tIteration {i + 1}:")
+        print(f"\t\tCurrent job: (difficulty={diff}, profit={prof})")
 
-    # Build the maximum profit for each difficulty level up to max_ability.
-    for diff, prof in zip(difficulty, profit):
         if diff <= max_ability:
+            old_profit = max_profit_per_diff[diff]
             max_profit_per_diff[diff] = max(max_profit_per_diff[diff], prof)
+            print(f"\t\tUpdated max_profit_per_diff[{diff}]: {old_profit} -> {max_profit_per_diff[diff]}")
+        else:
+            print(f"\t\tSkipped job (difficulty exceeds max_ability)")
 
-    # Accumulate the maximum profit so far for each difficulty level.
+        iteration_data.append(
+            [i + 1, diff, prof, max_profit_per_diff[:]])  # Store a copy of the list for each iteration
+
+    print("\n--- Iteration Summary (Max Profit Array Building) ---")
+    headers = ["Iteration", "Difficulty", "Profit", "max_profit_per_diff"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Second Loop (Propagating Maximum Profits) ---")
     for index in range(1, max_ability + 1):
+        print(f"\n\tIteration {index}:")
+        old_profit = max_profit_per_diff[index]
         max_profit_per_diff[index] = max(max_profit_per_diff[index], max_profit_per_diff[index - 1])
+        print(f"\t\tUpdated max_profit_per_diff[{index}]: {old_profit} -> {max_profit_per_diff[index]}")
 
-    # Compute and return the total maximum profit for all workers.
-    return sum(max_profit_per_diff[ability] for ability in worker)
+    print("\n--- Calculating Total Profit ---")
+    total_profit = 0
+    for i, ability in enumerate(worker):
+        print(f"\n\tWorker {i + 1}:")
+        print(f"\t\tAbility: {ability}")
+        print(f"\t\tMaximum Profit: {max_profit_per_diff[ability]}")
+        total_profit += max_profit_per_diff[ability]
+
+    print(f"\tTotal Profit: {total_profit}")
+
+    print("\n--- Function Returning ---")
+    return total_profit
 
 
 def maxProfitAssignment2(difficulty: List[int], profit: List[int], worker: List[int]) -> int:
@@ -386,7 +420,7 @@ def problem7_2():
 difficulty = [2, 4, 6, 8, 10]
 profit = [10, 20, 30, 40, 50]
 worker = [4, 5, 6, 7]
-# maxProfitAssignment1(difficulty, profit, worker)  # Expected output: 100
+maxProfitAssignment1(difficulty, profit, worker)  # Expected output: 100
 # maxProfitAssignment2(difficulty, profit, worker)  # Expected output: 100
 # maxProfitAssignment3(difficulty, profit, worker)  # Expected output: 100
 
