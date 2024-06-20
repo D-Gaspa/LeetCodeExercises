@@ -428,7 +428,34 @@ def maxProfitAssignment3(difficulty: List[int], profit: List[int], worker: List[
 
 
 def minDays1(bloom_day: List[int], m: int, k: int) -> int:
-    pass
+    if k * m > len(bloom_day):
+        return -1
+
+    def can_make_bouquets(day: int) -> bool:
+        bouquet_count = 0
+        flowers = 0
+        for bloom in bloom_day:
+            if bloom <= day:
+                flowers += 1
+                if flowers == k:
+                    bouquet_count += 1
+                    if bouquet_count >= m:
+                        return True
+                    flowers = 0
+            else:
+                flowers = 0
+
+        return bouquet_count >= m
+
+    left_index, right_index = min(bloom_day), max(bloom_day)
+    while left_index < right_index:
+        mid_index = (left_index + right_index) // 2
+        if can_make_bouquets(mid_index):
+            right_index = mid_index
+        else:
+            left_index = mid_index + 1
+
+    return left_index
 
 
 def minDays2(bloom_day: List[int], m: int, k: int) -> int:
@@ -506,9 +533,8 @@ worker = [10, 5, 7, 12, 8]
 # maxProfitAssignment3(difficulty, profit, worker)  # Expected output: 170
 
 # Test cases for June 19th, 2024
-bloomDay = [1, 10, 3, 10, 2]
-m = 3
-k = 1
+# minDays1([1, 2, 4, 9, 3, 10, 8, 5, 6, 7], 4, 2)  # Expected output: 8
+# minDays2([1, 2, 4, 9, 3, 10, 8, 5, 6, 7], 4, 2)  # Expected output: 8
 
 # Test cases for June 20th, 2024
 
