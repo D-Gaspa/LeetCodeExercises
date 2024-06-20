@@ -643,16 +643,19 @@ def minDays1_2(bloom_day: List[int], m: int, k: int) -> int:
 
 
 # <------------------------------------------------- June 20th, 2024 ------------------------------------------------->
-# 4. Problem
+# 1552. Magnetic Force Between Two Balls
 
-# Description
+# In Earth C-137, Rick has `n` baskets at positions given by `position[i]` and Morty has `m` balls.
+# The task is to distribute the balls into the baskets such that the minimum magnetic force
+# (defined as `|x - y|` between two balls at positions `x` and `y`) is maximized.
+# The function should return this maximum minimum magnetic force.
 
 
-def problem4_1():
+def maxDistance1(position: List[int], m: int) -> int:
     pass
 
 
-def problem4_2():
+def maxDistance2(position: List[int], m: int) -> int:
     pass
 
 
