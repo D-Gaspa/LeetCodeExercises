@@ -473,7 +473,10 @@ def minDays1_1(bloom_day: List[int], m: int, k: int) -> int:
                 flowers += 1
                 copy_bouquet_count = bouquet_count
                 copy_bouquet_count += 1 if flowers == k else 0
-                iteration_data.append([i + 1, bloom, "Yes" if bloom <= day else "No", flowers, copy_bouquet_count])
+                action = "Increment Flowers"
+                if flowers == k:
+                    action = "Make Bouquet and Reset Flowers"
+                iteration_data.append([i + 1, bloom, "Yes", action, flowers, copy_bouquet_count])
                 if flowers == k:
                     bouquet_count += 1
                     print(f"\t\tBouquet made. Total Bouquets: {bouquet_count}")
@@ -485,10 +488,10 @@ def minDays1_1(bloom_day: List[int], m: int, k: int) -> int:
             else:
                 print("\t\tFlower cannot be used. Resetting flower count.")
                 flowers = 0
-                iteration_data.append([i + 1, bloom, "Yes" if bloom <= day else "No", flowers, bouquet_count])
+                iteration_data.append([i + 1, bloom, "No", "Reset Flowers", flowers, bouquet_count])
 
         print("\n--- Iteration Summary (can_make_bouquets) ---")
-        headers = ["Flower", "Bloom Day", f"Bloom Day <= {day}", "Flowers", f"Bouquets ({k} size)"]
+        headers = ["Flower", "Bloom Day", f"Bloom Day <= {day}", "Action", "Flowers", f"Bouquets ({k} size)"]
         print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
 
         if enough_bouquets:
@@ -575,24 +578,28 @@ def minDays1_2(bloom_day: List[int], m: int, k: int) -> int:
                 print(f"\t\tAdding flower to bouquet. Total Flowers: {flowers + 1}")
                 flowers += 1
                 copy_bouquet_count = bouquet_count
-                copy_bouquet_count += flowers // k
+                action = "Increment Flowers"
+                if i == len(bloom_day) - 1:
+                    copy_bouquet_count += flowers // k
+                    action = "Final Bouquet Calculation"
 
-                iteration_data.append([i + 1, bloom, "Yes", flowers, copy_bouquet_count])
+                iteration_data.append([i + 1, bloom, "Yes", action, flowers, copy_bouquet_count])
             else:
                 bouquet_count += flowers // k  # Calculate bouquets from accumulated flowers before resetting
                 print(f"\t\tFlower cannot be used. Calculate bouquets from accumulated flowers: ({flowers} // {k}) = "
                       f"{flowers // k}")
                 print(f"\t\tTotal Bouquets: {bouquet_count}")
-                iteration_data.append([i + 1, bloom, "No", flowers, bouquet_count])
+                flowers = 0
+                iteration_data.append([i + 1, bloom, "No", "Reset Flowers/Calculate Bouquets", flowers,
+                                       bouquet_count])
                 if bouquet_count >= m:
                     return True
-                flowers = 0
         bouquet_count += flowers // k
         print(f"\tCalculate bouquets from remaining flowers: ({flowers} // {k}) = {flowers // k}")
         print(f"\tTotal Bouquets: {bouquet_count}")
 
         print("\n--- Iteration Summary (can_make_bouquets) ---")
-        headers = ["Flower", "Bloom Day", f"Bloom Day <= {day}", "Flowers", f"Bouquets ({k} size)"]
+        headers = ["Flower", "Bloom Day", f"Bloom Day <= {day}", "Action", "Flowers", f"Bouquets ({k} size)"]
         print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
 
         return bouquet_count >= m
@@ -612,13 +619,13 @@ def minDays1_2(bloom_day: List[int], m: int, k: int) -> int:
         print(f"\nWhile {left_index} < {right_index}: with mid_index = {mid_index}")
 
         if can_make_bouquets(unique_bloom_days[mid_index]):
-            print(f"\tEnough bouquets can be made in {unique_bloom_days[mid_index]} days"
+            print(f"\tEnough bouquets can be made in {unique_bloom_days[mid_index]} days. "
                   f"Adjusting right index to mid_index: {mid_index}")
             binary_search_iterations.append([iterations, left_index, right_index, mid_index, "Yes",
                                              f"right = mid ({mid_index})"])
             right_index = mid_index
         else:
-            print(f"\tNot enough bouquets can be made in {unique_bloom_days[mid_index]} days"
+            print(f"\tNot enough bouquets can be made in {unique_bloom_days[mid_index]} days. "
                   f"Adjusting left index to mid_index + 1: {mid_index + 1}")
             binary_search_iterations.append([iterations, left_index, right_index, mid_index, "No",
                                              f"left = mid + 1 ({mid_index + 1})"])
@@ -703,8 +710,8 @@ def problem7_2():
 # maxProfitAssignment3([5, 12, 2, 6, 15, 7, 9], [10, 30, 20, 25, 50, 35, 40], [10, 5, 7, 12, 8])  # Expected output: 170
 
 # Test cases for June 19th, 2024
-# minDays1_1([3, 2, 4, 9, 3, 10, 4, 3, 4, 7], 4, 2)  # Expected output: 9
-# minDays1_2([3, 2, 4, 9, 3, 10, 4, 3, 4, 7], 4, 2)  # Expected output: 9
+# minDays1_1([3, 2, 4, 9, 10, 4, 3, 4], 3, 2)  # Expected output: 9
+# minDays1_2([3, 2, 4, 9, 10, 4, 3, 4], 3, 2)  # Expected output: 9
 
 # Test cases for June 20th, 2024
 
