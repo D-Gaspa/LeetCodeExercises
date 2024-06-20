@@ -427,7 +427,7 @@ def maxProfitAssignment3(difficulty: List[int], profit: List[int], worker: List[
 # If it's impossible to make m bouquets, return -1.
 
 
-def minDays1(bloom_day: List[int], m: int, k: int) -> int:
+def minDays1_1(bloom_day: List[int], m: int, k: int) -> int:
     if k * m > len(bloom_day):
         return -1
 
@@ -458,8 +458,35 @@ def minDays1(bloom_day: List[int], m: int, k: int) -> int:
     return left_index
 
 
-def minDays2(bloom_day: List[int], m: int, k: int) -> int:
-    pass
+def minDays1_2(bloom_day: List[int], m: int, k: int) -> int:
+    if k * m > len(bloom_day):
+        return -1
+
+    def can_make_bouquets(day: int) -> bool:
+        bouquet_count = 0
+        flowers = 0
+        for bloom in bloom_day:
+            if bloom <= day:
+                flowers += 1
+            else:
+                bouquet_count += flowers // k
+                if bouquet_count >= m:
+                    return True
+                flowers = 0
+        bouquet_count += flowers // k
+        return bouquet_count >= m
+
+    unique_bloom_days = sorted(set(bloom_day))
+
+    left_index, right_index = 0, len(unique_bloom_days) - 1
+    while left_index < right_index:
+        mid_index = (left_index + right_index) // 2
+        if can_make_bouquets(unique_bloom_days[mid_index]):
+            right_index = mid_index
+        else:
+            left_index = mid_index + 1
+
+    return unique_bloom_days[left_index]
 
 
 # <------------------------------------------------- June 20th, 2024 ------------------------------------------------->
