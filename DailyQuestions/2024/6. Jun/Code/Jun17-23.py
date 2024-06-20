@@ -450,10 +450,12 @@ def minDays1_1(bloom_day: List[int], m: int, k: int) -> int:
     print(f"\tm = {m}")
     print(f"\tk = {k}")
 
+    print(f"\nChecking if {m} bouquets of {k} flowers can be made with the given flowers:")
     if k * m > len(bloom_day):
         print("\n--- Not Enough Flowers ---")
-        print("\tIt is impossible to make m bouquets with the given flowers and k.")
+        print(f"\tImpossible to make {m} bouquets of {k} flowers.")
         return -1
+    print(f"There are enough flowers ({len(bloom_day)}), we need {k * m}.")
 
     def can_make_bouquets(day: int) -> bool:
         print(f"\n--- Checking if {m} bouquets of {k} flowers can be made by day {day} ---")
@@ -545,34 +547,79 @@ def minDays1_2(bloom_day: List[int], m: int, k: int) -> int:
     Since U <= n, the overall time complexity simplifies from O(n + U log U + n log U) to O(n log n).
     The space complexity is O(U), which is at most O(n) in the worst case when all bloom days are unique.
     """
+    print(f"\tbloom_day = {bloom_day}")
+    print(f"\tm = {m}")
+    print(f"\tk = {k}")
+
     if k * m > len(bloom_day):
+        print(f"\nChecking if {m} bouquets of {k} flowers can be made with the given flowers:")
+        print("\n--- Not Enough Flowers ---")
+        print(f"\tImpossible to make {m} bouquets of {k} flowers.")
         return -1
+
+    print(f"\nChecking if {m} bouquets of {k} flowers can be made with the given flowers:")
+    print(f"There are enough flowers ({len(bloom_day)}), we need {k * m}.")
 
     def can_make_bouquets(day: int) -> bool:
         """Helper function to check if `m` bouquets can be made by a given day."""
+        print(f"\n--- Checking if {m} bouquets of {k} flowers can be made by day {day} ---")
         bouquet_count = 0
         flowers = 0
-        for bloom in bloom_day:
+        enough_bouquets = False
+        for i, bloom in enumerate(bloom_day):
+            if enough_bouquets:
+                break
+            print(f"\tFlower {i + 1}/{len(bloom_day)} with bloom day {bloom}:")
             if bloom <= day:
+                print(f"\t\tAdding flower to bouquet. Total Flowers: {flowers + 1}")
                 flowers += 1
             else:
                 bouquet_count += flowers // k  # Calculate bouquets from accumulated flowers before resetting
+                print(f"\t\tFlower cannot be used. Calculate bouquets from accumulated flowers: ({flowers} // {k}) = "
+                      f"{flowers // k}")
+                print(f"\t\tTotal Bouquets: {bouquet_count}")
                 if bouquet_count >= m:
                     return True
                 flowers = 0
         bouquet_count += flowers // k
+        print(f"\tCalculate bouquets from remaining flowers: ({flowers} // {k}) = {flowers // k}")
+        print(f"\tTotal Bouquets: {bouquet_count}")
+
         return bouquet_count >= m
 
     unique_bloom_days = sorted(set(bloom_day))
+    print("\n--- Unique Bloom Days ---")
+    print(f"\t{unique_bloom_days}")
 
     left_index, right_index = 0, len(unique_bloom_days) - 1
+    print(f"\n--- Binary Search: Initial Range: ({left_index}, {right_index}) ---")
+
+    binary_search_iterations = []
+    iterations = 0
     while left_index < right_index:
+        iterations += 1
         mid_index = (left_index + right_index) // 2
+        print(f"\nWhile {left_index} < {right_index}: with mid_index = {mid_index}")
+
         if can_make_bouquets(unique_bloom_days[mid_index]):
+            print(f"\tEnough bouquets can be made. Adjusting right index to mid_index: {mid_index}")
+            binary_search_iterations.append([iterations, left_index, right_index, mid_index, "Yes",
+                                             f"right = mid ({mid_index})"])
             right_index = mid_index
         else:
+            print(f"\tNot enough bouquets can be made. Adjusting left index to mid_index + 1: {mid_index + 1}")
+            binary_search_iterations.append([iterations, left_index, right_index, mid_index, "No",
+                                             f"left = mid + 1 ({mid_index + 1})"])
             left_index = mid_index + 1
 
+    print(f"\nBinary Search Ended with left_index = {left_index} and right_index = {right_index}")
+
+    print("\n--- Binary Search Summary ---")
+    headers = ["Iteration", "Left Index", "Right Index", "Mid Index", "Can Make Bouquets?", "Action"]
+    print(tabulate(binary_search_iterations, headers=headers, tablefmt="fancy_grid"))
+    print(f"\n--- Binary Search Complete: Final left_index (Result): {left_index} ---")
+    print(f"\n--- Function Returning ---")
+    print(f"\tResult: unique_bloom_days[{left_index}] = {unique_bloom_days[left_index]}")
     return unique_bloom_days[left_index]
 
 
@@ -648,7 +695,7 @@ worker = [10, 5, 7, 12, 8]
 
 # Test cases for June 19th, 2024
 # minDays1_1([3, 2, 4, 9, 3, 10, 4, 3, 4, 7], 4, 2)  # Expected output: 9
-minDays1_2([3, 2, 4, 9, 3, 10, 4, 3, 4, 7], 4, 2)  # Expected output: 9
+# minDays1_2([3, 2, 4, 9, 3, 10, 4, 3, 4, 7], 4, 2)  # Expected output: 9
 
 # Test cases for June 20th, 2024
 
