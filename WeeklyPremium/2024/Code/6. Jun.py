@@ -228,7 +228,21 @@ def maxBoxesInWarehouse1(boxes: List[int], warehouse: List[int]) -> int:
 
 
 def maxBoxesInWarehouse2(boxes: List[int], warehouse: List[int]) -> int:
-    pass
+    max_number = 0
+    left_index, right_index = 0, len(warehouse) - 1
+
+    for box in sorted(boxes, reverse=True):
+        if box <= warehouse[left_index]:
+            max_number += 1
+            left_index += 1
+        elif box <= warehouse[right_index]:
+            max_number += 1
+            right_index -= 1
+        if left_index == right_index:
+            return max_number
+
+    return max_number
+
 
 # <--------------------------------------------------- Week 4, June --------------------------------------------------->
 # 4. Problem
