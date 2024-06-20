@@ -194,18 +194,41 @@ def numberOfSubstrings1(s: str) -> int:
 
 
 # <--------------------------------------------------- Week 3, June --------------------------------------------------->
-# 3. Problem
+# 1580. Put Boxes Into the Warehouse II
 
-# Description
+# Given two arrays of positive integers, `boxes` and `warehouse`, representing the heights of boxes and the heights of
+# rooms in a warehouse respectively, determine the maximum number of boxes you can put into the warehouse.
+# Boxes can be rearranged, pushed from either side, cannot be stacked, and if a room's height is less than a box's
+# height, that box and all behind it will be stopped.
+
+# Introductory problem:
+# 1564. Put Boxes Into the Warehouse I
+
+# We are asked to do the same thing as in the previous problem, but this time boxes can only be pushed from the left.
 
 
-def problem3_1():
+def maxBoxesInWarehouse1(boxes: List[int], warehouse: List[int]) -> int:
+    """
+    Calculates the maximum number of boxes that can be arranged in the warehouse given the
+    heights of the boxes and the warehouse rooms from left to right only.
+
+    Function sorts boxes and tries to fit the largest boxes first.
+    If a box fits (its height is <= current warehouse room), the count increases, and it moves to the next room.
+    If it doesn't fit, the box is discarded (continue to the next box).
+
+    Time complexity is O(n log n) and space complexity is O(n), where n is the number of boxes, as we sort the boxes.
+    """
+    max_number = 0
+
+    for box in sorted(boxes, reverse=True):
+        if max_number < len(warehouse) and box <= warehouse[max_number]:
+            max_number += 1
+
+    return max_number
+
+
+def maxBoxesInWarehouse2(boxes: List[int], warehouse: List[int]) -> int:
     pass
-
-
-def problem3_2():
-    pass
-
 
 # <--------------------------------------------------- Week 4, June --------------------------------------------------->
 # 4. Problem
@@ -247,6 +270,12 @@ s = "abacabd"
 # numberOfSubstrings1(s)  # Expected output: 11
 
 # Test cases for Week 3, June
+maxBoxesInWarehouse1([4, 3, 4, 1], [5, 3, 3, 4, 1])  # Expected output: 3
+maxBoxesInWarehouse1([1, 2, 2, 3, 4], [3, 4, 1, 2])  # Expected output: 3
+maxBoxesInWarehouse1([1, 2, 3], [1, 2, 3, 4])  # Expected output: 1
+
+maxBoxesInWarehouse2([1, 2, 2, 3, 4], [3, 4, 1, 2])  # Expected output: 4
+maxBoxesInWarehouse2([3, 5, 5, 2], [2, 1, 3, 4, 5])  # Expected output: 3
 
 # Test cases for Week 4, June
 
