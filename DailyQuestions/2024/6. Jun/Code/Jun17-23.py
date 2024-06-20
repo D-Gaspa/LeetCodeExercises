@@ -446,34 +446,81 @@ def minDays1_1(bloom_day: List[int], m: int, k: int) -> int:
     This is because the binary search runs in O(log D) time, and each check within the search takes O(n) time.
     The space complexity is O(1) since only a few extra variables are used.
     """
+    print(f"\tbloom_day = {bloom_day}")
+    print(f"\tm = {m}")
+    print(f"\tk = {k}")
+
     if k * m > len(bloom_day):
+        print("\n--- Not Enough Flowers ---")
+        print("\tIt is impossible to make m bouquets with the given flowers and k.")
         return -1
 
     def can_make_bouquets(day: int) -> bool:
-        """Helper function to check if `m` bouquets can be made by a given day."""
+        print(f"\n--- Checking if {m} bouquets of {k} flowers can be made by day {day} ---")
         bouquet_count = 0
         flowers = 0
-        for bloom in bloom_day:
-            if bloom <= day:
+        iteration_data = []  # to store iteration data to be printed
+        enough_bouquets = False
+
+        for i, bloom in enumerate(bloom_day):
+            if enough_bouquets:
+                break
+            print(f"\tFlower {i + 1} with bloom day {bloom}:")
+            if bloom <= day and enough_bouquets is False:
+                print(f"\t\tAdding flower to bouquet. Total Flowers: {flowers + 1}")
                 flowers += 1
+                copy_bouquet_count = bouquet_count
+                copy_bouquet_count += 1 if flowers == k else 0
+                iteration_data.append([i + 1, bloom, "Yes" if bloom <= day else "No", flowers, copy_bouquet_count])
                 if flowers == k:
                     bouquet_count += 1
+                    print(f"\t\tBouquet made. Total Bouquets: {bouquet_count}")
                     if bouquet_count >= m:
-                        return True
+                        print("\t\tEnough bouquets made. Returning True.")
+                        enough_bouquets = True
+                        break
                     flowers = 0
             else:
+                print("\t\tFlower cannot be used. Resetting flower count.")
                 flowers = 0
+                iteration_data.append([i + 1, bloom, "Yes" if bloom <= day else "No", flowers, bouquet_count])
 
+        print("\n--- Iteration Summary (can_make_bouquets) ---")
+        headers = ["Flower", "Bloom Day", f"Bloom Day <= {day}", "Flowers", f"Bouquets ({k} size)"]
+        print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+        if enough_bouquets:
+            return True
         return bouquet_count >= m
 
     left_index, right_index = min(bloom_day), max(bloom_day)
+    print(f"\n--- Binary Search: Initial Range: ({left_index}, {right_index}) ---")
+
+    binary_search_iterations = []  # store data for binary search table
+    iterations = 0
+
     while left_index < right_index:
+        iterations += 1
         mid_index = (left_index + right_index) // 2
+        print(f"\nWhile {left_index} < {right_index}: with mid_index = {mid_index}")
+
         if can_make_bouquets(mid_index):
+            print(f"\tEnough bouquets can be made. Adjusting right index to mid_index: {mid_index}")
+            binary_search_iterations.append([iterations, left_index, right_index, mid_index, "Yes",
+                                             f"right = mid ({mid_index})"])
             right_index = mid_index
         else:
+            print(f"\tNot enough bouquets can be made. Adjusting left index to mid_index + 1: {mid_index + 1}")
+            binary_search_iterations.append([iterations, left_index, right_index, mid_index, "No",
+                                             f"left = mid + 1 ({mid_index + 1})"])
             left_index = mid_index + 1
 
+    print(f"\nBinary Search Ended with left_index = {left_index} and right_index = {right_index}")
+
+    print("\n--- Binary Search Summary ---")
+    headers = ["Iteration", "Left Index", "Right Index", "Mid Index", "Can Make Bouquets?", "Action"]
+    print(tabulate(binary_search_iterations, headers=headers, tablefmt="fancy_grid"))
+    print(f"\n--- Binary Search Complete: Final left_index (Result): {left_index} ---")
     return left_index
 
 
@@ -600,8 +647,8 @@ worker = [10, 5, 7, 12, 8]
 # maxProfitAssignment3(difficulty, profit, worker)  # Expected output: 170
 
 # Test cases for June 19th, 2024
-# minDays1([1, 2, 4, 9, 3, 10, 8, 5, 6, 7], 4, 2)  # Expected output: 8
-# minDays2([1, 2, 4, 9, 3, 10, 8, 5, 6, 7], 4, 2)  # Expected output: 8
+# minDays1_1([3, 2, 4, 9, 3, 10, 4, 3, 4, 7], 4, 2)  # Expected output: 9
+minDays1_2([3, 2, 4, 9, 3, 10, 4, 3, 4, 7], 4, 2)  # Expected output: 9
 
 # Test cases for June 20th, 2024
 
