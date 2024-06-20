@@ -428,10 +428,29 @@ def maxProfitAssignment3(difficulty: List[int], profit: List[int], worker: List[
 
 
 def minDays1_1(bloom_day: List[int], m: int, k: int) -> int:
+    """
+    Determines the minimum number of days required to make `m` bouquets using `k` adjacent flowers from the garden,
+    given the bloom days of the flowers `bloom_day`.
+
+    The function first checks if it's possible to make m bouquets given the constraints.
+    It then uses a binary search approach to find the minimum day on which it's possible to make the required bouquets.
+    The binary search is performed on the range of bloom days (min(bloom_day) to max(bloom_day)) to find the earliest
+    day that satisfies the condition.
+    The `can_make_bouquets` helper function checks if it's possible to make the bouquets by a given day by iterating
+    over the bloom_day list and counting the number of adjacent flowers that have bloomed by that day.
+    The binary search reduces the search space logarithmically, and the helper function ensures that the feasibility
+    of making bouquets is checked efficiently.
+
+    The time complexity of this solution is O(n log D), where `n` is the length of the `bloom_day` list and `D` is the
+    range of bloom days (max(bloom_day) - min(bloom_day)).
+    This is because the binary search runs in O(log D) time, and each check within the search takes O(n) time.
+    The space complexity is O(1) since only a few extra variables are used.
+    """
     if k * m > len(bloom_day):
         return -1
 
     def can_make_bouquets(day: int) -> bool:
+        """Helper function to check if `m` bouquets can be made by a given day."""
         bouquet_count = 0
         flowers = 0
         for bloom in bloom_day:
