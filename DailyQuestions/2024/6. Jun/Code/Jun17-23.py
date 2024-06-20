@@ -565,6 +565,7 @@ def minDays1_2(bloom_day: List[int], m: int, k: int) -> int:
         print(f"\n--- Checking if {m} bouquets of {k} flowers can be made by day {day} ---")
         bouquet_count = 0
         flowers = 0
+        iteration_data = []  # to store iteration data to be printed
         enough_bouquets = False
         for i, bloom in enumerate(bloom_day):
             if enough_bouquets:
@@ -573,17 +574,26 @@ def minDays1_2(bloom_day: List[int], m: int, k: int) -> int:
             if bloom <= day:
                 print(f"\t\tAdding flower to bouquet. Total Flowers: {flowers + 1}")
                 flowers += 1
+                copy_bouquet_count = bouquet_count
+                copy_bouquet_count += flowers // k
+
+                iteration_data.append([i + 1, bloom, "Yes", flowers, copy_bouquet_count])
             else:
                 bouquet_count += flowers // k  # Calculate bouquets from accumulated flowers before resetting
                 print(f"\t\tFlower cannot be used. Calculate bouquets from accumulated flowers: ({flowers} // {k}) = "
                       f"{flowers // k}")
                 print(f"\t\tTotal Bouquets: {bouquet_count}")
+                iteration_data.append([i + 1, bloom, "No", flowers, bouquet_count])
                 if bouquet_count >= m:
                     return True
                 flowers = 0
         bouquet_count += flowers // k
         print(f"\tCalculate bouquets from remaining flowers: ({flowers} // {k}) = {flowers // k}")
         print(f"\tTotal Bouquets: {bouquet_count}")
+
+        print("\n--- Iteration Summary (can_make_bouquets) ---")
+        headers = ["Flower", "Bloom Day", f"Bloom Day <= {day}", "Flowers", f"Bouquets ({k} size)"]
+        print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
 
         return bouquet_count >= m
 
@@ -602,12 +612,14 @@ def minDays1_2(bloom_day: List[int], m: int, k: int) -> int:
         print(f"\nWhile {left_index} < {right_index}: with mid_index = {mid_index}")
 
         if can_make_bouquets(unique_bloom_days[mid_index]):
-            print(f"\tEnough bouquets can be made. Adjusting right index to mid_index: {mid_index}")
+            print(f"\tEnough bouquets can be made in {unique_bloom_days[mid_index]} days"
+                  f"Adjusting right index to mid_index: {mid_index}")
             binary_search_iterations.append([iterations, left_index, right_index, mid_index, "Yes",
                                              f"right = mid ({mid_index})"])
             right_index = mid_index
         else:
-            print(f"\tNot enough bouquets can be made. Adjusting left index to mid_index + 1: {mid_index + 1}")
+            print(f"\tNot enough bouquets can be made in {unique_bloom_days[mid_index]} days"
+                  f"Adjusting left index to mid_index + 1: {mid_index + 1}")
             binary_search_iterations.append([iterations, left_index, right_index, mid_index, "No",
                                              f"left = mid + 1 ({mid_index + 1})"])
             left_index = mid_index + 1
@@ -686,12 +698,9 @@ def problem7_2():
 # judgeSquareSum2(98)  # Expected output: True
 
 # Test cases for June 18th, 2024
-difficulty = [5, 12, 2, 6, 15, 7, 9]
-profit = [10, 30, 20, 25, 50, 35, 40]
-worker = [10, 5, 7, 12, 8]
-# maxProfitAssignment1(difficulty, profit, worker)  # Expected output: 170
-# maxProfitAssignment2(difficulty, profit, worker)  # Expected output: 170
-# maxProfitAssignment3(difficulty, profit, worker)  # Expected output: 170
+# maxProfitAssignment1([5, 12, 2, 6, 15, 7, 9], [10, 30, 20, 25, 50, 35, 40], [10, 5, 7, 12, 8])  # Expected output: 170
+# maxProfitAssignment2([5, 12, 2, 6, 15, 7, 9], [10, 30, 20, 25, 50, 35, 40], [10, 5, 7, 12, 8])  # Expected output: 170
+# maxProfitAssignment3([5, 12, 2, 6, 15, 7, 9], [10, 30, 20, 25, 50, 35, 40], [10, 5, 7, 12, 8])  # Expected output: 170
 
 # Test cases for June 19th, 2024
 # minDays1_1([3, 2, 4, 9, 3, 10, 4, 3, 4, 7], 4, 2)  # Expected output: 9
