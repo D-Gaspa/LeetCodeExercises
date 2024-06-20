@@ -432,10 +432,10 @@ def minDays1_1(bloom_day: List[int], m: int, k: int) -> int:
     Determines the minimum number of days required to make `m` bouquets using `k` adjacent flowers from the garden,
     given the bloom days of the flowers `bloom_day`.
 
-    The function first checks if it's possible to make m bouquets given the constraints.
-    It then uses a binary search approach to find the minimum day on which it's possible to make the required bouquets.
-    The binary search is performed on the range of bloom days (min(bloom_day) to max(bloom_day)) to find the earliest
-    day that satisfies the condition.
+    The function performs a binary search over the range of bloom days to find the lowest day value at which it's
+    possible to make the required number of bouquets.
+    It first checks if it's possible to make the bouquets given the constraint, and then performs binary search on the
+    range of bloom days (min(bloom_day) to max(bloom_day)) to find the earliest day that satisfies the condition.
     The `can_make_bouquets` helper function checks if it's possible to make the bouquets by a given day by iterating
     over the bloom_day list and counting the number of adjacent flowers that have bloomed by that day.
     The binary search reduces the search space logarithmically, and the helper function ensures that the feasibility
@@ -478,17 +478,38 @@ def minDays1_1(bloom_day: List[int], m: int, k: int) -> int:
 
 
 def minDays1_2(bloom_day: List[int], m: int, k: int) -> int:
+    """
+    Determines the minimum number of days required to make `m` bouquets using `k` adjacent flowers from the garden,
+    given the bloom days of the flowers `bloom_day`.
+
+    The function leverages a binary search on a sorted list of unique bloom days to find the minimum day at which the
+    required number of bouquets could be made.
+    While it has a similar structure to the `minDays1_1` function, it optimizes the search space by considering only
+    the unique bloom days, sorted in advance to potentially reduce the number of comparisons needed.
+    The `can_make_bouquets` function is also slightly optimized in this version, and instead of resetting the flower
+    count immediately after finding k flowers, it continues to count potential bouquets from the remaining flowers.
+    As the previous version, the binary search reduces the search space logarithmically, and the helper function ensures
+    that the feasibility of making bouquets is checked efficiently.
+
+    The time complexity of this solution is O(n log n), where `n is the length of the bloom_day list.
+    This is because transforming the list to a set takes O(n) time, and sorting the unique bloom days takes O(U log U)
+    time, where `U` is the number of unique bloom days.
+    The binary search runs in O(log U) time, and each check within the search takes O(n) time.
+    Since U <= n, the overall time complexity simplifies from O(n + U log U + n log U) to O(n log n).
+    The space complexity is O(U), which is at most O(n) in the worst case when all bloom days are unique.
+    """
     if k * m > len(bloom_day):
         return -1
 
     def can_make_bouquets(day: int) -> bool:
+        """Helper function to check if `m` bouquets can be made by a given day."""
         bouquet_count = 0
         flowers = 0
         for bloom in bloom_day:
             if bloom <= day:
                 flowers += 1
             else:
-                bouquet_count += flowers // k
+                bouquet_count += flowers // k  # Calculate bouquets from accumulated flowers before resetting
                 if bouquet_count >= m:
                     return True
                 flowers = 0
