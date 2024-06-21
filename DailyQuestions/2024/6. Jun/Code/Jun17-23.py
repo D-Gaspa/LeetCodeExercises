@@ -725,22 +725,24 @@ def problem7_2():
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
 # Test cases for June 17th, 2024
-# judgeSquareSum1(98)  # Expected output: True
-# judgeSquareSum2(98)  # Expected output: True
+# Expected output: True
+# judgeSquareSum1(c=98)
+# judgeSquareSum2(c=98)
 
 # Test cases for June 18th, 2024
-# maxProfitAssignment1([5, 12, 2, 6, 15, 7, 9], [10, 30, 20, 25, 50, 35, 40], [10, 5, 7, 12, 8])  # Expected output: 170
-# maxProfitAssignment2([5, 12, 2, 6, 15, 7, 9], [10, 30, 20, 25, 50, 35, 40], [10, 5, 7, 12, 8])  # Expected output: 170
-# maxProfitAssignment3([5, 12, 2, 6, 15, 7, 9], [10, 30, 20, 25, 50, 35, 40], [10, 5, 7, 12, 8])  # Expected output: 170
+# Expected output: 160
+# maxProfitAssignment1(difficulty=[5, 12, 2, 6, 15, 7], profit=[10, 30, 20, 25, 50, 35], worker=[10, 5, 7, 12, 8])
+# maxProfitAssignment2(difficulty=[5, 12, 2, 6, 15, 7], profit=[10, 30, 20, 25, 50, 35], worker=[10, 5, 7, 12, 8])
+# maxProfitAssignment3(difficulty=[5, 12, 2, 6, 15, 7], profit=[10, 30, 20, 25, 50, 35], worker=[10, 5, 7, 12, 8])
 
 # Test cases for June 19th, 2024
-# minDays1_1([3, 2, 4, 9, 10, 4, 3, 4], 3, 2)  # Expected output: 9
-# minDays1_2([3, 2, 4, 9, 10, 4, 3, 4], 3, 2)  # Expected output: 9
+# Expected output: 9
+# minDays1_1(bloom_day=[3, 2, 4, 9, 10, 4, 3, 4], m=3, k=2)
+# minDays1_2(bloom_day=[3, 2, 4, 9, 10, 4, 3, 4], m=3, k=2)
 
 # Test cases for June 20th, 2024
-maxDistance1(position=[1, 2, 3, 4, 7], m=3)  # 3
-maxDistance1(position=[5, 4, 3, 2, 1, 1000000000], m=2)  # 999999999
-maxDistance1(position=[85, 24, 66, 57, 71, 43, 62, 93, 35, 23, 41, 8, 92, 96, 63, 77, 75, 26, 79, 78], m=17)  # 1
+# Expected output: 3
+# maxDistance1(position=[1, 2, 3, 4, 7], m=3)
 
 # Test cases for June 21st, 2024
 
