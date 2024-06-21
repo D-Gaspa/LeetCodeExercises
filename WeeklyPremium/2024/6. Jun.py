@@ -344,17 +344,16 @@ def problem5_2():
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
 # Test cases for Week 1, June
-arrays = [[2, 3, 6, 8], [1, 2, 3, 5, 6, 7, 10], [2, 3, 4, 6, 9]]
-# longestCommonSubsequence1(arrays)  # Expected output: [2, 3, 6]
-# longestCommonSubsequence2(arrays)  # Expected output: [2, 3, 6]
+
+# longestCommonSubsequence1(arrays=[[2, 3, 6, 8], [1, 2, 3, 5, 6, 7, 10], [2, 3, 4, 6, 9]]) # Expected output: [2, 3, 6]
+# longestCommonSubsequence2(arrays=[[2, 3, 6, 8], [1, 2, 3, 5, 6, 7, 10], [2, 3, 4, 6, 9]]) # Expected output: [2, 3, 6]
 
 # Test cases for Week 2, June
-s = "abacabd"
-# numberOfSubstrings1(s)  # Expected output: 11
+# numberOfSubstrings1(s="abacabd")  # Expected output: 11
 
 # Test cases for Week 3, June
-# maxBoxesInWarehouse1([4, 3, 4, 1], [5, 3, 3, 4, 1])  # Expected output: 3
-maxBoxesInWarehouse2([1, 2, 2, 3, 4], [3, 4, 1, 2])  # Expected output: 4
+# maxBoxesInWarehouse1(boxes=[4, 3, 4, 1], warehouse=[5, 3, 3, 4, 1])  # Expected output: 3
+# maxBoxesInWarehouse2(boxes=[5, 4, 3, 2, 1], warehouse=[4, 3, 1, 5, 2, 3])  # Expected output: 4
 
 # Test cases for Week 4, June
 
