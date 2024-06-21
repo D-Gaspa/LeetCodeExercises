@@ -245,19 +245,71 @@ def maxBoxesInWarehouse2(boxes: List[int], warehouse: List[int]) -> int:
     The warehouse traversal is linear, but dominated by the sorting complexity.
     The space complexity is O(n) due to the built-in sorting operation in Python.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tboxes = {boxes}")
+    print(f"\twarehouse = {warehouse}")
+
     max_number = 0
     left_index, right_index = 0, len(warehouse) - 1
 
-    for box in sorted(boxes, reverse=True):
-        if box <= warehouse[left_index]:
-            max_number += 1
-            left_index += 1
-        elif box <= warehouse[right_index]:
-            max_number += 1
-            right_index -= 1
-        if left_index == right_index:
-            return max_number  # Early return if all rooms are checked
+    print("\n--- Initialization ---")
+    print(f"\tmax_number = {max_number}")
+    print(f"\tleft_index = {left_index}")
+    print(f"\tright_index = {right_index}")
 
+    print("\n--- Sorting Boxes ---")
+    sorted_boxes = sorted(boxes, reverse=True)
+    print(f"\tSorted boxes: {sorted_boxes}")
+
+    print("\n--- Main Loop (Placing Boxes) ---")
+    iteration_data = []
+    for i, box in enumerate(sorted_boxes):
+        print(f"\nRoom {i + 1}/{len(sorted_boxes)}:")
+        print(f"\tCurrent box height: {box}")
+        print(f"\tLeft index {left_index}, Right index {right_index}")
+        print(f"\tWarehouse left height: {warehouse[left_index]}, Warehouse right height: {warehouse[right_index]}")
+
+        print(f"\tChecking if box fits from the left or right:")
+        if box <= warehouse[left_index]:
+            print(f"\t\tBox height {box} <= warehouse room height {warehouse[left_index]}")
+            max_number += 1
+            action = "Placed on the left, increase left_index"
+            iteration_data.append([i + 1, box, f"warehouse[{left_index}] = {warehouse[left_index]}",
+                                   f"warehouse[{right_index}] = {warehouse[right_index]}", action, max_number])
+            left_index += 1
+            print(f"\t\tBox placed on the left")
+            print(f"\t\tIncreasing max_number: {max_number}")
+            print(f"\t\tIncreasing left_index: {left_index}")
+
+        elif box <= warehouse[right_index]:
+            print(f"\t\tBox height {box} <= warehouse room height {warehouse[right_index]}")
+            max_number += 1
+            action = "Placed on the right, decrease right_index"
+            iteration_data.append([i + 1, box, f"warehouse[{left_index}] = {warehouse[left_index]}",
+                                   f"warehouse[{right_index}] = {warehouse[right_index]}", action, max_number])
+            right_index -= 1
+            print("\t\tBox placed on the right")
+            print(f"\t\tIncreasing max_number: {max_number}")
+            print(f"\t\tDecreasing right_index: {right_index}")
+        else:
+            print("\t\tBox cannot be placed")
+            action = "Not placed"
+            iteration_data.append([i + 1, box, f"warehouse[{left_index}] = {warehouse[left_index]}",
+                                   f"warehouse[{right_index}] = {warehouse[right_index]}", action, max_number])
+
+        if left_index == right_index:
+            print("\n--- Early Termination ---")
+            print("\tLeft index met right index. All rooms checked.")
+            iteration_data.append(['-', '-', '-', '-', f"Early Termination ({left_index} == {right_index})",
+                                   max_number])
+            break
+
+    print("\n--- Iteration Summary (Box Placement) ---")
+    headers = ["Room", "Box Height", "Left Room Height", "Right Room Height", "Action", "Max Number"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"Maximum number of boxes placed: {max_number}")
     return max_number
 
 
@@ -301,12 +353,8 @@ s = "abacabd"
 # numberOfSubstrings1(s)  # Expected output: 11
 
 # Test cases for Week 3, June
-maxBoxesInWarehouse1([4, 3, 4, 1], [5, 3, 3, 4, 1])  # Expected output: 3
-maxBoxesInWarehouse1([1, 2, 2, 3, 4], [3, 4, 1, 2])  # Expected output: 3
-maxBoxesInWarehouse1([1, 2, 3], [1, 2, 3, 4])  # Expected output: 1
-
+# maxBoxesInWarehouse1([4, 3, 4, 1], [5, 3, 3, 4, 1])  # Expected output: 3
 maxBoxesInWarehouse2([1, 2, 2, 3, 4], [3, 4, 1, 2])  # Expected output: 4
-maxBoxesInWarehouse2([3, 5, 5, 2], [2, 1, 3, 4, 5])  # Expected output: 3
 
 # Test cases for Week 4, June
 
