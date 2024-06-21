@@ -808,7 +808,7 @@ def problem7_2():
 
 # Test cases for June 20th, 2024
 # Expected output: 3
-maxDistance1(position=[64, 16, 128, 8, 2, 32, 1, 4], m=4)
+# maxDistance1(position=[64, 16, 128, 8, 2, 32, 1, 4], m=4)
 
 # Test cases for June 21st, 2024
 
