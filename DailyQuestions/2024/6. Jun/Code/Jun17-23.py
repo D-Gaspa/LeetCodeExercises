@@ -652,11 +652,32 @@ def minDays1_2(bloom_day: List[int], m: int, k: int) -> int:
 
 
 def maxDistance1(position: List[int], m: int) -> int:
-    pass
+    def can_place_balls(min_distance: int) -> bool:
+        remaining_balls = m - 1
+        next_valid_position = position[0] + min_distance
 
+        for pos in position[1:]:
+            if pos >= next_valid_position:
+                remaining_balls -= 1
+                next_valid_position = pos + min_distance
 
-def maxDistance2(position: List[int], m: int) -> int:
-    pass
+            if remaining_balls == 0:
+                return True
+
+        return False if remaining_balls > 0 else True
+
+    position.sort()
+
+    start_index, end_index = 1, position[-1] // (m - 1)
+
+    while start_index < end_index:
+        mid_index = 1 + (start_index + end_index) // 2
+        if can_place_balls(mid_index):
+            start_index = mid_index
+        else:
+            end_index = mid_index - 1
+
+    return start_index
 
 
 # <------------------------------------------------- June 21st, 2024 ------------------------------------------------->
@@ -717,6 +738,9 @@ def problem7_2():
 # minDays1_2([3, 2, 4, 9, 10, 4, 3, 4], 3, 2)  # Expected output: 9
 
 # Test cases for June 20th, 2024
+maxDistance1(position=[1, 2, 3, 4, 7], m=3)  # 3
+maxDistance1(position=[5, 4, 3, 2, 1, 1000000000], m=2)  # 999999999
+maxDistance1(position=[85, 24, 66, 57, 71, 43, 62, 93, 35, 23, 41, 8, 92, 96, 63, 77, 75, 26, 79, 78], m=17)  # 1
 
 # Test cases for June 21st, 2024
 
