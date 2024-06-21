@@ -652,31 +652,47 @@ def minDays1_2(bloom_day: List[int], m: int, k: int) -> int:
 
 
 def maxDistance1(position: List[int], m: int) -> int:
+    """
+    Determines the maximum possible minimum magnetic force between any two balls placed in baskets.
+
+    This function uses a binary search approach to find the optimal minimum distance between balls.
+    It first sorts the position list, then employs a helper function can_place_balls` to check if it's possible
+    to place all `m` balls with a given minimum distance.
+    The binary search efficiently narrows down the range of possible distances.
+
+    The search space is defined by the following bounds:
+    - Lower Bound (1): The minimum possible force is 1, when balls are placed in adjacent positions.
+    - Upper Bound ((max(position) - min(position)) // (m - 1)):  To maximize the minimum distance, we aim to spread the
+    balls as far apart as possible.
+    This upper bound represents the theoretical maximum average distance achievable with m balls and m-1 gaps.
+
+    The time complexity of this solution is O(n log(n * range)), where `n` is the length of the position list and range
+    is `(max(position) - min(position)) / (m - 1)`.
+    This is because we sort the position list in O(n log n) time and perform binary search with the `can_place_balls`
+    check in O(n log(range)) time, and when combined, it results in O(n log(n) + n log(range)) = O(n log(n * range)).
+    The space complexity is O(n) due to the sorting operation.
+    """
+
     def can_place_balls(min_distance: int) -> bool:
+        """Helper function that checks if 'm' balls can be placed with at least 'min_distance' between them."""
         remaining_balls = m - 1
         next_valid_position = position[0] + min_distance
-
         for pos in position[1:]:
             if pos >= next_valid_position:
                 remaining_balls -= 1
                 next_valid_position = pos + min_distance
-
             if remaining_balls == 0:
                 return True
-
         return False if remaining_balls > 0 else True
 
     position.sort()
-
-    start_index, end_index = 1, position[-1] // (m - 1)
-
+    start_index, end_index = 1, (position[-1] - position[0]) // (m - 1)
     while start_index < end_index:
         mid_index = 1 + (start_index + end_index) // 2
         if can_place_balls(mid_index):
             start_index = mid_index
         else:
             end_index = mid_index - 1
-
     return start_index
 
 
@@ -720,7 +736,6 @@ def problem7_1():
 
 def problem7_2():
     pass
-
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
