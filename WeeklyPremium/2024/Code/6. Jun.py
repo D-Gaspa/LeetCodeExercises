@@ -216,7 +216,7 @@ def maxBoxesInWarehouse1(boxes: List[int], warehouse: List[int]) -> int:
     If a box fits (its height is <= current warehouse room), the count increases, and it moves to the next room.
     If it doesn't fit, the box is discarded (continue to the next box).
 
-    Time complexity is O(n log n) and space complexity is O(n), where n is the number of boxes, as we sort the boxes.
+    Time complexity is O(n log n) and space complexity is O(n), where `n` is the number of boxes, as we sort the boxes.
     """
     max_number = 0
 
