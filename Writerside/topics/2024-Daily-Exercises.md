@@ -1,0 +1,3 @@
+# 2024 Daily Exercises
+
+Start typing here...
