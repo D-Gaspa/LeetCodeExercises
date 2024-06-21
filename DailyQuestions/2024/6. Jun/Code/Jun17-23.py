@@ -661,10 +661,10 @@ def maxDistance1(position: List[int], m: int) -> int:
     The binary search efficiently narrows down the range of possible distances.
 
     The search space is defined by the following bounds:
-    - Lower Bound (1): The minimum possible force is 1, when balls are placed in adjacent positions.
-    - Upper Bound ((max(position) - min(position)) // (m - 1)):  To maximize the minimum distance, we aim to spread the
-    balls as far apart as possible.
-    This upper bound represents the theoretical maximum average distance achievable with m balls and m-1 gaps.
+    - Lower Bound (`1`): The minimum possible force is 1, when balls are placed in adjacent positions.
+    - Upper Bound (`(max(position) - min(position)) // (m - 1)`): To maximize the minimum distance, we aim to spread
+      the balls as far apart as possible.
+      This upper bound represents the theoretical maximum average distance achievable with `m` balls and `m-1` gaps.
 
     The time complexity of this solution is O(n log(n * range)), where `n` is the length of the position list and range
     is `(max(position) - min(position)) / (m - 1)`.
@@ -674,26 +674,76 @@ def maxDistance1(position: List[int], m: int) -> int:
     """
 
     def can_place_balls(min_distance: int) -> bool:
-        """Helper function that checks if 'm' balls can be placed with at least 'min_distance' between them."""
+        print(f"\n--- can_place_balls Check (min_distance = {min_distance}) ---")
         remaining_balls = m - 1
         next_valid_position = position[0] + min_distance
-        for pos in position[1:]:
+        print(f"\tInitial next_valid_position: {position[0]} + {min_distance} = {next_valid_position}")
+
+        for i, pos in enumerate(position[1:], start=1):
+            print(f"\tChecking position[{i}] = {pos}")
             if pos >= next_valid_position:
+                print(f"\t\t{pos} >= {next_valid_position}. Ball placed. Remaining balls: {remaining_balls - 1}")
                 remaining_balls -= 1
                 next_valid_position = pos + min_distance
-            if remaining_balls == 0:
-                return True
-        return False if remaining_balls > 0 else True
+                print(f"\t\tUpdated next_valid_position: {next_valid_position}")
 
+            if remaining_balls == 0:
+                print(f"\tAll balls placed successfully with min_distance {min_distance}")
+                return True
+
+        success = remaining_balls <= 0
+        print(f"\tPlacement success: {success}")
+        return success
+
+    # Input Parameters
+    print("\n--- Input Parameters ---")
+    print(f"\tposition = {position}")
+    print(f"\tm = {m}")
+
+    # Sorting the positions
     position.sort()
+    print("\n--- Sorted Positions ---")
+    print(f"\tposition (sorted) = {position}")
+
+    # Binary Search Initialization
     start_index, end_index = 1, (position[-1] - position[0]) // (m - 1)
+    print("\n--- Binary Search Initialization ---")
+    print(f"\tstart_index = {start_index}")
+    print(f"\tend_index = {end_index}")
+
+    # Main Binary Search Loop
+    iteration_data = []
+    iteration_count = 0
+
     while start_index < end_index:
+        iteration_count += 1
         mid_index = 1 + (start_index + end_index) // 2
-        if can_place_balls(mid_index):
+        print(f"\nIteration {iteration_count}:")
+        print(f"\tWhile start_index ({start_index}) < end_index ({end_index}):")
+        print(f"\tmid_index = {mid_index}")
+
+        can_place = can_place_balls(mid_index)
+        iteration_data.append([iteration_count, start_index, end_index, mid_index, can_place])
+
+        if can_place:
             start_index = mid_index
+            print(f"\tCan place balls with min_distance {mid_index}. New start_index = {start_index}")
         else:
             end_index = mid_index - 1
-    return start_index
+            print(f"\tCannot place balls with min_distance {mid_index}. New end_index = {end_index}")
+
+    print(f"\nWhile loop ended because start_index ({start_index}) >= end_index ({end_index})")
+
+    # Iteration Summary
+    print("\n--- Iteration Summary ---")
+    headers = ["Iteration", "Start Index", "End Index", "Mid Index", "Can Place"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    # Function Return
+    print("\n--- Function Returning ---")
+    result = start_index
+    print(f"Maximum possible minimum magnetic force: {result}")
+    return result
 
 
 # <------------------------------------------------- June 21st, 2024 ------------------------------------------------->
@@ -737,6 +787,7 @@ def problem7_1():
 def problem7_2():
     pass
 
+
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
 # Test cases for June 17th, 2024
@@ -757,7 +808,7 @@ def problem7_2():
 
 # Test cases for June 20th, 2024
 # Expected output: 3
-# maxDistance1(position=[1, 2, 3, 4, 7], m=3)
+maxDistance1(position=[64, 16, 128, 8, 2, 32, 1, 4], m=4)
 
 # Test cases for June 21st, 2024
 
