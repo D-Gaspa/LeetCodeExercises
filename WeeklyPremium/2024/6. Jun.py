@@ -228,6 +228,23 @@ def maxBoxesInWarehouse1(boxes: List[int], warehouse: List[int]) -> int:
 
 
 def maxBoxesInWarehouse2(boxes: List[int], warehouse: List[int]) -> int:
+    """
+    Determines the maximum number of boxes that can be placed in a warehouse.
+
+    This function implements a two-pointer approach to maximize the number of boxes that can fit into the warehouse.
+    It sorts the boxes in descending order and attempts to place each box from either the left or right end of the
+    warehouse, whichever allows for placement.
+    This greedy strategy ensures that larger boxes are given priority, maximizing the total number of boxes placed.
+
+    The algorithm maintains two pointers, one at each end of the warehouse.
+    For each box, it checks if it can be placed at either end, moving the respective pointer inward if placement is
+    successful.
+    This approach efficiently handles the constraint of pushing boxes from either side of the warehouse.
+
+    The time complexity of this solution is O(n log n), where `n` is the number of boxes, due to the sorting operation.
+    The warehouse traversal is linear, but dominated by the sorting complexity.
+    The space complexity is O(n) due to the built-in sorting operation in Python.
+    """
     max_number = 0
     left_index, right_index = 0, len(warehouse) - 1
 
@@ -239,7 +256,7 @@ def maxBoxesInWarehouse2(boxes: List[int], warehouse: List[int]) -> int:
             max_number += 1
             right_index -= 1
         if left_index == right_index:
-            return max_number
+            return max_number  # Early return if all rooms are checked
 
     return max_number
 
