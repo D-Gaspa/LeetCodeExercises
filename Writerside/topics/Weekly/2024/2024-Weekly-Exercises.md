@@ -1,7 +1,5 @@
 # 2024 Weekly Exercises
 
-[//]: # (Here we are going to reference the monthly pages for the weekly exercises.)
-
 The following table contains links to the weekly exercises for the year 2024. Each month has its own page with the weekly exercises for that month.
 
 | First Quarter                     | Second Quarter              | Third Quarter                       | Fourth Quarter                    |
