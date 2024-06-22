@@ -757,7 +757,31 @@ def maxDistance1(position: List[int], m: int) -> int:
 
 
 def maxSatisfied1(customers: List[int], grumpy: List[int], minutes: int) -> int:
-    pass
+    n = len(customers)
+    normal_satisfied = 0
+
+    additional_satisfied = 0
+    for minute in range(minutes):
+        if grumpy[minute]:
+            additional_satisfied += customers[minute]
+        else:
+            normal_satisfied += customers[minute]
+
+    max_additional_satisfied = additional_satisfied
+
+    # Sliding window to find the maximum number of unsatisfied customers in any 'minutes' period
+    for minute in range(minutes, n):
+        if grumpy[minute]:
+            additional_satisfied += customers[minute]
+        else:
+            normal_satisfied += customers[minute]
+        # Remove unsatisfied customers that are outside the current window
+        if grumpy[minute - minutes]:
+            additional_satisfied -= customers[minute - minutes]
+
+        max_additional_satisfied = max(max_additional_satisfied, additional_satisfied)
+
+    return normal_satisfied + max_additional_satisfied
 
 
 # <------------------------------------------------- June 22nd, 2024 ------------------------------------------------->
@@ -811,6 +835,10 @@ def problem7_2():
 # maxDistance1(position=[64, 16, 128, 8, 2, 32, 1, 4], m=4)
 
 # Test cases for June 21st, 2024
+# Expected output: 16
+maxSatisfied1(customers=[1, 0, 1, 2, 1, 1, 7, 5], grumpy=[0, 1, 0, 1, 0, 1, 0, 1], minutes=3)
+# Expected output: 1
+maxSatisfied1(customers=[1], grumpy=[0], minutes=1)
 
 # Test cases for June 22nd, 2024
 
