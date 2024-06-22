@@ -747,16 +747,16 @@ def maxDistance1(position: List[int], m: int) -> int:
 
 
 # <------------------------------------------------- June 21st, 2024 ------------------------------------------------->
-# 5. Problem
+# 1052. Grumpy Bookstore Owner
 
-# Description
+# A bookstore owner has a store open for `n` minutes, with `customers[i]` representing the number of customers entering
+# at minute `i`.
+# The owner can be grumpy (`grumpy[i]` is 1) or not (`grumpy[i]` is 0), affecting customer satisfaction, but can use a
+# technique to avoid being grumpy for a single `minutes` period.
+# Return the maximum number of customers that can be satisfied throughout the day.
 
 
-def problem5_1():
-    pass
-
-
-def problem5_2():
+def maxSatisfied1(customers: List[int], grumpy: List[int], minutes: int) -> int:
     pass
 
 
