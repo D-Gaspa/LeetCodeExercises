@@ -756,11 +756,29 @@ def maxDistance1(position: List[int], m: int) -> int:
 # Return the maximum number of customers that can be satisfied throughout the day.
 
 
-def maxSatisfied1(customers: List[int], grumpy: List[int], minutes: int) -> int:
+def maxSatisfied1(customers: List[int], grumpy: List[int],
+                  minutes: int) -> int:
+    """
+    Calculates the maximum number of satisfied customers in a bookstore given a limited period where the owner can avoid
+    being grumpy.
+
+    The function first calculates the number of customers that are normally satisfied when the owner is not grumpy.
+    It then uses a sliding window technique to find the period during which the owner can suppress their grumpiness to
+    maximize the number of additionally satisfied customers.
+    This is achieved by iterating through the customers and grumpy lists, keeping track of the maximum number of
+    additionally satisfied customers over any given period of 'minutes' length.
+    There is a slight optimization by combining the normal and additional satisfaction calculations into the same loop.
+
+    The time complexity of this solution is O(n), where `n` is the length of the customers list,
+    because it processes each element of the list a constant number of times.
+    The space complexity is O(1), since it uses a fixed amount of additional space regardless of the input size.
+    """
+
     n = len(customers)
     normal_satisfied = 0
-
     additional_satisfied = 0
+
+    # Calculate initial normal and additional satisfaction for the first 'minutes' window
     for minute in range(minutes):
         if grumpy[minute]:
             additional_satisfied += customers[minute]
@@ -769,17 +787,19 @@ def maxSatisfied1(customers: List[int], grumpy: List[int], minutes: int) -> int:
 
     max_additional_satisfied = additional_satisfied
 
-    # Sliding window to find the maximum number of unsatisfied customers in any 'minutes' period
+    # Sliding window to find the maximum additional satisfaction over any 'minutes' period (plus normal satisfaction)
     for minute in range(minutes, n):
         if grumpy[minute]:
             additional_satisfied += customers[minute]
         else:
             normal_satisfied += customers[minute]
+
         # Remove unsatisfied customers that are outside the current window
         if grumpy[minute - minutes]:
             additional_satisfied -= customers[minute - minutes]
 
-        max_additional_satisfied = max(max_additional_satisfied, additional_satisfied)
+        max_additional_satisfied = max(max_additional_satisfied,
+                                       additional_satisfied)
 
     return normal_satisfied + max_additional_satisfied
 
@@ -836,9 +856,7 @@ def problem7_2():
 
 # Test cases for June 21st, 2024
 # Expected output: 16
-maxSatisfied1(customers=[1, 0, 1, 2, 1, 1, 7, 5], grumpy=[0, 1, 0, 1, 0, 1, 0, 1], minutes=3)
-# Expected output: 1
-maxSatisfied1(customers=[1], grumpy=[0], minutes=1)
+# maxSatisfied1(customers=[1, 0, 1, 2, 1, 1, 7, 5], grumpy=[0, 1, 0, 1, 0, 1, 0, 1], minutes=3)
 
 # Test cases for June 22nd, 2024
 
