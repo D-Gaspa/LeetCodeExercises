@@ -880,7 +880,7 @@ def maxSatisfied1(customers: List[int], grumpy: List[int], minutes: int) -> int:
 
 def numberOfSubarrays1(nums: List[int], k: int) -> int:
     """
-    Calculates the number of nice subarrays in a given list of integers.
+    Counts the number of continuous subarrays within `nums` that contain exactly `k` odd numbers.
 
     This function uses a sliding window approach combined with a counting technique
     to efficiently find nice subarrays. It maintains a window that expands when
@@ -917,22 +917,35 @@ def numberOfSubarrays1(nums: List[int], k: int) -> int:
 
 
 def numberOfSubarrays2(nums: List[int], k: int) -> int:
-    even_counts = []
-    current_even_count, odd_count = 1, 0
+    """
+    Counts the number of continuous subarrays within `nums` that contain exactly `k`
+    odd numbers.
 
+    This function uses a two-pass approach to efficiently count nice subarrays.
+    In the first pass, it counts the number of even integers between each pair
+    of odd integers, storing these counts in the 'even_counts' list. The second
+    pass uses these counts to calculate the total number of nice subarrays.
+    This method leverages the fact that for each sequence of k odd numbers,
+    the number of nice subarrays is the product of the number of even numbers
+    before the first odd number and after the last odd number in the sequence.
+
+    The time complexity is O(n), where n is the length of nums, as it makes two
+    passes through the input list. The space complexity is O(m), where m is the
+    number of odd integers in nums, due to the storage of even counts.
+    """
+    even_counts = []
+    current_even_count = 1
     for num in nums:
         if num % 2 == 0:
             current_even_count += 1
         else:
-            odd_count += 1
             even_counts.append(current_even_count)
             current_even_count = 1
     even_counts.append(current_even_count)
 
-    if odd_count < k:
-        return 0
-
     total_nice_subarrays = 0
+    # Calculate nice subarrays by multiplying counts of even numbers
+    # before and after each sequence of k odd numbers
     for left_even_count, right_even_count in zip(even_counts, even_counts[k:]):
         total_nice_subarrays += left_even_count * right_even_count
 
