@@ -854,7 +854,7 @@ def maxSatisfied1(customers: List[int], grumpy: List[int], minutes: int) -> int:
         max_potential_customers = max(max_potential_customers, potential_customers)
         print(f"\tAfter max calculation: max_potential_customers = {max_potential_customers}")
 
-        sliding_window_data.append([minute + 1,  f"[{minute - minutes + 2}, {minute + 1}]", customers[minute],
+        sliding_window_data.append([minute + 1, f"[{minute - minutes + 2}, {minute + 1}]", customers[minute],
                                     grumpy[minute], satisfied_customers, potential_customers, max_potential_customers])
 
     # Iteration Summary (Sliding Window)
@@ -879,7 +879,24 @@ def maxSatisfied1(customers: List[int], grumpy: List[int], minutes: int) -> int:
 
 
 def numberOfSubarrays1(nums: List[int], k: int) -> int:
-    pass
+    total_nice_subarrays = 0
+    current_nice_subarrays = 0
+    odd_count = 0
+    start_index = 0
+
+    for num in nums:
+        if num % 2 == 1:
+            odd_count += 1
+            current_nice_subarrays = 0
+
+        while odd_count == k:
+            current_nice_subarrays += 1
+            odd_count -= nums[start_index] % 2
+            start_index += 1
+
+        total_nice_subarrays += current_nice_subarrays
+
+    return total_nice_subarrays
 
 
 def numberOfSubarrays2(nums: List[int], k: int) -> int:
@@ -927,5 +944,12 @@ def problem7_2():
 # maxSatisfied1(customers=[1, 0, 1, 2, 1, 1, 7, 5], grumpy=[0, 1, 0, 1, 0, 1, 0, 1], minutes=3)
 
 # Test cases for June 22nd, 2024
+# Expected output: 2
+# numberOfSubarrays1(nums=[1, 1, 2, 1, 1], k=3)
+# numberOfSubarrays2(nums=[1, 1, 2, 1, 1], k=3)
+
+# Expected output: 16
+# numberOfSubarrays1(nums=[2, 2, 2, 1, 2, 2, 1, 2, 2, 2], k=2)
+# numberOfSubarrays2(nums=[2, 2, 2, 1, 2, 2, 1, 2, 2, 2], k=2)
 
 # Test cases for June 23rd, 2024
