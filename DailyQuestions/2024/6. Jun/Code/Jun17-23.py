@@ -900,7 +900,26 @@ def numberOfSubarrays1(nums: List[int], k: int) -> int:
 
 
 def numberOfSubarrays2(nums: List[int], k: int) -> int:
-    pass
+    even_counts = []
+    current_even_count, odd_count = 1, 0
+
+    for num in nums:
+        if num % 2 == 0:
+            current_even_count += 1
+        else:
+            odd_count += 1
+            even_counts.append(current_even_count)
+            current_even_count = 1
+    even_counts.append(current_even_count)
+
+    if odd_count < k:
+        return 0
+
+    total_nice_subarrays = 0
+    for left_even_count, right_even_count in zip(even_counts, even_counts[k:]):
+        total_nice_subarrays += left_even_count * right_even_count
+
+    return total_nice_subarrays
 
 
 # <------------------------------------------------- June 23rd, 2024 ------------------------------------------------->
