@@ -39,7 +39,7 @@ def judgeSquareSum1(c: int) -> bool:
     start_index = 0
     end_index = int(math.sqrt(c))
     print(f"\tstart_index = {start_index}")
-    print(f"\tend_index = {end_index}")
+    print(f"\tend_index = sqrt({c}) = {end_index}")
 
     # Main Loop (Two-Pointer Search)
     print("\n--- Main Loop (Two-Pointer Search) ---")
@@ -51,7 +51,6 @@ def judgeSquareSum1(c: int) -> bool:
         squares_sum = start_index * start_index + end_index * end_index
         print(f"\tsquares_sum = {squares_sum} ({start_index}^2 + {end_index}^2)")
 
-        # Decision Point
         print("\tDecision Point:")
         if squares_sum < c:
             print(f"\t\tsquares_sum ({squares_sum}) < c ({c}), increasing start_index to {start_index + 1}")
@@ -756,8 +755,7 @@ def maxDistance1(position: List[int], m: int) -> int:
 # Return the maximum number of customers that can be satisfied throughout the day.
 
 
-def maxSatisfied1(customers: List[int], grumpy: List[int],
-                  minutes: int) -> int:
+def maxSatisfied1(customers: List[int], grumpy: List[int], minutes: int) -> int:
     """
     Calculates the maximum number of satisfied customers in a bookstore given a limited period where the owner can avoid
     being grumpy.
@@ -773,35 +771,104 @@ def maxSatisfied1(customers: List[int], grumpy: List[int],
     because it processes each element of the list a constant number of times.
     The space complexity is O(1), since it uses a fixed amount of additional space regardless of the input size.
     """
+    # Input Parameters
+    print("\n--- Input Parameters ---")
+    print(f"\tcustomers = {customers}")
+    print(f"\tgrumpy = {grumpy}")
+    print(f"\tminutes = {minutes}")
 
-    n = len(customers)
-    normal_satisfied = 0
-    additional_satisfied = 0
+    # Initialization
+    print("\n--- Initialization ---")
+    satisfied_customers = 0
+    potential_customers = 0
+    print(f"\tsatisfied_customers = {satisfied_customers}")
+    print(f"\tpotential_customers = {potential_customers}")
 
-    # Calculate initial normal and additional satisfaction for the first 'minutes' window
-    for minute in range(minutes):
-        if grumpy[minute]:
-            additional_satisfied += customers[minute]
+    # Main Loop (Initial Window Calculation)
+    print("\n--- Main Loop (Initial Window Calculation) ---")
+    initial_window_data = []
+    for i, (customer, grump) in enumerate(zip(customers[:minutes], grumpy[:minutes])):
+        print(f"\n--- Minute {i + 1}/{minutes} ---")
+        print(f"\tcustomer = {customer}, grump = {grump}")
+
+        print(f"\tChecking if the owner is grumpy at minute {i}...")
+        if grump:
+            print(f"\t\tOwner is grumpy. Adding {customer} potential customers")
+            print(f"\t\tPotential Customers: {potential_customers} + {customer} = {potential_customers + customer}")
+            potential_customers += customer
         else:
-            normal_satisfied += customers[minute]
+            print(f"\t\tOwner is not grumpy. Adding satisfied customers: {customer}")
+            print(f"\t\tSatisfied Customers: {satisfied_customers} + {customer} = {satisfied_customers + customer}")
+            satisfied_customers += customer
 
-    max_additional_satisfied = additional_satisfied
+        initial_window_data.append([i + 1, customer, grump, satisfied_customers, potential_customers])
+        print(f"\tCurrent state: satisfied_customers = {satisfied_customers}, "
+              f"potential_customers = {potential_customers}")
 
-    # Sliding window to find the maximum additional satisfaction over any 'minutes' period (plus normal satisfaction)
-    for minute in range(minutes, n):
+    max_potential_customers = potential_customers
+    print(f"\nAfter initial window: max_potential_customers = {max_potential_customers}")
+
+    # Iteration Summary (Initial Window)
+    print("\n--- Iteration Summary (Initial Window) ---")
+    headers = ["Minute", "Customer", "Grumpy", "Satisfied Customers", "Potential Customers"]
+    print(tabulate(initial_window_data, headers=headers, tablefmt="fancy_grid"))
+
+    # Sliding Window Loop
+    print("\n--- Sliding Window Loop ---")
+    sliding_window_data = []
+    for minute in range(minutes, len(customers)):
+        print(f"\n--- Minute {minute + 1}/{len(customers)} ---")
+
+        print(f"\tcustomer = {customers[minute]}, grump = {grumpy[minute]}")
+
+        print(f"\tChecking if the owner is grumpy at minute {minute + 1}...")
         if grumpy[minute]:
-            additional_satisfied += customers[minute]
+            print(f"\t\tOwner is grumpy. Adding {customers[minute]} potential customers")
+            print(f"\t\tPotential Customers: {potential_customers} + {customers[minute]} = "
+                  f"{potential_customers + customers[minute]}")
+            potential_customers += customers[minute]
+
         else:
-            normal_satisfied += customers[minute]
+            print(f"\t\tOwner is not grumpy. Adding satisfied customers: {customers[minute]}")
+            print(f"\t\tSatisfied Customers: {satisfied_customers} + {customers[minute]} = "
+                  f"{satisfied_customers + customers[minute]}")
+            satisfied_customers += customers[minute]
+
+        print(f"\tWindow: [{minute - minutes + 2}, {minute + 1}]")
 
         # Remove unsatisfied customers that are outside the current window
+        print(f"\tTrying to remove potential customers at minute {minute - minutes + 1} because it is no longer "
+              f"inside the window...")
         if grumpy[minute - minutes]:
-            additional_satisfied -= customers[minute - minutes]
+            print(f"\t\tRemoving {customers[minute - minutes]} customers, as the owner was grumpy at minute "
+                  f"{minute - minutes + 1}.")
+            print(f"\t\tPotential Customers: {potential_customers} - {customers[minute - minutes]} = "
+                  f"{potential_customers - customers[minute - minutes]}")
+            potential_customers -= customers[minute - minutes]
+        else:
+            print(f"\t\tNo customers to remove, owner was not grumpy at minute {minute - minutes + 1}.")
 
-        max_additional_satisfied = max(max_additional_satisfied,
-                                       additional_satisfied)
+        print(
+            f"\tBefore max calculation: max_potential_customers = {max_potential_customers}, "
+            f"potential_customers = {potential_customers}")
+        max_potential_customers = max(max_potential_customers, potential_customers)
+        print(f"\tAfter max calculation: max_potential_customers = {max_potential_customers}")
 
-    return normal_satisfied + max_additional_satisfied
+        sliding_window_data.append([minute + 1,  f"[{minute - minutes + 2}, {minute + 1}]", customers[minute],
+                                    grumpy[minute], satisfied_customers, potential_customers, max_potential_customers])
+
+    # Iteration Summary (Sliding Window)
+    print("\n--- Iteration Summary (Sliding Window) ---")
+    headers = ["Minute", "Window", "Customers", "Grumpy", "Satisfied Customers", "Potential Customers", "Max Potential"]
+    print(tabulate(sliding_window_data, headers=headers, tablefmt="fancy_grid"))
+
+    # Function Return
+    print("\n--- Function Returning ---")
+    result = satisfied_customers + max_potential_customers
+    print(f"\tFinal satisfied_customers: {satisfied_customers}")
+    print(f"\tFinal max_potential_customers: {max_potential_customers}")
+    print(f"\tResult: {result}")
+    return result
 
 
 # <------------------------------------------------- June 22nd, 2024 ------------------------------------------------->
@@ -856,7 +923,7 @@ def problem7_2():
 
 # Test cases for June 21st, 2024
 # Expected output: 16
-# maxSatisfied1(customers=[1, 0, 1, 2, 1, 1, 7, 5], grumpy=[0, 1, 0, 1, 0, 1, 0, 1], minutes=3)
+maxSatisfied1(customers=[1, 0, 1, 2, 1, 1, 7, 5], grumpy=[0, 1, 0, 1, 0, 1, 0, 1], minutes=3)
 
 # Test cases for June 22nd, 2024
 
