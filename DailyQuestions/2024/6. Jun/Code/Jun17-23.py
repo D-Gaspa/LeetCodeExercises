@@ -872,16 +872,17 @@ def maxSatisfied1(customers: List[int], grumpy: List[int], minutes: int) -> int:
 
 
 # <------------------------------------------------- June 22nd, 2024 ------------------------------------------------->
-# 6. Problem
+# 1248. Count Number of Nice Subarrays
 
-# Description
+# Given an array of integers `nums` and an integer `k`, return the number of nice subarrays.
+# A continuous subarray is called nice if there are `k` odd numbers on it.
 
 
-def problem6_1():
+def numberOfSubarrays1(nums: List[int], k: int) -> int:
     pass
 
 
-def problem6_2():
+def numberOfSubarrays2(nums: List[int], k: int) -> int:
     pass
 
 
@@ -923,7 +924,7 @@ def problem7_2():
 
 # Test cases for June 21st, 2024
 # Expected output: 16
-maxSatisfied1(customers=[1, 0, 1, 2, 1, 1, 7, 5], grumpy=[0, 1, 0, 1, 0, 1, 0, 1], minutes=3)
+# maxSatisfied1(customers=[1, 0, 1, 2, 1, 1, 7, 5], grumpy=[0, 1, 0, 1, 0, 1, 0, 1], minutes=3)
 
 # Test cases for June 22nd, 2024
 
