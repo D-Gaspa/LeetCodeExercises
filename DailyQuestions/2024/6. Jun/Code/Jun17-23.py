@@ -971,24 +971,60 @@ def numberOfSubarrays2(nums: List[int], k: int) -> int:
     passes through the input list. The space complexity is O(1) as it uses only
     a constant amount of extra space regardless of the input size.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tnums = {nums}")
+    print(f"\tk = {k}")
+
+    print("\n--- Initialization ---")
     even_counts = []
     current_even_count = 1
-    for num in nums:
+    print(f"\teven_counts = {even_counts}")
+    print(f"\tcurrent_even_count = {current_even_count}")
+
+    print("\n--- First Pass: Counting Even Numbers ---")
+    for i, num in enumerate(nums):
+        print(f"\n--- Processing number {i + 1}/{len(nums)}: {num} ---")
+        print(f"\tCurrent state: current_even_count = {current_even_count}")
+
+        print(f"\tIs {num} even? {num % 2 == 0}")
         if num % 2 == 0:
             current_even_count += 1
+            print(f"\t\tNumber is even. Incrementing current_even_count to {current_even_count}")
         else:
+            print(f"\t\tNumber is odd. Appending current_even_count {current_even_count} to even_counts")
             even_counts.append(current_even_count)
+            print(f"\t\tResetting current_even_count to 1")
             current_even_count = 1
+
+        print(f"\tUpdated even_counts: {even_counts}")
+
+    print("\n--- Finalizing even_counts ---")
     even_counts.append(current_even_count)
+    print(f"\tAppending final current_even_count {current_even_count} to even_counts")
+    print(f"\tFinal even_counts: {even_counts}")
 
+    print("\n--- Calculating Nice Subarrays ---")
     total_nice_subarrays = 0
-    # Calculate nice subarrays by multiplying counts of even numbers
-    # before and after each sequence of k odd numbers
-    for left_even_count, right_even_count in zip(even_counts, even_counts[k:]):
-        total_nice_subarrays += left_even_count * right_even_count
+    iteration_data = []
+    for i, (left_even_count, right_even_count) in enumerate(zip(even_counts, even_counts[k:])):
+        print(f"\n--- Subarray {i + 1}/{len(even_counts) - k} ---")
+        print(f"\tleft_even_count = {left_even_count}, right_even_count = {right_even_count}")
 
+        nice_subarrays = left_even_count * right_even_count
+        total_nice_subarrays += nice_subarrays
+
+        print(f"\tCalculation: {left_even_count} * {right_even_count} = {nice_subarrays}")
+        print(f"\tUpdated total_nice_subarrays: {total_nice_subarrays}")
+
+        iteration_data.append([i + 1, left_even_count, right_even_count, nice_subarrays, total_nice_subarrays])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Subarray", "Left Even Count", "Right Even Count", "Nice Subarrays", "Total Nice Subarrays"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal Result: {total_nice_subarrays}")
     return total_nice_subarrays
-
 
 # <------------------------------------------------- June 23rd, 2024 ------------------------------------------------->
 # 7. Problem
@@ -1032,7 +1068,7 @@ def problem7_2():
 
 # Test cases for June 22nd, 2024
 # Expected output: 10
-numberOfSubarrays1(nums=[2, 1, 2, 1, 2, 1, 2, 2], k=2)
+# numberOfSubarrays1(nums=[2, 1, 2, 1, 2, 1, 2, 2], k=2)
 # numberOfSubarrays2(nums=[2, 1, 2, 1, 2, 1, 2, 2], k=2)
 
 # Test cases for June 23rd, 2024
