@@ -1206,29 +1206,72 @@ def longestSubarray3(nums: List[int], limit: int) -> int:
     and all operations on deques are O(1).
     The space complexity is O(n) in the worst case, as the deques might need to store all elements of the input array.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tnums = {nums}")
+    print(f"\tlimit = {limit}")
+
+    print("\n--- Initialization ---")
     max_queue = deque()
     min_queue = deque()
     left_index = 0
+    print(f"\tmax_queue = {list(max_queue)}")
+    print(f"\tmin_queue = {list(min_queue)}")
+    print(f"\tleft_index = {left_index}")
+
+    print("\n--- Main Loop ---")
+    iteration_data = []
     for right_index, num in enumerate(nums):
-        # Maintain monotonically decreasing queue for maximum values
+        print(f"\n--- Iteration {right_index + 1}/{len(nums)} ---")
+        print(f"\tCurrent number: {num}")
+        print(f"\tCurrent state: left_index = {left_index}")
+        print(f"\tmax_queue = {list(max_queue)}")
+        print(f"\tmin_queue = {list(min_queue)}")
+
+        print("\tUpdating max_queue:")
         while max_queue and num > max_queue[-1]:
-            max_queue.pop()
+            removed = max_queue.pop()
+            print(f"\t\tRemoved {removed} from max_queue")
         max_queue.append(num)
+        print(f"\t\tAppended {num} to max_queue")
+        print(f"\t\tUpdated max_queue = {list(max_queue)}")
 
-        # Maintain monotonically increasing queue for minimum values
+        print("\tUpdating min_queue:")
         while min_queue and num < min_queue[-1]:
-            min_queue.pop()
+            removed = min_queue.pop()
+            print(f"\t\tRemoved {removed} from min_queue")
         min_queue.append(num)
+        print(f"\t\tAppended {num} to min_queue")
+        print(f"\t\tUpdated min_queue = {list(min_queue)}")
 
-        # Shrink the window if the difference exceeds the limit
+        print("\tChecking if the difference between the max and min elements exceeds the limit...")
         if max_queue[0] - min_queue[0] > limit:
+            print(f"\t\tCondition true: {max_queue[0]} - {min_queue[0]} = {max_queue[0] - min_queue[0]} > {limit}")
+            print("\t\tShrinking window:")
             if max_queue[0] == nums[left_index]:
-                max_queue.popleft()
+                removed = max_queue.popleft()
+                print(f"\t\t\tRemoved {removed} from max_queue")
             if min_queue[0] == nums[left_index]:
-                min_queue.popleft()
+                removed = min_queue.popleft()
+                print(f"\t\t\tRemoved {removed} from min_queue")
             left_index += 1
+            print(f"\t\t\tUpdated left_index to {left_index}")
+        else:
+            print(f"\t\tCondition false: {max_queue[0]} - {min_queue[0]} = {max_queue[0] - min_queue[0]} <= {limit}")
+            print("\t\tNo action needed")
 
-    return len(nums) - left_index
+        current_length = right_index - left_index + 1
+        iteration_data.append([right_index + 1, num, left_index, current_length, list(max_queue), list(min_queue)])
+        print(f"\tCurrent window length: {current_length}")
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Iteration", "Current Number", "Left Index", "Current Length", "Max Queue", "Min Queue"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    result = len(nums) - left_index
+    print(f"\tCalculating result: len(nums) - left_index = {len(nums)} - {left_index} = {result}")
+    print(f"\tFinal Result: {result}")
+    return result
 
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
