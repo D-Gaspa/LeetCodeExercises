@@ -1029,6 +1029,7 @@ def numberOfSubarrays2(nums: List[int], k: int) -> int:
     print(f"\tFinal Result: {total_nice_subarrays}")
     return total_nice_subarrays
 
+
 # <------------------------------------------------- June 23rd, 2024 ------------------------------------------------->
 # 1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit
 
@@ -1272,7 +1273,6 @@ def longestSubarray3(nums: List[int], limit: int) -> int:
     print(f"\tCalculating result: len(nums) - left_index = {len(nums)} - {left_index} = {result}")
     print(f"\tFinal Result: {result}")
     return result
-
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 

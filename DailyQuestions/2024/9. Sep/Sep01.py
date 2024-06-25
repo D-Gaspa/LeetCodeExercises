@@ -1,8 +1,3 @@
-from pprint import pprint
-from typing import List
-
-from tabulate import tabulate
-
 # Week X: Month day th - Month day th, 2024
 
 # <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
@@ -17,7 +12,6 @@ def problem1_1():
 
 def problem1_2():
     pass
-
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
