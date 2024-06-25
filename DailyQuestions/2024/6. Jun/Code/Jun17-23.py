@@ -1040,6 +1040,34 @@ def longestSubarray1(nums: List[int], limit: int) -> int:
     """
     Finds the length of the longest subarray where the absolute difference between any two elements is at most 'limit'.
 
+    This function uses a sliding window approach combined with a sorted list to track the elements in the current
+    window.
+    It iterates through the array once, maintaining a sorted representation of the current window.
+    When a new element is added, it's inserted into its correct position in the sorted list.
+    If the difference between the maximum and minimum elements (which are always at the ends of the sorted list)
+    exceeds the limit, the window is shrunk from the left by removing the leftmost element from the sorted list.
+
+    The time complexity of this solution is O(n^2) in the worst case, where n is the length of the input array.
+    This is because for each element (O(n)), we might need to perform an insertion into a sorted list (O(n) using
+    bisect.insort).
+    However, in practice, it can be much faster if the subarrays tend to be short.
+    The space complexity is O(n), as in the worst case, the sorted list might contain all elements of the input array.
+    """
+    left_index = 0
+    sorted_nums = []
+    for num in nums:
+        bisect.insort(sorted_nums, num)  # Insert the new element in sorted position
+        if sorted_nums[-1] - sorted_nums[0] > limit:
+            # If the limit is exceeded, remove the leftmost element from the window
+            sorted_nums.pop(bisect.bisect(sorted_nums, nums[left_index]) - 1)
+            left_index += 1
+    return len(nums) - left_index
+
+
+def longestSubarray2(nums: List[int], limit: int) -> int:
+    """
+    Finds the length of the longest subarray where the absolute difference between any two elements is at most 'limit'.
+
     This function uses a sliding window approach combined with two heaps (min and max) to efficiently track the minimum
     and maximum elements in the current window.
     As we iterate through the array, we expand the window to the right.
@@ -1072,17 +1100,6 @@ def longestSubarray1(nums: List[int], limit: int) -> int:
         max_length = max(max_length, right_index - left_index + 1)
 
     return max_length
-
-
-def longestSubarray2(nums: List[int], limit: int) -> int:
-    left_index = 0
-    sorted_nums = []
-    for num in nums:
-        bisect.insort(sorted_nums, num)
-        if sorted_nums[-1] - sorted_nums[0] > limit:
-            sorted_nums.pop(bisect.bisect(sorted_nums, nums[left_index]) - 1)
-            left_index += 1
-    return len(nums) - left_index
 
 
 def longestSubarray3(nums: List[int], limit: int) -> int:
