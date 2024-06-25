@@ -894,25 +894,63 @@ def numberOfSubarrays1(nums: List[int], k: int) -> int:
     inner while loop. The space complexity is O(1) as it uses only a constant
     amount of extra space regardless of the input size.
     """
-    total_nice_subarrays = 0
-    current_nice_subarrays = 0
-    odd_count = 0
-    start_index = 0
+    print("\n--- Input Parameters ---")
+    print(f"\tnums = {nums}")
+    print(f"\tk = {k}")
 
-    for num in nums:
+    print("\n--- Initialization ---")
+    total_nice_subarrays = 0  # Total count of subarrays with exactly k odd numbers
+    current_nice_subarrays = 0  # Count of nice subarrays ending at current position
+    odd_count = 0  # Number of odd numbers in the current window
+    start_index = 0  # Starting index of the current window
+    print(f"\ttotal_nice_subarrays = {total_nice_subarrays}")
+    print(f"\tcurrent_nice_subarrays = {current_nice_subarrays}")
+    print(f"\todd_count = {odd_count}")
+    print(f"\tstart_index = {start_index}")
+
+    iteration_data = []
+
+    print("\n--- Main Loop (Iterating over each number in nums) ---")
+    for idx, num in enumerate(nums):
+        print(f"\n--- Processing Number {idx + 1}/{len(nums)}: num = {num} ---")
+
+        print(f"\tIs {num} odd? {num % 2 == 1}")
         if num % 2 == 1:
             odd_count += 1
             current_nice_subarrays = 0
+            print(f"\t\todd_count incremented to {odd_count}")
+            print(f"\t\tcurrent_nice_subarrays reset to {current_nice_subarrays} (New odd starts potential subarrays)")
 
-        # When k odd numbers are found, count nice subarrays and contract the window
+        print(f"\n\t--- While loop (Contracting window if odd_count ({odd_count}) == k ({k})) ---")
         while odd_count == k:
+            print(f"\t\todd_count ({odd_count}) == k ({k})")
+            print(f"\t\t--- Contracting Window ---")
             current_nice_subarrays += 1
-            odd_count -= nums[start_index] % 2
+            print(f"\t\tcurrent_nice_subarrays incremented to {current_nice_subarrays} (Found a nice subarray)")
+
+            print(f"\t\tChecking if nums[{start_index}] = {nums[start_index]} is odd...")
+            if nums[start_index] % 2 == 1:
+                print(f"\t\t\todd_count decremented to {odd_count} - 1 = {odd_count - 1}")
+                odd_count -= 1
+            else:
+                print(f"\t\t\tNo change to odd_count, nums[{start_index}] is not odd.")
             start_index += 1
+            print(f"\t\tstart_index incremented to {start_index} (Contract window start)")
 
-        # Add the count of nice subarrays ending at the current position
-        total_nice_subarrays += current_nice_subarrays
+        if current_nice_subarrays > 0:
+            print(f"\ttotal_nice_subarrays updated to {total_nice_subarrays} + {current_nice_subarrays} = "
+                  f"{total_nice_subarrays + current_nice_subarrays}")
+            total_nice_subarrays += current_nice_subarrays
 
+        # Collecting Iteration Data
+        iteration_data.append([idx + 1, num, odd_count, current_nice_subarrays, total_nice_subarrays, start_index])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Number Index", "Number", "Odd Count", "Current Nice Subarrays", "Total Nice Subarrays", "Start Index"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tReturning total_nice_subarrays = {total_nice_subarrays}")
     return total_nice_subarrays
 
 
@@ -993,12 +1031,8 @@ def problem7_2():
 # maxSatisfied1(customers=[1, 0, 1, 2, 1, 1, 7, 5], grumpy=[0, 1, 0, 1, 0, 1, 0, 1], minutes=3)
 
 # Test cases for June 22nd, 2024
-# Expected output: 2
-# numberOfSubarrays1(nums=[1, 1, 2, 1, 1], k=3)
-# numberOfSubarrays2(nums=[1, 1, 2, 1, 1], k=3)
-
-# Expected output: 16
-# numberOfSubarrays1(nums=[2, 2, 2, 1, 2, 2, 1, 2, 2, 2], k=2)
-# numberOfSubarrays2(nums=[2, 2, 2, 1, 2, 2, 1, 2, 2, 2], k=2)
+# Expected output: 10
+numberOfSubarrays1(nums=[2, 1, 2, 1, 2, 1, 2, 2], k=2)
+# numberOfSubarrays2(nums=[2, 1, 2, 1, 2, 1, 2, 2], k=2)
 
 # Test cases for June 23rd, 2024
