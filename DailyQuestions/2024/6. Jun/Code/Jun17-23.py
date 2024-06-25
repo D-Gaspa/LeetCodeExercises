@@ -930,8 +930,8 @@ def numberOfSubarrays2(nums: List[int], k: int) -> int:
     before the first odd number and after the last odd number in the sequence.
 
     The time complexity is O(n), where n is the length of nums, as it makes two
-    passes through the input list. The space complexity is O(m), where m is the
-    number of odd integers in nums, due to the storage of even counts.
+    passes through the input list. The space complexity is O(1) as it uses only
+    a constant amount of extra space regardless of the input size.
     """
     even_counts = []
     current_even_count = 1
