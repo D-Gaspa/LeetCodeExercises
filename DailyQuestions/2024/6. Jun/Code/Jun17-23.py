@@ -1,5 +1,8 @@
+import bisect
+import heapq
 import math
 from bisect import bisect_right
+from collections import deque
 from typing import List
 
 from tabulate import tabulate
@@ -1034,11 +1037,76 @@ def numberOfSubarrays2(nums: List[int], k: int) -> int:
 
 
 def longestSubarray1(nums: List[int], limit: int) -> int:
-    pass
+    """
+    Finds the length of the longest subarray where the absolute difference between any two elements is at most 'limit'.
+
+    This function uses a sliding window approach combined with two heaps (min and max) to efficiently track the minimum
+    and maximum elements in the current window.
+    As we iterate through the array, we expand the window to the right.
+    If the difference between the max and min elements exceeds the limit, we shrink the window from the left until the
+    condition is satisfied again.
+    The heaps allow us to quickly retrieve and update the min and max elements as the
+    window changes.
+
+    The time complexity of this solution is O(n log n), where n is the length of the input array. This is because we
+    perform n iterations, and in each iteration, we might need to perform heap operations (push and pop) which take
+    O(log n) time. The space complexity is O(n) as in the worst case, all elements might be stored in the heaps.
+    """
+    max_heap = []
+    min_heap = []
+    left_index = 0
+    max_length = 0
+    for right_index, num in enumerate(nums):
+        heapq.heappush(max_heap, (-num, right_index))  # Use negative for max heap
+        heapq.heappush(min_heap, (num, right_index))
+
+        # Shrink the window if the difference exceeds the limit
+        while -max_heap[0][0] - min_heap[0][0] > limit:
+            left_index = min(max_heap[0][1], min_heap[0][1]) + 1
+            # Remove elements outside the current window
+            while max_heap[0][1] < left_index:
+                heapq.heappop(max_heap)
+            while min_heap[0][1] < left_index:
+                heapq.heappop(min_heap)
+
+        max_length = max(max_length, right_index - left_index + 1)
+
+    return max_length
 
 
 def longestSubarray2(nums: List[int], limit: int) -> int:
-    pass
+    left_index = 0
+    sorted_nums = []
+    for num in nums:
+        bisect.insort(sorted_nums, num)
+        if sorted_nums[-1] - sorted_nums[0] > limit:
+            sorted_nums.pop(bisect.bisect(sorted_nums, nums[left_index]) - 1)
+            left_index += 1
+    return len(nums) - left_index
+
+
+def longestSubarray3(nums: List[int], limit: int) -> int:
+    max_queue = deque()
+    min_queue = deque()
+
+    left_index = 0
+
+    for num in nums:
+        while max_queue and num > max_queue[-1]:
+            max_queue.pop()
+        max_queue.append(num)
+
+        while min_queue and num < min_queue[-1]:
+            min_queue.pop()
+        min_queue.append(num)
+
+        if max_queue[0] - min_queue[0] > limit:
+            if max_queue[0] == nums[left_index]:
+                max_queue.popleft()
+            if min_queue[0] == nums[left_index]:
+                min_queue.popleft()
+            left_index += 1
+    return len(nums) - left_index
 
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
@@ -1074,13 +1142,13 @@ def longestSubarray2(nums: List[int], limit: int) -> int:
 
 # Test cases for June 23rd, 2024
 # Expected output: 2
-# longestSubarray1(nums=[8, 2, 4, 7], limit=4)
+longestSubarray1(nums=[8, 2, 4, 7], limit=4)
 # longestSubarray2(nums=[8, 2, 4, 7], limit=4)
 
 # Expected output: 4
-# longestSubarray1(nums=[10, 1, 2, 4, 7, 2], limit=5)
+longestSubarray1(nums=[10, 1, 2, 4, 7, 2], limit=5)
 # longestSubarray2(nums=[10, 1, 2, 4, 7, 2], limit=5)
 
 # Expected output: 3
-# longestSubarray1(nums=[4, 2, 2, 2, 4, 4, 2, 2], limit=0)
+longestSubarray1(nums=[4, 2, 2, 2, 4, 4, 2, 2], limit=0)
 # longestSubarray2(nums=[4, 2, 2, 2, 4, 4, 2, 2], limit=0)
