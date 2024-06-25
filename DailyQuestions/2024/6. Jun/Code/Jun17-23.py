@@ -1103,26 +1103,44 @@ def longestSubarray2(nums: List[int], limit: int) -> int:
 
 
 def longestSubarray3(nums: List[int], limit: int) -> int:
+    """
+    Finds the length of the longest subarray where the absolute difference between any two elements is at most 'limit'.
+
+    This function uses a sliding window approach with two monotonic queues (deques) to efficiently track the maximum
+    and minimum elements in the current window.
+    As we iterate through the array, we maintain a monotonically decreasing queue for maximum values and a monotonically
+    increasing queue for minimum values.
+    This allows us to quickly access the maximum and minimum elements of the current window at any time.
+    When the difference between these extremes exceeds the limit, we shrink the window from the left,
+    updating the queues accordingly.
+
+    The time complexity of this solution is O(n), where n is the length of the input array.
+    This is because each element is pushed and popped at most once from each deque,
+    and all operations on deques are O(1).
+    The space complexity is O(n) in the worst case, as the deques might need to store all elements of the input array.
+    """
     max_queue = deque()
     min_queue = deque()
-
     left_index = 0
-
-    for num in nums:
+    for right_index, num in enumerate(nums):
+        # Maintain monotonically decreasing queue for maximum values
         while max_queue and num > max_queue[-1]:
             max_queue.pop()
         max_queue.append(num)
 
+        # Maintain monotonically increasing queue for minimum values
         while min_queue and num < min_queue[-1]:
             min_queue.pop()
         min_queue.append(num)
 
+        # Shrink the window if the difference exceeds the limit
         if max_queue[0] - min_queue[0] > limit:
             if max_queue[0] == nums[left_index]:
                 max_queue.popleft()
             if min_queue[0] == nums[left_index]:
                 min_queue.popleft()
             left_index += 1
+
     return len(nums) - left_index
 
 
