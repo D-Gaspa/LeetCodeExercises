@@ -1027,16 +1027,17 @@ def numberOfSubarrays2(nums: List[int], k: int) -> int:
     return total_nice_subarrays
 
 # <------------------------------------------------- June 23rd, 2024 ------------------------------------------------->
-# 7. Problem
+# 1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit
 
-# Description
+# Given an array of integers `nums` and an integer `limit`, return the size of the longest non-empty contiguous subarray
+# such that the absolute difference between any two elements of this subarray is less than or equal to `limit`.
 
 
-def problem7_1():
+def longestSubarray1(nums: List[int], limit: int) -> int:
     pass
 
 
-def problem7_2():
+def longestSubarray2(nums: List[int], limit: int) -> int:
     pass
 
 
@@ -1072,3 +1073,14 @@ def problem7_2():
 # numberOfSubarrays2(nums=[2, 1, 2, 1, 2, 1, 2, 2], k=2)
 
 # Test cases for June 23rd, 2024
+# Expected output: 2
+# longestSubarray1(nums=[8, 2, 4, 7], limit=4)
+# longestSubarray2(nums=[8, 2, 4, 7], limit=4)
+
+# Expected output: 4
+# longestSubarray1(nums=[10, 1, 2, 4, 7, 2], limit=5)
+# longestSubarray2(nums=[10, 1, 2, 4, 7, 2], limit=5)
+
+# Expected output: 3
+# longestSubarray1(nums=[4, 2, 2, 2, 4, 4, 2, 2], limit=0)
+# longestSubarray2(nums=[4, 2, 2, 2, 4, 4, 2, 2], limit=0)
