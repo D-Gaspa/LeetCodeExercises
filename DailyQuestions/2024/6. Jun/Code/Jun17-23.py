@@ -1053,15 +1053,57 @@ def longestSubarray1(nums: List[int], limit: int) -> int:
     However, in practice, it can be much faster if the subarrays tend to be short.
     The space complexity is O(n), as in the worst case, the sorted list might contain all elements of the input array.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tnums = {nums}")
+    print(f"\tlimit = {limit}")
+
+    print("\n--- Initialization ---")
     left_index = 0
     sorted_nums = []
-    for num in nums:
-        bisect.insort(sorted_nums, num)  # Insert the new element in sorted position
+    print(f"\tleft_index = {left_index}")
+    print(f"\tsorted_nums = {sorted_nums}")
+
+    print("\n--- Main Loop ---")
+    iteration_data = []
+    for i, num in enumerate(nums):
+        print(f"\n--- Iteration {i + 1}/{len(nums)} ---")
+        print(f"\tCurrent number: {num}")
+        print(f"\tCurrent state: left_index = {left_index}, sorted_nums = {sorted_nums}")
+
+        print("\tInserting new element into sorted_nums:")
+        bisect.insort(sorted_nums, num)
+        print(f"\t\tsorted_nums after insertion: {sorted_nums}")
+
+        print("\tChecking if the difference between the maximum and minimum elements exceeds the limit...")
         if sorted_nums[-1] - sorted_nums[0] > limit:
-            # If the limit is exceeded, remove the leftmost element from the window
-            sorted_nums.pop(bisect.bisect(sorted_nums, nums[left_index]) - 1)
+            print(
+                f"\t\tCondition true: {sorted_nums[-1]} - {sorted_nums[0]} ="
+                f" {sorted_nums[-1] - sorted_nums[0]} > {limit}")
+            print("\t\tAction: Removing leftmost element and updating left_index")
+            removed_index = bisect.bisect(sorted_nums, nums[left_index]) - 1
+            removed_value = sorted_nums.pop(removed_index)
+            print(f"\t\t\tRemoved {removed_value} from index {removed_index}")
             left_index += 1
-    return len(nums) - left_index
+            print(f"\t\t\tUpdated left_index to {left_index}")
+        else:
+            print(
+                f"\t\tCondition false: {sorted_nums[-1]} - {sorted_nums[0]} ="
+                f" {sorted_nums[-1] - sorted_nums[0]} <= {limit}")
+            print("\t\tAction: No action needed")
+
+        current_length = i - left_index + 1
+        iteration_data.append([i + 1, num, left_index, sorted_nums.copy(), current_length])
+        print(f"\tCurrent subarray length: {current_length}")
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Iteration", "Current Number", "Left Index", "Sorted Nums", "Current Length"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    result = len(nums) - left_index
+    print(f"\tCalculating result: len(nums) - left_index = {len(nums)} - {left_index} = {result}")
+    print(f"\tFinal Result: {result}")
+    return result
 
 
 def longestSubarray2(nums: List[int], limit: int) -> int:
@@ -1176,14 +1218,7 @@ def longestSubarray3(nums: List[int], limit: int) -> int:
 # numberOfSubarrays2(nums=[2, 1, 2, 1, 2, 1, 2, 2], k=2)
 
 # Test cases for June 23rd, 2024
-# Expected output: 2
-longestSubarray1(nums=[8, 2, 4, 7], limit=4)
-# longestSubarray2(nums=[8, 2, 4, 7], limit=4)
-
 # Expected output: 4
-longestSubarray1(nums=[10, 1, 2, 4, 7, 2], limit=5)
+# longestSubarray1(nums=[10, 1, 2, 4, 7, 2], limit=5)
 # longestSubarray2(nums=[10, 1, 2, 4, 7, 2], limit=5)
-
-# Expected output: 3
-longestSubarray1(nums=[4, 2, 2, 2, 4, 4, 2, 2], limit=0)
-# longestSubarray2(nums=[4, 2, 2, 2, 4, 4, 2, 2], limit=0)
+# longestSubarray3(nums=[10, 1, 2, 4, 7, 2], limit=5)
