@@ -1122,25 +1122,70 @@ def longestSubarray2(nums: List[int], limit: int) -> int:
     perform n iterations, and in each iteration, we might need to perform heap operations (push and pop) which take
     O(log n) time. The space complexity is O(n) as in the worst case, all elements might be stored in the heaps.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tnums = {nums}")
+    print(f"\tlimit = {limit}")
+
+    print("\n--- Initialization ---")
     max_heap = []
     min_heap = []
     left_index = 0
     max_length = 0
+    print(f"\tmax_heap = {max_heap}")
+    print(f"\tmin_heap = {min_heap}")
+    print(f"\tleft_index = {left_index}")
+    print(f"\tmax_length = {max_length}")
+
+    print("\n--- Main Loop ---")
+    iteration_data = []
     for right_index, num in enumerate(nums):
-        heapq.heappush(max_heap, (-num, right_index))  # Use negative for max heap
+        print(f"\n--- Iteration {right_index + 1}/{len(nums)} ---")
+        print(f"\tCurrent number: {num}")
+        print(f"\tCurrent state: left_index = {left_index}, max_length = {max_length}")
+        print(f"\tmax_heap = {max_heap}")
+        print(f"\tmin_heap = {min_heap}")
+
+        print("\tPushing current element into heaps:")
+        heapq.heappush(max_heap, (-num, right_index))
         heapq.heappush(min_heap, (num, right_index))
+        print(f"\t\tAfter push: max_heap = {max_heap}")
+        print(f"\t\tAfter push: min_heap = {min_heap}")
 
-        # Shrink the window if the difference exceeds the limit
+        print("\tChecking if the difference between the max and min elements exceeds the "
+              "limit and adjusting the window:")
         while -max_heap[0][0] - min_heap[0][0] > limit:
+            print(
+                f"\t\tCondition true: {-max_heap[0][0]} - {min_heap[0][0]} = "
+                f"{-max_heap[0][0] - min_heap[0][0]} > {limit}")
             left_index = min(max_heap[0][1], min_heap[0][1]) + 1
-            # Remove elements outside the current window
+            print(f"\t\tUpdating left_index to {left_index}")
+
+            print("\t\tRemoving elements outside the current window:")
             while max_heap[0][1] < left_index:
-                heapq.heappop(max_heap)
+                removed = heapq.heappop(max_heap)
+                print(f"\t\t\tRemoved {removed} from max_heap")
             while min_heap[0][1] < left_index:
-                heapq.heappop(min_heap)
+                removed = heapq.heappop(min_heap)
+                print(f"\t\t\tRemoved {removed} from min_heap")
+        else:
+            print(
+                f"\t\tCondition false: {-max_heap[0][0]} - {min_heap[0][0]} = "
+                f"{-max_heap[0][0] - min_heap[0][0]} <= {limit}")
 
-        max_length = max(max_length, right_index - left_index + 1)
+        current_length = right_index - left_index + 1
+        max_length = max(max_length, current_length)
+        print(f"\tUpdated max_length: {max_length}")
 
+        iteration_data.append([right_index + 1, num, left_index, current_length, max_length,
+                               [(-v[0], v[1]) for v in max_heap[:3]], [v for v in min_heap[:3]]])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Iteration", "Current Number", "Left Index", "Current Length", "Max Length",
+               "Max Heap (top 3)", "Min Heap (top 3)"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal Result: {max_length}")
     return max_length
 
 
