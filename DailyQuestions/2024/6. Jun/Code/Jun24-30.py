@@ -256,7 +256,7 @@ def problem7_2():
 # Test cases for June 24th, 2024
 # Expected output: 3
 # minKBitFlips1(nums=[0, 0, 0, 1, 0, 1, 1, 0], k=3)
-minKBitFlips2(nums=[0, 0, 0, 1, 0, 1, 1, 0], k=3)
+# minKBitFlips2(nums=[0, 0, 0, 1, 0, 1, 1, 0], k=3)
 
 # Test cases for June 25th, 2024
 
