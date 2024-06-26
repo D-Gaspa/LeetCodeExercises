@@ -8,13 +8,29 @@ from typing import List
 
 # Given a binary array `nums` and an integer `k`, return the minimum number of k-bit flips required so that there is no
 # `0` in the array; if it is not possible, return `-1.
-# A k-bit flip is choosing a subarray of length `k` from `nums` and simultaneously changing every `0` in the
+# A k-bit flip is choosing a contiguous subarray of length `k` from `nums` and simultaneously changing every `0` in the
 # subarray to `1`, and every `1` in the subarray to `0`.
 
 
 def minKBitFlips1(nums: List[int], k: int) -> int:
+    """
+    Determines the minimum number of k-bit flips required to convert all elements in `nums` to 1.
+
+    This function uses a sliding window approach with a deque to efficiently track the flips.
+    It maintains a 'current_flipped_state' to represent the cumulative effect of flips on the
+    current element, avoiding the need to actually modify the input array.
+    The algorithm iterates through the array once, deciding whether to flip at each position based on the
+    current state and the original value.
+    This approach allows for efficient handling of overlapping flips without the need
+    to recalculate previous operations.
+
+    The time complexity of this solution is O(n), where `n` is the length of `nums`, because it
+    processes each element once with constant-time operations.
+    The space complexity is O(k)
+    due to the deque storing at most `k` elements to track the sliding window of flips.
+    """
     if k == 1:
-        return nums.count(0)
+        return nums.count(0)  # Optimization for k=1 case
 
     flip_window_deque = deque()
     current_flipped_state = 0
@@ -22,16 +38,18 @@ def minKBitFlips1(nums: List[int], k: int) -> int:
 
     for index, num in enumerate(nums):
         if index >= k:
+            # Remove the effect of the flip that's now out of the window
             current_flipped_state ^= flip_window_deque.popleft()
 
         if current_flipped_state == num:
+            # The current state matches the original value, so a flip is needed
             if index + k > len(nums):
-                return -1
+                return -1  # Not enough elements left for a flip
             flip_window_deque.append(1)
             current_flipped_state ^= 1
             total_flips += 1
         else:
-            flip_window_deque.append(0)
+            flip_window_deque.append(0)  # No flip needed at this position
 
     return total_flips
 
@@ -162,18 +180,23 @@ def problem7_1():
 def problem7_2():
     pass
 
+
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
-# Test cases for month day th, 2024
+# Test cases for June 24th, 2024
+# Expected output: 3
+minKBitFlips1(nums=[0, 0, 0, 1, 0, 1, 1, 0], k=3)
+minKBitFlips2(nums=[0, 0, 0, 1, 0, 1, 1, 0], k=3)
+minKBitFlips3(nums=[0, 0, 0, 1, 0, 1, 1, 0], k=3)
 
-# Test cases for month day th, 2024
+# Test cases for June 25th, 2024
 
-# Test cases for month day th, 2024
+# Test cases for June 26th, 2024
 
-# Test cases for month day th, 2024
+# Test cases for June 27th, 2024
 
-# Test cases for month day th, 2024
+# Test cases for June 28th, 2024
 
-# Test cases for month day th, 2024
+# Test cases for June 29th, 2024
 
-# Test cases for month day th, 2024
+# Test cases for June 30th, 2024
