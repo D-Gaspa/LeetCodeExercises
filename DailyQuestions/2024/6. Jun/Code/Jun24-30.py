@@ -2,6 +2,8 @@
 from collections import deque
 from typing import List
 
+from tabulate import tabulate
+
 
 # <------------------------------------------------- June 24th, 2024 ------------------------------------------------->
 # 995. Minimum Number of K Consecutive Bit Flips
@@ -29,28 +31,64 @@ def minKBitFlips1(nums: List[int], k: int) -> int:
     The space complexity is O(k)
     due to the deque storing at most `k` elements to track the sliding window of flips.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tnums = {nums}")
+    print(f"\tk = {k}")
+
+    print("\n--- Initialization ---")
     if k == 1:
-        return nums.count(0)  # Optimization for k=1 case
+        result = nums.count(0)
+        print(f"\tOptimization for k=1: returning nums.count(0) = {result}")
+        return result
 
     flip_window_deque = deque()
     current_flipped_state = 0
     total_flips = 0
+    print(f"\tflip_window_deque = {flip_window_deque}")
+    print(f"\tcurrent_flipped_state = {current_flipped_state}")
+    print(f"\ttotal_flips = {total_flips}")
 
+    print("\n--- Main Loop ---")
+    iteration_data = []
     for index, num in enumerate(nums):
+        print(f"\n--- Element {index + 1}/{len(nums)} ---")
+        print(f"\tCurrent element: nums[{index}] = {num}")
+        print(f"\tCurrent state: current_flipped_state = {current_flipped_state}, total_flips = {total_flips}")
+        print(f"\tflip_window_deque = {flip_window_deque}")
+
         if index >= k:
-            # Remove the effect of the flip that's now out of the window
-            current_flipped_state ^= flip_window_deque.popleft()
+            print(f"\tWindow size reached (index {index} >= k {k})")
+            removed_flip = flip_window_deque.popleft()
+            print(f"\t\tRemoving oldest flip from window: {removed_flip}")
+            current_flipped_state ^= removed_flip
+            print(f"\t\tUpdated current_flipped_state = {current_flipped_state}")
 
+        print(f"\tDecision Point: Should we flip the current element?")
         if current_flipped_state == num:
-            # The current state matches the original value, so a flip is needed
+            print(f"\t\tCondition true: current_flipped_state ({current_flipped_state}) == num ({num})")
             if index + k > len(nums):
-                return -1  # Not enough elements left for a flip
+                print(f"\t\t\tNot enough elements left for a flip (index {index} + k {k} > len(nums) {len(nums)})")
+                print("\t\t\tReturning -1")
+                return -1
             flip_window_deque.append(1)
+            print("\t\t\tAdded flip to window: flip_window_deque.append(1)")
             current_flipped_state ^= 1
+            print(f"\t\t\tUpdated current_flipped_state = {current_flipped_state}")
             total_flips += 1
+            print(f"\t\t\tIncremented total_flips to {total_flips}")
         else:
-            flip_window_deque.append(0)  # No flip needed at this position
+            print(f"\t\tCondition false: current_flipped_state ({current_flipped_state}) != num ({num})")
+            flip_window_deque.append(0)
+            print("\t\t\tAdded no-flip to window: flip_window_deque.append(0)")
 
+        iteration_data.append([index, num, current_flipped_state, total_flips, list(flip_window_deque)])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Index", "Element", "Flipped State", "Total Flips", "Flip Window"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal Result: total_flips = {total_flips}")
     return total_flips
 
 
@@ -222,8 +260,8 @@ def problem7_2():
 # Test cases for June 24th, 2024
 # Expected output: 3
 minKBitFlips1(nums=[0, 0, 0, 1, 0, 1, 1, 0], k=3)
-minKBitFlips2(nums=[0, 0, 0, 1, 0, 1, 1, 0], k=3)
-minKBitFlips3(nums=[0, 0, 0, 1, 0, 1, 1, 0], k=3)
+# minKBitFlips2(nums=[0, 0, 0, 1, 0, 1, 1, 0], k=3)
+# minKBitFlips3(nums=[0, 0, 0, 1, 0, 1, 1, 0], k=3)
 
 # Test cases for June 25th, 2024
 
