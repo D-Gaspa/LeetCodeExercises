@@ -96,8 +96,23 @@ def minKBitFlips2(nums: List[int], k: int) -> int:
 
 
 def minKBitFlips3(nums: List[int], k: int) -> int:
+    """
+    Computes the minimum number of k-bit flips needed to convert all elements in nums to 1.
+
+    This function uses a clever in-place marking technique to track flips efficiently.
+    It uses the value 2 to mark the start of a flip in the original array, allowing it to
+    implicitly store flip information without additional data structures.
+    The 'active_flips' variable keeps track of the number of active flips affecting the current element,
+    enabling quick decisions on whether to flip.
+    This approach combines the benefits of in-place modification with efficient flip tracking.
+
+    The time complexity of this solution is O(n), where n is the length of nums, as it
+    processes each element once with constant-time operations.
+    The space complexity is O(1)
+    since it modifies the input array in-place and uses only a constant amount of extra space.
+    """
     if k == 1:
-        return nums.count(0)
+        return nums.count(0)  # Optimization for k=1 case
 
     n = len(nums)
     active_flips = 0
@@ -105,12 +120,14 @@ def minKBitFlips3(nums: List[int], k: int) -> int:
 
     for index in range(n):
         if index >= k and nums[index - k] == 2:
+            # A flip that started k positions ago is ending
             active_flips -= 1
 
         if (active_flips % 2) == nums[index]:
+            # Current element needs to be flipped
             if index + k > n:
-                return -1
-            nums[index] = 2
+                return -1  # Not enough elements left for a flip
+            nums[index] = 2  # Mark the start of a new flip
             active_flips += 1
             total_flips += 1
 
