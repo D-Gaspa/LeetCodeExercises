@@ -108,29 +108,70 @@ def minKBitFlips2(nums: List[int], k: int) -> int:
     The space complexity is O(1)
     since it only uses a constant amount of extra space regardless of input size.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tnums = {nums}")
+    print(f"\tk = {k}")
+
+    print("\n--- Initialization ---")
     if k == 1:
-        return nums.count(0)  # Optimization for k=1 case
+        result = nums.count(0)
+        print(f"\tOptimization for k=1: returning nums.count(0) = {result}")
+        return result
 
     flip_count = 0
-    expected_state = 1  # We expect all elements to be 1 eventually
+    expected_state = 1
+    print(f"\tflip_count = {flip_count}")
+    print(f"\texpected_state = {expected_state}")
 
+    print(f"\n--- Main Loop (From index k = {k} to {len(nums) - 1}) ---")
+    iteration_data = []
     for index in range(k, len(nums)):
+        print(f"\n--- Element {index + 1}/{len(nums)} ---")
+        print(f"\tCurrent element: nums[{index}] = {nums[index]}")
+        print(f"\tCurrent state: flip_count = {flip_count}, expected_state = {expected_state}")
+
+        print("\tChecking previous flip:")
         if nums[index - k] != expected_state:
-            # A flip was performed k positions ago
+            print(
+                f"\t\tFlip detected at index {index - k}: nums[{index - k}] ({nums[index - k]}) != expected_state ({expected_state})")
             expected_state = 1 - expected_state
             flip_count += 1
+            print(f"\t\tUpdated expected_state = {expected_state}")
+            print(f"\t\tIncremented flip_count to {flip_count}")
+        else:
+            print(
+                f"\t\tNo flip at index {index - k}: nums[{index - k}] ({nums[index - k]})"
+                f" == expected_state ({expected_state})")
 
+        print("\tSimulating flip effect:")
         if expected_state == 0:
-            # Simulate the effect of a flip on the current element
+            print(f"\t\texpected_state is 0, flipping nums[{index}] from {nums[index]} to {1 - nums[index]}")
             nums[index] = 1 - nums[index]
+        else:
+            print(f"\t\texpected_state is 1, no flip needed for nums[{index}]")
 
-    # Check if the last k elements are all the same
+        iteration_data.append([index, nums[index], expected_state, flip_count])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Index", "Element Value", "Expected State", "Flip Count"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Final Check ---")
     last_value = nums[-1]
+    print(f"\tLast value: nums[-1] = {last_value}")
+    print("\tChecking if last k elements are all the same:")
     if not all(num == last_value for num in nums[-k:]):
-        return -1  # Impossible to make all elements 1
+        print(f"\t\tLast {k} elements are not all the same")
+        print("\t\tReturning -1 (impossible to make all elements 1)")
+        return -1
+    print(f"\t\tLast {k} elements are all the same: {nums[-k:]}")
 
-    # Account for a possible final flip if needed
-    return flip_count + (1 if last_value != expected_state else 0)
+    print("\n--- Function Returning ---")
+    final_flip = 1 if last_value != expected_state else 0
+    result = flip_count + final_flip
+    print(f"\tFinal flip needed: {final_flip} (last_value: {last_value}, expected_state: {expected_state})")
+    print(f"\tCalculating result: flip_count ({flip_count}) + final_flip ({final_flip}) = {result}")
+    return result
 
 
 def minKBitFlips3(nums: List[int], k: int) -> int:
@@ -259,8 +300,8 @@ def problem7_2():
 
 # Test cases for June 24th, 2024
 # Expected output: 3
-minKBitFlips1(nums=[0, 0, 0, 1, 0, 1, 1, 0], k=3)
-# minKBitFlips2(nums=[0, 0, 0, 1, 0, 1, 1, 0], k=3)
+# minKBitFlips1(nums=[0, 0, 0, 1, 0, 1, 1, 0], k=3)
+minKBitFlips2(nums=[0, 0, 0, 1, 0, 1, 1, 0], k=3)
 # minKBitFlips3(nums=[0, 0, 0, 1, 0, 1, 1, 0], k=3)
 
 # Test cases for June 25th, 2024
