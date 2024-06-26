@@ -169,16 +169,24 @@ def minKBitFlips2(nums: List[int], k: int) -> int:
 
 
 # <------------------------------------------------- June 25th, 2024 ------------------------------------------------->
-# 2. Problem
+# 1038. Binary Search Tree to Greater Sum Tree
 
-# Description
+# Given the `root` of a Binary Search Tree (BST), convert it to a Greater Tree such that every key of the original BST
+# is changed to the original key plus the sum of all keys greater than the original key in BST.
 
 
-def problem2_1():
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+
+def bstToGst1(root: TreeNode) -> TreeNode:
     pass
 
 
-def problem2_2():
+def bstToGst2(root: TreeNode) -> TreeNode:
     pass
 
 
