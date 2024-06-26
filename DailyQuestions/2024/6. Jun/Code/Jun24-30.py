@@ -13,15 +13,71 @@ from typing import List
 
 
 def minKBitFlips1(nums: List[int], k: int) -> int:
-    pass
+    if k == 1:
+        return nums.count(0)
+
+    flip_window_deque = deque()
+    current_flipped_state = 0
+    total_flips = 0
+
+    for index, num in enumerate(nums):
+        if index >= k:
+            current_flipped_state ^= flip_window_deque.popleft()
+
+        if current_flipped_state == num:
+            if index + k > len(nums):
+                return -1
+            flip_window_deque.append(1)
+            current_flipped_state ^= 1
+            total_flips += 1
+        else:
+            flip_window_deque.append(0)
+
+    return total_flips
 
 
 def minKBitFlips2(nums: List[int], k: int) -> int:
-    pass
+    if k == 1:
+        return nums.count(0)
+
+    flip_count = 0
+    expected_state = 1
+
+    for index in range(k, len(nums)):
+        if nums[index - k] != expected_state:
+            expected_state = 1 - expected_state
+            flip_count += 1
+
+        if expected_state == 0:
+            nums[index] = 1 - nums[index]
+
+    last_value = nums[-1]
+    if not all(num == last_value for num in nums[-k:]):
+        return -1
+
+    return flip_count + (1 if last_value != expected_state else 0)
 
 
 def minKBitFlips3(nums: List[int], k: int) -> int:
-    pass
+    if k == 1:
+        return nums.count(0)
+
+    n = len(nums)
+    active_flips = 0
+    total_flips = 0
+
+    for index in range(n):
+        if index >= k and nums[index - k] == 2:
+            active_flips -= 1
+
+        if (active_flips % 2) == nums[index]:
+            if index + k > n:
+                return -1
+            nums[index] = 2
+            active_flips += 1
+            total_flips += 1
+
+    return total_flips
 
 
 # <------------------------------------------------- June 25th, 2024 ------------------------------------------------->
