@@ -214,50 +214,68 @@ def bstToGst1(root: TreeNode) -> TreeNode:
 
 
 def bstToGst2(root: TreeNode) -> TreeNode:
+    """
+    Converts a Binary Search Tree (BST) to a Greater Sum Tree (GST) using an iterative approach.
+
+    This function performs an in-order traversal of the BST in reverse order (right-root-left) using a stack,
+    updating each node's value to be the sum of its original value plus all greater values in the tree.
+    The algorithm uses an explicit stack to simulate the recursive process, pushing all right nodes onto
+    the stack first, then processing the current node, and finally pushing left nodes. This approach
+    maintains the property of visiting nodes in descending order of value.
+
+    The time complexity is O(n), where n is the number of nodes in the tree, as each node is visited exactly once.
+    The space complexity is O(h), where h is the height of the tree, due to the stack used for traversal.
+    In the worst case of an unbalanced tree, this could be O(n) (skewed tree), but for a balanced BST,
+    it would be O(log n).
+    """
+    def push_right_nodes(node):
+        """Helper function to push all right nodes onto the stack."""
+        while node:
+            stack.append(node)
+            node = node.right
+
     stack = []
     current_node = root
     cumulative_sum = 0
 
-    while stack or current_node:
-        while current_node:
-            stack.append(current_node)
-            current_node = current_node.right
+    push_right_nodes(current_node)
 
+    while stack:
         current_node = stack.pop()
-
         cumulative_sum += current_node.val
         current_node.val = cumulative_sum
-
-        current_node = current_node.left
+        push_right_nodes(current_node.left)
 
     return root
 
 
 def bstToGst3(root: TreeNode) -> TreeNode:
-    def get_next_node(node):
-        next_node = node.right
-        while next_node.left is not None and next_node.left is not node:
-            next_node = next_node.left
-        return next_node
+    def find_predecessor(current):
+        pred = current.right
+        while pred.left and pred.left is not current:
+            pred = pred.left
+        return pred
 
-    total = 0
-    node = root
-    while node is not None:
-        if node.right is None:
-            total += node.val
-            node.val = total
-            node = node.left
+    cumulative_sum = 0
+    current = root
+    while current:
+        if not current.right:
+            # No right child: process current node and move to the left
+            cumulative_sum += current.val
+            current.val = cumulative_sum
+            current = current.left
         else:
-            next_node = get_next_node(node)
-            if next_node.left is None:
-                next_node.left = node
-                node = node.right
-
+            predecessor = find_predecessor(current)
+            if not predecessor.left:
+                # First time visiting: create temporary link and move right
+                predecessor.left = current
+                current = current.right
             else:
-                next_node.left = None
-                total += node.val
-                node.val = total
-                node = node.left
+                # Second time visiting: remove temp link, process node, and move left
+                predecessor.left = None
+                cumulative_sum += current.val
+                current.val = cumulative_sum
+                current = current.left
 
     return root
 
