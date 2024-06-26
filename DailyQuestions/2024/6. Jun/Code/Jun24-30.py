@@ -133,7 +133,8 @@ def minKBitFlips2(nums: List[int], k: int) -> int:
         print("\tChecking previous flip:")
         if nums[index - k] != expected_state:
             print(
-                f"\t\tFlip detected at index {index - k}: nums[{index - k}] ({nums[index - k]}) != expected_state ({expected_state})")
+                f"\t\tFlip detected at index {index - k}: nums[{index - k}] ({nums[index - k]})"
+                f" != expected_state ({expected_state})")
             expected_state = 1 - expected_state
             flip_count += 1
             print(f"\t\tUpdated expected_state = {expected_state}")
@@ -190,26 +191,63 @@ def minKBitFlips3(nums: List[int], k: int) -> int:
     The space complexity is O(1)
     since it modifies the input array in-place and uses only a constant amount of extra space.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tnums = {nums}")
+    print(f"\tk = {k}")
+
+    print("\n--- Initialization ---")
     if k == 1:
-        return nums.count(0)  # Optimization for k=1 case
+        result = nums.count(0)
+        print(f"\tOptimization for k=1: returning nums.count(0) = {result}")
+        return result
 
     n = len(nums)
     active_flips = 0
     total_flips = 0
+    print(f"\tn = {n}")
+    print(f"\tactive_flips = {active_flips}")
+    print(f"\ttotal_flips = {total_flips}")
 
+    print("\n--- Main Loop ---")
+    iteration_data = []
     for index in range(n):
-        if index >= k and nums[index - k] == 2:
-            # A flip that started k positions ago is ending
-            active_flips -= 1
+        print(f"\n--- Element {index + 1}/{n} ---")
+        print(f"\tCurrent element: nums[{index}] = {nums[index]}")
+        print(f"\tCurrent state: active_flips = {active_flips}, total_flips = {total_flips}")
 
+        print("\tChecking for ending flip:")
+        if index >= k and nums[index - k] == 2:
+            print(f"\t\tFlip ending at index {index}: nums[{index - k}] == 2")
+            active_flips -= 1
+            print(f"\t\tDecremented active_flips to {active_flips}")
+        else:
+            print(f"\t\tNo flip ending at index {index}")
+
+        print("\tDecision Point: Should we flip the current element?")
         if (active_flips % 2) == nums[index]:
-            # Current element needs to be flipped
+            print(f"\t\tCondition true: (active_flips % 2) ({active_flips % 2}) == nums[{index}] ({nums[index]})")
             if index + k > n:
-                return -1  # Not enough elements left for a flip
-            nums[index] = 2  # Mark the start of a new flip
+                print(f"\t\t\tNot enough elements left for a flip (index {index} + k {k} > n {n})")
+                print("\t\t\tReturning -1")
+                return -1
+            print(f"\t\t\tMarking flip start: Setting nums[{index}] = 2")
+            nums[index] = 2
             active_flips += 1
             total_flips += 1
+            print(f"\t\t\tIncremented active_flips to {active_flips}")
+            print(f"\t\t\tIncremented total_flips to {total_flips}")
+        else:
+            print(f"\t\tCondition false: (active_flips % 2) ({active_flips % 2}) != nums[{index}] ({nums[index]})")
+            print("\t\t\tNo flip needed at this index")
 
+        iteration_data.append([index, nums[index], active_flips, total_flips])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Index", "Element Value", "Active Flips", "Total Flips"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal Result: total_flips = {total_flips}")
     return total_flips
 
 
@@ -301,7 +339,7 @@ def problem7_2():
 # Test cases for June 24th, 2024
 # Expected output: 3
 # minKBitFlips1(nums=[0, 0, 0, 1, 0, 1, 1, 0], k=3)
-minKBitFlips2(nums=[0, 0, 0, 1, 0, 1, 1, 0], k=3)
+# minKBitFlips2(nums=[0, 0, 0, 1, 0, 1, 1, 0], k=3)
 # minKBitFlips3(nums=[0, 0, 0, 1, 0, 1, 1, 0], k=3)
 
 # Test cases for June 25th, 2024
