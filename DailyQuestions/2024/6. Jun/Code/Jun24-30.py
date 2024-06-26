@@ -215,7 +215,7 @@ def bstToGst1(root: TreeNode) -> TreeNode:
 
 def bstToGst2(root: TreeNode) -> TreeNode:
     """
-    Converts a Binary Search Tree (BST) to a Greater Sum Tree (GST) using an iterative approach.
+    Converts a Binary Search Tree (BST) to a Greater Sum Tree (GST).
 
     This function performs an in-order traversal of the BST in reverse order (right-root-left) using a stack,
     updating each node's value to be the sum of its original value plus all greater values in the tree.
@@ -228,6 +228,7 @@ def bstToGst2(root: TreeNode) -> TreeNode:
     In the worst case of an unbalanced tree, this could be O(n) (skewed tree), but for a balanced BST,
     it would be O(log n).
     """
+
     def push_right_nodes(node):
         """Helper function to push all right nodes onto the stack."""
         while node:
@@ -250,29 +251,49 @@ def bstToGst2(root: TreeNode) -> TreeNode:
 
 
 def bstToGst3(root: TreeNode) -> TreeNode:
-    def find_predecessor(current):
-        pred = current.right
-        while pred.left and pred.left is not current:
-            pred = pred.left
-        return pred
+    """
+    Converts a Binary Search Tree (BST) to a Greater Sum Tree (GST) using Morris Traversal.
+
+    This function performs a reverse in-order traversal (right-root-left) of the BST using Morris Traversal,
+    updating each node's value to be the sum of its original value plus all greater values in the tree.
+    The algorithm uses a threaded binary tree approach, temporarily modifying the tree structure to navigate
+    without recursion or an explicit stack.
+
+    The Morris Traversal creates temporary links from the predecessor node (rightmost node of the left subtree)
+    to the current node, allowing backtracking without using a stack.
+    These temporary links are removed after use, restoring the original tree structure.
+
+    The time complexity is O(n), where `n` is the number of nodes in the tree.
+    Although each node may be visited up to
+    three times (to create the link, to process the node, and to remove the link),
+    this still results in linear time complexity.
+    The space complexity is O(1) as it uses only a constant amount of extra space, regardless of the tree size.
+    """
+
+    def find_successor(current):
+        """Helper function to find the successor node (leftmost node of the right subtree)."""
+        successor = current.right
+        while successor.left and successor.left is not current:
+            successor = successor.left
+        return successor
 
     cumulative_sum = 0
     current = root
     while current:
         if not current.right:
-            # No right child: process current node and move to the left
+            # No right child: process the current node and move to the left
             cumulative_sum += current.val
             current.val = cumulative_sum
             current = current.left
         else:
-            predecessor = find_predecessor(current)
-            if not predecessor.left:
-                # First time visiting: create temporary link and move right
-                predecessor.left = current
+            successor = find_successor(current)
+            if not successor.left:
+                # First time visiting: create a temporary link and move right
+                successor.left = current
                 current = current.right
             else:
                 # Second time visiting: remove temp link, process node, and move left
-                predecessor.left = None
+                successor.left = None
                 cumulative_sum += current.val
                 current.val = cumulative_sum
                 current = current.left
@@ -361,6 +382,10 @@ def problem7_2():
 # TreeNode(30, TreeNode(36, TreeNode(36), TreeNode(35, right=TreeNode(33))),
 #              TreeNode(21, TreeNode(26), TreeNode(15, right=TreeNode(8)))))
 bstToGst1(TreeNode(4, TreeNode(1, TreeNode(), TreeNode(2, right=TreeNode(3))),
+                   TreeNode(6, TreeNode(5), TreeNode(7, right=TreeNode(8)))))
+bstToGst2(TreeNode(4, TreeNode(1, TreeNode(), TreeNode(2, right=TreeNode(3))),
+                   TreeNode(6, TreeNode(5), TreeNode(7, right=TreeNode(8)))))
+bstToGst3(TreeNode(4, TreeNode(1, TreeNode(), TreeNode(2, right=TreeNode(3))),
                    TreeNode(6, TreeNode(5), TreeNode(7, right=TreeNode(8)))))
 
 # Test cases for June 26th, 2024
