@@ -183,11 +183,70 @@ class TreeNode:
 
 
 def bstToGst1(root: TreeNode) -> TreeNode:
-    pass
+    cumulative_sum = 0
+
+    def accumulate_node_values_in_reverse_order(node: TreeNode) -> None:
+        nonlocal cumulative_sum
+        if node.right:
+            accumulate_node_values_in_reverse_order(node.right)
+
+        cumulative_sum += node.val
+        node.val = cumulative_sum
+
+        if node.left:
+            accumulate_node_values_in_reverse_order(node.left)
+
+    accumulate_node_values_in_reverse_order(root)
+    return root
 
 
 def bstToGst2(root: TreeNode) -> TreeNode:
-    pass
+    stack = []
+    current_node = root
+    cumulative_sum = 0
+
+    while stack or current_node:
+        while current_node:
+            stack.append(current_node)
+            current_node = current_node.right
+
+        current_node = stack.pop()
+
+        cumulative_sum += current_node.val
+        current_node.val = cumulative_sum
+
+        current_node = current_node.left
+
+    return root
+
+
+def bstToGst3(root: TreeNode) -> TreeNode:
+    def get_next_node(node):
+        next_node = node.right
+        while next_node.left is not None and next_node.left is not node:
+            next_node = next_node.left
+        return next_node
+
+    total = 0
+    node = root
+    while node is not None:
+        if node.right is None:
+            total += node.val
+            node.val = total
+            node = node.left
+        else:
+            next_node = get_next_node(node)
+            if next_node.left is None:
+                next_node.left = node
+                node = node.right
+
+            else:
+                next_node.left = None
+                total += node.val
+                node.val = total
+                node = node.left
+
+    return root
 
 
 # 3. Problem
@@ -267,6 +326,11 @@ def problem7_2():
 # minKBitFlips2(nums=[0, 0, 0, 1, 0, 1, 1, 0], k=3)
 
 # Test cases for June 25th, 2024
+# Expected output:
+# TreeNode(30, TreeNode(36, TreeNode(36), TreeNode(35, right=TreeNode(33))),
+#              TreeNode(21, TreeNode(26), TreeNode(15, right=TreeNode(8)))))
+bstToGst1(TreeNode(4, TreeNode(1, TreeNode(), TreeNode(2, right=TreeNode(3))),
+                   TreeNode(6, TreeNode(5), TreeNode(7, right=TreeNode(8)))))
 
 # Test cases for June 26th, 2024
 
