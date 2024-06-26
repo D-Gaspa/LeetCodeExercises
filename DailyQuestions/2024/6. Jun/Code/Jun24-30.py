@@ -55,24 +55,43 @@ def minKBitFlips1(nums: List[int], k: int) -> int:
 
 
 def minKBitFlips2(nums: List[int], k: int) -> int:
+    """
+    Calculates the minimum number of k-bit flips required to convert all elements in `nums` to 1.
+
+    This function uses a linear scan approach with in-place modifications to track flips.
+    It maintains an 'expected_state' variable to determine whether a flip is needed at each
+    position.
+    The algorithm cleverly uses the original array to implicitly store flip
+    information by toggling values, eliminating the need for additional data structures.
+    This method reduces space complexity at the cost of modifying the input array.
+
+    The time complexity of this solution is O(n), where `n` is the length of nums, as it
+    processes each element once with constant-time operations.
+    The space complexity is O(1)
+    since it only uses a constant amount of extra space regardless of input size.
+    """
     if k == 1:
-        return nums.count(0)
+        return nums.count(0)  # Optimization for k=1 case
 
     flip_count = 0
-    expected_state = 1
+    expected_state = 1  # We expect all elements to be 1 eventually
 
     for index in range(k, len(nums)):
         if nums[index - k] != expected_state:
+            # A flip was performed k positions ago
             expected_state = 1 - expected_state
             flip_count += 1
 
         if expected_state == 0:
+            # Simulate the effect of a flip on the current element
             nums[index] = 1 - nums[index]
 
+    # Check if the last k elements are all the same
     last_value = nums[-1]
     if not all(num == last_value for num in nums[-k:]):
-        return -1
+        return -1  # Impossible to make all elements 1
 
+    # Account for a possible final flip if needed
     return flip_count + (1 if last_value != expected_state else 0)
 
 
