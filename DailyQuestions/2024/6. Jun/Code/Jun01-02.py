@@ -3,7 +3,7 @@ from typing import List
 from tabulate import tabulate
 
 
-# Week 1: June 1st - June 2nd, 2024
+# June 2024, Week 1: June 1st - June 2nd
 
 # <-------------------------------------------------- June 1st, 2024 -------------------------------------------------->
 # 3110. Score of a String

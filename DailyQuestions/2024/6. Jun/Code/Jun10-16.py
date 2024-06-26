@@ -5,7 +5,7 @@ from typing import List
 from tabulate import tabulate
 
 
-# Week 3: June 10th - June 16th, 2024
+# June 2024, Week 3: June 10th - June 16th
 
 # <------------------------------------------------- June 10th, 2024 ------------------------------------------------->
 # 1051. Height Checker

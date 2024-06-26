@@ -8,7 +8,7 @@ from typing import List
 from tabulate import tabulate
 
 
-# Week 3: June 17th - June 23rd, 2024
+# June 2024, Week 4: June 17th - June 23rd
 
 # <------------------------------------------------- June 17th, 2024 ------------------------------------------------->
 # 633. Sum of Square Numbers

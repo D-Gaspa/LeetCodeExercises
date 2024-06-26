@@ -6,7 +6,7 @@ from typing import List
 from tabulate import tabulate
 
 
-# Week 2: June 3rd - June 9th, 2024
+# June 2024, Week 2: June 3rd - June 9th
 
 # <-------------------------------------------------- June 3rd, 2024 -------------------------------------------------->
 # 2486. Append Characters to String to Make Subsequence
