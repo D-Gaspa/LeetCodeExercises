@@ -252,14 +252,14 @@ def bstToGst2(root: TreeNode) -> TreeNode:
 
 def bstToGst3(root: TreeNode) -> TreeNode:
     """
-    Converts a Binary Search Tree (BST) to a Greater Sum Tree (GST) using Morris Traversal.
+    Converts a Binary Search Tree (BST) to a Greater Sum Tree (GST).
 
     This function performs a reverse in-order traversal (right-root-left) of the BST using Morris Traversal,
     updating each node's value to be the sum of its original value plus all greater values in the tree.
     The algorithm uses a threaded binary tree approach, temporarily modifying the tree structure to navigate
     without recursion or an explicit stack.
 
-    The Morris Traversal creates temporary links from the predecessor node (rightmost node of the left subtree)
+    The Morris Traversal creates temporary links from the successor node (rightmost node of the left subtree)
     to the current node, allowing backtracking without using a stack.
     These temporary links are removed after use, restoring the original tree structure.
 
