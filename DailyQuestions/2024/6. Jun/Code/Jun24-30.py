@@ -229,7 +229,7 @@ def bstToGst2(root: TreeNode) -> TreeNode:
     it would be O(log n).
     """
 
-    def push_right_nodes(node):
+    def push_right_nodes(node: TreeNode) -> None:
         """Helper function to push all right nodes onto the stack."""
         while node:
             stack.append(node)
@@ -259,7 +259,7 @@ def bstToGst3(root: TreeNode) -> TreeNode:
     The algorithm uses a threaded binary tree approach, temporarily modifying the tree structure to navigate
     without recursion or an explicit stack.
 
-    The Morris Traversal creates temporary links from the successor node (rightmost node of the left subtree)
+    The Morris Traversal creates temporary links from the successor node (leftmost node of the right subtree)
     to the current node, allowing backtracking without using a stack.
     These temporary links are removed after use, restoring the original tree structure.
 
@@ -270,33 +270,36 @@ def bstToGst3(root: TreeNode) -> TreeNode:
     The space complexity is O(1) as it uses only a constant amount of extra space, regardless of the tree size.
     """
 
-    def find_successor(current):
-        """Helper function to find the successor node (leftmost node of the right subtree)."""
-        successor = current.right
-        while successor.left and successor.left is not current:
+    def find_successor(current_node: TreeNode) -> TreeNode:
+        """
+        Helper function to find the inorder successor in the context of reverse inorder traversal.
+        This is the leftmost node in the right subtree of the current node.
+        """
+        successor = current_node.right
+        while successor.left and successor.left is not current_node:
             successor = successor.left
         return successor
 
     cumulative_sum = 0
-    current = root
-    while current:
-        if not current.right:
+    current_node = root
+    while current_node:
+        if not current_node.right:
             # No right child: process the current node and move to the left
-            cumulative_sum += current.val
-            current.val = cumulative_sum
-            current = current.left
+            cumulative_sum += current_node.val
+            current_node.val = cumulative_sum
+            current_node = current_node.left
         else:
-            successor = find_successor(current)
+            successor = find_successor(current_node)
             if not successor.left:
                 # First time visiting: create a temporary link and move right
-                successor.left = current
-                current = current.right
+                successor.left = current_node
+                current_node = current_node.right
             else:
                 # Second time visiting: remove temp link, process node, and move left
                 successor.left = None
-                cumulative_sum += current.val
-                current.val = cumulative_sum
-                current = current.left
+                cumulative_sum += current_node.val
+                current_node.val = cumulative_sum
+                current_node = current_node.left
 
     return root
 
