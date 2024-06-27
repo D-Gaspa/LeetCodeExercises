@@ -1,6 +1,7 @@
 .idea
 CodingLearningExercises
-Utils
+Utils/*
+!Utils/trees_utils.py
 Writerside/*
 !Writerside/topics
 !Writerside/images

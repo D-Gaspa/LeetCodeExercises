@@ -1,11 +1,11 @@
 # June 2024, Week 5: June 24th - June 30th
 import math
-import tempfile
 from collections import deque
 from typing import List
 
-from graphviz import Digraph
 from tabulate import tabulate
+
+from Utils.trees_utils import TreeNode, TreeVisualizer
 
 
 # <------------------------------------------------- June 24th, 2024 ------------------------------------------------->
@@ -176,40 +176,6 @@ def minKBitFlips2(nums: List[int], k: int) -> int:
 
 # Given the `root` of a Binary Search Tree (BST), convert it to a Greater Tree such that every key of the original BST
 # is changed to the original key plus the sum of all keys greater than the original key in BST.
-
-
-class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
-
-
-class TreeVisualizer:
-    @staticmethod
-    def visualize(root: TreeNode) -> str:
-        dot = Digraph(comment='Binary Tree')
-        dot.attr('node', shape='circle', style='filled', color='lightblue', fontcolor='black')
-        dot.attr('edge', color='black')
-
-        def add_nodes_edges(node, parent_id=None):
-            if node:
-                node_id = str(id(node))
-                dot.node(node_id, str(node.val))
-                if parent_id:
-                    dot.edge(parent_id, node_id)
-                add_nodes_edges(node.left, node_id)
-                add_nodes_edges(node.right, node_id)
-
-        add_nodes_edges(root)
-
-        # Generate a unique file name and save the file in the current directory
-        with tempfile.NamedTemporaryFile(delete=False, suffix='', dir='.') as tmp:
-            image_path = tmp.name
-            tmp.close()  # Close the file before rendering
-            dot.render(image_path, format='png', cleanup=True)
-
-        return image_path
 
 
 def bstToGst1(root: TreeNode) -> TreeNode:
@@ -466,6 +432,7 @@ def balanceBST2(root: TreeNode) -> TreeNode:
     regardless of the input size. This is a key advantage over methods that require
     O(n) auxiliary space.
     """
+
     def right_rotate(parent: TreeNode, node: TreeNode) -> None:
         """Helper function to perform a right rotation on the given node."""
         left_child = node.left
@@ -576,7 +543,6 @@ def problem7_1():
 
 def problem7_2():
     pass
-
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
