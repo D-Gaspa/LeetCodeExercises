@@ -1,4 +1,5 @@
 # June 2024, Week 5: June 24th - June 30th
+import math
 import tempfile
 from collections import deque
 from typing import List
@@ -402,7 +403,29 @@ def update_node_and_move_left(cumulative_sum, current_node, iteration_data):
 
 
 def balanceBST1(root: TreeNode) -> TreeNode:
-    pass
+    inorder_nodes = []
+
+    def inorder_traverse(root: TreeNode) -> None:
+        if not root:
+            return
+        inorder_traverse(root.left)
+        inorder_nodes.append(root)
+        inorder_traverse(root.right)
+
+    def build_balanced_bst(start_index: int, end_index: int) -> TreeNode | None:
+        if start_index > end_index:
+            return None
+
+        mid_index = start_index + (end_index - start_index) // 2
+
+        node = inorder_nodes[mid_index]
+        node.left = build_balanced_bst(start_index, mid_index - 1)
+        node.right = build_balanced_bst(mid_index + 1, end_index)
+
+        return node
+
+    inorder_traverse(root)
+    return build_balanced_bst(0, len(inorder_nodes) - 1)
 
 
 def balanceBST2(root: TreeNode) -> TreeNode:
@@ -484,6 +507,10 @@ def problem7_2():
 #                         right=TreeNode(val=6, left=TreeNode(5), right=TreeNode(val=7, right=TreeNode(val=8)))))
 
 # Test cases for June 26th, 2024
+# Expected output:
+# TreeNode(3, left=TreeNode(2, left=TreeNode(1), right=TreeNode()), right=TreeNode(4))
+
+balanceBST1(root=TreeNode(val=1, right=TreeNode(val=2, right=TreeNode(val=3, right=TreeNode(val=4)))))
 
 # Test cases for June 27th, 2024
 
