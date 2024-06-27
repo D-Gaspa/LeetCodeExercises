@@ -369,47 +369,55 @@ def update_node_and_move_left(cumulative_sum, current_node, iteration_data):
 
 
 def balanceBST1(root: TreeNode) -> TreeNode:
-    """
-    Converts an unbalanced binary search tree (BST) into a balanced one.
+    print("\n--- Input Parameters ---")
+    print(f"\troot = {TreeVisualizer.visualize(root)}")
 
-    This function uses a two-step approach to balance the BST:
-    1. It performs an in-order traversal of the original BST, storing nodes in a list.
-       This step ensures that we have a sorted list of nodes, as in-order traversal
-       of a BST yields nodes in ascending order.
-    2. It then recursively constructs a new balanced BST from this sorted list,
-       using the middle element as the root at each step.
-       This approach guarantees that the tree remains balanced, as we always choose the median element as the root.
-
-    The time complexity of this solution is O(n), where `n` is the number of nodes in the tree.
-    This is because we traverse each node once during the in-order traversal and once
-    during the balanced BST construction.
-    The space complexity is O(n) as well, due to the storage of all nodes in the
-    `inorder_nodes` list and the recursion stack used in both traversal and construction.
-    """
+    print("\n--- Initialization ---")
     inorder_nodes = []
+    print(f"\tinorder_nodes = {inorder_nodes}")
 
-    def inorder_traverse(root: TreeNode) -> None:
-        """Helper function to perform in-order traversal of the tree."""
-        if not root:
+    def inorder_traverse(node: TreeNode) -> None:
+        if not node:
             return
-        inorder_traverse(root.left)
-        inorder_nodes.append(root)
-        inorder_traverse(root.right)
+        print(f"\n\t--- Traversing Node: {node.val} ---")
+        print("\t\tMoving to left child")
+        inorder_traverse(node.left)
+        print(f"\t\tAppending node {node.val} to inorder_nodes")
+        inorder_nodes.append(node)
+        print("\t\tMoving to right child")
+        inorder_traverse(node.right)
 
     def build_balanced_bst(start_index: int, end_index: int) -> TreeNode | None:
-        """Helper function to construct a balanced BST from the sorted list of nodes."""
+        print(f"\n\t--- Building BST: start_index={start_index}, end_index={end_index} ---")
         if start_index > end_index:
+            print("\t\tBase case reached: returning None")
             return None
 
         mid_index = start_index + (end_index - start_index) // 2
+        print(f"\t\tCalculated mid_index: {mid_index}")
 
         node = inorder_nodes[mid_index]
+        print(f"\t\tSelected root node: {node.val}")
+
+        print(f"\t\tBuilding left subtree: start_index={start_index}, end_index={mid_index - 1}")
         node.left = build_balanced_bst(start_index, mid_index - 1)
+        print(f"\t\tBuilding right subtree: start_index={mid_index + 1}, end_index={end_index}")
         node.right = build_balanced_bst(mid_index + 1, end_index)
+
         return node
 
+    print("\n--- Performing In-order Traversal ---")
     inorder_traverse(root)
-    return build_balanced_bst(0, len(inorder_nodes) - 1)
+
+    print("\n--- In-order Traversal Result ---")
+    print(f"\tinorder_nodes = {[node.val for node in inorder_nodes]}")
+
+    print("\n--- Building Balanced BST ---")
+    balanced_root = build_balanced_bst(0, len(inorder_nodes) - 1)
+
+    print("\n--- Function Returning ---")
+    print(f"\tBalanced Tree: {TreeVisualizer.visualize(balanced_root)}")
+    return balanced_root
 
 
 def balanceBST2(root: TreeNode) -> TreeNode:
@@ -544,6 +552,7 @@ def problem7_1():
 def problem7_2():
     pass
 
+
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
 # Test cases for June 24th, 2024
@@ -565,7 +574,7 @@ def problem7_2():
 # Test cases for June 26th, 2024
 # Expected output:
 # TreeNode(3, left=TreeNode(2, left=TreeNode(1), right=TreeNode()), right=TreeNode(4))
-# balanceBST1(root=TreeNode(val=1, right=TreeNode(val=2, right=TreeNode(val=3, right=TreeNode(val=4)))))
+balanceBST1(root=TreeNode(val=1, right=TreeNode(val=2, right=TreeNode(val=3, right=TreeNode(val=4)))))
 # balanceBST2(root=TreeNode(val=1, right=TreeNode(val=2, right=TreeNode(val=3, right=TreeNode(val=4)))))
 
 # Test cases for June 27th, 2024
