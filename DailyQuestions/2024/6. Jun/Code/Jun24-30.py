@@ -403,9 +403,27 @@ def update_node_and_move_left(cumulative_sum, current_node, iteration_data):
 
 
 def balanceBST1(root: TreeNode) -> TreeNode:
+    """
+    Converts an unbalanced binary search tree (BST) into a balanced one.
+
+    This function uses a two-step approach to balance the BST:
+    1. It performs an in-order traversal of the original BST, storing nodes in a list.
+       This step ensures that we have a sorted list of nodes, as in-order traversal
+       of a BST yields nodes in ascending order.
+    2. It then recursively constructs a new balanced BST from this sorted list,
+       using the middle element as the root at each step.
+       This approach guarantees that the tree remains balanced, as we always choose the median element as the root.
+
+    The time complexity of this solution is O(n), where `n` is the number of nodes in the tree.
+    This is because we traverse each node once during the in-order traversal and once
+    during the balanced BST construction.
+    The space complexity is O(n) as well, due to the storage of all nodes in the
+    `inorder_nodes` list and the recursion stack used in both traversal and construction.
+    """
     inorder_nodes = []
 
     def inorder_traverse(root: TreeNode) -> None:
+        """Helper function to perform in-order traversal of the tree."""
         if not root:
             return
         inorder_traverse(root.left)
@@ -413,6 +431,7 @@ def balanceBST1(root: TreeNode) -> TreeNode:
         inorder_traverse(root.right)
 
     def build_balanced_bst(start_index: int, end_index: int) -> TreeNode | None:
+        """Helper function to construct a balanced BST from the sorted list of nodes."""
         if start_index > end_index:
             return None
 
@@ -421,7 +440,6 @@ def balanceBST1(root: TreeNode) -> TreeNode:
         node = inorder_nodes[mid_index]
         node.left = build_balanced_bst(start_index, mid_index - 1)
         node.right = build_balanced_bst(mid_index + 1, end_index)
-
         return node
 
     inorder_traverse(root)
