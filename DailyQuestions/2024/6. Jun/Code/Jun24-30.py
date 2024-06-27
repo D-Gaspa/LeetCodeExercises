@@ -329,57 +329,69 @@ def bstToGst2(root: TreeNode) -> TreeNode:
 
 
 def bstToGst3(root: TreeNode) -> TreeNode:
-    """
-    Converts a Binary Search Tree (BST) to a Greater Sum Tree (GST).
-
-    This function performs a reverse in-order traversal (right-root-left) of the BST using Morris Traversal,
-    updating each node's value to be the sum of its original value plus all greater values in the tree.
-    The algorithm uses a threaded binary tree approach, temporarily modifying the tree structure to navigate
-    without recursion or an explicit stack.
-
-    The Morris Traversal creates temporary links from the successor node (leftmost node of the right subtree)
-    to the current node, allowing backtracking without using a stack.
-    These temporary links are removed after use, restoring the original tree structure.
-
-    The time complexity is O(n), where `n` is the number of nodes in the tree.
-    Although each node may be visited up to
-    three times (to create the link, to process the node, and to remove the link),
-    this still results in linear time complexity.
-    The space complexity is O(1) as it uses only a constant amount of extra space, regardless of the tree size.
-    """
+    print("\n--- Input Parameters ---")
+    print(f"\troot = {TreeVisualizer.visualize(root)}")
 
     def find_successor(current_node: TreeNode) -> TreeNode:
-        """
-        Helper function to find the inorder successor in the context of reverse inorder traversal.
-        This is the leftmost node in the right subtree of the current node.
-        """
+        print("\n\t--- Finding Successor ---")
         successor = current_node.right
+        print(f"\t\tStarting from right child: {successor.val if successor else None}")
         while successor.left and successor.left is not current_node:
             successor = successor.left
+            print(f"\t\tMoving to left child: {successor.val}")
+        print(f"\t\tSuccessor found: {successor.val}")
         return successor
 
+    print("\n--- Initialization ---")
     cumulative_sum = 0
     current_node = root
+    print(f"\tcumulative_sum = {cumulative_sum}")
+    print(f"\tcurrent_node = {current_node.val if current_node else None}")
+
+    iteration_data = []
+
+    print("\n--- Main Traversal Loop ---")
     while current_node:
+        print(f"\n--- Processing Node: {current_node.val} ---")
+
         if not current_node.right:
-            # No right child: process the current node and move to the left
-            cumulative_sum += current_node.val
-            current_node.val = cumulative_sum
-            current_node = current_node.left
+            print("\t--- No Right Child ---")
+            cumulative_sum, current_node = update_node_and_move_left(cumulative_sum, current_node, iteration_data)
         else:
             successor = find_successor(current_node)
             if not successor.left:
-                # First time visiting: create a temporary link and move right
+                print("\t--- Creating Temporary Link ---")
+                print(f"\t\tLinking successor {successor.val} to current node {current_node.val}")
                 successor.left = current_node
+                print(f"\t\tMoving to right child: {current_node.right.val}")
                 current_node = current_node.right
             else:
-                # Second time visiting: remove temp link, process node, and move left
+                print("\t--- Removing Temporary Link ---")
+                print(f"\t\tRemoving link from successor {successor.val} to current node {current_node.val}")
                 successor.left = None
-                cumulative_sum += current_node.val
-                current_node.val = cumulative_sum
-                current_node = current_node.left
+                cumulative_sum, current_node = update_node_and_move_left(cumulative_sum, current_node, iteration_data)
 
+    print("\n--- Iteration Summary ---")
+    headers = ["Original Value", "Added to Sum", "New Value (Cumulative Sum)"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tModified Tree: {TreeVisualizer.visualize(root)}")
     return root
+
+
+def update_node_and_move_left(cumulative_sum, current_node, iteration_data):
+    old_val = current_node.val
+    cumulative_sum += current_node.val
+    current_node.val = cumulative_sum
+    print(f"\t\tUpdating node value:")
+    print(f"\t\t\tOld value: {old_val}")
+    print(f"\t\t\tNew cumulative_sum: {cumulative_sum}")
+    print(f"\t\t\tUpdated node value: {current_node.val}")
+    iteration_data.append([old_val, cumulative_sum - old_val, cumulative_sum])
+    print(f"\t\tMoving to left child: {current_node.left.val if current_node.left else None}")
+    current_node = current_node.left
+    return cumulative_sum, current_node
 
 
 # 1382. Balance a Binary Search Tree
@@ -464,11 +476,11 @@ def problem7_2():
 # Expected output:
 # TreeNode(30, TreeNode(36, TreeNode(36), TreeNode(35, right=TreeNode(33))),
 #              TreeNode(21, TreeNode(26), TreeNode(15, right=TreeNode(8)))))
-# bstToGst1(root=TreeNode(val=4, left=TreeNode(val=1, left=TreeNode(), right=TreeNode(val=2, right=3)),
+# bstToGst1(root=TreeNode(val=4, left=TreeNode(val=1, left=TreeNode(), right=TreeNode(val=2, right=TreeNode(val=3))),
 #                         right=TreeNode(val=6, left=TreeNode(5), right=TreeNode(val=7, right=TreeNode(val=8)))))
 # bstToGst2(root=TreeNode(val=4, left=TreeNode(val=1, left=TreeNode(), right=TreeNode(val=2, right=TreeNode(val=3))),
 #                         right=TreeNode(val=6, left=TreeNode(5), right=TreeNode(val=7, right=TreeNode(val=8)))))
-# bstToGst3(root=TreeNode(val=4, left=TreeNode(val=1, left=TreeNode(), right=TreeNode(val=2, right=3)),
+# bstToGst3(root=TreeNode(val=4, left=TreeNode(val=1, left=TreeNode(), right=TreeNode(val=2, right=TreeNode(val=3))),
 #                         right=TreeNode(val=6, left=TreeNode(5), right=TreeNode(val=7, right=TreeNode(val=8)))))
 
 # Test cases for June 26th, 2024
