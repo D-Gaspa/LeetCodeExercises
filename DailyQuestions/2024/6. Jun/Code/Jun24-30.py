@@ -429,7 +429,56 @@ def balanceBST1(root: TreeNode) -> TreeNode:
 
 
 def balanceBST2(root: TreeNode) -> TreeNode:
-    pass
+    def right_rotate(parent: TreeNode, node: TreeNode) -> None:
+        left_child = node.left
+        node.left = left_child.right
+        left_child.right = node
+        parent.right = left_child
+
+    def left_rotate(parent: TreeNode, node: TreeNode) -> None:
+        right_child = node.right
+        node.right = right_child.left
+        right_child.left = node
+        parent.right = right_child
+
+    def compress_vine(vine_root: TreeNode, rotations: int) -> None:
+        current_node = vine_root
+        for _ in range(rotations):
+            child = current_node.right
+            left_rotate(current_node, child)
+            current_node = current_node.right
+
+    dummy_root = TreeNode()
+    dummy_root.right = root
+    current_node = dummy_root
+
+    # Convert to vine (right-leaning linked list)
+    while current_node.right:
+        if current_node.right.left:
+            right_rotate(current_node, current_node.right)
+        else:
+            current_node = current_node.right
+
+    # Count nodes in the vine
+    node_count = 0
+    current_node = dummy_root.right
+    while current_node:
+        node_count += 1
+        current_node = current_node.right
+
+    # Calculate the number of nodes in the perfect tree portion
+    perfect_tree_nodes = 2 ** math.floor(math.log2(node_count + 1)) - 1
+
+    # Perform initial compression
+    compress_vine(dummy_root, node_count - perfect_tree_nodes)
+
+    # Perform remaining compressions
+    remaining_nodes = perfect_tree_nodes
+    while remaining_nodes > 1:
+        remaining_nodes //= 2
+        compress_vine(dummy_root, remaining_nodes)
+
+    return dummy_root.right
 
 
 # <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
@@ -509,8 +558,8 @@ def problem7_2():
 # Test cases for June 26th, 2024
 # Expected output:
 # TreeNode(3, left=TreeNode(2, left=TreeNode(1), right=TreeNode()), right=TreeNode(4))
-
-balanceBST1(root=TreeNode(val=1, right=TreeNode(val=2, right=TreeNode(val=3, right=TreeNode(val=4)))))
+# balanceBST1(root=TreeNode(val=1, right=TreeNode(val=2, right=TreeNode(val=3, right=TreeNode(val=4)))))
+# balanceBST2(root=TreeNode(val=1, right=TreeNode(val=2, right=TreeNode(val=3, right=TreeNode(val=4)))))
 
 # Test cases for June 27th, 2024
 
