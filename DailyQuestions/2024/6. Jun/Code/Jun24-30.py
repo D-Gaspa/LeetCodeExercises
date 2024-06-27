@@ -1,7 +1,9 @@
 # June 2024, Week 5: June 24th - June 30th
+import tempfile
 from collections import deque
 from typing import List
 
+from graphviz import Digraph
 from tabulate import tabulate
 
 
@@ -182,34 +184,87 @@ class TreeNode:
         self.right = right
 
 
+class TreeVisualizer:
+    @staticmethod
+    def visualize(root: TreeNode) -> str:
+        dot = Digraph(comment='Binary Tree')
+        dot.attr('node', shape='circle', style='filled', color='lightblue', fontcolor='black')
+        dot.attr('edge', color='black')
+
+        def add_nodes_edges(node, parent_id=None):
+            if node:
+                node_id = str(id(node))
+                dot.node(node_id, str(node.val))
+                if parent_id:
+                    dot.edge(parent_id, node_id)
+                add_nodes_edges(node.left, node_id)
+                add_nodes_edges(node.right, node_id)
+
+        add_nodes_edges(root)
+
+        # Generate a unique file name and save the file in the current directory
+        with tempfile.NamedTemporaryFile(delete=False, suffix='', dir='.') as tmp:
+            image_path = tmp.name
+            tmp.close()  # Close the file before rendering
+            dot.render(image_path, format='png', cleanup=True)
+
+        return image_path
+
+
 def bstToGst1(root: TreeNode) -> TreeNode:
-    """
-    Converts a Binary Search Tree (BST) to a Greater Sum Tree (GST).
+    print("\n--- Input Parameters ---")
+    print(f"\troot = {TreeVisualizer.visualize(root)}")
 
-    This function performs an in-order traversal of the BST in reverse order (right-root-left),
-    updating each node's value to be the sum of its original value plus all greater values in the tree.
-    The algorithm leverages the BST property where all right subtree values are greater than the current node,
-    and all left subtree values are smaller.
-    By traversing right first, we accumulate the sum of greater values,
-    which is then used to update the current node and propagated to the left subtree.
-
-    The time complexity is O(n), where `n` is the number of nodes in the tree, as each node is visited exactly once.
-    The space complexity is O(h), where `h` is the height of the tree, due to the recursive call stack.
-    In the worst case of an unbalanced tree, this could be O(n) (skewed tree), but for a balanced BST,
-    it would be O(log n).
-    """
+    print("\n--- Initialization ---")
     cumulative_sum = 0
+    print(f"\tcumulative_sum = {cumulative_sum}")
+
+    iteration_data = []
 
     def update_node_values(node: TreeNode) -> None:
         nonlocal cumulative_sum
+        nonlocal iteration_data
+
+        if node is None:
+            return
+
+        print(f"\n--- Processing Node: {node.val} ---")
+        print(f"\tCurrent cumulative_sum: {cumulative_sum}")
+
+        print("\n\t--- Traversing Right Subtree ---")
         if node.right:
+            print(f"\t\tMoving to right child: {node.right.val}")
             update_node_values(node.right)
+        else:
+            print("\t\tNo right child")
+
+        print("\n\t--- Updating Current Node ---")
+        old_val = node.val
         cumulative_sum += node.val
         node.val = cumulative_sum
-        if node.left:
-            update_node_values(node.left)
+        print(f"\t\tUpdating node value:")
+        print(f"\t\t\tOld value: {old_val}")
+        print(f"\t\t\tAdding to cumulative_sum: {cumulative_sum - node.val} + {old_val} = {cumulative_sum}")
+        print(f"\t\t\tNew value: {node.val}")
 
+        iteration_data.append([old_val, cumulative_sum - old_val, cumulative_sum])
+
+        print("\n\t--- Traversing Left Subtree ---")
+        if node.left:
+            print(f"\t\tMoving to left child: {node.left.val}")
+            update_node_values(node.left)
+        else:
+            print("\t\tNo left child")
+
+    print("\n--- Starting Tree Traversal ---")
     update_node_values(root)
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Original Value", "Added to Sum", "New Value (Cumulative Sum)"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tModified Tree: {TreeVisualizer.visualize(root)}")
     return root
 
 
@@ -386,12 +441,12 @@ def problem7_2():
 # Expected output:
 # TreeNode(30, TreeNode(36, TreeNode(36), TreeNode(35, right=TreeNode(33))),
 #              TreeNode(21, TreeNode(26), TreeNode(15, right=TreeNode(8)))))
-bstToGst1(TreeNode(4, TreeNode(1, TreeNode(), TreeNode(2, right=TreeNode(3))),
-                   TreeNode(6, TreeNode(5), TreeNode(7, right=TreeNode(8)))))
-bstToGst2(TreeNode(4, TreeNode(1, TreeNode(), TreeNode(2, right=TreeNode(3))),
-                   TreeNode(6, TreeNode(5), TreeNode(7, right=TreeNode(8)))))
-bstToGst3(TreeNode(4, TreeNode(1, TreeNode(), TreeNode(2, right=TreeNode(3))),
-                   TreeNode(6, TreeNode(5), TreeNode(7, right=TreeNode(8)))))
+# bstToGst1(root=TreeNode(val=4, left=TreeNode(val=1, left=TreeNode(), right=TreeNode(val=2, right=3)),
+#                         right=TreeNode(val=6, left=TreeNode(5), right=TreeNode(val=7, right=TreeNode(val=8)))))
+bstToGst2(root=TreeNode(val=4, left=TreeNode(val=1, left=TreeNode(), right=TreeNode(val=2, right=3)),
+                        right=TreeNode(val=6, left=TreeNode(5), right=TreeNode(val=7, right=TreeNode(val=8)))))
+# bstToGst3(root=TreeNode(val=4, left=TreeNode(val=1, left=TreeNode(), right=TreeNode(val=2, right=3)),
+#                         right=TreeNode(val=6, left=TreeNode(5), right=TreeNode(val=7, right=TreeNode(val=8)))))
 
 # Test cases for June 26th, 2024
 
