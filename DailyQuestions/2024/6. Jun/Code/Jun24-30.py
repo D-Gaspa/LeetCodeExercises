@@ -447,19 +447,41 @@ def balanceBST1(root: TreeNode) -> TreeNode:
 
 
 def balanceBST2(root: TreeNode) -> TreeNode:
+    """
+    Converts an unbalanced binary search tree (BST) into a balanced one.
+
+    This function implements the Day-Stout-Warren (DSW) algorithm to balance a BST in three main steps:
+    1. Convert the BST into a "vine" (a right-skewed tree)
+    2. Determine the number of nodes needed for a perfect binary tree
+    3. Perform a series of left rotations to balance the tree
+
+    The DSW algorithm achieves balance through a series of tree rotations,
+    without requiring extra space for node storage. It guarantees a balanced
+    tree with a height of O(log n).
+
+    The time complexity of this solution is O(n), where `n` is the number of nodes.
+    Despite multiple passes through the tree, each node is processed a constant
+    number of times.
+    The space complexity is O(1), as it uses only a constant amount of extra space,
+    regardless of the input size. This is a key advantage over methods that require
+    O(n) auxiliary space.
+    """
     def right_rotate(parent: TreeNode, node: TreeNode) -> None:
+        """Helper function to perform a right rotation on the given node."""
         left_child = node.left
         node.left = left_child.right
         left_child.right = node
         parent.right = left_child
 
     def left_rotate(parent: TreeNode, node: TreeNode) -> None:
+        """Helper function to perform a left rotation on the given node."""
         right_child = node.right
         node.right = right_child.left
         right_child.left = node
         parent.right = right_child
 
     def compress_vine(vine_root: TreeNode, rotations: int) -> None:
+        """Helper function to perform a series of left rotations to balance the vine."""
         current_node = vine_root
         for _ in range(rotations):
             child = current_node.right
@@ -470,14 +492,14 @@ def balanceBST2(root: TreeNode) -> TreeNode:
     dummy_root.right = root
     current_node = dummy_root
 
-    # Convert to vine (right-leaning linked list)
+    # Step 1: Convert BST to vine (right-leaning linked list)
     while current_node.right:
         if current_node.right.left:
             right_rotate(current_node, current_node.right)
         else:
             current_node = current_node.right
 
-    # Count nodes in the vine
+    # Step 2: Count nodes and calculate perfect tree size
     node_count = 0
     current_node = dummy_root.right
     while current_node:
@@ -487,6 +509,7 @@ def balanceBST2(root: TreeNode) -> TreeNode:
     # Calculate the number of nodes in the perfect tree portion
     perfect_tree_nodes = 2 ** math.floor(math.log2(node_count + 1)) - 1
 
+    # Step 3: Balance the tree through a series of left rotations
     # Perform initial compression
     compress_vine(dummy_root, node_count - perfect_tree_nodes)
 
