@@ -269,39 +269,62 @@ def bstToGst1(root: TreeNode) -> TreeNode:
 
 
 def bstToGst2(root: TreeNode) -> TreeNode:
-    """
-    Converts a Binary Search Tree (BST) to a Greater Sum Tree (GST).
+    print("\n--- Input Parameters ---")
+    print(f"\troot = {TreeVisualizer.visualize(root)}")
 
-    This function performs an in-order traversal of the BST in reverse order (right-root-left) using a stack,
-    updating each node's value to be the sum of its original value plus all greater values in the tree.
-    The algorithm uses an explicit stack to simulate the recursive process, pushing all right nodes onto
-    the stack first, then processing the current node, and finally pushing left nodes. This approach
-    maintains the property of visiting nodes in descending order of value.
-
-    The time complexity is O(n), where n is the number of nodes in the tree, as each node is visited exactly once.
-    The space complexity is O(h), where h is the height of the tree, due to the stack used for traversal.
-    In the worst case of an unbalanced tree, this could be O(n) (skewed tree), but for a balanced BST,
-    it would be O(log n).
-    """
-
-    def push_right_nodes(node: TreeNode) -> None:
-        """Helper function to push all right nodes onto the stack."""
-        while node:
-            stack.append(node)
-            node = node.right
-
+    print("\n--- Initialization ---")
     stack = []
     current_node = root
     cumulative_sum = 0
+    print(f"\tstack = {stack}")
+    print(f"\tcurrent_node = {current_node.val if current_node else None}")
+    print(f"\tcumulative_sum = {cumulative_sum}")
 
+    iteration_data = []
+
+    def push_right_nodes(node: TreeNode) -> None:
+        print("\n\t--- Pushing Right Nodes ---")
+        while node:
+            print(f"\t\tPushing node {node.val} onto stack")
+            stack.append(node)
+            node = node.right
+            print(f"\t\tMoving to right child: {node.val if node else None}")
+        print(f"\t\tStack after pushing: {[n.val for n in stack]}")
+
+    print("\n--- Initial Stack Population ---")
     push_right_nodes(current_node)
 
+    print("\n--- Main Traversal Loop ---")
     while stack:
+        print(f"\n--- Processing Node ---")
         current_node = stack.pop()
+        print(f"\tPopped node: {current_node.val}")
+        print(f"\tCurrent stack: {[n.val for n in stack]}")
+
+        old_val = current_node.val
         cumulative_sum += current_node.val
         current_node.val = cumulative_sum
-        push_right_nodes(current_node.left)
 
+        print("\t--- Node Update ---")
+        print(f"\t\tOld value: {old_val}")
+        print(f"\t\tNew cumulative_sum: {cumulative_sum}")
+        print(f"\t\tUpdated node value: {current_node.val}")
+
+        iteration_data.append([old_val, cumulative_sum - old_val, cumulative_sum])
+
+        print("\t--- Handling Left Subtree ---")
+        if current_node.left:
+            print(f"\t\tPushing right nodes of left child ({current_node.left.val})")
+            push_right_nodes(current_node.left)
+        else:
+            print("\t\tNo left child")
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Original Value", "Added to Sum", "New Value (Cumulative Sum)"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tModified Tree: {TreeVisualizer.visualize(root)}")
     return root
 
 
@@ -443,8 +466,8 @@ def problem7_2():
 #              TreeNode(21, TreeNode(26), TreeNode(15, right=TreeNode(8)))))
 # bstToGst1(root=TreeNode(val=4, left=TreeNode(val=1, left=TreeNode(), right=TreeNode(val=2, right=3)),
 #                         right=TreeNode(val=6, left=TreeNode(5), right=TreeNode(val=7, right=TreeNode(val=8)))))
-bstToGst2(root=TreeNode(val=4, left=TreeNode(val=1, left=TreeNode(), right=TreeNode(val=2, right=3)),
-                        right=TreeNode(val=6, left=TreeNode(5), right=TreeNode(val=7, right=TreeNode(val=8)))))
+# bstToGst2(root=TreeNode(val=4, left=TreeNode(val=1, left=TreeNode(), right=TreeNode(val=2, right=TreeNode(val=3))),
+#                         right=TreeNode(val=6, left=TreeNode(5), right=TreeNode(val=7, right=TreeNode(val=8)))))
 # bstToGst3(root=TreeNode(val=4, left=TreeNode(val=1, left=TreeNode(), right=TreeNode(val=2, right=3)),
 #                         right=TreeNode(val=6, left=TreeNode(5), right=TreeNode(val=7, right=TreeNode(val=8)))))
 
