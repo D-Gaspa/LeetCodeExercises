@@ -586,6 +586,24 @@ def findCenter1(edges: List[List[int]]) -> int:
 
 
 def maximumImportance1(n: int, roads: List[List[int]]) -> int:
+    """
+    Calculates the maximum total importance of all roads in a country with `n` cities and `roads` connecting them.
+
+    This function uses a greedy approach to maximize the total importance.
+    It first counts the number of connections for each city, then assigns values to cities based on their connection
+    count in ascending order.
+    This ensures that cities with more connections receive higher values, maximizing the overall importance.
+    The algorithm works in three main steps, it first counts the connections for each city, then sorts the cities by
+    their connection count, and finally assigns values and calculates the total importance.
+
+    The time complexity is O(m + n log n), where `n` is the number of cities and `m` is the number of roads.
+    This is due to first counting the connections (O(m)), then sorting the cities (O(n log n)), and finally calculating
+    the total importance (O(n)).
+    In the worst case, `m` could be O(n^2), but is constrained in this problem.
+
+    The space complexity is O(n) for storing the `city_connections` list and O(n) for the sorting operation (Python's
+    Timsort).
+    """
     # Count the number of connections for each city
     city_connections = [0] * n
     for road in roads:
