@@ -546,9 +546,20 @@ def balanceBST2(root: TreeNode) -> TreeNode:
 # graph.
 
 def findCenter1(edges: List[List[int]]) -> int:
-    first_edge, second_edge = edges[0], edges[1]
+    """
+    Determines the center node of a star graph given its edges.
 
-    return first_edge[0] if first_edge[0] in second_edge else first_edge[1]  # Works because u_i and v_i are unique
+    This function leverages the unique property of a star graph where the center node is connected to all other nodes.
+    By comparing just two edges, we can identify the common node, which must be the center.
+    This approach is highly efficient as it only needs to examine two edges regardless of the graph's size.
+
+    The time complexity of this solution is O(1) because it performs a constant number of operations regardless of
+    the input size.
+    The space complexity is also O(1) as it only uses a fixed amount of additional memory.
+    """
+    reference_edge, comparison_edge = edges[0], edges[1]
+    # The center node is the common node between the two edges
+    return reference_edge[0] if reference_edge[0] in comparison_edge else reference_edge[1]
 
 
 # <------------------------------------------------- June 28th, 2024 ------------------------------------------------->
