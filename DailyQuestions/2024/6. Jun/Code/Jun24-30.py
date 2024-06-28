@@ -600,15 +600,14 @@ def maximumImportance1(n: int, roads: List[List[int]]) -> int:
     This is due to first counting the connections (O(m)), then sorting the cities (O(n log n)), and finally calculating
     the total importance (O(n)).
     In the worst case, `m` could be O(n^2), but is constrained in this problem.
-
     The space complexity is O(n) for storing the `city_connections` list and O(n) for the sorting operation (Python's
     Timsort).
     """
     # Count the number of connections for each city
     city_connections = [0] * n
-    for road in roads:
-        city_connections[road[0]] += 1
-        city_connections[road[1]] += 1
+    for city1, city2 in roads:
+        city_connections[city1] += 1
+        city_connections[city2] += 1
 
     total_importance = 0
     city_value = 1
