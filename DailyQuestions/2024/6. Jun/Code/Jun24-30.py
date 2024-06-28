@@ -546,20 +546,34 @@ def balanceBST2(root: TreeNode) -> TreeNode:
 # graph.
 
 def findCenter1(edges: List[List[int]]) -> int:
-    """
-    Determines the center node of a star graph given its edges.
+    print("\n--- Input Parameters ---")
+    print(f"\tedges = {edges}")
 
-    This function leverages the unique property of a star graph where the center node is connected to all other nodes.
-    By comparing just two edges, we can identify the common node, which must be the center.
-    This approach is highly efficient as it only needs to examine two edges regardless of the graph's size.
+    print("\n--- Initialization ---")
+    reference_edge = edges[0]
+    comparison_edge = edges[1]
+    print(f"\treference_edge = {reference_edge}")
+    print(f"\tcomparison_edge = {comparison_edge}")
 
-    The time complexity of this solution is O(1) because it performs a constant number of operations regardless of
-    the input size.
-    The space complexity is also O(1) as it only uses a fixed amount of additional memory.
-    """
-    reference_edge, comparison_edge = edges[0], edges[1]
-    # The center node is the common node between the two edges
-    return reference_edge[0] if reference_edge[0] in comparison_edge else reference_edge[1]
+    print("\n--- Center Node Identification ---")
+    print(f"\tChecking if {reference_edge[0]} is in {comparison_edge}")
+    if reference_edge[0] in comparison_edge:
+        center = reference_edge[0]
+        print(f"\t\tCondition true: {reference_edge[0]} is in {comparison_edge}")
+        print(f"\t\tCenter node identified: {center}")
+    else:
+        center = reference_edge[1]
+        print(f"\t\tCondition false: {reference_edge[0]} is not in {comparison_edge}")
+        print(f"\t\tCenter node must be the other node in reference_edge: {center}")
+
+    print("\n--- Decision Summary ---")
+    headers = ["Reference Edge", "Comparison Edge", "Condition", "Center Node"]
+    data = [[reference_edge, comparison_edge, f"{reference_edge[0]} in {comparison_edge}", center]]
+    print(tabulate(data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tReturning center node: {center}")
+    return center
 
 
 # <------------------------------------------------- June 28th, 2024 ------------------------------------------------->
