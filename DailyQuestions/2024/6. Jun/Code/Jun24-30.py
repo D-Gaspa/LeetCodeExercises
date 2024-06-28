@@ -537,17 +537,16 @@ def balanceBST2(root: TreeNode) -> TreeNode:
 
 
 # <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
-# 4. Problem
+# 1791. Find Center of Star Graph
 
-# Description
+# Given an undirected star graph of n nodes labeled from 1 to n, represented by a 2D integer array edges where each
+# edges[i] = [u_i, v_i] indicates an edge between nodes u_i and v_i, the task is to return the center of this star
+# graph.
 
+def findCenter1(edges: List[List[int]]) -> int:
+    first_edge, second_edge = edges[0], edges[1]
 
-def problem4_1():
-    pass
-
-
-def problem4_2():
-    pass
+    return first_edge[0] if first_edge[0] in second_edge else first_edge[1]  # Works because u_i and v_i are unique
 
 
 # <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
@@ -613,10 +612,12 @@ def problem7_2():
 # Test cases for June 26th, 2024
 # Expected output:
 # TreeNode(3, left=TreeNode(2, left=TreeNode(1), right=TreeNode()), right=TreeNode(4))
-# balanceBST1(root=TreeNode(val=4, left=TreeNode(val=3, left=TreeNode(val=2, right=TreeNode(left=TreeNode(val=1))))))
+# balanceBST1(root=TreeNode(val=4, left=TreeNode(val=3, left=TreeNode(val=2, right=TreeNode(left=1)))))
 # balanceBST2(root=TreeNode(val=4, left=TreeNode(val=3, left=TreeNode(val=2, right=TreeNode(left=TreeNode(val=1))))))
 
 # Test cases for June 27th, 2024
+# Expected output: 1
+# findCenter1(edges=[[1, 2], [5, 1], [1, 3], [1, 4]])
 
 # Test cases for June 28th, 2024
 
