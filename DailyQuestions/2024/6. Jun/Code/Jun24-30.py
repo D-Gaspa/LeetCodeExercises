@@ -586,11 +586,21 @@ def findCenter1(edges: List[List[int]]) -> int:
 
 
 def maximumImportance1(n: int, roads: List[List[int]]) -> int:
-    pass
+    # Count the number of connections for each city
+    city_connections = [0] * n
+    for road in roads:
+        city_connections[road[0]] += 1
+        city_connections[road[1]] += 1
 
+    total_importance = 0
+    city_value = 1
 
-def maximumImportance2(n: int, roads: List[List[int]]) -> int:
-    pass
+    # Assign values to cities based on their number of connections
+    for connections in sorted(city_connections):
+        total_importance += city_value * connections
+        city_value += 1
+
+    return total_importance
 
 
 # <------------------------------------------------- June 29th, 2024 ------------------------------------------------->
@@ -650,6 +660,8 @@ def problem7_2():
 # findCenter1(edges=[[1, 2], [5, 1], [1, 3], [1, 4]])
 
 # Test cases for June 28th, 2024
+# Expected output: 43
+# maximumImportance1(n=5, roads=[[0, 1], [1, 2], [2, 3], [0, 2], [1, 3], [2, 4]])
 
 # Test cases for June 29th, 2024
 
