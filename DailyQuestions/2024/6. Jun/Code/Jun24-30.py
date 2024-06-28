@@ -586,37 +586,62 @@ def findCenter1(edges: List[List[int]]) -> int:
 
 
 def maximumImportance1(n: int, roads: List[List[int]]) -> int:
-    """
-    Calculates the maximum total importance of all roads in a country with `n` cities and `roads` connecting them.
+    print("\n--- Input Parameters ---")
+    print(f"\tn = {n}")
+    print(f"\troads = {roads}")
 
-    This function uses a greedy approach to maximize the total importance.
-    It first counts the number of connections for each city, then assigns values to cities based on their connection
-    count in ascending order.
-    This ensures that cities with more connections receive higher values, maximizing the overall importance.
-    The algorithm works in three main steps, it first counts the connections for each city, then sorts the cities by
-    their connection count, and finally assigns values and calculates the total importance.
-
-    The time complexity is O(m + n log n), where `n` is the number of cities and `m` is the number of roads.
-    This is due to first counting the connections (O(m)), then sorting the cities (O(n log n)), and finally calculating
-    the total importance (O(n)).
-    In the worst case, `m` could be O(n^2), but is constrained in this problem.
-    The space complexity is O(n) for storing the `city_connections` list and O(n) for the sorting operation (Python's
-    Timsort).
-    """
-    # Count the number of connections for each city
+    print("\n--- Initialization ---")
     city_connections = [0] * n
-    for city1, city2 in roads:
+    print(f"\tcity_connections = {city_connections}")
+
+    print("\n--- Counting Connections ---")
+    for i, (city1, city2) in enumerate(roads):
+        print(f"\n--- Road {i + 1}/{len(roads)} ---")
+        print(f"\tProcessing road: {city1} <-> {city2}")
+
+        print(f"\tBefore update: city_connections = {city_connections}")
         city_connections[city1] += 1
         city_connections[city2] += 1
+        print(f"\tAfter update:  city_connections = {city_connections}")
 
+    print("\n--- Connection Count Summary ---")
+    connection_summary = [[city, count] for city, count in enumerate(city_connections)]
+    print(tabulate(connection_summary, headers=["City", "Connections"], tablefmt="fancy_grid"))
+
+    print("\n--- Initializing Result Variables ---")
     total_importance = 0
     city_value = 1
+    print(f"\ttotal_importance = {total_importance}")
+    print(f"\tcity_value = {city_value}")
 
-    # Assign values to cities based on their number of connections
-    for connections in sorted(city_connections):
-        total_importance += city_value * connections
+    print("\n--- Sorting and Importance Calculation ---")
+    sorted_connections = sorted(city_connections)
+    print(f"\tSorted connections: {sorted_connections}")
+
+    iteration_data = []
+    for i, connections in enumerate(sorted_connections):
+        print(f"\n--- City {i + 1}/{n} ---")
+        print(f"\tConnections: {connections}")
+        print(f"\tCurrent city_value: {city_value}")
+
+        importance_contribution = city_value * connections
+        print(f"\tImportance contribution calculation:")
+        print(f"\t\t{city_value} * {connections} = {importance_contribution}")
+
+        total_importance += importance_contribution
+        print(f"\tUpdated total_importance: {total_importance}")
+
+        iteration_data.append([i + 1, connections, city_value, importance_contribution, total_importance])
+
         city_value += 1
+        print(f"\tIncremented city_value for next iteration: {city_value}")
 
+    print("\n--- Iteration Summary ---")
+    headers = ["City #", "Connections", "Assigned Value", "Importance Contribution", "Total Importance"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal total_importance: {total_importance}")
     return total_importance
 
 
