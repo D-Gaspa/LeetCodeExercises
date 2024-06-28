@@ -577,16 +577,19 @@ def findCenter1(edges: List[List[int]]) -> int:
 
 
 # <------------------------------------------------- June 28th, 2024 ------------------------------------------------->
-# 5. Problem
+# 2285. Maximum Total Importance of Roads
 
-# Description
+# Given an integer `n` representing the number of cities and a 2D integer array `roads` denoting bidirectional roads
+# between cities, the task is to assign each city a unique value from `1` to `n` such that the sum of the values of two
+# cities connected by a road (the road's importance) is maximized.
+# The goal is to return the maximum total importance of all roads after optimal assignment.
 
 
-def problem5_1():
+def maximumImportance1(n: int, roads: List[List[int]]) -> int:
     pass
 
 
-def problem5_2():
+def maximumImportance2(n: int, roads: List[List[int]]) -> int:
     pass
 
 
