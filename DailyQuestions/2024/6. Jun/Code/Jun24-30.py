@@ -180,7 +180,7 @@ def minKBitFlips2(nums: List[int], k: int) -> int:
 
 def bstToGst1(root: TreeNode) -> TreeNode:
     print("\n--- Input Parameters ---")
-    print(f"\troot = {TreeVisualizer.visualize(root)}")
+    print(f"\troot = {TreeVisualizer.visualize(root, file_name='bstToGst1-Input')}")
 
     print("\n--- Initialization ---")
     cumulative_sum = 0
@@ -231,13 +231,13 @@ def bstToGst1(root: TreeNode) -> TreeNode:
     print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
 
     print("\n--- Function Returning ---")
-    print(f"\tModified Tree: {TreeVisualizer.visualize(root)}")
+    print(f"\tModified Tree: {TreeVisualizer.visualize(root, file_name='bstToGst1-Output')}")
     return root
 
 
 def bstToGst2(root: TreeNode) -> TreeNode:
     print("\n--- Input Parameters ---")
-    print(f"\troot = {TreeVisualizer.visualize(root)}")
+    print(f"\troot = {TreeVisualizer.visualize(root, file_name='bstToGst2-Input')}")
 
     print("\n--- Initialization ---")
     stack = []
@@ -291,13 +291,13 @@ def bstToGst2(root: TreeNode) -> TreeNode:
     print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
 
     print("\n--- Function Returning ---")
-    print(f"\tModified Tree: {TreeVisualizer.visualize(root)}")
+    print(f"\tModified Tree: {TreeVisualizer.visualize(root, file_name='bstToGst2-Output')}")
     return root
 
 
 def bstToGst3(root: TreeNode) -> TreeNode:
     print("\n--- Input Parameters ---")
-    print(f"\troot = {TreeVisualizer.visualize(root)}")
+    print(f"\troot = {TreeVisualizer.visualize(root, file_name='bstToGst3-Input')}")
 
     def find_successor(current_node: TreeNode) -> TreeNode:
         print("\n\t--- Finding Successor ---")
@@ -343,7 +343,7 @@ def bstToGst3(root: TreeNode) -> TreeNode:
     print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
 
     print("\n--- Function Returning ---")
-    print(f"\tModified Tree: {TreeVisualizer.visualize(root)}")
+    print(f"\tModified Tree: {TreeVisualizer.visualize(root, file_name='bstToGst3-Output')}")
     return root
 
 
@@ -370,7 +370,7 @@ def update_node_and_move_left(cumulative_sum, current_node, iteration_data):
 
 def balanceBST1(root: TreeNode) -> TreeNode:
     print("\n--- Input Parameters ---")
-    print(f"\troot = {TreeVisualizer.visualize(root)}")
+    print(f"\troot = {TreeVisualizer.visualize(root, file_name='balanceBST1-Input')}")
 
     print("\n--- Initialization ---")
     inorder_nodes = []
@@ -416,85 +416,124 @@ def balanceBST1(root: TreeNode) -> TreeNode:
     balanced_root = build_balanced_bst(0, len(inorder_nodes) - 1)
 
     print("\n--- Function Returning ---")
-    print(f"\tBalanced Tree: {TreeVisualizer.visualize(balanced_root)}")
+    print(f"\tBalanced Tree: {TreeVisualizer.visualize(balanced_root, file_name='balanceBST1-Output')}")
     return balanced_root
 
 
 def balanceBST2(root: TreeNode) -> TreeNode:
-    """
-    Converts an unbalanced binary search tree (BST) into a balanced one.
+    print("\n--- Input Parameters ---")
+    print(f"\tInitial Tree:\n{TreeVisualizer.visualize(root, file_name='balanceBST2-Input')}")
 
-    This function implements the Day-Stout-Warren (DSW) algorithm to balance a BST in three main steps:
-    1. Convert the BST into a "vine" (a right-skewed tree)
-    2. Determine the number of nodes needed for a perfect binary tree
-    3. Perform a series of left rotations to balance the tree
-
-    The DSW algorithm achieves balance through a series of tree rotations,
-    without requiring extra space for node storage. It guarantees a balanced
-    tree with a height of O(log n).
-
-    The time complexity of this solution is O(n), where `n` is the number of nodes.
-    Despite multiple passes through the tree, each node is processed a constant
-    number of times.
-    The space complexity is O(1), as it uses only a constant amount of extra space,
-    regardless of the input size. This is a key advantage over methods that require
-    O(n) auxiliary space.
-    """
+    right_rotation_count = 0
+    left_rotation_count = 0
+    compression_count = 0
 
     def right_rotate(parent: TreeNode, node: TreeNode) -> None:
-        """Helper function to perform a right rotation on the given node."""
+        nonlocal right_rotation_count
+        right_rotation_count += 1
+        print(f"\n\t--- Right Rotation ---")
+        print(f"\t\tBefore rotation saved at: {TreeVisualizer.visualize(dummy_root.right,
+                                                                        file_name=f"balanceBST2-Right_rot_"
+                                                                                  f"{right_rotation_count}_before")}")
+        print(f"\t\tParent: {parent.val}, Node: {node.val}")
         left_child = node.left
+        print(f"\t\tLeft child: {left_child.val}")
         node.left = left_child.right
         left_child.right = node
         parent.right = left_child
+        print(f"\t\tAfter rotation saved at: {TreeVisualizer.visualize(dummy_root.right,
+                                                                       file_name=f"balanceBST2-Right_rot_"
+                                                                                 f"{right_rotation_count}_after")}")
 
     def left_rotate(parent: TreeNode, node: TreeNode) -> None:
-        """Helper function to perform a left rotation on the given node."""
+        print(f"\n\t--- Left Rotation ---")
+        nonlocal left_rotation_count
+        left_rotation_count += 1
+        print(f"\t\tBefore rotation saved at: {TreeVisualizer.visualize(dummy_root.right,
+                                                                        file_name=f"balanceBST2-Left_rot_"
+                                                                                  f"{left_rotation_count}_before")}")
+        print(f"\t\tParent: {parent.val}, Node: {node.val}")
         right_child = node.right
+        print(f"\t\tRight child: {right_child.val}")
         node.right = right_child.left
         right_child.left = node
         parent.right = right_child
+        print(f"\t\tAfter rotation saved at: {TreeVisualizer.visualize(dummy_root.right,
+                                                                       file_name=f"balanceBST2-Left_rot_"
+                                                                                 f"{left_rotation_count}_after")}")
 
     def compress_vine(vine_root: TreeNode, rotations: int) -> None:
-        """Helper function to perform a series of left rotations to balance the vine."""
+        print(f"\n\t--- Compressing Vine: {rotations} rotations ---")
+        if rotations > 0:
+            nonlocal compression_count
+            compression_count += 1
+            print(f"\t\tBefore compression saved at: {TreeVisualizer.visualize(dummy_root.right,
+                                                                               file_name=f"balanceBST2-Compression_"
+                                                                                         f"{compression_count}_before"
+                                                                               )}")
+        else:
+            print("\t\tNo rotations needed")
+            return
         current_node = vine_root
-        for _ in range(rotations):
+        for i in range(rotations):
             child = current_node.right
+            print(f"\t\tRotation {i + 1}: Left rotate {current_node.val} and {child.val}")
             left_rotate(current_node, child)
             current_node = current_node.right
+        print(f"\t\tAfter compression saved at: {TreeVisualizer.visualize(dummy_root.right,
+                                                                          file_name=f"balanceBST2-Compression_"
+                                                                                    f"{compression_count}_after")}")
 
-    dummy_root = TreeNode()
+    print("\n--- Initialization ---")
+    dummy_root = TreeNode(val="dummy")
     dummy_root.right = root
     current_node = dummy_root
+    print(f"\tDummy root created and connected to tree root")
 
-    # Step 1: Convert BST to vine (right-leaning linked list)
+    print("\n--- Step 1: Convert BST to vine (right-leaning linked list) ---")
+    vine_nodes = []
     while current_node.right:
         if current_node.right.left:
+            print(f"\tRight rotate needed at node {current_node.right.val}")
             right_rotate(current_node, current_node.right)
         else:
             current_node = current_node.right
+            vine_nodes.append(current_node.val)
+            print(f"\tMoved to next node: {current_node.val}")
 
-    # Step 2: Count nodes and calculate perfect tree size
-    node_count = 0
-    current_node = dummy_root.right
-    while current_node:
-        node_count += 1
-        current_node = current_node.right
+    print("\n\tVine creation complete")
+    print(f"\tVine nodes: {vine_nodes}")
+    print(
+        f"\tFinal vine structure saved at: {TreeVisualizer.visualize(dummy_root.right, file_name='balanceBST2-Vine')}")
 
-    # Calculate the number of nodes in the perfect tree portion
+    print("\n--- Step 2: Count nodes and calculate perfect tree size ---")
+    node_count = len(vine_nodes)
+    print(f"\tTotal node count: {node_count}")
+
     perfect_tree_nodes = 2 ** math.floor(math.log2(node_count + 1)) - 1
+    print(f"\tPerfect tree nodes: {perfect_tree_nodes}")
 
-    # Step 3: Balance the tree through a series of left rotations
-    # Perform initial compression
-    compress_vine(dummy_root, node_count - perfect_tree_nodes)
+    print("\n--- Step 3: Balance the tree through a series of left rotations ---")
+    print("\tPerform initial compression")
+    initial_compressions = node_count - perfect_tree_nodes
+    compress_vine(dummy_root, initial_compressions)
 
-    # Perform remaining compressions
+    print("\n\tPerform remaining compressions")
     remaining_nodes = perfect_tree_nodes
+    compression_rounds = []
     while remaining_nodes > 1:
         remaining_nodes //= 2
         compress_vine(dummy_root, remaining_nodes)
+        compression_rounds.append(remaining_nodes)
 
-    return dummy_root.right
+    print("\n--- Compression Summary ---")
+    print(f"\tInitial compressions: {initial_compressions}")
+    print(f"\tCompression rounds: {compression_rounds}")
+
+    print("\n--- Function Returning ---")
+    balanced_root = dummy_root.right
+    print(f"\tFinal Balanced Tree saved at: {TreeVisualizer.visualize(balanced_root, file_name='balanceBST2-Output')}")
+    return balanced_root
 
 
 # <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
@@ -574,8 +613,8 @@ def problem7_2():
 # Test cases for June 26th, 2024
 # Expected output:
 # TreeNode(3, left=TreeNode(2, left=TreeNode(1), right=TreeNode()), right=TreeNode(4))
-balanceBST1(root=TreeNode(val=1, right=TreeNode(val=2, right=TreeNode(val=3, right=TreeNode(val=4)))))
-# balanceBST2(root=TreeNode(val=1, right=TreeNode(val=2, right=TreeNode(val=3, right=TreeNode(val=4)))))
+# balanceBST1(root=TreeNode(val=4, left=TreeNode(val=3, left=TreeNode(val=2, right=TreeNode(left=TreeNode(val=1))))))
+# balanceBST2(root=TreeNode(val=4, left=TreeNode(val=3, left=TreeNode(val=2, right=TreeNode(left=TreeNode(val=1))))))
 
 # Test cases for June 27th, 2024
 
