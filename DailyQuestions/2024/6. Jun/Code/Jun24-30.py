@@ -378,6 +378,7 @@ def balanceBST1(root: TreeNode) -> TreeNode:
 
     def inorder_traverse(node: TreeNode) -> None:
         if not node:
+            print(f"\t\tNode is None")
             return
         print(f"\n\t--- Traversing Node: {node.val} ---")
         print("\t\tMoving to left child")
@@ -435,8 +436,8 @@ def balanceBST2(root: TreeNode) -> TreeNode:
         print(f"\t\tBefore rotation saved at: {TreeVisualizer.visualize(dummy_root.right,
                                                                         file_name=f"balanceBST2-Right_rot_"
                                                                                   f"{right_rotation_count}_before")}")
-        print(f"\t\tParent: {parent.val}, Node: {node.val}")
         left_child = node.left
+        print(f"\t\tParent: {parent.val}, Node: {node.val}")
         print(f"\t\tLeft child: {left_child.val}")
         node.left = left_child.right
         left_child.right = node
@@ -612,8 +613,8 @@ def problem7_2():
 # Test cases for June 26th, 2024
 # Expected output:
 # TreeNode(3, left=TreeNode(2, left=TreeNode(1), right=TreeNode()), right=TreeNode(4))
-# balanceBST1(root=TreeNode(val=4, left=TreeNode(val=3, left=TreeNode(val=2, right=TreeNode(left=1)))))
-# balanceBST2(root=TreeNode(val=4, left=TreeNode(val=3, left=TreeNode(val=2, right=TreeNode(left=TreeNode(val=1))))))
+balanceBST1(root=TreeNode(val=4, left=TreeNode(val=3, left=TreeNode(val=2, left=TreeNode(val=1)))))
+# balanceBST2(root=TreeNode(val=4, left=TreeNode(val=3, left=TreeNode(val=2, left=TreeNode(val=1)))))
 
 # Test cases for June 27th, 2024
 # Expected output: 1
