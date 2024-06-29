@@ -323,6 +323,23 @@ def maxBoxesInWarehouse2(boxes: List[int], warehouse: List[int]) -> int:
 
 
 def numberOfSpecialSubstrings1(s: str) -> int:
+    """
+    Counts the number of special substrings in the given string.
+
+    This function uses a sliding window approach to efficiently count special substrings.
+    It maintains a set of unique characters in the current window and adjusts the window
+    size as it iterates through the string.
+    The key insight is that it starts with the total number of all possible substrings and then subtracts
+    the count of non-special substrings, which is more efficient than directly counting special substrings.
+
+    The time complexity of this solution is O(n), where `n` is the length of the input string.
+    This is because each character is added to the window once and removed at most once,
+    resulting in a total of O(n) operations.
+    The space complexity is O(k), where `k` is the
+    size of the alphabet (26 for lowercase English letters), as the set stores at most
+    `k` unique characters.
+    Since O(26) is a constant, the space complexity can be considered O(1).
+    """
     window_chars = set()
     left_index = 0
     n = len(s)
@@ -345,21 +362,17 @@ def numberOfSpecialSubstrings1(s: str) -> int:
 
 def numberOfSpecialSubstrings2(s: str) -> int:
     special_substrings_count = 0
-    last_occurrence = [-1] * 26  # Track the last occurrence of each lowercase letter
+    last_occurrence = [-1] * 26
     window_start = 0
 
     for current_index, char in enumerate(s):
         char_index = ord(char) - ord('a')
 
-        # If the current character's last occurrence is within the current window,
-        # move the window start to exclude the previous occurrence
         if last_occurrence[char_index] >= window_start:
             window_start = last_occurrence[char_index] + 1
 
-        # Count special substrings ending at current_index
         special_substrings_count += current_index - window_start + 1
 
-        # Update last occurrence of current character
         last_occurrence[char_index] = current_index
 
     return special_substrings_count
