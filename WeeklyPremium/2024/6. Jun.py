@@ -314,12 +314,13 @@ def maxBoxesInWarehouse2(boxes: List[int], warehouse: List[int]) -> int:
 
 
 # <--------------------------------------------------- Week 4, June --------------------------------------------------->
-# 4. Problem
+# 2743. Count Substrings Without Repeating Character
 
-# Description
+# Given a string s of lowercase English letters, the task is to count the number of substrings (contiguous) that do not
+# contain any repeating characters, referred to as "special" substrings.
 
 
-def problem4_1():
+def numberOfSpecialSubstrings1(s: str) -> int:
     pass
 
 
@@ -344,16 +345,18 @@ def problem5_2():
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
 # Test cases for Week 1, June
-
-# longestCommonSubsequence1(arrays=[[2, 3, 6, 8], [1, 2, 3, 5, 6, 7, 10], [2, 3, 4, 6, 9]]) # Expected output: [2, 3, 6]
-# longestCommonSubsequence2(arrays=[[2, 3, 6, 8], [1, 2, 3, 5, 6, 7, 10], [2, 3, 4, 6, 9]]) # Expected output: [2, 3, 6]
+# Expected output: [2, 3, 6]
+# longestCommonSubsequence1(arrays=[[2, 3, 6, 8], [1, 2, 3, 5, 6, 7, 10], [2, 3, 4, 6, 9]])
+# longestCommonSubsequence2(arrays=[[2, 3, 6, 8], [1, 2, 3, 5, 6, 7, 10], [2, 3, 4, 6, 9]])
 
 # Test cases for Week 2, June
-# numberOfSubstrings1(s="abacabd")  # Expected output: 11
+# Expected output: 11
+# numberOfSubstrings1(s="abacabd")
 
 # Test cases for Week 3, June
-# maxBoxesInWarehouse1(boxes=[4, 3, 4, 1], warehouse=[5, 3, 3, 4, 1])  # Expected output: 3
-# maxBoxesInWarehouse2(boxes=[5, 4, 3, 2, 1], warehouse=[4, 3, 1, 5, 2, 3])  # Expected output: 4
+# Expected output: 4
+# maxBoxesInWarehouse1(boxes=[5, 4, 3, 2, 1], warehouse=[4, 3, 1, 5, 2, 3])
+# maxBoxesInWarehouse2(boxes=[5, 4, 3, 2, 1], warehouse=[4, 3, 1, 5, 2, 3])
 
 # Test cases for Week 4, June
 
