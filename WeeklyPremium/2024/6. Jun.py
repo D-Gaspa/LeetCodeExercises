@@ -344,7 +344,25 @@ def numberOfSpecialSubstrings1(s: str) -> int:
 
 
 def numberOfSpecialSubstrings2(s: str) -> int:
-    pass
+    special_substrings_count = 0
+    last_occurrence = [-1] * 26  # Track the last occurrence of each lowercase letter
+    window_start = 0
+
+    for current_index, char in enumerate(s):
+        char_index = ord(char) - ord('a')
+
+        # If the current character's last occurrence is within the current window,
+        # move the window start to exclude the previous occurrence
+        if last_occurrence[char_index] >= window_start:
+            window_start = last_occurrence[char_index] + 1
+
+        # Count special substrings ending at current_index
+        special_substrings_count += current_index - window_start + 1
+
+        # Update last occurrence of current character
+        last_occurrence[char_index] = current_index
+
+    return special_substrings_count
 
 
 # <--------------------------------------------------- Week 5, June --------------------------------------------------->
