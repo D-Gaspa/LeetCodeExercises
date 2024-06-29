@@ -323,40 +323,56 @@ def maxBoxesInWarehouse2(boxes: List[int], warehouse: List[int]) -> int:
 
 
 def numberOfSpecialSubstrings1(s: str) -> int:
-    """
-    Counts the number of special substrings in the given string.
+    print("\n--- Input Parameters ---")
+    print(f"\ts = {s}")
 
-    This function uses a sliding window approach to efficiently count special substrings.
-    It maintains a set of unique characters in the current window and adjusts the window
-    size as it iterates through the string.
-    The key insight is that it starts with the total number of all possible substrings and then subtracts
-    the count of non-special substrings, which is more efficient than directly counting special substrings.
-
-    The time complexity of this solution is O(n), where `n` is the length of the input string.
-    This is because each character is added to the window once and removed at most once,
-    resulting in a total of O(n) operations.
-    The space complexity is O(k), where `k` is the
-    size of the alphabet (26 for lowercase English letters), as the set stores at most
-    `k` unique characters.
-    Since O(26) is a constant, the space complexity can be considered O(1).
-    """
+    print("\n--- Initialization ---")
     window_chars = set()
     left_index = 0
     n = len(s)
-
     potential_special_substrings = n * (n + 1) // 2
+    print(f"\twindow_chars = {window_chars}")
+    print(f"\tleft_index = {left_index}")
+    print(f"\tn = {n}")
+    print(f"\tpotential_special_substrings = {n} * ({n} + 1) // 2 = {potential_special_substrings}")
 
-    for current_char in s:
-        # Shrink window until current_char is unique
+    print("\n--- Main Loop ---")
+    iteration_data = []
+    for right_index, current_char in enumerate(s):
+        print(f"\n--- Character {right_index + 1}/{n}: '{current_char}' ---")
+        print(f"\tCurrent state: window_chars = {window_chars}, left_index = {left_index}")
+
+        print(f"\tShrinking window if '{current_char}' is already in window:")
+        if current_char not in window_chars:
+            print(f"\t\tCharacter '{current_char}' not in window.")
         while current_char in window_chars:
+            print(f"\t\tCharacter '{current_char}' already in window.")
+            print(f"\t\tRemoving '{s[left_index]}' from window_chars")
             window_chars.remove(s[left_index])
             left_index += 1
+            print(f"\t\tUpdated: window_chars = {window_chars}, left_index = {left_index}")
 
-        # Subtract non-special substrings ending at current position
-        potential_special_substrings -= left_index
+        print("\tCounting non-special substrings:")
+        non_special = left_index
+        print(f"\t\tNon-special substrings ending at current position: {non_special}")
+        print(f"\t\tUpdated potential_special_substrings = {potential_special_substrings} - {non_special} = "
+              f"{potential_special_substrings - non_special}")
+        potential_special_substrings -= non_special
 
+        print("\tUpdating window:")
+        print(f"\t\tAdding '{current_char}' to window_chars")
         window_chars.add(current_char)
+        print(f"\t\tUpdated window_chars: {window_chars}")
 
+        iteration_data.append(
+            [right_index + 1, current_char, left_index, list(window_chars), non_special, potential_special_substrings])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Position", "Character", "Left Index", "Window Chars", "Non-special Count", "Potential Special"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal count of special substrings: {potential_special_substrings}")
     return potential_special_substrings
 
 
@@ -429,7 +445,7 @@ def splitBST2(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]
 
 # Test cases for Week 4, June
 # Expected output: 7
-# numberOfSpecialSubstrings1(s="abab")
+numberOfSpecialSubstrings1(s="abab")
 # numberOfSpecialSubstrings2(s="abab")
 
 # Test cases for Week 5, June
