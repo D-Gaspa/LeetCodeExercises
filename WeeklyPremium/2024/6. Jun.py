@@ -1,8 +1,10 @@
 import bisect
 from collections import defaultdict
-from typing import List
+from typing import List, Optional
 
 from tabulate import tabulate
+
+from Utils.trees_utils import TreeNode
 
 
 # June, 2024
@@ -324,21 +326,25 @@ def numberOfSpecialSubstrings1(s: str) -> int:
     pass
 
 
-def problem4_2():
+def numberOfSpecialSubstrings2(s: str) -> int:
     pass
 
 
 # <--------------------------------------------------- Week 5, June --------------------------------------------------->
-# 5. Problem
+# 776. Split BST
 
-# Description
+# Given a binary search tree (BST) `root` and an integer `target`, the task is to split the BST into two subtrees such
+# that the first subtree contains nodes with values less than or equal to `target`, and the second subtree contains
+# nodes with values greater than `target`.
+# The original tree's structure should be largely preserved.
+# The output should be an array of the two subtree roots in order.
 
 
-def problem5_1():
+def splitBST1(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]:
     pass
 
 
-def problem5_2():
+def splitBST2(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]:
     pass
 
 
@@ -359,5 +365,14 @@ def problem5_2():
 # maxBoxesInWarehouse2(boxes=[5, 4, 3, 2, 1], warehouse=[4, 3, 1, 5, 2, 3])
 
 # Test cases for Week 4, June
+# Expected output: 7
+# numberOfSpecialSubstrings1(s="abab")
+# numberOfSpecialSubstrings2(s="abab")
 
 # Test cases for Week 5, June
+# Expected output: [(TreeNode(2, left=TreeNode(1))),
+#                   TreeNode(4, left=TreeNode(3), right=TreeNode(6, left=TreeNode(5), right=TreeNode(7)))]
+# splitBST1(TreeNode(val=4, left=TreeNode(val=2, left=TreeNode(val=1), right=TreeNode(val=3)),
+#                    right=TreeNode(val=6, left=TreeNode(val=5), right=TreeNode(val=7))), target=2)
+# splitBST2(TreeNode(val=4, left=TreeNode(val=2, left=TreeNode(val=1), right=TreeNode(val=3)),
+#                    right=TreeNode(val=6, left=TreeNode(val=5), right=TreeNode(val=7))), target=2)
