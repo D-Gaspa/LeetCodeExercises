@@ -361,17 +361,32 @@ def numberOfSpecialSubstrings1(s: str) -> int:
 
 
 def numberOfSpecialSubstrings2(s: str) -> int:
+    """
+    Counts the number of special substrings in the given string.
+
+    This function uses a sliding window technique with an array to track character
+    positions.
+    It efficiently counts special substrings by maintaining the most recent valid window for each character encountered.
+    The approach leverages the fact that any substring ending at the current character and starting after the last
+    occurrence of that character is special.
+
+    The time complexity of this solution is O(n), where `n` is the length of the input string.
+    This is achieved by iterating through the string once, with constant-time operations at each step.
+    The space complexity is O(1), as it uses a fixed-size array of 26 elements
+    to store the last occurrences of characters, regardless of the input string's length.
+    """
     special_substrings_count = 0
     last_occurrence = [-1] * 26
-    window_start = 0
+    start_index = 0
 
     for current_index, char in enumerate(s):
         char_index = ord(char) - ord('a')
 
-        if last_occurrence[char_index] >= window_start:
-            window_start = last_occurrence[char_index] + 1
+        if last_occurrence[char_index] >= start_index:
+            start_index = last_occurrence[char_index] + 1
 
-        special_substrings_count += current_index - window_start + 1
+        # Count special substrings ending at `current_index`
+        special_substrings_count += current_index - start_index + 1
 
         last_occurrence[char_index] = current_index
 
