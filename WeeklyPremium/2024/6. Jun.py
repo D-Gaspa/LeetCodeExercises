@@ -386,7 +386,7 @@ def numberOfSpecialSubstrings2(s: str) -> int:
     start_index = 0
     n = len(s)
     print(f"\tspecial_substrings_count = {special_substrings_count}")
-    print(f"\tlast_occurrence = {last_occurrence}")
+    print(f"\tlast_occurrence = {last_occurrence[:5]} + ['...']")
     print(f"\tstart_index = {start_index}")
     print(f"\tn = {n}")
 
