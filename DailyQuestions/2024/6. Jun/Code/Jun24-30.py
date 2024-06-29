@@ -646,16 +646,19 @@ def maximumImportance1(n: int, roads: List[List[int]]) -> int:
 
 
 # <------------------------------------------------- June 29th, 2024 ------------------------------------------------->
-# 6. Problem
+# 2192. All Ancestors of a Node in a Directed Acyclic Graph
 
-# Description
+# Given a positive integer `n` representing the number of nodes in a Directed Acyclic Graph (DAG) and a 2D integer
+# array `edges` denoting unidirectional edges, the task is to return a list where each element is a sorted list of
+# ancestors for the corresponding node.
+# A node `u` is considered an ancestor of node `v` if `u` can reach `v` via a set of edges.
 
 
-def problem6_1():
+def getAncestors1(n: int, edges: List[List[int]]) -> List[List[int]]:
     pass
 
 
-def problem6_2():
+def getAncestors2(n: int, edges: List[List[int]]) -> List[List[int]]:
     pass
 
 
@@ -706,5 +709,12 @@ def problem7_2():
 # maximumImportance1(n=5, roads=[[0, 1], [1, 2], [2, 3], [0, 2], [1, 3], [2, 4]])
 
 # Test cases for June 29th, 2024
+# Expected output: [[], [], [], {0, 1}, [0, 2], [0, 1, 3], [0, 1, 2, 3, 4], [0, 1, 2, 3]]
+getAncestors1(n=8, edges=[[0, 3], [0, 4], [1, 3], [2, 4], [2, 7], [3, 5], [3, 6], [3, 7], [4, 6]])
+getAncestors2(n=8, edges=[[0, 3], [0, 4], [1, 3], [2, 4], [2, 7], [3, 5], [3, 6], [3, 7], [4, 6]])
+
+# Expected output: [[], [0], [0, 1], [0, 1, 2], [0, 1, 2, 3]]
+getAncestors1(n=5, edges=[[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 4]])
+getAncestors2(n=5, edges=[[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 4]])
 
 # Test cases for June 30th, 2024
