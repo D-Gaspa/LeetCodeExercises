@@ -471,7 +471,7 @@ def splitBST2(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]
 # Test cases for Week 4, June
 # Expected output: 7
 # numberOfSpecialSubstrings1(s="abab")
-numberOfSpecialSubstrings2(s="abab")
+# numberOfSpecialSubstrings2(s="abab")
 
 # Test cases for Week 5, June
 # Expected output: [(TreeNode(2, left=TreeNode(1))),
