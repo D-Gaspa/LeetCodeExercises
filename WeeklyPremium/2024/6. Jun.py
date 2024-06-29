@@ -377,35 +377,60 @@ def numberOfSpecialSubstrings1(s: str) -> int:
 
 
 def numberOfSpecialSubstrings2(s: str) -> int:
-    """
-    Counts the number of special substrings in the given string.
+    print("\n--- Input Parameters ---")
+    print(f"\ts = {s}")
 
-    This function uses a sliding window technique with an array to track character
-    positions.
-    It efficiently counts special substrings by maintaining the most recent valid window for each character encountered.
-    The approach leverages the fact that any substring ending at the current character and starting after the last
-    occurrence of that character is special.
-
-    The time complexity of this solution is O(n), where `n` is the length of the input string.
-    This is achieved by iterating through the string once, with constant-time operations at each step.
-    The space complexity is O(1), as it uses a fixed-size array of 26 elements
-    to store the last occurrences of characters, regardless of the input string's length.
-    """
+    print("\n--- Initialization ---")
     special_substrings_count = 0
     last_occurrence = [-1] * 26
     start_index = 0
+    n = len(s)
+    print(f"\tspecial_substrings_count = {special_substrings_count}")
+    print(f"\tlast_occurrence = {last_occurrence}")
+    print(f"\tstart_index = {start_index}")
+    print(f"\tn = {n}")
 
+    print("\n--- Main Loop ---")
+    iteration_data = []
     for current_index, char in enumerate(s):
-        char_index = ord(char) - ord('a')
+        print(f"\n--- Character {current_index + 1}/{n}: '{char}' ---")
+        print(f"\tCurrent state: start_index = {start_index}, special_substrings_count = {special_substrings_count}")
 
+        print("\tCalculating character index:")
+        char_index = ord(char) - ord('a')
+        print(f"\t\tchar_index = ord('{char}') - ord('a') = {ord(char)} - {ord('a')} = {char_index}")
+
+        print("\tChecking if character occurred within current window:")
         if last_occurrence[char_index] >= start_index:
             start_index = last_occurrence[char_index] + 1
+            print(f"\t\tCharacter '{char}' occurred within current window.")
+            print(f"\t\tUpdating start_index to {start_index}")
+        else:
+            print(f"\t\tNo adjustment needed. '{char}' not in current window.")
 
-        # Count special substrings ending at `current_index`
-        special_substrings_count += current_index - start_index + 1
+        print("\tCounting special substrings:")
+        new_special_substrings = current_index - start_index + 1
+        special_substrings_count += new_special_substrings
+        print(f"\t\tNew special substrings ending at current position: {new_special_substrings}")
+        print(
+            f"\t\tCalculation: current_index ({current_index}) - start_index"
+            f" ({start_index}) + 1 = {new_special_substrings}")
+        print(f"\t\tUpdated special_substrings_count: {special_substrings_count}")
 
+        print("\tUpdating last occurrence:")
+        print(f"\t\tSetting last_occurrence[{char_index}] to {current_index}")
         last_occurrence[char_index] = current_index
 
+        iteration_data.append(
+            [current_index + 1, char, char_index, start_index, new_special_substrings, special_substrings_count,
+             f'{last_occurrence.copy()[:5]} + ["..."]'])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Position", "Character", "Char Index", "Start Index", "New Special", "Total Special", "Last Occurrence"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal count of special substrings: {special_substrings_count}")
     return special_substrings_count
 
 
@@ -445,8 +470,8 @@ def splitBST2(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]
 
 # Test cases for Week 4, June
 # Expected output: 7
-numberOfSpecialSubstrings1(s="abab")
-# numberOfSpecialSubstrings2(s="abab")
+# numberOfSpecialSubstrings1(s="abab")
+numberOfSpecialSubstrings2(s="abab")
 
 # Test cases for Week 5, June
 # Expected output: [(TreeNode(2, left=TreeNode(1))),
