@@ -323,7 +323,24 @@ def maxBoxesInWarehouse2(boxes: List[int], warehouse: List[int]) -> int:
 
 
 def numberOfSpecialSubstrings1(s: str) -> int:
-    pass
+    window_chars = set()
+    left_index = 0
+    n = len(s)
+
+    potential_special_substrings = n * (n + 1) // 2
+
+    for current_char in s:
+        # Shrink window until current_char is unique
+        while current_char in window_chars:
+            window_chars.remove(s[left_index])
+            left_index += 1
+
+        # Subtract non-special substrings ending at current position
+        potential_special_substrings -= left_index
+
+        window_chars.add(current_char)
+
+    return potential_special_substrings
 
 
 def numberOfSpecialSubstrings2(s: str) -> int:
