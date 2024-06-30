@@ -660,31 +660,56 @@ def getAncestors1(n: int, edges: List[List[int]]) -> List[List[int]]:
 
     This function uses a depth-first search (DFS) approach to propagate ancestor information
     through the graph.
-    It first builds an adjacency list representation of the graph using
-    a defaultdict, which allows for efficient lookup of a node's direct children.
-    Then, it iterates through each node, propagating it as an ancestor to all of its descendants recursively.
-
-    The time complexity of this solution is O(n * (n + e)), where n is the number of nodes and e is the number of edges.
-    In the worst case, the `propagate_ancestor` function could traverse all nodes and edges in the graph (n + e).
-    The space complexity is O(n + e) for the adjacency list and O(n^2) in the worst case
-    for the ancestors' list, as each node could potentially have all other nodes as ancestors.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tn = {n}")
+    print(f"\tedges = {edges}")
+
+    print("\n--- Initialization ---")
     direct_children = defaultdict(list)
     ancestors: List[List[int]] = [[] for _ in range(n)]
+    print(f"\tdirect_children (initially empty) = {dict(direct_children)}")
+    print(f"\tancestors (initially empty) = {ancestors}")
+
+    print("\n--- Building Adjacency List ---")
     for parent, child in edges:
         direct_children[parent].append(child)
+        print(f"\tAdding edge: parent {parent} -> child {child}")
+        print(f"\tUpdated direct_children = {dict(direct_children)}")
 
     def propagate_ancestor(current_ancestor: int, current_node: int):
         """Helper function to recursively propagate ancestry information from a node to its descendants."""
+        print(f"\n\t--- Propagating ancestor {current_ancestor} from node {current_node} ---")
+        print(f"\t\tCurrent node children: {direct_children[current_node]}")
+        if not direct_children[current_node]:
+            print(f"\t\tNo children for node {current_node}, going back")
+            return
         for child in direct_children[current_node]:
-            # Prevent unnecessary recursion (duplicate ancestors)
+            print(f"\t\tChecking child {child} of node {current_node}")
             if not ancestors[child] or ancestors[child][-1] != current_ancestor:
+                print(f"\t\t\tAdding ancestor {current_ancestor} to node {child}")
                 ancestors[child].append(current_ancestor)
+                print(f"\t\t\tUpdated ancestors[{child}] = {ancestors[child]}")
+                print(f"\t\t\tRecursively propagating to descendants of {child}")
                 propagate_ancestor(current_ancestor, child)
+            else:
+                print(f"\t\t\tSkipping: {current_ancestor} is already an ancestor of {child}")
 
+    print("\n--- Main Loop: Propagating Ancestors ---")
+    iteration_data = []
     for node in range(n):
+        print(f"\n--- Processing Node {node}/{n - 1} ---")
+        print(f"\tCurrent ancestors: {ancestors}")
+        print(f"\tPropagating {node} as an ancestor")
         propagate_ancestor(node, node)
+        iteration_data.append([node, ancestors[node], [child for child in direct_children[node]]])
 
+    print("\n--- Iteration Summary ---")
+    headers = ["Node", "Ancestors", "Direct Children"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal ancestors list: {ancestors}")
     return ancestors
 
 
@@ -835,9 +860,9 @@ def problem7_2():
 # maximumImportance1(n=5, roads=[[0, 1], [1, 2], [2, 3], [0, 2], [1, 3], [2, 4]])
 
 # Test cases for June 29th, 2024
-# Expected output: [[], [], [], {0, 1}, [0, 2], [0, 1, 3], [0, 1, 2, 3, 4], [0, 1, 2, 3]]
-getAncestors1(n=8, edges=[[0, 3], [0, 4], [1, 3], [2, 4], [2, 7], [3, 5], [3, 6], [3, 7], [4, 6]])
-getAncestors2(n=8, edges=[[0, 3], [0, 4], [1, 3], [2, 4], [2, 7], [3, 5], [3, 6], [3, 7], [4, 6]])
-getAncestors3(n=8, edges=[[0, 3], [0, 4], [1, 3], [2, 4], [2, 7], [3, 5], [3, 6], [3, 7], [4, 6]])
+# Expected output: [[], [0], [0, 1], [0, 1, 2], [0, 1, 2, 3]]
+getAncestors1(n=5, edges=[[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 4]])
+getAncestors2(n=5, edges=[[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 4]])
+getAncestors3(n=5, edges=[[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 4]])
 
 # Test cases for June 30th, 2024
