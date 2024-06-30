@@ -486,7 +486,8 @@ def splitBST1(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]
     return [smaller_equal_subtree, greater_subtree]
 
 
-def splitBST2(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]:
+def splitBST2(root: Optional[TreeNode],
+              target: int) -> List[Optional[TreeNode]]:
     """
     Splits a binary search tree (BST) into two subtrees based on a target value.
 
@@ -521,7 +522,8 @@ def splitBST2(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]
     return split_tree(root)
 
 
-def splitBST3(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]:
+def splitBST3(root: Optional[TreeNode],
+              target: int) -> List[Optional[TreeNode]]:
     """
     Splits a binary search tree (BST) into two subtrees based on a target value.
 
@@ -532,11 +534,12 @@ def splitBST3(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]
     avoids recursion and stack usage, making it memory-efficient and
     less prone to stack overflow for very deep trees.
 
-    The time complexity is O(h), where h is the height of the tree.
-    In the worst case (skewed tree), this becomes O(n) where n is the
-    number of nodes. This is because we visit each node at most once,
-    following a single path down the tree. The space complexity is O(1)
-    as it uses only a constant amount of extra space regardless of input size.
+    The time complexity is O(n), where n is the number of nodes in the tree.
+    This is because the function visits every node in the tree exactly once,
+    regardless of the tree's structure. Unlike the previous two approaches,
+    which could potentially skip subtrees, this method always processes all nodes.
+    The space complexity is O(1) as it uses only a constant amount of extra space
+    regardless of input size.
     """
     dummy_smaller_equal = TreeNode()
     dummy_greater = TreeNode()
