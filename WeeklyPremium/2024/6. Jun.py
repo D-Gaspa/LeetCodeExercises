@@ -4,7 +4,7 @@ from typing import List, Optional
 
 from tabulate import tabulate
 
-from Utils.trees_utils import TreeNode
+from Utils.trees_utils import TreeNode, TreeVisualizer
 
 
 # June, 2024
@@ -445,43 +445,106 @@ def numberOfSpecialSubstrings2(s: str) -> int:
 
 
 def splitBST1(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]:
-    """
-    Splits a binary search tree (BST) into two subtrees based on a target value.
+    print("\n--- Input Parameters ---")
+    print(f"\troot = {root.val if root else None}")
+    print(f"\ttarget = {target}")
 
-    This function traverses the BST and reconstructs two separate subtrees:
-    one containing nodes with values less than or equal to the target,
-    and another with nodes greater than the target. The algorithm uses
-    an iterative approach with a stack to maintain the path of traversal.
-    This design choice allows for efficient space usage and avoids
-    recursive call overhead, which could be significant for deep trees.
+    # Visualize the initial tree
+    TreeVisualizer.visualize(root, "initial_tree")
+    print(f"\nInitial tree visualization saved as 'initial_tree.png'")
 
-    The time complexity is O(h), where h is the height of the tree.
-    In the worst case (skewed tree), this becomes O(n) where n is the
-    number of nodes. This is because we traverse down one path of the tree
-    and then back up. The space complexity is also O(h) due to the stack
-    used to store the path, which in the worst case stores all nodes.
-    """
+    print("\n--- Initialization ---")
     smaller_equal_subtree, greater_subtree = None, None
     path_stack = []
+    print(f"\tsmaller_equal_subtree = {smaller_equal_subtree}")
+    print(f"\tgreater_subtree = {greater_subtree}")
+    print(f"\tpath_stack = {path_stack}")
 
-    # Traverse down the tree
+    print("\n--- Traversing Down the Tree ---")
     current = root
+    traversal_data = []
+    iteration = 0
     while current:
+        iteration += 1
+        print(f"\n--- Iteration {iteration} ---")
+        print(f"\tCurrent node value: {current.val}")
         path_stack.append(current)
+        print(f"\tAdded to path_stack: {current.val}")
+        print(f"\tChecking condition: current.val ({current.val}) <= target ({target})")
         if current.val <= target:
+            print(f"\t\tCondition true. Moving to right child.")
             current = current.right
         else:
+            print(f"\t\tCondition false. Moving to left child.")
             current = current.left
+        print(f"\tNew current: {current.val if current else None}")
+        traversal_data.append([iteration, current.val if current else None,
+                               [node.val for node in path_stack],
+                               "Right" if current and current.val <= target else "Left"])
 
-    # Reconstruct subtrees
+    print("\n--- Traversal Summary ---")
+    headers = ["Iteration", "Current Node", "Path Stack", "Direction"]
+    print(tabulate(traversal_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Reconstructing Subtrees ---")
+    reconstruction_data = []
+    iteration = 0
+    se_subtree_iter = 0
+    g_subtree_iter = 0
     while path_stack:
+        iteration += 1
+        print(f"\n--- Iteration {iteration} ---")
+        print(f"\tPath stack: {[node.val for node in path_stack]}")
         node = path_stack.pop()
+        print(f"\tPopped node: {node.val}")
+        print(f"\tChecking condition: node.val ({node.val}) <= target ({target})")
         if node.val <= target:
+            print(f"\t\tCondition true. Adding to smaller_equal_subtree.")
+            print(f"\t\tPrevious smaller_equal_subtree: {smaller_equal_subtree.val if smaller_equal_subtree else None}")
             node.right = smaller_equal_subtree
             smaller_equal_subtree = node
+            se_subtree_if = True
+
+            g_subtree_if = False
+            print(f"\t\tNew smaller_equal_subtree root: {smaller_equal_subtree.val}")
         else:
+            print(f"\t\tCondition false. Adding to greater_subtree.")
+            print(f"\t\tPrevious greater_subtree: {greater_subtree.val if greater_subtree else None}")
             node.left = greater_subtree
             greater_subtree = node
+            se_subtree_if = False
+            g_subtree_if = True
+            print(f"\t\tNew greater_subtree root: {greater_subtree.val}")
+        reconstruction_data.append([iteration, node.val,
+                                    "smaller_equal" if node.val <= target else "greater",
+                                    smaller_equal_subtree.val if smaller_equal_subtree else None,
+                                    greater_subtree.val if greater_subtree else None])
+
+        # Visualize the current state of both subtrees
+        if se_subtree_if:
+            se_subtree_iter += 1
+            TreeVisualizer.visualize(smaller_equal_subtree, f"smaller_equal_subtree_step_{se_subtree_iter}")
+            print(f"\tSmaller/Equal subtree visualization saved as 'smaller_equal_subtree_step_{se_subtree_iter}.png'")
+        if g_subtree_if:
+            g_subtree_iter += 1
+            TreeVisualizer.visualize(greater_subtree, f"greater_subtree_step_{g_subtree_iter}")
+            print(f"\tGreater subtree visualization saved as 'greater_subtree_step_{g_subtree_iter}.png'")
+
+    print("\n--- Reconstruction Summary ---")
+    headers = ["Iteration", "Processed Node", "Subtree Added To", "Smaller/Equal Subtree Root", "Greater Subtree Root"]
+    print(tabulate(reconstruction_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tsmaller_equal_subtree root: {smaller_equal_subtree.val if smaller_equal_subtree else None}")
+    print(f"\tgreater_subtree root: {greater_subtree.val if greater_subtree else None}")
+
+    # Final visualization of both subtrees
+    if smaller_equal_subtree:
+        TreeVisualizer.visualize(smaller_equal_subtree, "final_smaller_equal_subtree")
+        print(f"\nFinal Smaller/Equal subtree visualization saved as 'final_smaller_equal_subtree.png'")
+    if greater_subtree:
+        TreeVisualizer.visualize(greater_subtree, "final_greater_subtree")
+        print(f"\nFinal Greater subtree visualization saved as 'final_greater_subtree.png'")
 
     return [smaller_equal_subtree, greater_subtree]
 
@@ -592,7 +655,9 @@ def splitBST3(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]
 # Test cases for Week 5, June
 # Expected output: [(TreeNode(2, left=TreeNode(1))),
 #                   TreeNode(4, left=TreeNode(3), right=TreeNode(6, left=TreeNode(5), right=TreeNode(7)))]
-# splitBST1(TreeNode(val=4, left=TreeNode(val=2, left=TreeNode(val=1), right=TreeNode(val=3)),
-#                    right=TreeNode(val=6, left=TreeNode(val=5), right=TreeNode(val=7))), target=2)
-splitBST2(TreeNode(val=4, left=TreeNode(val=2, left=TreeNode(val=1), right=TreeNode(val=3)),
+splitBST1(TreeNode(val=4, left=TreeNode(val=2, left=TreeNode(val=1), right=TreeNode(val=3)),
                    right=TreeNode(val=6, left=TreeNode(val=5), right=TreeNode(val=7))), target=2)
+# splitBST2(TreeNode(val=4, left=TreeNode(val=2, left=TreeNode(val=1), right=TreeNode(val=3)),
+#                    right=TreeNode(val=6, left=TreeNode(val=5), right=TreeNode(val=7))), target=2)
+# splitBST3(TreeNode(val=4, left=TreeNode(val=2, left=TreeNode(val=1), right=TreeNode(val=3)),
+#                    right=TreeNode(val=6, left=TreeNode(val=5), right=TreeNode(val=7))), target=2)
