@@ -1,6 +1,6 @@
 # June 2024, Week 5: June 24th - June 30th
 import math
-from collections import deque
+from collections import deque, defaultdict
 from typing import List
 
 from tabulate import tabulate
@@ -655,10 +655,31 @@ def maximumImportance1(n: int, roads: List[List[int]]) -> int:
 
 
 def getAncestors1(n: int, edges: List[List[int]]) -> List[List[int]]:
-    pass
+    direct_children = defaultdict(list)
+    ancestors: List[List[int]] = [[] for _ in range(n)]
+
+    # Build the graph
+    for parent, child in edges:
+        direct_children[parent].append(child)
+
+    def find_ancestors(current_ancestor: int, current_node: int):
+        """Helper function to recursively find and add ancestors for all descendants of the current node."""
+        for child in direct_children[current_node]:
+            if not ancestors[child] or ancestors[child][-1] != current_ancestor:  # Avoid duplicates
+                ancestors[child].append(current_ancestor)
+                find_ancestors(current_ancestor, child)
+
+    for node in range(n):
+        find_ancestors(node, node)
+
+    return ancestors
 
 
 def getAncestors2(n: int, edges: List[List[int]]) -> List[List[int]]:
+    pass
+
+
+def getAncestors3(n: int, edges: List[List[int]]) -> List[List[int]]:
     pass
 
 
@@ -712,9 +733,6 @@ def problem7_2():
 # Expected output: [[], [], [], {0, 1}, [0, 2], [0, 1, 3], [0, 1, 2, 3, 4], [0, 1, 2, 3]]
 getAncestors1(n=8, edges=[[0, 3], [0, 4], [1, 3], [2, 4], [2, 7], [3, 5], [3, 6], [3, 7], [4, 6]])
 getAncestors2(n=8, edges=[[0, 3], [0, 4], [1, 3], [2, 4], [2, 7], [3, 5], [3, 6], [3, 7], [4, 6]])
-
-# Expected output: [[], [0], [0, 1], [0, 1, 2], [0, 1, 2, 3]]
-getAncestors1(n=5, edges=[[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 4]])
-getAncestors2(n=5, edges=[[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 4]])
+getAncestors3(n=8, edges=[[0, 3], [0, 4], [1, 3], [2, 4], [2, 7], [3, 5], [3, 6], [3, 7], [4, 6]])
 
 # Test cases for June 30th, 2024
