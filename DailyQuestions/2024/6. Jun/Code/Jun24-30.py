@@ -715,52 +715,78 @@ def getAncestors1(n: int, edges: List[List[int]]) -> List[List[int]]:
 
 def getAncestors2(n: int, edges: List[List[int]]) -> List[List[int]]:
     """
-    Determines the ancestors of each node in a Directed Acyclic Graph (DAG).
-
-    This function employs a depth-first search (DFS) strategy with memoization to efficiently compute
-    the ancestors of each node.
-    It first constructs a reverse adjacency list (direct_parents) to facilitate upward traversal in the DAG.
-    The core logic lies in the recursive helper function find_all_ancestors,
-    which computes and caches the ancestors for each node.
-
-    The use of sets for intermediate computations ensures efficient union operations and eliminates
-    duplicates, while the final sorting step ensures the required ascending order of ancestors.
-    This approach balances between time efficiency (through memoization and set operations) and
-    space efficiency (by storing only necessary information).
-
-    The time complexity of this solution is O(n * (n + e)), where n is the number of nodes and e
-    is the number of edges.
-    In the worst case, each node might need to traverse all edges to find
-    its ancestors, and the sorting step for each node takes O(n log n) time.
-    The space complexity is O(n^2) in the worst case, where each node could potentially have all
-    other nodes as ancestors, plus O(e) for the direct_parents dictionary.
+    Determines the ancestors of each node in a Directed Acyclic Graph (DAG) using DFS with memoization.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tn = {n}")
+    print(f"\tedges = {edges}")
+
+    print("\n--- Initialization ---")
     direct_parents = defaultdict(list)
     ancestors = [[] for _ in range(n)]
+    print(f"\tdirect_parents (initially empty) = {dict(direct_parents)}")
+    print(f"\tancestors (initially empty) = {ancestors}")
 
+    print("\n--- Building Reverse Adjacency List ---")
     for parent, child in edges:
         direct_parents[child].append(parent)
+        print(f"\tAdding edge: child {child} <- parent {parent}")
+        print(f"\tUpdated direct_parents = {dict(direct_parents)}")
 
     def find_all_ancestors(node: int) -> set:
         """Helper function to recursively find and memoize all ancestors of a given node."""
+        print(f"\n\t--- Finding ancestors for node {node} ---")
         if ancestors[node]:
+            print(f"\t\tAncestors for node {node} already computed: {ancestors[node]}")
             return set(ancestors[node])
 
+        print(f"\t\tComputing ancestors for node {node}")
+        print(f"\t\tDirect parents of node {node}: {direct_parents[node]}")
+        if not direct_parents[node]:
+            print(f"\t\tNo direct parents for node {node}, returning empty set")
+            ancestors[node] = []
+            return set()
         result = set()
         for parent in direct_parents[node]:
-            result.update(find_all_ancestors(parent))
+            print(f"\t\t\tProcessing parent {parent} of node {node}")
+            parent_ancestors = find_all_ancestors(parent)
+            print(f"\t\t\tAncestors of parent {parent}: {parent_ancestors}")
+            print(f"\t\t\tAdding ancestors of parent {parent} to result")
+            result.update(parent_ancestors)
+            print(f"\t\t\tUpdated result: {result}")
+
+        print(f"\t\tAdding direct parents of node {node} to result")
         result.update(direct_parents[node])
+        print(f"\t\tFinal result for node {node}: {result}")
 
         ancestors[node] = list(result)
+        print(f"\t\tUpdated ancestors[{node}] = {ancestors[node]}")
         return result
 
+    print("\n--- Main Loop: Computing Ancestors ---")
+    iteration_data = []
     for node in range(n):
+        print(f"\n--- Processing Node {node}/{n - 1} ---")
         if not ancestors[node]:
+            print(f"\tAncestors for node {node} not yet computed")
             find_all_ancestors(node)
+        else:
+            print(f"\tAncestors for node {node} already computed: {ancestors[node]}")
+        iteration_data.append([node, ancestors[node], direct_parents[node]])
 
+    print("\n--- Sorting Ancestors ---")
     for node in range(n):
+        print(f"\tSorting ancestors for node {node}")
+        print(f"\t\tBefore sorting: {ancestors[node]}")
         ancestors[node].sort()
+        print(f"\t\tAfter sorting: {ancestors[node]}")
 
+    print("\n--- Iteration Summary ---")
+    headers = ["Node", "Ancestors", "Direct Parents"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal ancestors list: {ancestors}")
     return ancestors
 
 
@@ -860,9 +886,9 @@ def problem7_2():
 # maximumImportance1(n=5, roads=[[0, 1], [1, 2], [2, 3], [0, 2], [1, 3], [2, 4]])
 
 # Test cases for June 29th, 2024
-# Expected output: [[], [0], [0, 1], [0, 1, 2], [0, 1, 2, 3]]
-getAncestors1(n=5, edges=[[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 4]])
-getAncestors2(n=5, edges=[[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 4]])
-getAncestors3(n=5, edges=[[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 4]])
+# Expected output: [[], [], [], [0, 1], [0, 2], [0, 1, 3], [0, 1, 2, 3, 4], [0, 1, 2, 3]]
+# getAncestors1(n=8, edges=[[0, 3], [0, 4], [1, 3], [2, 4], [2, 7], [3, 5], [3, 6], [3, 7], [4, 6]])
+getAncestors2(n=8, edges=[[0, 3], [0, 4], [1, 3], [2, 4], [2, 7], [3, 5], [3, 6], [3, 7], [4, 6]])
+getAncestors3(n=8, edges=[[0, 3], [0, 4], [1, 3], [2, 4], [2, 7], [3, 5], [3, 6], [3, 7], [4, 6]])
 
 # Test cases for June 30th, 2024
