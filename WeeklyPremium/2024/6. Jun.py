@@ -471,7 +471,20 @@ def splitBST1(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]
 
 
 def splitBST2(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]:
-    pass
+    def split_tree(node: Optional[TreeNode]) -> List[Optional[TreeNode]]:
+        if not node:
+            return [None, None]
+
+        if node.val <= target:
+            smaller_equal_subtree, greater_subtree = split_tree(node.right)
+            node.right = smaller_equal_subtree
+            return [node, greater_subtree]
+        else:
+            smaller_equal_subtree, greater_subtree = split_tree(node.left)
+            node.left = greater_subtree
+            return [smaller_equal_subtree, node]
+
+    return split_tree(root)
 
 
 def splitBST3(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]:
