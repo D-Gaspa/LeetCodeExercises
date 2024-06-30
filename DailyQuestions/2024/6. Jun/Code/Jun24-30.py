@@ -707,7 +707,30 @@ def getAncestors2(n: int, edges: List[List[int]]) -> List[List[int]]:
 
 
 def getAncestors3(n: int, edges: List[List[int]]) -> List[List[int]]:
-    pass
+    direct_children = defaultdict(list)
+    ancestors = [set() for _ in range(n)]
+    in_degree = [0] * n
+
+    for parent, child in edges:
+        direct_children[parent].append(child)
+        ancestors[child].add(parent)
+        in_degree[child] += 1
+
+    # Initialize queue with nodes having no incoming edges
+    queue = deque(node for node in range(n) if in_degree[node] == 0)
+
+    # Process nodes in topological order
+    while queue:
+        current_node = queue.popleft()
+        for child_node in direct_children[current_node]:
+            # Update ancestors of child node
+            ancestors[child_node].update(ancestors[current_node])
+            in_degree[child_node] -= 1
+            if in_degree[child_node] == 0:
+                queue.append(child_node)
+
+    # Convert sets to sorted lists
+    return [sorted(node_ancestors) for node_ancestors in ancestors]
 
 
 # <------------------------------------------------- June 30th, 2024 ------------------------------------------------->
