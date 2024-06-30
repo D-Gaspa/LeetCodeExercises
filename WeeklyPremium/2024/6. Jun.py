@@ -522,8 +522,7 @@ def splitBST2(root: Optional[TreeNode],
     return split_tree(root)
 
 
-def splitBST3(root: Optional[TreeNode],
-              target: int) -> List[Optional[TreeNode]]:
+def splitBST3(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]:
     """
     Splits a binary search tree (BST) into two subtrees based on a target value.
 
