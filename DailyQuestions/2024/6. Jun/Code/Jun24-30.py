@@ -689,15 +689,35 @@ def getAncestors1(n: int, edges: List[List[int]]) -> List[List[int]]:
 
 
 def getAncestors2(n: int, edges: List[List[int]]) -> List[List[int]]:
+    """
+    Determines the ancestors of each node in a Directed Acyclic Graph (DAG).
+
+    This function employs a depth-first search (DFS) strategy with memoization to efficiently compute
+    the ancestors of each node.
+    It first constructs a reverse adjacency list (direct_parents) to facilitate upward traversal in the DAG.
+    The core logic lies in the recursive helper function find_all_ancestors,
+    which computes and caches the ancestors for each node.
+
+    The use of sets for intermediate computations ensures efficient union operations and eliminates
+    duplicates, while the final sorting step ensures the required ascending order of ancestors.
+    This approach balances between time efficiency (through memoization and set operations) and
+    space efficiency (by storing only necessary information).
+
+    The time complexity of this solution is O(n * (n + e)), where n is the number of nodes and e
+    is the number of edges.
+    In the worst case, each node might need to traverse all edges to find
+    its ancestors, and the sorting step for each node takes O(n log n) time.
+    The space complexity is O(n^2) in the worst case, where each node could potentially have all
+    other nodes as ancestors, plus O(e) for the direct_parents dictionary.
+    """
     direct_parents = defaultdict(list)
     ancestors = [[] for _ in range(n)]
 
-    # Build the graph
     for parent, child in edges:
         direct_parents[child].append(parent)
 
     def find_all_ancestors(node: int) -> set:
-        """Helper function to recursively find all ancestors for a given node. Returns a set of all ancestors."""
+        """Helper function to recursively find and memoize all ancestors of a given node."""
         if ancestors[node]:
             return set(ancestors[node])
 
