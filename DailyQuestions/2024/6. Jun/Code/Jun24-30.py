@@ -792,51 +792,81 @@ def getAncestors2(n: int, edges: List[List[int]]) -> List[List[int]]:
 
 def getAncestors3(n: int, edges: List[List[int]]) -> List[List[int]]:
     """
-    Determines the ancestors of each node in a Directed Acyclic Graph (DAG).
-
-    This function uses a breadth-first search (BFS) approach combined with topological sorting
-    to compute the ancestors of each node.
-    It builds an adjacency list of direct children, initializes ancestor sets, and calculates the
-    in-degree of each node.
-    Then, it uses a queue-based topological sort to process nodes in an order that ensures all ancestors are
-    computed before they're needed.
-
-    The use of sets for storing ancestors allows for efficient update operations and automatic
-    deduplication.
-    The topological sorting approach ensures that each edge is processed only once,
-    which is efficient for sparse graphs.
-    However, for densely connected graphs or worst-case
-    scenarios (like a chain structure), the algorithm's performance may degrade.
-
-    The time complexity of this solution is O(n^2 log n + e) in the worst case, where `n` is the
-    number of nodes and `e` is the number of edges.
-    This occurs when the graph forms a chain, resulting in growing ancestor lists that need to be sorted.
-    In practice, for many graph structures, the performance is often better than this worst-case bound.
-    The space complexity is O(n^2) in the worst case, where each node could potentially have
-    all other nodes as ancestors, plus O(n + e) for the adjacency list, in-degree array, and queue.
+    Determines the ancestors of each node in a Directed Acyclic Graph (DAG) using BFS and topological sorting.
     """
+    print("\n--- Input Parameters ---")
+    print(f"\tn = {n}")
+    print(f"\tedges = {edges}")
+
+    print("\n--- Initialization ---")
     direct_children = defaultdict(list)
     ancestors = [set() for _ in range(n)]
     in_degree = [0] * n
+    print(f"\tdirect_children (initially empty) = {dict(direct_children)}")
+    print(f"\tancestors (initially empty) = {ancestors}")
+    print(f"\tin_degree (initially all zeros) = {in_degree}")
 
+    print("\n--- Building Graph Data Structures ---")
     for parent, child in edges:
         direct_children[parent].append(child)
         ancestors[child].add(parent)
         in_degree[child] += 1
+        print(f"\tProcessing edge: parent {parent} -> child {child}")
+        print(f"\t\tUpdated direct_children[{parent}] = {direct_children[parent]}")
+        print(f"\t\tUpdated ancestors[{child}] = {ancestors[child]}")
+        print(f"\t\tUpdated in_degree[{child}] = {in_degree[child]}")
 
-    # Initialize queue with nodes having no incoming edges
+    print(f"\ndirect_children: {dict(direct_children)}")
+    print(f"ancestors: {ancestors}")
+    print(f"in_degree: {in_degree}")
+
+    print("\n--- Initializing Queue ---")
     queue = deque(node for node in range(n) if in_degree[node] == 0)
+    print(f"\tInitial queue (nodes with in_degree 0): {list(queue)}")
 
-    # Process nodes in topological order
+    print("\n--- Processing Nodes in Topological Order ---")
+    iteration_data = []
     while queue:
         current_node = queue.popleft()
+        print(f"\n\t--- Processing Node {current_node} ---")
+        print(f"\t\tCurrent queue: {list(queue)}")
+        print(f"\t\tCurrent node ancestors: {ancestors[current_node]}")
+        print(f"\t\tCurrent node children: {direct_children[current_node]}")
+
         for child_node in direct_children[current_node]:
+            print(f"\n\t\tProcessing child node {child_node}")
+            print(f"\t\t\tBefore update: ancestors[{child_node}] = {ancestors[child_node]}, "
+                  f"adding ancestors of {current_node} = {ancestors[current_node]}")
             ancestors[child_node].update(ancestors[current_node])
+            print(f"\t\t\tAfter update: ancestors[{child_node}] = {ancestors[child_node]}")
+
+            print(f"\t\t\tUpdated in_degree[{child_node}] = {in_degree[child_node]} - 1 = {in_degree[child_node] - 1}")
             in_degree[child_node] -= 1
+
             if in_degree[child_node] == 0:
                 queue.append(child_node)
+                print(f"\t\t\tAdded node {child_node} to queue")
+                print(f"\t\t\tUpdated queue: {list(queue)}")
 
-    return [sorted(node_ancestors) for node_ancestors in ancestors]
+        iteration_data.append(
+            [current_node, ancestors[current_node], direct_children[current_node], in_degree[current_node]])
+
+    print("\n--- Sorting Ancestors ---")
+    sorted_ancestors = []
+    for node, node_ancestors in enumerate(ancestors):
+        print(f"\tSorting ancestors for node {node}")
+        print(f"\t\tBefore sorting: {node_ancestors}")
+        sorted_node_ancestors = sorted(node_ancestors)
+        print(f"\t\tAfter sorting: {sorted_node_ancestors}")
+        sorted_ancestors.append(sorted_node_ancestors)
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Processed Node", "Ancestors", "Direct Children", "Final In-Degree"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal sorted ancestors list: {sorted_ancestors}")
+    return sorted_ancestors
 
 
 # <------------------------------------------------- June 30th, 2024 ------------------------------------------------->
@@ -888,7 +918,7 @@ def problem7_2():
 # Test cases for June 29th, 2024
 # Expected output: [[], [], [], [0, 1], [0, 2], [0, 1, 3], [0, 1, 2, 3, 4], [0, 1, 2, 3]]
 # getAncestors1(n=8, edges=[[0, 3], [0, 4], [1, 3], [2, 4], [2, 7], [3, 5], [3, 6], [3, 7], [4, 6]])
-getAncestors2(n=8, edges=[[0, 3], [0, 4], [1, 3], [2, 4], [2, 7], [3, 5], [3, 6], [3, 7], [4, 6]])
+# getAncestors2(n=8, edges=[[0, 3], [0, 4], [1, 3], [2, 4], [2, 7], [3, 5], [3, 6], [3, 7], [4, 6]])
 getAncestors3(n=8, edges=[[0, 3], [0, 4], [1, 3], [2, 4], [2, 7], [3, 5], [3, 6], [3, 7], [4, 6]])
 
 # Test cases for June 30th, 2024
