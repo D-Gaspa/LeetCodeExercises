@@ -655,22 +655,35 @@ def maximumImportance1(n: int, roads: List[List[int]]) -> int:
 
 
 def getAncestors1(n: int, edges: List[List[int]]) -> List[List[int]]:
+    """
+    Determines the ancestors of each node in a Directed Acyclic Graph (DAG).
+
+    This function uses a depth-first search (DFS) approach to propagate ancestor information
+    through the graph.
+    It first builds an adjacency list representation of the graph using
+    a defaultdict, which allows for efficient lookup of a node's direct children.
+    Then, it iterates through each node, propagating it as an ancestor to all of its descendants recursively.
+
+    The time complexity of this solution is O(n * (n + e)), where n is the number of nodes and e is the number of edges.
+    In the worst case, the `propagate_ancestor` function could traverse all nodes and edges in the graph (n + e).
+    The space complexity is O(n + e) for the adjacency list and O(n^2) in the worst case
+    for the ancestors' list, as each node could potentially have all other nodes as ancestors.
+    """
     direct_children = defaultdict(list)
     ancestors: List[List[int]] = [[] for _ in range(n)]
-
-    # Build the graph
     for parent, child in edges:
         direct_children[parent].append(child)
 
-    def find_ancestors(current_ancestor: int, current_node: int):
-        """Helper function to recursively find and add ancestors for all descendants of the current node."""
+    def propagate_ancestor(current_ancestor: int, current_node: int):
+        """Helper function to recursively propagate ancestry information from a node to its descendants."""
         for child in direct_children[current_node]:
-            if not ancestors[child] or ancestors[child][-1] != current_ancestor:  # Avoid duplicates
+            # Prevent unnecessary recursion (duplicate ancestors)
+            if not ancestors[child] or ancestors[child][-1] != current_ancestor:
                 ancestors[child].append(current_ancestor)
-                find_ancestors(current_ancestor, child)
+                propagate_ancestor(current_ancestor, child)
 
     for node in range(n):
-        find_ancestors(node, node)
+        propagate_ancestor(node, node)
 
     return ancestors
 
