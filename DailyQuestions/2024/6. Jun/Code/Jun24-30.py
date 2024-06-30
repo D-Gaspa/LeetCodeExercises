@@ -676,7 +676,34 @@ def getAncestors1(n: int, edges: List[List[int]]) -> List[List[int]]:
 
 
 def getAncestors2(n: int, edges: List[List[int]]) -> List[List[int]]:
-    pass
+    direct_parents = defaultdict(list)
+    ancestors = [[] for _ in range(n)]
+
+    # Build the graph
+    for parent, child in edges:
+        direct_parents[child].append(parent)
+
+    def find_all_ancestors(node: int) -> set:
+        """Helper function to recursively find all ancestors for a given node. Returns a set of all ancestors."""
+        if ancestors[node]:
+            return set(ancestors[node])
+
+        result = set()
+        for parent in direct_parents[node]:
+            result.update(find_all_ancestors(parent))
+        result.update(direct_parents[node])
+
+        ancestors[node] = list(result)
+        return result
+
+    for node in range(n):
+        if not ancestors[node]:
+            find_all_ancestors(node)
+
+    for node in range(n):
+        ancestors[node].sort()
+
+    return ancestors
 
 
 def getAncestors3(n: int, edges: List[List[int]]) -> List[List[int]]:
