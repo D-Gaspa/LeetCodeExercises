@@ -445,10 +445,36 @@ def numberOfSpecialSubstrings2(s: str) -> int:
 
 
 def splitBST1(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]:
-    pass
+    smaller_equal_subtree, greater_subtree = None, None
+    path_stack = []
+
+    # Traverse down the tree
+    current = root
+    while current:
+        path_stack.append(current)
+        if current.val <= target:
+            current = current.right
+        else:
+            current = current.left
+
+    # Reconstruct subtrees
+    while path_stack:
+        node = path_stack.pop()
+        if node.val <= target:
+            node.right = smaller_equal_subtree
+            smaller_equal_subtree = node
+        else:
+            node.left = greater_subtree
+            greater_subtree = node
+
+    return [smaller_equal_subtree, greater_subtree]
 
 
 def splitBST2(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]:
+    pass
+
+
+def splitBST3(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]:
     pass
 
 
@@ -478,5 +504,5 @@ def splitBST2(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]
 #                   TreeNode(4, left=TreeNode(3), right=TreeNode(6, left=TreeNode(5), right=TreeNode(7)))]
 # splitBST1(TreeNode(val=4, left=TreeNode(val=2, left=TreeNode(val=1), right=TreeNode(val=3)),
 #                    right=TreeNode(val=6, left=TreeNode(val=5), right=TreeNode(val=7))), target=2)
-# splitBST2(TreeNode(val=4, left=TreeNode(val=2, left=TreeNode(val=1), right=TreeNode(val=3)),
-#                    right=TreeNode(val=6, left=TreeNode(val=5), right=TreeNode(val=7))), target=2)
+splitBST2(TreeNode(val=4, left=TreeNode(val=2, left=TreeNode(val=1), right=TreeNode(val=3)),
+                   right=TreeNode(val=6, left=TreeNode(val=5), right=TreeNode(val=7))), target=2)
