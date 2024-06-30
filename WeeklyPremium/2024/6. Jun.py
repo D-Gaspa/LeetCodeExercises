@@ -488,7 +488,33 @@ def splitBST2(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]
 
 
 def splitBST3(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]:
-    pass
+    dummy_smaller_equal = TreeNode()
+    dummy_greater = TreeNode()
+
+    current_smaller_equal = dummy_smaller_equal
+    current_greater = dummy_greater
+    current_node = root
+
+    while current_node is not None:
+        if current_node.val <= target:
+            current_smaller_equal.right = current_node
+            current_smaller_equal = current_node
+
+            next_node = current_node.right
+            current_smaller_equal.right = None
+        else:
+            current_greater.left = current_node
+            current_greater = current_node
+
+            next_node = current_node.left
+            current_greater.left = None
+
+        current_node = next_node
+
+    smaller_equal_subtree = dummy_smaller_equal.right
+    greater_subtree = dummy_greater.left
+
+    return [smaller_equal_subtree, greater_subtree]
 
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
