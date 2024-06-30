@@ -740,6 +740,27 @@ def getAncestors2(n: int, edges: List[List[int]]) -> List[List[int]]:
 
 
 def getAncestors3(n: int, edges: List[List[int]]) -> List[List[int]]:
+    """
+    Determines the ancestors of each node in a Directed Acyclic Graph (DAG).
+
+    This function uses a breadth-first search (BFS) approach combined with topological sorting
+    to compute the ancestors of each node. It builds an adjacency list of direct children,
+    initializes ancestor sets, and calculates the in-degree of each node. Then, it uses a
+    queue-based topological sort to process nodes in an order that ensures all ancestors are
+    computed before they're needed.
+
+    The use of sets for storing ancestors allows for efficient update operations and automatic
+    deduplication. The topological sorting approach ensures that each edge is processed only once,
+    which is efficient for sparse graphs. However, for densely connected graphs or worst-case
+    scenarios (like a chain structure), the algorithm's performance may degrade.
+
+    The time complexity of this solution is O(n^2 log n + e) in the worst case, where `n` is the
+    number of nodes and `e` is the number of edges. This occurs when the graph forms a chain,
+    resulting in growing ancestor lists that need to be sorted. In practice, for many graph
+    structures, the performance is often better than this worst-case bound.
+    The space complexity is O(n^2) in the worst case, where each node could potentially have
+    all other nodes as ancestors, plus O(n + e) for the adjacency list, in-degree array, and queue.
+    """
     direct_children = defaultdict(list)
     ancestors = [set() for _ in range(n)]
     in_degree = [0] * n
@@ -756,13 +777,11 @@ def getAncestors3(n: int, edges: List[List[int]]) -> List[List[int]]:
     while queue:
         current_node = queue.popleft()
         for child_node in direct_children[current_node]:
-            # Update ancestors of child node
             ancestors[child_node].update(ancestors[current_node])
             in_degree[child_node] -= 1
             if in_degree[child_node] == 0:
                 queue.append(child_node)
 
-    # Convert sets to sorted lists
     return [sorted(node_ancestors) for node_ancestors in ancestors]
 
 
