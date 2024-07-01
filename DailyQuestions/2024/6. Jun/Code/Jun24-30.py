@@ -881,27 +881,45 @@ def getAncestors3(n: int, edges: List[List[int]]) -> List[List[int]]:
 
 
 def maxNumEdgesToRemove1(n: int, edges: List[List[int]]) -> int:
-    alice_graph = UnionFind(size=n, index=1)
-    bob_graph = UnionFind(size=n, index=1)
-    required_edges = 0
+    """
+    Determines the maximum number of edges that can be removed from a graph while maintaining full traversal for
+    both Alice and Bob.
 
+    This function uses the Union-Find data structure to efficiently track connected components for both Alice and Bob.
+    It processes edges in two passes: first type 3 edges (usable by both Alice and Bob), then type 1 and 2 edges
+    (usable by Alice or Bob respectively).
+    This approach prioritizes shared edges, potentially maximizing removable edges.
+    The function tracks "essential" edges that must be kept for full traversal.
+
+    The time complexity is O(α(n) * m), where α(n) is the inverse Ackermann function
+    (nearly constant for all practical values of `n` [number of nodes]), and `m` is the number of edges.
+    This is because each Union-Find operation takes amortized O(α(n)) time, and we perform at most 2m such operations.
+    The space complexity is O(n) for the two UnionFind data structures.
+    """
+
+    alice_uf = UnionFind(size=n, offset=1)
+    bob_uf = UnionFind(size=n, offset=1)
+    essential_edges = 0
+
+    # First pass: process type 3 edges (usable by both Alice and Bob)
     for edge_type, u, v in edges:
         if edge_type == 3:
-            required_edges += alice_graph.union(u, v) | bob_graph.union(u, v)
-            if alice_graph.is_single_component():
-                return len(edges) - required_edges
+            essential_edges += alice_uf.union(u, v) | bob_uf.union(u, v)
+            if alice_uf.is_single_component():
+                return len(edges) - essential_edges
 
+    # Second pass: process type 1 (Alice) and type 2 (Bob) edges
     for edge_type, u, v in edges:
         if edge_type == 1:
-            if alice_graph.union(u, v):
-                required_edges += 1
+            if alice_uf.union(u, v):
+                essential_edges += 1
         elif edge_type == 2:
-            if bob_graph.union(u, v):
-                required_edges += 1
-        if alice_graph.is_single_component() and bob_graph.is_single_component():
-            return len(edges) - required_edges
+            if bob_uf.union(u, v):
+                essential_edges += 1
+        if alice_uf.is_single_component() and bob_uf.is_single_component():
+            return len(edges) - essential_edges
 
-    return -1
+    return -1  # Full traversal is not possible for both Alice and Bob
 
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
