@@ -870,16 +870,20 @@ def getAncestors3(n: int, edges: List[List[int]]) -> List[List[int]]:
 
 
 # <------------------------------------------------- June 30th, 2024 ------------------------------------------------->
-# 7. Problem
+# 1579. Remove Max Number of Edges to Keep Graph Fully Traversable
 
-# Description
+# Alice and Bob have an undirected graph with three types of edges, each type representing who can traverse it.
+# The task is to find the maximum number of edges that can be removed such that the graph can still be fully traversed
+# by both Alice and Bob, or return -1 if it's impossible.
+# Alice can only traverse the first type of edges, Bob can only traverse the second type of edges, and the
+# third type of edges can be traversed by both Alice and Bob.
 
 
-def problem7_1():
+def maxNumEdgesToRemove1(n: int, edges: List[List[int]]) -> int:
     pass
 
 
-def problem7_2():
+def maxNumEdgesToRemove2(n: int, edges: List[List[int]]) -> int:
     pass
 
 
@@ -922,3 +926,14 @@ def problem7_2():
 # getAncestors3(n=8, edges=[[0, 3], [0, 4], [1, 3], [2, 4], [2, 7], [3, 5], [3, 6], [3, 7], [4, 6]])
 
 # Test cases for June 30th, 2024
+# Expected output: 2
+maxNumEdgesToRemove1(n=4, edges=[[3, 1, 2], [3, 2, 3], [1, 1, 3], [1, 2, 4], [1, 1, 2], [2, 3, 4]])
+maxNumEdgesToRemove2(n=4, edges=[[3, 1, 2], [3, 2, 3], [1, 1, 3], [1, 2, 4], [1, 1, 2], [2, 3, 4]])
+
+# Expected output: 0
+maxNumEdgesToRemove1(n=4, edges=[[3, 1, 2], [3, 2, 3], [1, 1, 4], [2, 1, 4]])
+maxNumEdgesToRemove2(n=4, edges=[[3, 1, 2], [3, 2, 3], [1, 1, 4], [2, 1, 4]])
+
+# Expected output: -1
+maxNumEdgesToRemove1(n=4, edges=[[3, 2, 3], [1, 1, 2], [2, 3, 4]])
+maxNumEdgesToRemove2(n=4, edges=[[3, 2, 3], [1, 1, 2], [2, 3, 4]])
