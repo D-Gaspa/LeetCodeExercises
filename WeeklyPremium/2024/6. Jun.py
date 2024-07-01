@@ -664,7 +664,7 @@ def splitBST3(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]
             print(f"\t\tCut off right subtree. Next node: "
                   f"{next_node.val if next_node else None}")
 
-            TreeVisualizer.visualize(dummy_smaller_equal.right, f"smaller_equal_subtree_step_{iteration}")
+            TreeVisualizer.visualize(dummy_smaller_equal, f"smaller_equal_subtree_step_{iteration}")
             print(f"\t\tSmaller/Equal subtree visualization saved as 'smaller_equal_subtree_step_{iteration}.png'")
         else:
             print(f"\t\tCondition false. Adding to greater subtree.")
@@ -676,7 +676,7 @@ def splitBST3(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]
             current_greater.left = None  # Cut off left subtree
             print(f"\t\tCut off left subtree. Next node: {next_node.val if next_node else None}")
 
-            TreeVisualizer.visualize(dummy_greater.left, f"greater_subtree_step_{iteration}")
+            TreeVisualizer.visualize(dummy_greater, f"greater_subtree_step_{iteration}")
             print(f"\t\tGreater subtree visualization saved as 'greater_subtree_step_{iteration}.png'")
 
         current_node = next_node
@@ -737,7 +737,7 @@ def returnSplitBSTResult(greater_subtree, smaller_equal_subtree) -> List[Optiona
 #                   TreeNode(4, left=TreeNode(3), right=TreeNode(6, left=TreeNode(5), right=TreeNode(7)))]
 # splitBST1(TreeNode(val=4, left=TreeNode(val=2, left=TreeNode(val=1), right=TreeNode(val=3)),
 #                    right=TreeNode(val=6, left=TreeNode(val=5), right=TreeNode(val=7))), target=2)
-splitBST2(TreeNode(val=4, left=TreeNode(val=2, left=TreeNode(val=1), right=TreeNode(val=3)),
-                   right=TreeNode(val=6, left=TreeNode(val=5), right=TreeNode(val=7))), target=2)
+# splitBST2(TreeNode(val=4, left=TreeNode(val=2, left=TreeNode(val=1), right=TreeNode(val=3)),
+#                    right=TreeNode(val=6, left=TreeNode(val=5), right=TreeNode(val=7))), target=2)
 # splitBST3(TreeNode(val=4, left=TreeNode(val=2, left=TreeNode(val=1), right=TreeNode(val=3)),
 #                    right=TreeNode(val=6, left=TreeNode(val=5), right=TreeNode(val=7))), target=2)
