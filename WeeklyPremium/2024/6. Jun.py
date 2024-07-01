@@ -737,7 +737,7 @@ def returnSplitBSTResult(greater_subtree, smaller_equal_subtree) -> List[Optiona
 #                   TreeNode(4, left=TreeNode(3), right=TreeNode(6, left=TreeNode(5), right=TreeNode(7)))]
 # splitBST1(TreeNode(val=4, left=TreeNode(val=2, left=TreeNode(val=1), right=TreeNode(val=3)),
 #                    right=TreeNode(val=6, left=TreeNode(val=5), right=TreeNode(val=7))), target=2)
-# splitBST2(TreeNode(val=4, left=TreeNode(val=2, left=TreeNode(val=1), right=TreeNode(val=3)),
-#                    right=TreeNode(val=6, left=TreeNode(val=5), right=TreeNode(val=7))), target=2)
+splitBST2(TreeNode(val=4, left=TreeNode(val=2, left=TreeNode(val=1), right=TreeNode(val=3)),
+                   right=TreeNode(val=6, left=TreeNode(val=5), right=TreeNode(val=7))), target=2)
 # splitBST3(TreeNode(val=4, left=TreeNode(val=2, left=TreeNode(val=1), right=TreeNode(val=3)),
 #                    right=TreeNode(val=6, left=TreeNode(val=5), right=TreeNode(val=7))), target=2)
