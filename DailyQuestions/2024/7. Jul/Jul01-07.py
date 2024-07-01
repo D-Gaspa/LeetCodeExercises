@@ -1,5 +1,6 @@
 # Week 1: July 1st - July 7th
-from typing import List
+
+from tabulate import tabulate
 
 
 # <-------------------------------------------------- July 1st, 2024 -------------------------------------------------->
@@ -9,29 +10,62 @@ from typing import List
 # Otherwise, return `false`.
 
 
-def threeConsecutiveOdds1(arr: List[int]) -> bool:
-    """
-    Determines if there are three consecutive odd numbers in the given array.
+def threeConsecutiveOdds1(arr):
+    print("\n--- Input Parameters ---")
+    print(f"\tarr = {arr}")
 
-    This function iterates through the array once, keeping track of the count of consecutive odd numbers encountered.
-    It uses a single variable 'consecutive_odds' to maintain this count, resetting it to 0 whenever an even number is
-    found. This approach is memory-efficient and allows for a single-pass solution.
-
-    The time complexity of this solution is O(n), where `n` is the length of the input array, because it performs a
-    single iteration through the array in the worst case. The space complexity is O(1) as it uses only a constant
-    amount of extra space regardless of the input size.
-    """
-    if len(arr) < 3:
-        return False
-
+    print("\n--- Initialization ---")
     consecutive_odds = 0
-    for num in arr:
+    print(f"\tconsecutive_odds = {consecutive_odds}")
+
+    print("\n--- Input Validation ---")
+    if len(arr) < 3:
+        print(f"\tArray length ({len(arr)}) is less than 3")
+        print("\tReturning False")
+        return False
+    else:
+        print(f"\tArray length ({len(arr)}) is valid")
+
+    print("\n--- Main Loop ---")
+    iteration_data = []
+    process_finished = False
+    for i, num in enumerate(arr):
+        print(f"\n--- Element {i + 1}/{len(arr)} ---")
+        print(f"\tCurrent number: {num}")
+        print(f"\tconsecutive_odds at start: {consecutive_odds}")
+
+        print("\tChecking if number is odd:")
         if num % 2:
+            print(f"\t\t{num} is odd (remainder when divided by 2 is {num % 2})")
             consecutive_odds += 1
+            print(f"\t\tIncrementing consecutive_odds to {consecutive_odds}")
         else:
+            print(f"\t\t{num} is even (remainder when divided by 2 is {num % 2})")
             consecutive_odds = 0
+            print(f"\t\tResetting consecutive_odds to {consecutive_odds}")
+
+        print("\tChecking if three consecutive odds found:")
         if consecutive_odds == 3:
-            return True
+            print("\t\tThree consecutive odds found!")
+            print("\t\tReturning True")
+            process_finished = True
+            iteration_data.append([i + 1, num, "Odd" if num % 2 else "Even", consecutive_odds])
+            break
+        else:
+            print(f"\t\tNot yet three consecutive odds (current count: {consecutive_odds})")
+
+        iteration_data.append([i + 1, num, "Odd" if num % 2 else "Even", consecutive_odds])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Element", "Number", "Odd/Even", "Consecutive Odds"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    if process_finished:
+        return True
+
+    print("\n--- Function Returning ---")
+    print("\tThree consecutive odds not found in the entire array")
+    print("\tReturning False")
     return False
 
 
@@ -122,10 +156,8 @@ def problem7_2():
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
 # Test cases for July 1st, 2024
-# Expected output: False
-print(threeConsecutiveOdds1(arr=[2, 6, 4, 1]))
 # Expected output: True
-print(threeConsecutiveOdds1(arr=[1, 2, 34, 3, 4, 5, 7, 23, 12]))
+threeConsecutiveOdds1(arr=[1, 2, 34, 3, 4, 5, 7, 23, 12])
 
 # Test cases for July 2nd, 2024
 
