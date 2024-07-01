@@ -10,19 +10,28 @@ from typing import List
 
 
 def threeConsecutiveOdds1(arr: List[int]) -> bool:
-    n = len(arr)
-    if n < 3:
+    """
+    Determines if there are three consecutive odd numbers in the given array.
+
+    This function iterates through the array once, keeping track of the count of consecutive odd numbers encountered.
+    It uses a single variable 'consecutive_odds' to maintain this count, resetting it to 0 whenever an even number is
+    found. This approach is memory-efficient and allows for a single-pass solution.
+
+    The time complexity of this solution is O(n), where `n` is the length of the input array, because it performs a
+    single iteration through the array in the worst case. The space complexity is O(1) as it uses only a constant
+    amount of extra space regardless of the input size.
+    """
+    if len(arr) < 3:
         return False
 
     consecutive_odds = 0
-    for index in range(n):
-        if arr[index] % 2:
+    for num in arr:
+        if num % 2:
             consecutive_odds += 1
         else:
             consecutive_odds = 0
         if consecutive_odds == 3:
             return True
-
     return False
 
 
