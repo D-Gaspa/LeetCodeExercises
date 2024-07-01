@@ -45,3 +45,78 @@ class UnionFind:
     def is_single_component(self) -> bool:
         """Checks if all elements are in a single set."""
         return self.num_components == 1
+
+
+class UnionFindWithLogs:
+
+    def __init__(self, size: int, offset: int = 0):
+        self.parent = [i for i in range(size + offset)]
+        self.rank = [1] * (size + offset)
+        self.num_components = size
+        print(f"\n--- Initializing UnionFind ---")
+        print(f"\tSize: {size}")
+        print(f"\tOffset: {offset}")
+        print(f"\tInitial parent array: {self.parent}")
+        print(f"\tInitial rank array: {self.rank}")
+        print(f"\tInitial number of components: {self.num_components}")
+
+    def find(self, x: int) -> int:
+        print(f"\n\t--- Finding root for element {x} ---")
+        path = [x]
+        while x != self.parent[x]:
+            x = self.parent[x]
+            path.append(x)
+        root = x
+        print(f"\t\tPath to root: {' -> '.join(map(str, path))}")
+
+        # Path compression
+        for node in path[:-1]:
+            self.parent[node] = root
+        print(f"\t\tAfter path compression, parent array: {self.parent}")
+
+        return root
+
+    def union(self, x: int, y: int) -> bool:
+        print(f"\n\t--- Uniting sets containing {x} and {y} ---")
+        root_x = self.find(x)
+        root_y = self.find(y)
+        print(f"\t\tRoot of {x}: {root_x}")
+        print(f"\t\tRoot of {y}: {root_y}")
+
+        if root_x == root_y:
+            print(f"\t\t{x} and {y} are already in the same set. No union performed.")
+            return False
+
+        if self.rank[root_x] < self.rank[root_y]:
+            self.parent[root_x] = root_y
+            print(f"\t\tAttaching tree rooted at {root_x} to {root_y}")
+        else:
+            self.parent[root_y] = root_x
+            if self.rank[root_x] == self.rank[root_y]:
+                self.rank[root_x] += 1
+                print(f"\t\tAttaching tree rooted at {root_y} to {root_x} and incrementing rank of {root_x}")
+            else:
+                print(f"\t\tAttaching tree rooted at {root_y} to {root_x}")
+
+        self.num_components -= 1
+        print(f"\t\tUpdated parent array: {self.parent}")
+        print(f"\t\tUpdated rank array: {self.rank}")
+        print(f"\t\tNumber of components reduced to: {self.num_components}")
+        return True
+
+    def is_connected(self, x: int, y: int) -> bool:
+        print(f"\n\t--- Checking if {x} and {y} are connected ---")
+        result = self.find(x) == self.find(y)
+        print(f"\t\tResult: {result}")
+        return result
+
+    def get_components(self) -> int:
+        print(f"\n\t--- Getting number of components ---")
+        print(f"\t\tCurrent number of components: {self.num_components}")
+        return self.num_components
+
+    def is_single_component(self) -> bool:
+        print(f"\n\t--- Checking if all elements are in a single component ---")
+        result = self.num_components == 1
+        print(f"\t\tResult: {result}")
+        return result

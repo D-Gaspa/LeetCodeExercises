@@ -5,7 +5,7 @@ from typing import List
 
 from tabulate import tabulate
 
-from Utils.graph_utils import UnionFind
+from Utils.graph_utils import UnionFindWithLogs
 from Utils.trees_utils import TreeNode, TreeVisualizer
 
 
@@ -881,45 +881,96 @@ def getAncestors3(n: int, edges: List[List[int]]) -> List[List[int]]:
 
 
 def maxNumEdgesToRemove1(n: int, edges: List[List[int]]) -> int:
-    """
-    Determines the maximum number of edges that can be removed from a graph while maintaining full traversal for
-    both Alice and Bob.
+    print("\n--- Input Parameters ---")
+    print(f"\tn = {n}")
+    print(f"\tedges = {edges}")
 
-    This function uses the Union-Find data structure to efficiently track connected components for both Alice and Bob.
-    It processes edges in two passes: first type 3 edges (usable by both Alice and Bob), then type 1 and 2 edges
-    (usable by Alice or Bob respectively).
-    This approach prioritizes shared edges, potentially maximizing removable edges.
-    The function tracks "essential" edges that must be kept for full traversal.
-
-    The time complexity is O(α(n) * m), where α(n) is the inverse Ackermann function
-    (nearly constant for all practical values of `n` [number of nodes]), and `m` is the number of edges.
-    This is because each Union-Find operation takes amortized O(α(n)) time, and we perform at most 2m such operations.
-    The space complexity is O(n) for the two UnionFind data structures.
-    """
-
-    alice_uf = UnionFind(size=n, offset=1)
-    bob_uf = UnionFind(size=n, offset=1)
+    print("\n--- Initialization ---")
+    alice_uf = UnionFindWithLogs(size=n, offset=1)
+    bob_uf = UnionFindWithLogs(size=n, offset=1)
     essential_edges = 0
+    print(f"\talice_uf initialized")
+    print(f"\tbob_uf initialized")
+    print(f"\tessential_edges = {essential_edges}")
 
-    # First pass: process type 3 edges (usable by both Alice and Bob)
-    for edge_type, u, v in edges:
+    print("\n--- First Pass: Processing Type 3 Edges ---")
+    first_pass_data = []
+    for i, (edge_type, u, v) in enumerate(edges, 1):
         if edge_type == 3:
-            essential_edges += alice_uf.union(u, v) | bob_uf.union(u, v)
+            print(f"\n--- Edge {i}/{len(edges)} ---")
+            print(f"\tEdge: Type {edge_type}, connects nodes {u} and {v}")
+
+            print("\tProcessing for Alice:")
+            alice_union = alice_uf.union(u, v)
+            print(f"\t\tUnion result: {alice_union}")
+
+            print("\tProcessing for Bob:")
+            bob_union = bob_uf.union(u, v)
+            print(f"\t\tUnion result: {bob_union}")
+
+            union_result = alice_union | bob_union
+            essential_edges += union_result
+            print(f"\tCombined union result: {union_result}")
+            print(f"\tUpdated essential_edges: {essential_edges}")
+
+            first_pass_data.append([i, edge_type, u, v, alice_union, bob_union, union_result, essential_edges])
+
             if alice_uf.is_single_component():
+                print("\n\tAlice's graph is fully connected")
+                print(f"\tReturning: {len(edges) - essential_edges}")
                 return len(edges) - essential_edges
 
-    # Second pass: process type 1 (Alice) and type 2 (Bob) edges
-    for edge_type, u, v in edges:
-        if edge_type == 1:
-            if alice_uf.union(u, v):
-                essential_edges += 1
-        elif edge_type == 2:
-            if bob_uf.union(u, v):
-                essential_edges += 1
-        if alice_uf.is_single_component() and bob_uf.is_single_component():
-            return len(edges) - essential_edges
+    print("\n--- First Pass Summary ---")
+    headers = ["Edge #", "Type", "U", "V", "Alice Union", "Bob Union", "Combined", "Essential Edges"]
+    print(tabulate(first_pass_data, headers=headers, tablefmt="fancy_grid"))
 
-    return -1  # Full traversal is not possible for both Alice and Bob
+    print("\n--- Second Pass: Processing Type 1 and 2 Edges ---")
+    second_pass_data = []
+    loop_is_over = False
+    for i, (edge_type, u, v) in enumerate(edges, 1):
+        if edge_type in [1, 2]:
+            print(f"\n--- Edge {i}/{len(edges)} ---")
+            print(f"\tEdge: Type {edge_type}, connects nodes {u} and {v}")
+
+            if edge_type == 1:
+                print("\tProcessing for Alice:")
+                union_result = alice_uf.union(u, v)
+                print(f"\t\tUnion result: {union_result}")
+            else:
+                print("\tProcessing for Bob:")
+                union_result = bob_uf.union(u, v)
+                print(f"\t\tUnion result: {union_result}")
+
+            if union_result:
+                essential_edges += 1
+                print(f"\tUpdated essential_edges: {essential_edges}")
+
+            second_pass_data.append([i, edge_type, u, v, union_result, essential_edges])
+
+            print("\tChecking full connectivity:")
+            alice_connected = alice_uf.is_single_component()
+            bob_connected = bob_uf.is_single_component()
+            print(f"\t\tAlice's graph fully connected: {alice_connected}")
+            print(f"\t\tBob's graph fully connected: {bob_connected}")
+
+            if alice_connected and bob_connected:
+                print("\n\tBoth graphs are fully connected")
+                loop_is_over = True
+                break
+
+    print("\n--- Second Pass Summary ---")
+    headers = ["Edge #", "Type", "U", "V", "Union Result", "Essential Edges"]
+    print(tabulate(second_pass_data, headers=headers, tablefmt="fancy_grid"))
+
+    if loop_is_over:
+        print(f"\tReturning: len(edges) - essential_edges = {len(edges)} - {essential_edges} ="
+              f" {len(edges) - essential_edges}")
+        return len(edges) - essential_edges
+
+    print("\n--- Function Returning ---")
+    print("\tFull traversal is not possible for both Alice and Bob")
+    print("\tReturning: -1")
+    return -1
 
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
@@ -963,9 +1014,3 @@ def maxNumEdgesToRemove1(n: int, edges: List[List[int]]) -> int:
 # Test cases for June 30th, 2024
 # Expected output: 2
 maxNumEdgesToRemove1(n=4, edges=[[3, 1, 2], [3, 2, 3], [1, 1, 3], [1, 2, 4], [1, 1, 2], [2, 3, 4]])
-
-# Expected output: 0
-maxNumEdgesToRemove1(n=4, edges=[[3, 1, 2], [3, 2, 3], [1, 1, 4], [2, 1, 4]])
-
-# Expected output: -1
-maxNumEdgesToRemove1(n=4, edges=[[3, 2, 3], [1, 1, 2], [2, 3, 4]])
