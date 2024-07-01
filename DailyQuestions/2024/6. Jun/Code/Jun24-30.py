@@ -5,6 +5,7 @@ from typing import List
 
 from tabulate import tabulate
 
+from Utils.graph_utils import UnionFind
 from Utils.trees_utils import TreeNode, TreeVisualizer
 
 
@@ -880,11 +881,27 @@ def getAncestors3(n: int, edges: List[List[int]]) -> List[List[int]]:
 
 
 def maxNumEdgesToRemove1(n: int, edges: List[List[int]]) -> int:
-    pass
+    alice_graph = UnionFind(size=n, index=1)
+    bob_graph = UnionFind(size=n, index=1)
+    required_edges = 0
 
+    for edge_type, u, v in edges:
+        if edge_type == 3:
+            required_edges += alice_graph.union(u, v) | bob_graph.union(u, v)
+            if alice_graph.is_single_component():
+                return len(edges) - required_edges
 
-def maxNumEdgesToRemove2(n: int, edges: List[List[int]]) -> int:
-    pass
+    for edge_type, u, v in edges:
+        if edge_type == 1:
+            if alice_graph.union(u, v):
+                required_edges += 1
+        elif edge_type == 2:
+            if bob_graph.union(u, v):
+                required_edges += 1
+        if alice_graph.is_single_component() and bob_graph.is_single_component():
+            return len(edges) - required_edges
+
+    return -1
 
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
@@ -928,12 +945,9 @@ def maxNumEdgesToRemove2(n: int, edges: List[List[int]]) -> int:
 # Test cases for June 30th, 2024
 # Expected output: 2
 maxNumEdgesToRemove1(n=4, edges=[[3, 1, 2], [3, 2, 3], [1, 1, 3], [1, 2, 4], [1, 1, 2], [2, 3, 4]])
-maxNumEdgesToRemove2(n=4, edges=[[3, 1, 2], [3, 2, 3], [1, 1, 3], [1, 2, 4], [1, 1, 2], [2, 3, 4]])
 
 # Expected output: 0
 maxNumEdgesToRemove1(n=4, edges=[[3, 1, 2], [3, 2, 3], [1, 1, 4], [2, 1, 4]])
-maxNumEdgesToRemove2(n=4, edges=[[3, 1, 2], [3, 2, 3], [1, 1, 4], [2, 1, 4]])
 
 # Expected output: -1
 maxNumEdgesToRemove1(n=4, edges=[[3, 2, 3], [1, 1, 2], [2, 3, 4]])
-maxNumEdgesToRemove2(n=4, edges=[[3, 2, 3], [1, 1, 2], [2, 3, 4]])
