@@ -1,5 +1,5 @@
 import heapq
-from collections import Counter
+from collections import Counter, defaultdict
 from pprint import pprint
 from typing import List
 
@@ -104,14 +104,11 @@ def longestPalindrome1(s: str) -> int:
     print("\n--- Input Parameters ---")
     print(f"\ts = {s}")
     print("\n--- Building Character Count Dictionary ---")
-    char_count = {}
+    char_count = defaultdict(int)
     for i, char in enumerate(s):
         print(f"\tIteration {i + 1}:")
         print(f"\t\tCharacter: {char}")
-        if char in char_count:
-            char_count[char] += 1
-        else:
-            char_count[char] = 1
+        char_count[char] += 1
         print(f"\t\tUpdated char_count: {char_count}")
     print("\n--- Character Count Dictionary ---")
     pprint(char_count)
@@ -931,14 +928,13 @@ def subarraysDivByK1(nums: List[int], k: int) -> int:
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
 # Test cases for june 3rd, 2024
-s = "coaching"
-t = "coding"
-# appendCharacters1(s, t)  # Expected output: 4
+# Expected output: 4
+# appendCharacters1(s="coaching", t="coding")
 
 # Test cases for june 4th, 2024
-s_2 = "abccccdd"
-# longestPalindrome1(s_2)  # Expected output: 7
-# longestPalindrome2(s_2)  # Expected output: 7
+# Expected output: 7
+# longestPalindrome1(s="abccccdd")
+# longestPalindrome2(s="abccccdd")
 
 # Test cases for june 5th, 2024
 words = ["bella", "label", "roller"]
