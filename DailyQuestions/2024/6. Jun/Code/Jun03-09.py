@@ -318,18 +318,35 @@ def isNStraightHand1(hand: List[int], group_size: int) -> bool:
 
 
 def isNStraightHand2(hand: List[int], group_size: int) -> bool:
+    """
+    Determines if a list of cards can be arranged into groups of consecutive cards of a given size.
+
+    This function employs a two-pass strategy to efficiently group cards. It first checks if the
+    total number of cards is divisible by the group size. Then, it uses a Counter to track card
+    frequencies. For each card, it finds the start of its group and attempts to remove complete
+    groups. This approach is optimized by using helper functions to find group starts and remove
+    groups, allowing for cleaner code and potentially better performance through local optimizations
+    without needing to sort the cards.
+
+    The time complexity of this solution is O(n), where n is the number of cards. Despite nested
+    loops, each card is processed at most twice: once to find the group start and once to remove
+    it from a group. The space complexity is O(k), where k is the number of unique card values,
+    used for storing the Counter.
+    """
     if len(hand) % group_size != 0:
         return False
 
     card_count = Counter(hand)
 
     def find_group_start(card):
+        """Helper function to find the start of a consecutive group for a given card."""
         group_start = card
         while card_count[group_start - 1]:
             group_start -= 1
         return group_start
 
     def remove_group(group_start):
+        """Helper function to remove a group of consecutive cards starting from a given card."""
         for card in range(group_start, group_start + group_size):
             if not card_count[card]:
                 return False
