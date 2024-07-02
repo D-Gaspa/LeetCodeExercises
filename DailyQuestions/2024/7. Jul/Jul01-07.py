@@ -80,6 +80,21 @@ def threeConsecutiveOdds1(arr):
 
 
 def intersect1(nums1: List[int], nums2: List[int]) -> List[int]:
+    """
+    Finds the intersection of two integer arrays, maintaining element frequency.
+
+    This function uses a two-pointer approach on sorted arrays to efficiently find the intersection.
+    By sorting both arrays first, we can compare elements linearly, adding common elements to the
+    result. The algorithm ensures that each element appears in the result as many times as it
+    appears in both input arrays. Swapping arrays if nums1 is longer optimizes for space efficiency.
+
+    The time complexity is O(n log n + m log m) for sorting, where n and m are the lengths of nums1
+    and nums2 respectively. The intersection itself is found in O(min(m, n)) time, where m and n are
+    the lengths of nums1 and nums2 respectively. The sorting step dominates the overall time complexity,
+    as the two-pointer traversal is linear. The space complexity is O(min(m, n))
+    for the result array, where m and n are the lengths of nums1 and nums2 respectively, excluding
+    the space used for sorting (which could be O(n) or O(1) depending on the sorting algorithm).
+    """
     # Ensure nums1 is the shorter array for efficiency
     if len(nums1) > len(nums2):
         nums1, nums2 = nums2, nums1
@@ -89,6 +104,7 @@ def intersect1(nums1: List[int], nums2: List[int]) -> List[int]:
 
     intersection = []
     index1, index2 = 0, 0
+
     while index1 < len(nums1) and index2 < len(nums2):
         if nums1[index1] < nums2[index2]:
             index1 += 1
@@ -116,6 +132,7 @@ def intersect2(nums1: List[int], nums2: List[int]) -> List[int]:
             count_nums1[num] -= 1
 
     return intersection
+
 
 # <-------------------------------------------------- July 3rd, 2024 -------------------------------------------------->
 # 3. Problem
