@@ -282,228 +282,56 @@ def commonChars2(words: List[str]) -> List[str]:
 
 
 def isNStraightHand1(hand: List[int], group_size: int) -> bool:
-    """
-    This function checks if it's possible to divide the 'hand' into several groups of 'group_size',
-    where each group consists of consecutive cards.
-
-    The function checks if the total number of cards is divisible by the group size, returning False if not.
-    Then the function sorts 'hand' in increasing order.
-    It repeatedly selects the smallest card left ('start_card'),
-    then looks for group_size - 1 cards that follow 'start_card' consecutively.
-    If it finds all of them, it removes them from 'hand' along with 'start_card';
-    if any card is not in 'hand', it returns False right away.
-    The function keeps forming groups in such a way until no cards are left, in which case it returns True.
-
-    The time complexity of this solution is O(n^2) because it uses list.remove() inside a loop.
-    Specifically, 'list.remove(x)' involves scanning the list until finding 'x' and then removing it,
-    which can take up to O(n) time where n is the length of the list.
-    Given that 'remove' is called in a loop, this will result in an overall quadratic time complexity.
-    The space complexity is O(n) due to the storage requirements for the 'hand' list.
-    """
-    print("\n--- Input Parameters ---")
-    print(f"\thand = {hand}")
-    print(f"\tgroup_size = {group_size}")
-
     if len(hand) % group_size != 0:
-        print("\n--- Decision Point (Divisibility Check) ---")
-        print("\tThe number of cards is not divisible by the group size.")
-        print("\tReturning False")
         return False
 
-    hand.sort()
-    print("\n--- After Sorting ---")
-    print(f"\thand = {hand}")
+    card_count = Counter(hand)
+    card_min_heap = list(card_count.keys())
+    heapq.heapify(card_min_heap)
 
-    iteration_data = []  # To collect data for the iteration summary table
-    iteration_count = 0
+    while card_min_heap:
+        start_card = card_min_heap[0]
 
-    print("\n--- Main Loop (Building Groups) ---")
-    while hand:
-        iteration_count += 1
-        print(f"\nIteration {iteration_count}:")
-        start_card = hand[0]
-        print(f"\tStart Card: {start_card}")
-
-        print(f"\tCard before iteration {iteration_count}: {hand}")
-
-        group = [start_card]
-        for i in range(1, group_size):
-            card_to_find = start_card + i
-            print(f"\t\tLooking for Card: {card_to_find}")
-            if card_to_find not in hand:
-                print("\n--- Decision Point (Consecutive Group Check) ---")
-                print(f"\t\tCard {card_to_find} not found in the remaining hand.")
-                print("\t\tReturning False")
+        for offset in range(group_size):
+            current_card = start_card + offset
+            if card_count[current_card] == 0:
                 return False
-            group.append(card_to_find)  # Build the group
+            card_count[current_card] -= 1
+            if card_count[current_card] == 0:
+                if current_card != heapq.heappop(card_min_heap):
+                    return False
 
-        for card in group:
-            hand.remove(card)
-
-        iteration_data.append([iteration_count, group, hand.copy()])  # Add to summary table data
-
-        print(f"\tCard after iteration {iteration_count}: {hand}")
-
-    print("\n--- Iteration Summary (Formed Groups) ---")
-    headers = ["Iteration", "Group Formed", "Remaining Hand"]
-    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
-
-    print("\n--- Function Returning ---")
-    print("\tAll cards successfully formed groups.")
-    print("\tReturning True")
     return True
 
 
 def isNStraightHand2(hand: List[int], group_size: int) -> bool:
-    """
-    This function checks if it's possible to divide the 'hand' into several groups of 'group_size',
-    where each group consists of consecutive cards.
-
-    The function checks if the total number of cards is divisible by the group size, returning False if not.
-    It counts each card's frequency and uses a min-heap to track the smallest card values.
-    It iterates over the heap, checking for group_size - 1 consecutive cards with non-zero counts.
-    If any are missing, it returns False.
-    Otherwise, it decrements the counts and removes cards with a count of 0.
-    If all cards form valid groups, it returns True.
-
-    The time complexity of this solution is O(n log n) due to the use of a heap, where n is the size of the hand.
-    The heap is created with all the unique card values and heappop is used (which has logarithmic time complexity).
-    The space complexity of this solution is O(n), for the card_count and min_heap storage,
-    where n is the number of unique cards.
-    """
-    print("\n--- Input Parameters ---")
-    print(f"\thand = {hand}")
-    print(f"\tgroup_size = {group_size}")
-
-    print("\n--- Preprocessing (Counting Cards) ---")
     if len(hand) % group_size != 0:
-        print("\tThe number of cards is not divisible by the group size.")
-        print("\tReturning False")
         return False
 
     card_count = Counter(hand)
-    print(f"\tCard Counts: {card_count}")
 
-    min_heap = list(card_count.keys())
-    heapq.heapify(min_heap)
-    print(f"\tMin-Heap (Initial): {min_heap}")
+    def find_group_start(card):
+        # Find the start of the group by moving backwards
+        group_start = card
+        while card_count[group_start - 1]:
+            group_start -= 1
+        return group_start
 
-    iteration_data = []  # To collect data for the iteration summary table
-    iteration_count = 0
+    def remove_group(group_start):
+        for card in range(group_start, group_start + group_size):
+            if not card_count[card]:
+                return False
+            card_count[card] -= 1
+        return True
 
-    print("\n--- Main Loop (Building Groups) ---")
-    while min_heap:
-        iteration_count += 1
-        print(f"\nIteration {iteration_count}:")
-
-        current_card = min_heap[0]
-        print(f"\tCurrent Card (Min-Heap Top): {current_card}")
-        print(f"\t\tMin-Heap: {min_heap}")
-
-        group_formed = True  # Assume the group can be formed unless proven otherwise
-        for i in range(group_size):
-            card_to_find = current_card + i
-            if card_count[card_to_find] == 0:
-                group_formed = False  # Group cannot be formed
-                print(f"\t\t\tCard {card_to_find} missing or count is zero")
-                break
-            else:
-                print(f"\t\t\tCard {card_to_find} found in counts")
-
-        if group_formed:
-            for i in range(group_size):
-                card_count[current_card + i] -= 1
-                if card_count[current_card + i] == 0:
-                    del card_count[current_card + i]
-                    print(f"\t\t\tRemoved card {current_card + i} from counts")
-                    if current_card + i != heapq.heappop(min_heap):
-                        print("\t\t\tError: Heap inconsistency detected")
-                        return False
-
-        iteration_data.append([iteration_count, current_card, group_formed, min_heap.copy(), card_count.copy()])
-
-    print("\n--- Iteration Summary (Group Formation Attempts) ---")
-    headers = ["Iteration", "Current Card", "Group Formed?", "Min-Heap", "Card Counts"]
-    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
-
-    print("\n--- Function Returning ---")
-    print("\tAll cards successfully formed groups.")
-    print("\tReturning True")
-    return True
-
-
-def isNStraightHand3(hand: List[int], group_size: int) -> bool:
-    """
-    This function checks if it's possible to divide the 'hand' into several groups of 'group_size',
-    where each group consists of consecutive cards.
-
-    The function checks if the total number of cards is divisible by the group size, returning False if not.
-    It then creates a Counter dictionary 'card_count' to count each unique card in the 'hand'.
-    For each 'card' in the 'hand', it looks for the smallest card 'start_card'
-    in the potential group that the 'card' belongs to.
-    It then reduces by 1 the count of 'start_card' and any other card in the same group in 'card_count',
-    and continues doing so until 'start_card' doesn't exist in the 'hand'.
-    If all cards from 'start_card' to the 'card' can be decremented successfully,
-    it moves on to the next potential 'start_card';
-    if any card doesn't exist in the 'hand', it will return False.
-    After all cards are processed and no False has been returned, it will return True meaning that the hand can be
-    divided into groups as required.
-
-    The time complexity of this solution is O(n) because every card is processed at most three times:
-    once when constructing the dictionary, and potentially twice more when forming the groups.
-    We might visit each card twice in the worst case: once on the way down, locating the start card and once on the way
-    up, decrementing and removing the cards of a group, resulting in O(3n) operations, which simplifies to O(n).
-    The space complexity is O(n) because of the Counter dictionary used to count the cards,
-    where n is the total number of cards in the 'hand'.
-    """
-    print("\n--- Input Parameters ---")
-    print(f"\thand = {hand}")
-    print(f"\tgroup_size = {group_size}")
-
-    print("\n--- Initial Check (Divisibility) ---")
-    if len(hand) % group_size != 0:
-        print(f"\tHand length ({len(hand)}) not divisible by group_size ({group_size}). Returning False.")
-        return False
-
-    print("\n--- Card Counting ---")
-    card_count = Counter(hand)
-    pprint(card_count)
-
-    print("\n--- Main Loop (Processing Cards) ---")
-    iteration_data = []  # Data collection for iteration summary
     for card in hand:
-        print(f"\n\tProcessing card in hand: {card}")
-        start_card = card
-        print(f"\t\tInitial start_card: {start_card}")
+        group_start = find_group_start(card)
+        while group_start <= card:
+            if card_count[group_start]:
+                if not remove_group(group_start):
+                    return False
+            group_start += 1
 
-        # Find the smallest card in the potential group
-        print(f"\t\tFinding smallest start_card:")
-        while card_count[start_card - 1]:
-            start_card -= 1
-            print(f"\t\t\tstart_card updated to: {start_card}")
-
-        # Process cards in the group
-        print(f"\t\tProcessing group starting from {start_card}:")
-        while start_card <= card:
-            while card_count[start_card]:
-                # Iterate over cards in the group
-                for next_card in range(start_card, start_card + group_size):
-                    if not card_count[next_card]:  # Card not found
-                        print(f"\t\t\tMissing card: {next_card}. Returning False.")
-                        return False
-                    card_count[next_card] -= 1
-                    print(f"\t\t\tDecremented count of {next_card} to {card_count[next_card]}")
-                    iteration_data.append([card, next_card, card_count.copy()])  # Collect data
-            start_card += 1
-            print(f"\t\t\tMoved to next start_card: {start_card}")
-
-    # Iteration summary
-    print("\n--- Iteration Summary (Card Processing) ---")
-    headers = ["Card", "Processed Card", "Card Count (After)"]
-    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
-
-    print("\n--- Function Returning ---")
-    print("All cards successfully formed groups. Returning True.")
     return True
 
 
@@ -908,13 +736,12 @@ def subarraysDivByK1(nums: List[int], k: int) -> int:
 # Test cases for june 5th, 2024
 # Expected output: ["e", "l", "l"]
 # commonChars1(words=["bella", "label", "roller"])
-commonChars2(words=["bella", "label", "roller"])
+# commonChars2(words=["bella", "label", "roller"])
 
 # Test cases for june 6th, 2024
 # Expected output: True
 # isNStraightHand1(hand=[1, 2, 3, 6, 2, 3, 4, 7, 8], group_size=3)
 # isNStraightHand2(hand=[1, 2, 3, 6, 2, 3, 4, 7, 8], group_size=3)
-# isNStraightHand3(hand=[1, 2, 3, 6, 2, 3, 4, 7, 8], group_size=3)
 
 # Test cases for june 7th, 2024
 # Expected output: "the cat was rat by the bat"
