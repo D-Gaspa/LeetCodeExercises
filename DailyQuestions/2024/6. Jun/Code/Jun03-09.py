@@ -282,6 +282,20 @@ def commonChars2(words: List[str]) -> List[str]:
 
 
 def isNStraightHand1(hand: List[int], group_size: int) -> bool:
+    """
+    Determines if a list of cards can be arranged into groups of consecutive cards of a given size.
+
+    This function uses a greedy approach combined with a min heap to efficiently group cards.
+    It first checks if the total number of cards is divisible by the group size. Then, it uses
+    a Counter to track card frequencies and a min heap to process cards in ascending order.
+    The algorithm attempts to form groups starting from the smallest available card, ensuring
+    consecutive values within each group. This approach is optimal as it guarantees the formation
+    of valid groups if they exist, while quickly identifying impossible arrangements.
+
+    The time complexity of this solution is O(n log k), where `n` is the number of cards and `k` is
+    the number of unique card values. This is due to the heap operations performed for each card.
+    The space complexity is O(k) for storing the Counter and min heap.
+    """
     if len(hand) % group_size != 0:
         return False
 
@@ -298,8 +312,7 @@ def isNStraightHand1(hand: List[int], group_size: int) -> bool:
                 return False
             card_count[current_card] -= 1
             if card_count[current_card] == 0:
-                if current_card != heapq.heappop(card_min_heap):
-                    return False
+                heapq.heappop(card_min_heap)
 
     return True
 
@@ -311,7 +324,6 @@ def isNStraightHand2(hand: List[int], group_size: int) -> bool:
     card_count = Counter(hand)
 
     def find_group_start(card):
-        # Find the start of the group by moving backwards
         group_start = card
         while card_count[group_start - 1]:
             group_start -= 1
@@ -327,7 +339,7 @@ def isNStraightHand2(hand: List[int], group_size: int) -> bool:
     for card in hand:
         group_start = find_group_start(card)
         while group_start <= card:
-            if card_count[group_start]:
+            while card_count[group_start]:
                 if not remove_group(group_start):
                     return False
             group_start += 1
