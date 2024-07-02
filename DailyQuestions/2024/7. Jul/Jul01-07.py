@@ -1,4 +1,6 @@
 # Week 1: July 1st - July 7th
+from collections import Counter
+from typing import List
 
 from tabulate import tabulate
 
@@ -70,18 +72,50 @@ def threeConsecutiveOdds1(arr):
 
 
 # <-------------------------------------------------- July 2nd, 2024 -------------------------------------------------->
-# 2. Problem
+# 350. Intersection of Two Arrays II
 
-# Description
-
-
-def problem2_1():
-    pass
+# Given two integer arrays `nums1` and `nums2`, return an array of their intersection.
+# Each element in the result must appear as many times as it shows in both arrays,
+# and you may return the result in any order.
 
 
-def problem2_2():
-    pass
+def intersect1(nums1: List[int], nums2: List[int]) -> List[int]:
+    # Ensure nums1 is the shorter array for efficiency
+    if len(nums1) > len(nums2):
+        nums1, nums2 = nums2, nums1
 
+    nums1.sort()
+    nums2.sort()
+
+    intersection = []
+    index1, index2 = 0, 0
+    while index1 < len(nums1) and index2 < len(nums2):
+        if nums1[index1] < nums2[index2]:
+            index1 += 1
+        elif nums1[index1] > nums2[index2]:
+            index2 += 1
+        else:
+            intersection.append(nums1[index1])
+            index1 += 1
+            index2 += 1
+
+    return intersection
+
+
+def intersect2(nums1: List[int], nums2: List[int]) -> List[int]:
+    # Ensure nums1 is the shorter array for efficiency
+    if len(nums1) > len(nums2):
+        nums1, nums2 = nums2, nums1
+
+    count_nums1 = Counter(nums1)
+
+    intersection = []
+    for num in nums2:
+        if count_nums1[num] > 0:
+            intersection.append(num)
+            count_nums1[num] -= 1
+
+    return intersection
 
 # <-------------------------------------------------- July 3rd, 2024 -------------------------------------------------->
 # 3. Problem
@@ -157,9 +191,12 @@ def problem7_2():
 
 # Test cases for July 1st, 2024
 # Expected output: True
-threeConsecutiveOdds1(arr=[1, 2, 34, 3, 4, 5, 7, 23, 12])
+# threeConsecutiveOdds1(arr=[1, 2, 34, 3, 4, 5, 7, 23, 12])
 
 # Test cases for July 2nd, 2024
+# Expected output: [4, 9]
+intersect1(nums1=[4, 9, 5], nums2=[9, 4, 9, 8, 4])
+intersect2(nums1=[4, 9, 5], nums2=[9, 4, 9, 8, 4])
 
 # Test cases for July 3rd, 2024
 
