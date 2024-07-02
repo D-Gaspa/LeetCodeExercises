@@ -80,41 +80,59 @@ def threeConsecutiveOdds1(arr):
 
 
 def intersect1(nums1: List[int], nums2: List[int]) -> List[int]:
-    """
-    Finds the intersection of two integer arrays, maintaining element frequency.
+    print("\n--- Input Parameters ---")
+    print(f"\tnums1 = {nums1}")
+    print(f"\tnums2 = {nums2}")
 
-    This function uses a two-pointer approach on sorted arrays to efficiently find the intersection.
-    By sorting both arrays first, we can compare elements linearly, adding common elements to the
-    result. The algorithm ensures that each element appears in the result as many times as it
-    appears in both input arrays. Swapping arrays if nums1 is longer optimizes for space efficiency.
-
-    The time complexity is O(n log n + m log m) for sorting, where n and m are the lengths of nums1
-    and nums2 respectively. The intersection itself is found in O(min(m, n)) time, where m and n are
-    the lengths of nums1 and nums2 respectively. The sorting step dominates the overall time complexity,
-    as the two-pointer traversal is linear. The space complexity is O(min(m, n))
-    for the result array, where m and n are the lengths of nums1 and nums2 respectively, excluding
-    the space used for sorting (which could be O(n) or O(1) depending on the sorting algorithm).
-    """
-    # Ensure nums1 is the shorter array for efficiency
+    print("\n--- Initialization ---")
     if len(nums1) > len(nums2):
+        print("\tSwapping nums1 and nums2 to ensure nums1 is shorter")
         nums1, nums2 = nums2, nums1
+    print(f"\tAfter potential swap: nums1 = {nums1}, nums2 = {nums2}")
 
+    print("\nSorting both arrays:")
     nums1.sort()
     nums2.sort()
+    print(f"\tSorted nums1 = {nums1}")
+    print(f"\tSorted nums2 = {nums2}")
 
     intersection = []
     index1, index2 = 0, 0
+    print(f"\nInitial state: index1 = {index1}, index2 = {index2}, intersection = {intersection}")
 
+    print("\n--- Main Loop ---")
+    iteration_data = []
     while index1 < len(nums1) and index2 < len(nums2):
+        print(f"\n--- Iteration {len(iteration_data) + 1} ---")
+        print(f"While loop condition: index1 ({index1}) < len(nums1) ({len(nums1)}) "
+              f"and index2 ({index2}) < len(nums2) ({len(nums2)})")
+        print(f"\tCurrent state: index1 = {index1}, index2 = {index2}")
+        print(f"\tComparing nums1[{index1}] = {nums1[index1]} and nums2[{index2}] = {nums2[index2]}")
+
         if nums1[index1] < nums2[index2]:
+            print(f"\t\tnums1[{index1}] < nums2[{index2}], incrementing index1")
             index1 += 1
+            action = "Increment index1"
         elif nums1[index1] > nums2[index2]:
+            print(f"\t\tnums1[{index1}] > nums2[{index2}], incrementing index2")
             index2 += 1
+            action = "Increment index2"
         else:
+            print(f"\t\tnums1[{index1}] == nums2[{index2}], adding to intersection and incrementing both indices")
             intersection.append(nums1[index1])
             index1 += 1
             index2 += 1
+            action = "Add to intersection, increment both"
 
+        iteration_data.append([len(iteration_data) + 1, index1, index2, nums1[index1-1] if index1 > 0 else None,
+                               nums2[index2-1] if index2 > 0 else None, action, intersection.copy()])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Iteration", "Index1", "Index2", "nums1 value", "nums2 value", "Action", "Current Intersection"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal intersection: {intersection}")
     return intersection
 
 
@@ -226,8 +244,8 @@ def problem7_2():
 
 # Test cases for July 2nd, 2024
 # Expected output: [4, 9]
-intersect1(nums1=[4, 9, 5], nums2=[9, 4, 9, 8, 4])
-intersect2(nums1=[4, 9, 5], nums2=[9, 4, 9, 8, 4])
+# intersect1(nums1=[4, 9, 5], nums2=[9, 4, 9, 8, 4])
+# intersect2(nums1=[4, 9, 5], nums2=[9, 4, 9, 8, 4])
 
 # Test cases for July 3rd, 2024
 
