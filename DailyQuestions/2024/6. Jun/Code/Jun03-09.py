@@ -282,85 +282,141 @@ def commonChars2(words: List[str]) -> List[str]:
 
 
 def isNStraightHand1(hand: List[int], group_size: int) -> bool:
-    """
-    Determines if a list of cards can be arranged into groups of consecutive cards of a given size.
+    print("\n--- Input Parameters ---")
+    print(f"\thand = {hand}")
+    print(f"\tgroup_size = {group_size}")
 
-    This function uses a greedy approach combined with a min heap to efficiently group cards.
-    It first checks if the total number of cards is divisible by the group size. Then, it uses
-    a Counter to track card frequencies and a min heap to process cards in ascending order.
-    The algorithm attempts to form groups starting from the smallest available card, ensuring
-    consecutive values within each group. This approach is optimal as it guarantees the formation
-    of valid groups if they exist, while quickly identifying impossible arrangements.
-
-    The time complexity of this solution is O(n log k), where `n` is the number of cards and `k` is
-    the number of unique card values. This is due to the heap operations performed for each card.
-    The space complexity is O(k) for storing the Counter and min heap.
-    """
+    print("\n--- Initialization ---")
+    print(f"\tChecking if len(hand) % group_size == 0")
     if len(hand) % group_size != 0:
+        print(f"\t\tCondition false: {len(hand)} % {group_size} = {len(hand) % group_size}")
+        print("\tReturning False")
         return False
+    print(f"\t\tCondition true: {len(hand)} % {group_size} = 0")
 
+    print("\n\tInitializing card_count (Counter)")
     card_count = Counter(hand)
+    print(f"\tcard_count = {dict(card_count)}")
+
+    print("\n\tInitializing card_min_heap")
     card_min_heap = list(card_count.keys())
+    print(f"\tcard_min_heap (before heapify) = {card_min_heap}")
     heapq.heapify(card_min_heap)
+    print(f"\tcard_min_heap (after heapify) = {card_min_heap}")
 
+    print("\n--- Main Loop ---")
+    iteration_data = []
     while card_min_heap:
+        print(f"\n--- While card_min_heap is not empty ---")
+        print(f"\tCurrent card_min_heap: {card_min_heap}")
         start_card = card_min_heap[0]
+        print(f"\tstart_card = {start_card}")
 
+        print(f"\n\tForming group of size {group_size}")
         for offset in range(group_size):
             current_card = start_card + offset
+            print(f"\n\t--- Processing card: {current_card} ---")
+            print(f"\t\tChecking if card_count[{current_card}] == 0")
             if card_count[current_card] == 0:
+                print(f"\t\t\tCondition true: card_count[{current_card}] == 0")
+                print("\t\tReturning False")
                 return False
-            card_count[current_card] -= 1
-            if card_count[current_card] == 0:
-                heapq.heappop(card_min_heap)
+            print(f"\t\t\tCondition false: card_count[{current_card}] = {card_count[current_card]}")
 
+            print(f"\t\tDecrementing card_count[{current_card}]")
+            card_count[current_card] -= 1
+            print(f"\t\t\tNew value: card_count[{current_card}] = {card_count[current_card]}")
+
+            print(f"\t\tChecking if card_count[{current_card}] == 0")
+            if card_count[current_card] == 0:
+                print(f"\t\t\tCondition true: Removing {current_card} from card_min_heap")
+                removed_card = heapq.heappop(card_min_heap)
+                print(f"\t\t\tRemoved card: {removed_card}")
+            else:
+                print(f"\t\t\tCondition false: card_count[{current_card}] = {card_count[current_card]}")
+
+        iteration_data.append([start_card, group_size, card_count.copy(), card_min_heap.copy()])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Start Card", "Group Size", "Card Count", "Min Heap"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print("\tAll groups formed successfully")
+    print("\tReturning True")
     return True
 
 
 def isNStraightHand2(hand: List[int], group_size: int) -> bool:
-    """
-    Determines if a list of cards can be arranged into groups of consecutive cards of a given size.
+    print("\n--- Input Parameters ---")
+    print(f"\thand = {hand}")
+    print(f"\tgroup_size = {group_size}")
 
-    This function employs a two-pass strategy to efficiently group cards. It first checks if the
-    total number of cards is divisible by the group size. Then, it uses a Counter to track card
-    frequencies. For each card, it finds the start of its group and attempts to remove complete
-    groups. This approach is optimized by using helper functions to find group starts and remove
-    groups, allowing for cleaner code and potentially better performance through local optimizations
-    without needing to sort the cards.
-
-    The time complexity of this solution is O(n), where n is the number of cards. Despite nested
-    loops, each card is processed at most twice: once to find the group start and once to remove
-    it from a group. The space complexity is O(k), where k is the number of unique card values,
-    used for storing the Counter.
-    """
+    print("\n--- Initialization ---")
+    print(f"\tChecking if len(hand) % group_size == 0")
     if len(hand) % group_size != 0:
+        print(f"\t\tCondition false: "
+              f"{len(hand)} % {group_size} = {len(hand) % group_size}")
+        print("\tReturning False")
         return False
+    print(f"\t\tCondition true: {len(hand)} % {group_size} = 0")
 
+    print("\n\tInitializing card_count (Counter)")
     card_count = Counter(hand)
+    print(f"\tcard_count = {dict(card_count)}")
 
     def find_group_start(card):
-        """Helper function to find the start of a consecutive group for a given card."""
+        print(f"\n\t--- Finding group start for card {card} ---")
         group_start = card
         while card_count[group_start - 1]:
+            print(f"\t\tcard_count[{group_start - 1}] = {card_count[group_start - 1]}")
+            print(f"\t\tMoving group_start from {group_start} to {group_start - 1}")
             group_start -= 1
+        print(f"\t\tGroup start found: {group_start}")
         return group_start
 
     def remove_group(group_start):
-        """Helper function to remove a group of consecutive cards starting from a given card."""
+        print(f"\n\t--- Removing group starting from {group_start} ---")
         for card in range(group_start, group_start + group_size):
+            print(f"\t\tChecking card {card}")
             if not card_count[card]:
+                print(f"\t\t\tcard_count[{card}] = 0, returning False")
                 return False
+            print(f"\t\t\tDecrementing card_count[{card}] from {card_count[card]} to {card_count[card] - 1}")
             card_count[card] -= 1
+        print("\t\tGroup removed successfully")
         return True
 
+    print("\n--- Main Loop ---")
+    iteration_data = []
     for card in hand:
+        print(f"\n--- Processing card {card} ---")
         group_start = find_group_start(card)
+        print(f"\tInitial group_start: {group_start}")
+
         while group_start <= card:
+            print(f"\n\t--- While group_start ({group_start}) <= card ({card}) ---")
+            inner_loop_data = []
             while card_count[group_start]:
+                print(f"\n\t\t--- While card_count[{group_start}] = {card_count[group_start]} ---")
+                print(f"\t\tAttempting to remove group starting at {group_start}")
                 if not remove_group(group_start):
+                    print("\t\tGroup removal failed, returning False")
                     return False
+                inner_loop_data.append(card_count.copy())
+            print(f"\t\tMoving group_start from {group_start} to {group_start + 1}")
             group_start += 1
 
+            if inner_loop_data:
+                iteration_data.append([card, group_start - 1, inner_loop_data])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Processed Card", "Group Start", "Card Count After Each Removal"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print("\tAll groups formed successfully")
+    print("\tReturning True")
     return True
 
 
@@ -770,7 +826,7 @@ def subarraysDivByK1(nums: List[int], k: int) -> int:
 # Test cases for june 6th, 2024
 # Expected output: True
 # isNStraightHand1(hand=[1, 2, 3, 6, 2, 3, 4, 7, 8], group_size=3)
-# isNStraightHand2(hand=[1, 2, 3, 6, 2, 3, 4, 7, 8], group_size=3)
+isNStraightHand2(hand=[1, 2, 3, 6, 2, 3, 4, 7, 8], group_size=3)
 
 # Test cases for june 7th, 2024
 # Expected output: "the cat was rat by the bat"
