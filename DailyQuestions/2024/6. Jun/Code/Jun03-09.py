@@ -199,81 +199,50 @@ def longestPalindrome2(s: str) -> int:
 # (including duplicates).
 
 def commonChars1(words: List[str]) -> List[str]:
-    """
-    Finds the common characters (including duplicates) that appear in all strings within the input list 'words'.
-
-    This function starts with a list of characters from the first word and iteratively updates it
-    by checking with each later word.
-    Each character found in both the 'common_chars' and the current word is retained.
-    This operation is performed by 'new_common_chars',
-    which is then assigned back to 'common_chars' at the end of each iteration.
-
-    The time complexity of this solution is O(n * m^2) where n is the number of words,
-    and m is the average length of each word.
-    The outer loop runs n times and the inner loop m times.
-    Within the inner loop, the 'remove' operation is performed which can take up to m operations in the worst-case
-    scenario (hence, m squared).
-    The space complexity is O(p), where p is the length of the first word.
-    The initial size of the common_chars list is determined by the size of the first word,
-    and while exploring other words in the list, the size of this list would only decrease or remain the same.
-    """
     print("\n--- Input Parameters ---")
     print(f"\twords = {words}")
 
     print("\n--- Initialization ---")
-    common_chars = list(words[0])  # Initial common characters from the first word
-    print(f"\tInitial common_chars: {common_chars}")
+    common_chars = []
+    print(f"\tcommon_chars = {common_chars}")
 
-    print("\n--- Main Loop (Comparing with Each Word) ---")
-    iteration_data = []  # To store data for iteration summary
-    for i, word in enumerate(words[1:], start=1):  # Start from the second word
-        print(f"\nIteration {i}: Comparing with word '{word}'")
-        new_common_chars = []
-        common_chars_copy = common_chars.copy()
+    print("\n--- Main Loop: Iterating through unique characters of the first word ---")
+    iteration_data = []
+    unique_chars = set(words[0])
+    total_iterations = len(unique_chars)
 
-        print("\tInner Loop (Checking Characters in Word) ---")
-        for char in word:
-            if char in common_chars:
-                new_common_chars.append(char)
-                common_chars.remove(char)  # Remove to handle duplicates correctly
-                print(f"\t\tFound common char '{char}': {new_common_chars}")
-            else:
-                print(f"\t\t'{char}' not found in common_chars")
+    for i, char in enumerate(unique_chars):
+        print(f"\n--- Character {i + 1}/{total_iterations}: '{char}' ---")
 
-        common_chars = new_common_chars
-        print(f"\tUpdated common_chars after iteration {i}: {common_chars}")
+        print("\tCounting occurrences in each word:")
+        char_counts = []
+        for j, word in enumerate(words):
+            count = word.count(char)
+            char_counts.append(count)
+            print(f"\t\tword[{j}] ('{word}'): count = {count}")
 
-        iteration_data.append([i, word, common_chars_copy, new_common_chars.copy()])
+        print("\n\tCalculating minimum count:")
+        min_count = min(char_counts)
+        print(f"\t\tmin_count = min({char_counts}) = {min_count}")
 
-    print("\n--- Iteration Summary (Common Characters per Word) ---")
-    headers = ["Iteration", "Word", "Common Chars Before Iteration", "New Common Chars"]
+        print("\n\tAdding characters to common_chars:")
+        chars_to_add = [char] * min_count
+        common_chars.extend(chars_to_add)
+        print(f"\t\tAdding: {chars_to_add}")
+        print(f"\t\tUpdated common_chars: {common_chars}")
+
+        iteration_data.append([i + 1, char, char_counts, min_count, chars_to_add])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Iteration", "Character", "Counts in Words", "Min Count", "Added to Result"]
     print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
 
     print("\n--- Function Returning ---")
-    print(f"\tFinal common_chars: {common_chars}")
+    print(f"\tFinal Result: {common_chars}")
     return common_chars
 
 
 def commonChars2(words: List[str]) -> List[str]:
-    """
-    Finds the common characters (including duplicates) that appear in all strings within the input list 'words'.
-
-    The function uses python's built-in data structure 'Counter' to generate a count
-    of each character in a word.
-    Initially, the 'Counter' of the first word is taken,
-    and then applied with bitwise 'AND' operation with the 'Counter' of each later word.
-    This bitwise 'AND' operation results in the intersection of characters of both words,
-    keeping the count as the minimum of counts in both words.
-    This ensures that 'common_chars' always holds the common characters with the least count among all processed words,
-    thus effectively finding the common characters.
-    Finally, 'elements()' method is used to generate the list of common characters from the updated 'Counter'.
-
-    The time complexity of this solution is O(n * m), where n is the number of words,
-    and m is the average length of each word.
-    This is because for each word, the function runs through each character to update the Counter.
-    The space complexity is O(1) as the size of the `Counter` used to store the character counts is limited by the
-    fixed alphabet size (26).
-    """
     print("\n--- Input Parameters ---")
     print(f"\twords = {words}")
 
@@ -937,30 +906,26 @@ def subarraysDivByK1(nums: List[int], k: int) -> int:
 # longestPalindrome2(s="abccccdd")
 
 # Test cases for june 5th, 2024
-words = ["bella", "label", "roller"]
-# commonChars1(words)  # Expected output: ["e", "l", "l"]
-# commonChars2(words)  # Expected output: ["e", "l", "l"]
+# Expected output: ["e", "l", "l"]
+# commonChars1(words=["bella", "label", "roller"])
+commonChars2(words=["bella", "label", "roller"])
 
 # Test cases for june 6th, 2024
-hand = [1, 2, 3, 6, 2, 3, 4, 7, 8]
-groupSize = 3
-# isNStraightHand1(hand, groupSize)  # Expected output: True
-# isNStraightHand2(hand, groupSize)  # Expected output: True
-# isNStraightHand3(hand, groupSize)  # Expected output: True
+# Expected output: True
+# isNStraightHand1(hand=[1, 2, 3, 6, 2, 3, 4, 7, 8], group_size=3)
+# isNStraightHand2(hand=[1, 2, 3, 6, 2, 3, 4, 7, 8], group_size=3)
+# isNStraightHand3(hand=[1, 2, 3, 6, 2, 3, 4, 7, 8], group_size=3)
 
 # Test cases for june 7th, 2024
-dictionary = ["cat", "bat", "rat"]
-sentence = "the cattle was rattled by the battery"
-# replaceWords1(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
-# replaceWords2(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
-# replaceWords3(dictionary, sentence)  # Expected output: "the cat was rat by the bat"
+# Expected output: "the cat was rat by the bat"
+# replaceWords1(dictionary=["cat", "bat", "rat"], sentence="the cattle was rattled by the battery")
+# replaceWords2(dictionary=["cat", "bat", "rat"], sentence="the cattle was rattled by the battery")
+# replaceWords3(dictionary=["cat", "bat", "rat"], sentence="the cattle was rattled by the battery")
 
 # Test cases for june 8th, 2024
-nums = [23, 2, 6, 4, 7]
-k = 6
-# checkSubarraySum1(nums, k)  # Expected output: True
+# Expected output: True
+# checkSubarraySum1(nums=[23, 2, 6, 4, 7], k=6)
 
 # Test cases for june 9th, 2024
-nums_2 = [4, 5, 0, -2, -3, 1]
-k_2 = 5
-# subarraysDivByK1(nums_2, k_2)  # Expected output: 7
+# Expected output: 7
+# subarraysDivByK1(nums=[4, 5, 0, -2, -3, 1], k=5)
