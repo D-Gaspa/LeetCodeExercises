@@ -137,32 +137,51 @@ def intersect1(nums1: List[int], nums2: List[int]) -> List[int]:
 
 
 def intersect2(nums1: List[int], nums2: List[int]) -> List[int]:
-    """
-    Finds the intersection of two integer arrays, maintaining element frequency.
+    print("\n--- Input Parameters ---")
+    print(f"\tnums1 = {nums1}")
+    print(f"\tnums2 = {nums2}")
 
-    This function uses a hash table approach using Python's Counter class. It first ensures
-    that `nums1` is the shorter array to optimize space usage. Then, it creates a frequency map
-    of `nums1` and iterates through `nums2`, adding common elements to the result while decrementing
-    their count in the frequency map. This method efficiently handles unsorted input and can
-    terminate early if all elements from the shorter array are found.
-
-    The time complexity is O(n + m), where `n` and `m` are the lengths of `nums1` and `nums2` respectively.
-    This is because we iterate through nums1 once to build the Counter and then through `nums2` to
-    find the intersection. The space complexity is O(min(n, m)) for the Counter and the result list,
-    as we ensure `nums1` is the shorter array.
-    """
-    # Ensure nums1 is the shorter array for efficiency
+    print("\n--- Initialization ---")
     if len(nums1) > len(nums2):
+        print("\tSwapping nums1 and nums2 to"
+              " ensure nums1 is shorter")
         nums1, nums2 = nums2, nums1
+    print(f"\tAfter potential swap: nums1 = {nums1}, nums2 = {nums2}")
 
     count_nums1 = Counter(nums1)
+    print("\nCreating frequency map of nums1:")
+    print(tabulate(count_nums1.items(), headers=["Element", "Frequency"], tablefmt="fancy_grid"))
 
     intersection = []
-    for num in nums2:
+    print(f"\nInitial state: intersection = {intersection}")
+
+    print("\n--- Main Loop ---")
+    iteration_data = []
+    for i, num in enumerate(nums2):
+        print(f"\n--- Iteration {i + 1}/{len(nums2)} ---")
+        print(f"\tProcessing num = {num}")
+        print(f"\tCurrent count in frequency map: {count_nums1[num]}")
+
         if count_nums1[num] > 0:
+            print(f"\t\tnum {num} found in frequency map with count > 0")
             intersection.append(num)
             count_nums1[num] -= 1
+            action = f"Add {num} to intersection, decrement count"
+        else:
+            print(f"\t\tnum {num} not found in frequency map or count is 0")
+            action = "No action"
 
+        iteration_data.append([i + 1, num, count_nums1[num], action, intersection.copy()])
+
+        print(f"\tUpdated frequency map for {num}: {count_nums1[num]}")
+        print(f"\tCurrent intersection: {intersection}")
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Iteration", "Number", "Count after action", "Action", "Current Intersection"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal intersection: {intersection}")
     return intersection
 
 
