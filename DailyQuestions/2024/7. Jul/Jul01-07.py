@@ -1,4 +1,6 @@
 # Week 1: July 1st - July 7th
+import heapq
+
 from collections import Counter
 from typing import List
 
@@ -124,8 +126,8 @@ def intersect1(nums1: List[int], nums2: List[int]) -> List[int]:
             index2 += 1
             action = "Add to intersection, increment both"
 
-        iteration_data.append([len(iteration_data) + 1, index1, index2, nums1[index1-1] if index1 > 0 else None,
-                               nums2[index2-1] if index2 > 0 else None, action, intersection.copy()])
+        iteration_data.append([len(iteration_data) + 1, index1, index2, nums1[index1 - 1] if index1 > 0 else None,
+                               nums2[index2 - 1] if index2 > 0 else None, action, intersection.copy()])
 
     print("\n--- Iteration Summary ---")
     headers = ["Iteration", "Index1", "Index2", "nums1 value", "nums2 value", "Action", "Current Intersection"]
@@ -193,11 +195,20 @@ def intersect2(nums1: List[int], nums2: List[int]) -> List[int]:
 
 
 def minDifference1(nums: List[int]) -> int:
-    pass
+    # If we have 4 or fewer elements, we can make all elements equal
+    if len(nums) <= 4:
+        return 0
 
+    smallest_four = heapq.nsmallest(4, nums)
+    largest_four = heapq.nlargest(4, nums)
 
-def minDifference2(nums: List[int]) -> int:
-    pass
+    # Check all possible combinations of 3 moves
+    return min(
+        largest_four[0] - smallest_four[3],  # Change 3 smallest
+        largest_four[1] - smallest_four[2],  # Change 2 smallest, 1 largest
+        largest_four[2] - smallest_four[1],  # Change 1 smallest, 2 largest
+        largest_four[3] - smallest_four[0]  # Change 3 largest
+    )
 
 
 # <-------------------------------------------------- July 4th, 2024 -------------------------------------------------->
@@ -268,6 +279,8 @@ def problem7_2():
 # intersect2(nums1=[4, 9, 5], nums2=[9, 4, 9, 8, 4])
 
 # Test cases for July 3rd, 2024
+# Expected output: 4
+print(minDifference1(nums=[6, 5, 0, 7, 10, 4, 8, 21]))
 
 # Test cases for July 4th, 2024
 
