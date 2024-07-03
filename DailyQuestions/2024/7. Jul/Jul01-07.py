@@ -186,16 +186,17 @@ def intersect2(nums1: List[int], nums2: List[int]) -> List[int]:
 
 
 # <-------------------------------------------------- July 3rd, 2024 -------------------------------------------------->
-# 3. Problem
+# 1509. Minimum Difference Between Largest and Smallest Value in Three Moves
 
-# Description
+# Return the minimum difference between the largest and smallest value of `nums` after performing at most three moves.
+# In one move, you can choose one element of `nums` and change it to any value.
 
 
-def problem3_1():
+def minDifference1(nums: List[int]) -> int:
     pass
 
 
-def problem3_2():
+def minDifference2(nums: List[int]) -> int:
     pass
 
 
