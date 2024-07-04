@@ -67,11 +67,6 @@ jobs:
       - name: Unzip artifact
         run: unzip -O UTF-8 -qq '${{ env.ARTIFACT }}' -d dir
 
-      - name: Debug GitHub Context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-
       - name: Setup Pages
         uses: actions/configure-pages@v4
 

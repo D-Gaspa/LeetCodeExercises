@@ -4,7 +4,7 @@ from typing import List, Optional
 
 from tabulate import tabulate
 
-from Utils.trees_utils import TreeNode, TreeVisualizer
+from Utils.trees_utils import BinaryTreeNode, TreeVisualizer
 
 
 # June, 2024
@@ -444,7 +444,7 @@ def numberOfSpecialSubstrings2(s: str) -> int:
 # The output should be an array of the two subtree roots in order.
 
 
-def splitBST1(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]:
+def splitBST1(root: Optional[BinaryTreeNode], target: int) -> List[Optional[BinaryTreeNode]]:
     print("\n--- Input Parameters ---")
     print(f"\troot = {root.val if root else None}")
     print(f"\ttarget = {target}")
@@ -536,7 +536,7 @@ def splitBST1(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]
     return returnSplitBSTResult(smaller_equal_subtree, greater_subtree)
 
 
-def splitBST2(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]:
+def splitBST2(root: Optional[BinaryTreeNode], target: int) -> List[Optional[BinaryTreeNode]]:
     print("\n--- Input Parameters ---")
     print(f"\troot = {root.val if root else None}")
     print(f"\ttarget = {target}")
@@ -550,7 +550,7 @@ def splitBST2(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]
     se_subtree_iter = 0
     g_subtree_iter = 0
 
-    def split_tree(node: Optional[TreeNode], depth: int = 0) -> List[Optional[TreeNode]]:
+    def split_tree(node: Optional[BinaryTreeNode], depth: int = 0) -> List[Optional[BinaryTreeNode]]:
         """Helper function to recursively split the tree."""
         nonlocal se_subtree_iter, g_subtree_iter
 
@@ -622,7 +622,7 @@ def splitBST2(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]
     return result
 
 
-def splitBST3(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]:
+def splitBST3(root: Optional[BinaryTreeNode], target: int) -> List[Optional[BinaryTreeNode]]:
     print("\n--- Input Parameters ---")
     print(f"\troot = {root.val if root else None}")
     print(f"\ttarget = {target}")
@@ -632,8 +632,8 @@ def splitBST3(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]
     print(f"\nInitial tree visualization saved as 'initial_tree.png'")
 
     print("\n--- Initialization ---")
-    dummy_smaller_equal = TreeNode()
-    dummy_greater = TreeNode()
+    dummy_smaller_equal = BinaryTreeNode()
+    dummy_greater = BinaryTreeNode()
     current_smaller_equal = dummy_smaller_equal
     current_greater = dummy_greater
     current_node = root
@@ -697,7 +697,7 @@ def splitBST3(root: Optional[TreeNode], target: int) -> List[Optional[TreeNode]]
     return returnSplitBSTResult(greater_subtree, smaller_equal_subtree)
 
 
-def returnSplitBSTResult(greater_subtree, smaller_equal_subtree) -> List[Optional[TreeNode]]:
+def returnSplitBSTResult(greater_subtree, smaller_equal_subtree) -> List[Optional[BinaryTreeNode]]:
     print("\n--- Function Returning ---")
     print(f"\tsmaller_equal_subtree root: {smaller_equal_subtree.val if smaller_equal_subtree else None}")
     print(f"\tgreater_subtree root: {greater_subtree.val if greater_subtree else None}")

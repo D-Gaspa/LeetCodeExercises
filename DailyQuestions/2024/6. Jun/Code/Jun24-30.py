@@ -6,7 +6,7 @@ from typing import List
 from tabulate import tabulate
 
 from Utils.graph_utils import UnionFindWithLogs
-from Utils.trees_utils import TreeNode, TreeVisualizer
+from Utils.trees_utils import BinaryTreeNode, TreeVisualizer
 
 
 # <------------------------------------------------- June 24th, 2024 ------------------------------------------------->
@@ -179,7 +179,7 @@ def minKBitFlips2(nums: List[int], k: int) -> int:
 # is changed to the original key plus the sum of all keys greater than the original key in BST.
 
 
-def bstToGst1(root: TreeNode) -> TreeNode:
+def bstToGst1(root: BinaryTreeNode) -> BinaryTreeNode:
     print("\n--- Input Parameters ---")
     print(f"\troot = {TreeVisualizer.visualize(root, file_name='bstToGst1-Input')}")
 
@@ -189,7 +189,7 @@ def bstToGst1(root: TreeNode) -> TreeNode:
 
     iteration_data = []
 
-    def update_node_values(node: TreeNode) -> None:
+    def update_node_values(node: BinaryTreeNode) -> None:
         nonlocal cumulative_sum
         nonlocal iteration_data
 
@@ -236,7 +236,7 @@ def bstToGst1(root: TreeNode) -> TreeNode:
     return root
 
 
-def bstToGst2(root: TreeNode) -> TreeNode:
+def bstToGst2(root: BinaryTreeNode) -> BinaryTreeNode:
     print("\n--- Input Parameters ---")
     print(f"\troot = {TreeVisualizer.visualize(root, file_name='bstToGst2-Input')}")
 
@@ -250,7 +250,7 @@ def bstToGst2(root: TreeNode) -> TreeNode:
 
     iteration_data = []
 
-    def push_right_nodes(node: TreeNode) -> None:
+    def push_right_nodes(node: BinaryTreeNode) -> None:
         print("\n\t--- Pushing Right Nodes ---")
         while node:
             print(f"\t\tPushing node {node.val} onto stack")
@@ -296,11 +296,11 @@ def bstToGst2(root: TreeNode) -> TreeNode:
     return root
 
 
-def bstToGst3(root: TreeNode) -> TreeNode:
+def bstToGst3(root: BinaryTreeNode) -> BinaryTreeNode:
     print("\n--- Input Parameters ---")
     print(f"\troot = {TreeVisualizer.visualize(root, file_name='bstToGst3-Input')}")
 
-    def find_successor(current_node: TreeNode) -> TreeNode:
+    def find_successor(current_node: BinaryTreeNode) -> BinaryTreeNode:
         print("\n\t--- Finding Successor ---")
         successor = current_node.right
         print(f"\t\tStarting from right child: {successor.val if successor else None}")
@@ -370,7 +370,7 @@ def update_node_and_move_left(cumulative_sum, current_node, iteration_data):
 # A binary search tree is balanced if the depth of the two subtrees of every node never differs by more than `1`.
 
 
-def balanceBST1(root: TreeNode) -> TreeNode:
+def balanceBST1(root: BinaryTreeNode) -> BinaryTreeNode:
     print("\n--- Input Parameters ---")
     print(f"\troot = {TreeVisualizer.visualize(root, file_name='balanceBST1-Input')}")
 
@@ -378,7 +378,7 @@ def balanceBST1(root: TreeNode) -> TreeNode:
     inorder_nodes = []
     print(f"\tinorder_nodes = {inorder_nodes}")
 
-    def inorder_traverse(node: TreeNode) -> None:
+    def inorder_traverse(node: BinaryTreeNode) -> None:
         if not node:
             print(f"\t\tNode is None")
             return
@@ -390,7 +390,7 @@ def balanceBST1(root: TreeNode) -> TreeNode:
         print("\t\tMoving to right child")
         inorder_traverse(node.right)
 
-    def build_balanced_bst(start_index: int, end_index: int) -> TreeNode | None:
+    def build_balanced_bst(start_index: int, end_index: int) -> BinaryTreeNode | None:
         print(f"\n\t--- Building BST: start_index={start_index}, end_index={end_index} ---")
         if start_index > end_index:
             print("\t\tBase case reached: returning None")
@@ -423,7 +423,7 @@ def balanceBST1(root: TreeNode) -> TreeNode:
     return balanced_root
 
 
-def balanceBST2(root: TreeNode) -> TreeNode:
+def balanceBST2(root: BinaryTreeNode) -> BinaryTreeNode:
     print("\n--- Input Parameters ---")
     print(f"\tInitial Tree:\n{TreeVisualizer.visualize(root, file_name='balanceBST2-Input')}")
 
@@ -431,7 +431,7 @@ def balanceBST2(root: TreeNode) -> TreeNode:
     left_rotation_count = 0
     compression_count = 0
 
-    def right_rotate(parent: TreeNode, node: TreeNode) -> None:
+    def right_rotate(parent: BinaryTreeNode, node: BinaryTreeNode) -> None:
         nonlocal right_rotation_count
         right_rotation_count += 1
         print(f"\n\t--- Right Rotation ---")
@@ -448,7 +448,7 @@ def balanceBST2(root: TreeNode) -> TreeNode:
                                                                        file_name=f"balanceBST2-Right_rot_"
                                                                                  f"{right_rotation_count}_after")}")
 
-    def left_rotate(parent: TreeNode, node: TreeNode) -> None:
+    def left_rotate(parent: BinaryTreeNode, node: BinaryTreeNode) -> None:
         print(f"\n\t--- Left Rotation ---")
         nonlocal left_rotation_count
         left_rotation_count += 1
@@ -465,7 +465,7 @@ def balanceBST2(root: TreeNode) -> TreeNode:
                                                                        file_name=f"balanceBST2-Left_rot_"
                                                                                  f"{left_rotation_count}_after")}")
 
-    def compress_vine(vine_root: TreeNode, rotations: int) -> None:
+    def compress_vine(vine_root: BinaryTreeNode, rotations: int) -> None:
         print(f"\n\t--- Compressing Vine: {rotations} rotations ---")
         if rotations > 0:
             nonlocal compression_count
@@ -488,7 +488,7 @@ def balanceBST2(root: TreeNode) -> TreeNode:
                                                                                     f"{compression_count}_after")}")
 
     print("\n--- Initialization ---")
-    dummy_root = TreeNode(val="dummy")
+    dummy_root = BinaryTreeNode(val="dummy")
     dummy_root.right = root
     current_node = dummy_root
     print(f"\tDummy root created and connected to tree root")

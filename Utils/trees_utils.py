@@ -1,7 +1,7 @@
 from graphviz import Digraph
 
 
-class TreeNode:
+class BinaryTreeNode:
     def __init__(self, val=0, left=None, right=None):
         self.val = val
         self.left = left
@@ -10,7 +10,7 @@ class TreeNode:
 
 class TreeVisualizer:
     @staticmethod
-    def visualize(root: TreeNode, file_name: str) -> str:
+    def visualize(root: BinaryTreeNode, file_name: str) -> str:
         dot = Digraph(comment='Binary Tree')
         dot.attr('node', shape='circle', style='filled', color='lightblue', fontcolor='black')
         dot.attr('edge', color='black')

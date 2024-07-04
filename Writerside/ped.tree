@@ -4,9 +4,9 @@
 
 <instance-profile id="ped"
                  name="Programming Exercises Documentation"
-                 start-page="starter-topic.md">
+                 start-page="home.md">
 
-    <toc-element topic="starter-topic.md"/>
+    <toc-element topic="home.md"/>
     <toc-element topic="Daily-Programming-Exercises.md">
         <toc-element topic="2024-Daily-Exercises.md">
             <toc-element topic="Daily-1.January-2024.md" hidden="true">

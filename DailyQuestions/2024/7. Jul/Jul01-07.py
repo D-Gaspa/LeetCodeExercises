@@ -1,8 +1,7 @@
 # Week 1: July 1st - July 7th
 import heapq
-
 from collections import Counter
-from typing import List
+from typing import List, Optional
 
 from tabulate import tabulate
 
@@ -250,16 +249,23 @@ def minDifference1(nums: List[int]) -> int:
 
 
 # <-------------------------------------------------- July 4th, 2024 -------------------------------------------------->
-# 4. Problem
+# 2181. Merge Nodes in Between Zeros
 
-# Description
+# Given the `head` of a linked list where integers are separated by `0`s (with `0` at the beginning and end), merge
+# nodes between every two consecutive `0`s into a single node with a value equal to their sum,
+# and return the modified list without any `0`s.
+
+class ListNode:
+    def __init__(self, val=0, next_node=None):
+        self.val = val
+        self.next_node = next_node
 
 
-def problem4_1():
+def mergeNodes1(head: Optional[ListNode]) -> Optional[ListNode]:
     pass
 
 
-def problem4_2():
+def mergeNodes2(head: Optional[ListNode]) -> Optional[ListNode]:
     pass
 
 
