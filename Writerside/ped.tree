@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE instance-profile
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
+
+<instance-profile id="ped"
+                 name="Programming Exercises Documentation"
+                 start-page="starter-topic.md">
+
+    <toc-element topic="starter-topic.md"/>
+    <toc-element topic="Daily-Programming-Exercises.md">
+        <toc-element topic="2024-Daily-Exercises.md">
+            <toc-element topic="Daily-1.January-2024.md" hidden="true">
+                <toc-element topic="Jan01-07_2024.md" hidden="true"/>
+                <toc-element topic="Jan08-14_2024.md" hidden="true"/>
+                <toc-element topic="Jan15-21_2024.md" hidden="true"/>
+                <toc-element topic="Jan22-28_2024.md" hidden="true"/>
+                <toc-element topic="Jan29-31_2024.md" hidden="true"/>
+            </toc-element>
+            <toc-element topic="Daily-2.February-2024.md" hidden="true">
+                <toc-element topic="Feb01-04_2024.md" hidden="true"/>
+                <toc-element topic="Feb05-11_2024.md" hidden="true"/>
+                <toc-element topic="Feb12-18_2024.md" hidden="true"/>
+                <toc-element topic="Feb19-25_2024.md" hidden="true"/>
+                <toc-element topic="Feb26-29_2024.md" hidden="true"/>
+            </toc-element>
+            <toc-element topic="Daily-3.March-2024.md" hidden="true">
+                <toc-element topic="Mar01-03_2024.md" hidden="true"/>
+                <toc-element topic="Mar04-10_2024.md" hidden="true"/>
+                <toc-element topic="Mar11-17_2024.md" hidden="true"/>
+                <toc-element topic="Mar18-24_2024.md" hidden="true"/>
+                <toc-element topic="Mar25-31_2024.md" hidden="true"/>
+            </toc-element>
+            <toc-element topic="Daily-4.April-2024.md" hidden="true">
+                <toc-element topic="Apr01-07_2024.md" hidden="true"/>
+                <toc-element topic="Apr08-14_2024.md" hidden="true"/>
+                <toc-element topic="Apr15-21_2024.md" hidden="true"/>
+                <toc-element topic="Apr22-28_2024.md" hidden="true"/>
+                <toc-element topic="Apr29-30_2024.md" hidden="true"/>
+            </toc-element>
+            <toc-element topic="Daily-5.May-2024.md" hidden="true">
+                <toc-element topic="May01-05_2024.md" hidden="true"/>
+                <toc-element topic="May06-12_2024.md" hidden="true"/>
+                <toc-element topic="May13-19_2024.md" hidden="true"/>
+                <toc-element topic="May20-26_2024.md" hidden="true"/>
+                <toc-element topic="May27-31_2024.md" hidden="true"/>
+            </toc-element>
+            <toc-element topic="Daily-6.June-2024.md" hidden="true">
+                <toc-element topic="Jun01-02_2024.md" hidden="true"/>
+                <toc-element topic="Jun03-09_2024.md" hidden="true"/>
+                <toc-element topic="Jun10-16_2024.md" hidden="true"/>
+                <toc-element topic="Jun17-23_2024.md" hidden="true"/>
+                <toc-element topic="Jun24-30_2024.md" hidden="true"/>
+            </toc-element>
+            <toc-element topic="Daily-7.July-2024.md" hidden="true">
+                <toc-element topic="Jul01-07_2024.md" hidden="true"/>
+                <toc-element topic="Jul08-14_2024.md" hidden="true"/>
+                <toc-element topic="Jul15-21_2024.md" hidden="true"/>
+                <toc-element topic="Jul22-28_2024.md" hidden="true"/>
+                <toc-element topic="Jul29-31_2024.md" hidden="true"/>
+            </toc-element>
+            <toc-element topic="Daily-8.August-2024.md" hidden="true">
+                <toc-element topic="Aug01-04_2024.md" hidden="true"/>
+                <toc-element topic="Aug05-11_2024.md" hidden="true"/>
+                <toc-element topic="Aug12-18_2024.md" hidden="true"/>
+                <toc-element topic="Aug19-25_2024.md" hidden="true"/>
+                <toc-element topic="Aug26-31_2024.md" hidden="true"/>
+            </toc-element>
+            <toc-element topic="Daily-9.September-2024.md" hidden="true">
+                <toc-element topic="Sep01_2024.md" hidden="true"/>
+                <toc-element topic="Sep02-08_2024.md" hidden="true"/>
+                <toc-element topic="Sep09-15_2024.md" hidden="true"/>
+                <toc-element topic="Sep16-22_2024.md" hidden="true"/>
+                <toc-element topic="Sep23-29_2024.md" hidden="true"/>
+                <toc-element topic="Sep30_2024.md" hidden="true"/>
+            </toc-element>
+            <toc-element topic="Daily-10.October-2024.md" hidden="true">
+                <toc-element topic="Oct01-06_2024.md" hidden="true"/>
+                <toc-element topic="Oct07-13_2024.md" hidden="true"/>
+                <toc-element topic="Oct14-20_2024.md" hidden="true"/>
+                <toc-element topic="Oct21-27_2024.md" hidden="true"/>
+                <toc-element topic="Oct28-31_2024.md" hidden="true"/>
+            </toc-element>
+            <toc-element topic="Daily-11.November-2024.md" hidden="true">
+                <toc-element topic="Nov01-03_2024.md" hidden="true"/>
+                <toc-element topic="Nov04-10_2024.md" hidden="true"/>
+                <toc-element topic="Nov11-17_2024.md" hidden="true"/>
+                <toc-element topic="Nov18-24_2024.md" hidden="true"/>
+                <toc-element topic="Nov25-30_2024.md" hidden="true"/>
+            </toc-element>
+            <toc-element topic="Daily-12.December-2024.md" hidden="true">
+                <toc-element topic="Dec01_2024.md" hidden="true"/>
+                <toc-element topic="Dec02-08_2024.md" hidden="true"/>
+                <toc-element topic="Dec09-15_2024.md" hidden="true"/>
+                <toc-element topic="Dec16-22_2024.md" hidden="true"/>
+                <toc-element topic="Dec23-29_2024.md" hidden="true"/>
+                <toc-element topic="Dec30-31_2024.md" hidden="true"/>
+            </toc-element>
+        </toc-element>
+    </toc-element>
+    <toc-element topic="Weekly-Programming-Exercises.md">
+        <toc-element topic="2024-Weekly-Exercises.md">
+            <toc-element topic="1.January-2024.md" hidden="true"/>
+            <toc-element topic="2.February-2024.md" hidden="true"/>
+            <toc-element topic="3.March-2024.md" hidden="true"/>
+            <toc-element topic="4.April-2024.md" hidden="true"/>
+            <toc-element topic="5.May-2024.md" hidden="true"/>
+            <toc-element topic="6.June-2024.md" hidden="true"/>
+            <toc-element topic="7.July-2024.md" hidden="true"/>
+            <toc-element topic="8.August-2024.md" hidden="true"/>
+            <toc-element topic="9.September-2024.md" hidden="true"/>
+            <toc-element topic="10.October-2024.md" hidden="true"/>
+            <toc-element topic="11.November-2024.md" hidden="true"/>
+            <toc-element topic="12.December-2024.md" hidden="true"/>
+        </toc-element>
+    </toc-element>
+</instance-profile>

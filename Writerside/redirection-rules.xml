@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rules SYSTEM "https://resources.jetbrains.com/writerside/1.0/redirection-rules.dtd">
+<rules>
+    <!-- format is as follows
+    <rule id="<unique id>">
+        <accepts>page.html</accepts>
+    </rule>
+    -->
+    <rule id="7a6035b">
+        <description>Created after removal of "6. Jun" from Programming Exercises Documentation</description>
+        <accepts>6-Jun.html</accepts>
+    </rule>
+    <rule id="5da725df">
+        <description>Created after removal of "How to" from Programming Exercises Documentation</description>
+        <accepts>How-to.html</accepts>
+    </rule>
+    <rule id="7cd8fb0">
+        <description>Created after removal of "January 2024" from Programming Exercises Documentation</description>
+        <accepts>January-2024.html</accepts>
+    </rule>
+    <rule id="28e306ef">
+        <description>Created after removal of "Starter" from Programming Exercises Documentation</description>
+        <accepts>Starter.html</accepts>
+    </rule>
+    <rule id="3798e2e3">
+        <description>Created after removal of "Starter" from Programming Exercises Documentation</description>
+        <accepts>Starter.html</accepts>
+    </rule>
+    <rule id="a63d8c">
+        <description>Created after removal of "How to" from Programming Exercises Documentation</description>
+        <accepts>How-to.html</accepts>
+    </rule>
+    <rule id="75193c88">
+        <description>Created after removal of "Starter" from Programming Exercises Documentation</description>
+        <accepts>Starter.html</accepts>
+    </rule>
+    <rule id="5bd6053c">
+        <description>Created after removal of "How to" from Programming Exercises Documentation</description>
+        <accepts>How-to.html</accepts>
+    </rule>
+</rules>

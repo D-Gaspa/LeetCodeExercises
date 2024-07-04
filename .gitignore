@@ -3,6 +3,3 @@ CodingLearningExercises
 Utils/*
 !Utils/trees_utils.py
 !Utils/graph_utils.py
-Writerside/*
-!Writerside/topics
-!Writerside/images
