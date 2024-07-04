@@ -19,19 +19,24 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: List directory contents
-        run: |
-          echo "Current directory:"
-          pwd
-          echo "Directory contents:"
-          ls -R
-
       - name: Build docs using Writerside Docker builder
         uses: JetBrains/writerside-github-action@v4
         with:
           instance: ${{ env.INSTANCE }}
           artifact: ${{ env.ARTIFACT }}
           docker-version: ${{ env.DOCKER_VERSION }}
+          verbose: true
+        env:
+          GITHUB_WORKSPACE: ${{ github.workspace }}
+          run: |
+            echo "Current directory:"
+            pwd
+            echo "Directory contents:"
+            ls -R
+            echo "INSTANCE: ${{ env.INSTANCE }}"
+            echo "ARTIFACT: ${{ env.ARTIFACT }}"
+            echo "DOCKER_VERSION: ${{ env.DOCKER_VERSION }}"
+            echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
 
       - name: Save artifact with build results
         uses: actions/upload-artifact@v4
