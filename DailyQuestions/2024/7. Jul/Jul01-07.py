@@ -262,11 +262,21 @@ class ListNode:
 
 
 def mergeNodes1(head: Optional[ListNode]) -> Optional[ListNode]:
-    pass
+    result_node = head
+    traversal_node = head.next_node
+    current_sum = 0
 
+    while traversal_node:
+        if traversal_node.val == 0:
+            result_node = result_node.next_node
+            result_node.val = current_sum
+            current_sum = 0
+        else:
+            current_sum += traversal_node.val
+        traversal_node = traversal_node.next_node
 
-def mergeNodes2(head: Optional[ListNode]) -> Optional[ListNode]:
-    pass
+    result_node.next_node = None
+    return head.next_node
 
 
 # <-------------------------------------------------- July 5th, 2024 -------------------------------------------------->
@@ -327,6 +337,9 @@ def problem7_2():
 # minDifference1(nums=[6, 5, 0, 7, 10, 4, 8, 21])
 
 # Test cases for July 4th, 2024
+# Expected output: [4, 11] -> ListNode(val=4, next_node=ListNode(val=11))
+mergeNodes1(head=ListNode(next_node=ListNode(val=3, next_node=ListNode(val=1, next_node=ListNode(next_node=ListNode(
+            val=4, next_node=ListNode(val=5, next_node=ListNode(val=2, next_node=ListNode()))))))))
 
 # Test cases for July 5th, 2024
 
