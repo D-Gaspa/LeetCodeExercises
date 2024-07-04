@@ -25,18 +25,6 @@ jobs:
           instance: ${{ env.INSTANCE }}
           artifact: ${{ env.ARTIFACT }}
           docker-version: ${{ env.DOCKER_VERSION }}
-          verbose: true
-        env:
-          GITHUB_WORKSPACE: ${{ github.workspace }}
-          run: |
-            echo "Current directory:"
-            pwd
-            echo "Directory contents:"
-            ls -R
-            echo "INSTANCE: ${{ env.INSTANCE }}"
-            echo "ARTIFACT: ${{ env.ARTIFACT }}"
-            echo "DOCKER_VERSION: ${{ env.DOCKER_VERSION }}"
-            echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
 
       - name: Save artifact with build results
         uses: actions/upload-artifact@v4
@@ -60,3 +48,29 @@ jobs:
         uses: JetBrains/writerside-checker-action@v1
         with:
           instance: ${{ env.INSTANCE }}
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: docs
+
+      - name: Unzip artifact
+        run: unzip -O UTF-8 -qq '${{ env.ARTIFACT }}' -d dir
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Package and upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dir
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
