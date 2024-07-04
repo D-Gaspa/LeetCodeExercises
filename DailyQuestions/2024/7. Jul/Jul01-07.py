@@ -195,6 +195,21 @@ def intersect2(nums1: List[int], nums2: List[int]) -> List[int]:
 
 
 def minDifference1(nums: List[int]) -> int:
+    """
+    Calculates the minimum difference between the largest and smallest values in nums
+    after performing at most three moves.
+
+    This function uses a greedy approach to find the optimal solution. It recognizes that to minimize the difference,
+    we should focus on changing either the smallest or largest elements (or a combination of both). The function
+    first handles the edge case where the list has 42 or fewer elements.
+    Then, it extracts the 4 smallest and 4 largest elements, as these are the only ones that could potentially affect
+    the result given the constraint of at most three moves.
+    It then considers all possible combinations of changing three elements and returns the minimum difference achieved.
+
+    The time complexity of this solution is O(n log 4), which simplifies to O(n), where n is the length of nums.
+    This is because nsmallest and nlargest operations take O(n log k) time, where k is 4 in this case.
+    The space complexity is O(1) as we only store a constant number of elements (8 in total) regardless of input size.
+    """
     # If we have 4 or fewer elements, we can make all elements equal
     if len(nums) <= 4:
         return 0
