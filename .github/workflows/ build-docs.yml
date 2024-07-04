@@ -3,6 +3,9 @@ name: Build documentation
 on:
   push:
     branches: [ "master" ]
+    paths:
+      - 'Writerside/**'
+      - '.github/workflows/build-docs.yml'
   workflow_dispatch:
 
 env:

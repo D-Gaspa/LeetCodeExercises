@@ -1,40 +1,32 @@
-# Programming Exercises Documentation
+# LeetCode Exercises Documentation
 
-Welcome to my Programming Exercises Documentation repository! This project is dedicated to documenting my journey through various programming challenges, primarily focused on LeetCode exercises.
+Welcome to the LeetCode Exercises Documentation repository!
+This project documents my journey through various LeetCode programming challenges,
+including both premium weekly exercises and daily problems.
 
-## About This Repository
+## Documentation Website
 
-This repository contains detailed solutions and explanations for two types of programming exercises:
+For a comprehensive view of all solutions and explanations, visit my documentation website:
 
-1. **Weekly Premium Exercises**: These are problems sourced from LeetCode's weekly challenges. They are exclusive to premium members and are solved on a weekly basis.
+[https://d-gaspa.github.io/LeetCodeExercises/](https://d-gaspa.github.io/LeetCodeExercises/)
 
-2. **Daily Exercises**: These are the daily problems from LeetCode, which are available to all users. They are solved on a daily basis.
+## Repository Contents
 
-## Repository Structure
-
-- [Weekly-Programming-Exercises.md](Writerside/topics/Weekly/Weekly-Programming-Exercises.md): This file contains links to weekly programming exercises, organized by year.
-- [Daily-Programming-Exercises.md](Writerside/topics/Daily/Daily-Programming-Exercises.md): This file contains links to daily programming exercises, also organized chronologically.
-
-Each exercise is thoroughly documented with:
-
-- Multiple approaches to solving the problem
-- Detailed explanations of the core ideas behind each approach
+- Weekly Premium Exercises
+- Daily LeetCode Problems
+- Detailed solutions with multiple approaches
+- In-depth explanations and complexity analyses
 - Step-by-step code walkthroughes
-- Complexity analysis (time and space)
-- Concrete examples to illustrate the solution process
+- Illustrative examples
 
-## Features of the Documentation
+## How to Use
 
-- **Readable Code**: All functions are written with a focus on readability and maintainability.
-- **Comprehensive Docstrings**: Each function is accompanied by a detailed docstring explaining its purpose, and any important notes.
-- **Multiple Approaches**: Where applicable, different solutions to the same problem are presented, allowing for comparison of various techniques.
-- **In-depth Analysis**: Each approach is analyzed for its core idea, implementation details, and computational complexity.
-- **Illustrative Examples**: Step-by-step examples are provided to demonstrate how each solution works with concrete inputs.
+Navigate through the documentation website to explore solutions organized by category (weekly/daily) and date.
+Each problem includes multiple solution approaches, detailed explanations, and complexity analyses.
 
-## How to Use This Repository
+## Contributing
 
-You can navigate through the exercises using the links provided in the Weekly and Daily Programming Exercises files. Each linked document contains detailed solutions and explanations for the respective problems.
-
-Feel free to explore, learn, and use these solutions as a reference for your own programming journey. If you have any questions or suggestions, please feel free to open an issue or submit a pull request.
+If you have suggestions for improvements or want to contribute,
+please feel free to open an issue or submit a pull request.
 
 Happy coding!
