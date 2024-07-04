@@ -195,35 +195,58 @@ def intersect2(nums1: List[int], nums2: List[int]) -> List[int]:
 
 
 def minDifference1(nums: List[int]) -> int:
-    """
-    Calculates the minimum difference between the largest and smallest values in nums
-    after performing at most three moves.
+    print("\n--- Input Parameters ---")
+    print(f"\tnums = {nums}")
 
-    This function uses a greedy approach to find the optimal solution. It recognizes that to minimize the difference,
-    we should focus on changing either the smallest or largest elements (or a combination of both). The function
-    first handles the edge case where the list has 42 or fewer elements.
-    Then, it extracts the 4 smallest and 4 largest elements, as these are the only ones that could potentially affect
-    the result given the constraint of at most three moves.
-    It then considers all possible combinations of changing three elements and returns the minimum difference achieved.
+    print("\n--- Initialization ---")
+    n = len(nums)
+    print(f"\tLength of nums (n) = {n}")
 
-    The time complexity of this solution is O(n log 4), which simplifies to O(n), where n is the length of nums.
-    This is because nsmallest and nlargest operations take O(n log k) time, where k is 4 in this case.
-    The space complexity is O(1) as we only store a constant number of elements (8 in total) regardless of input size.
-    """
-    # If we have 4 or fewer elements, we can make all elements equal
-    if len(nums) <= 4:
+    print("\n--- Edge Case Check ---")
+    if n <= 4:
+        print("\tEdge case: n <= 4")
+        print("\tAll elements can be made equal")
+        print("\tReturning 0")
         return 0
 
+    print("\n--- Extracting Smallest and Largest Elements ---")
     smallest_four = heapq.nsmallest(4, nums)
     largest_four = heapq.nlargest(4, nums)
+    print(f"\tFour smallest elements: {smallest_four}")
+    print(f"\tFour largest elements: {largest_four}")
 
-    # Check all possible combinations of 3 moves
-    return min(
-        largest_four[0] - smallest_four[3],  # Change 3 smallest
-        largest_four[1] - smallest_four[2],  # Change 2 smallest, 1 largest
-        largest_four[2] - smallest_four[1],  # Change 1 smallest, 2 largest
-        largest_four[3] - smallest_four[0]  # Change 3 largest
-    )
+    print("\n--- Calculating Possible Differences ---")
+    differences = [
+        (largest_four[0] - smallest_four[3], "Change 3 smallest"),
+        (largest_four[1] - smallest_four[2], "Change 2 smallest, 1 largest"),
+        (largest_four[2] - smallest_four[1], "Change 1 smallest, 2 largest"),
+        (largest_four[3] - smallest_four[0], "Change 3 largest")
+    ]
+
+    print("\n--- Difference Calculations ---")
+    for i, (diff, strategy) in enumerate(differences, 1):
+        print(f"\n--- Calculation {i}/4 ---")
+        print(f"\tStrategy: {strategy}")
+        print(f"\tLargest: {largest_four[i-1]}, Smallest: {smallest_four[4-i]}")
+        print(f"\tDifference: {largest_four[i-1]} - {smallest_four[4-i]} = {diff}")
+
+    print("\n--- Difference Summary ---")
+    headers = ["Strategy", "Largest", "Smallest", "Difference"]
+    table_data = [
+        [strategy, largest_four[i-1], smallest_four[4-i], diff]
+        for i, (diff, strategy) in enumerate(differences, 1)
+    ]
+    print(tabulate(table_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Finding Minimum Difference ---")
+    min_diff = min(diff for diff, _ in differences)
+    min_strategy = next(strategy for diff, strategy in differences if diff == min_diff)
+    print(f"\tMinimum difference: {min_diff}")
+    print(f"\tCorresponding strategy: {min_strategy}")
+
+    print("\n--- Function Returning ---")
+    print(f"\tReturning minimum difference: {min_diff}")
+    return min_diff
 
 
 # <-------------------------------------------------- July 4th, 2024 -------------------------------------------------->
@@ -295,7 +318,7 @@ def problem7_2():
 
 # Test cases for July 3rd, 2024
 # Expected output: 4
-print(minDifference1(nums=[6, 5, 0, 7, 10, 4, 8, 21]))
+# minDifference1(nums=[6, 5, 0, 7, 10, 4, 8, 21])
 
 # Test cases for July 4th, 2024
 
