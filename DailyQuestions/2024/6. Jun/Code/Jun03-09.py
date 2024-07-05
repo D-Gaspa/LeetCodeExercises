@@ -429,66 +429,50 @@ def isNStraightHand2(hand: List[int], group_size: int) -> bool:
 
 
 def replaceWords1(dictionary: List[str], sentence: str) -> str:
-    """
-    Replaces all words in a sentence with their shortest root available in the given dictionary.
-
-    The function is divided into two parts, first with the nested function 'shortest_root';
-    in this function, a check is performed for each word to see if it starts with a root found in the dictionary.
-    If multiple roots are found, it returns the shortest one.
-    If no roots are found, it returns the original word.
-    The main function then takes a sentence, splits it into words, and calls 'shortest_root' for each word.
-    The result is then rejoined into a sentence with the roots replacing the original words.
-
-    The time complexity of this solution is O(n * d * m) where n is the number of words in the sentence,
-    d is the number of words in the dictionary, and m is the average length of these words.
-    This is due to the nested loop structure where each word is checked against each root, and each root is checked
-    against the word using the startswith method, which in the worst case can take O(m) time.
-    The space complexity is O(n) as the function stores the modified words in a list before joining them.
-    """
     print("\n--- Input Parameters ---")
     print(f"\tdictionary = {dictionary}")
     print(f"\tsentence = {sentence}")
 
-    print("\n--- Splitting Sentence into Words ---")
+    print("\n--- Initialization ---")
     words = sentence.split()
-    print(f"\twords = {words}")
+    print(f"\tWords in sentence: {words}")
 
-    def shortest_root(word: str) -> str:
-        print(f"\n--- Processing Word: '{word}' ---")
+    print("\n--- Helper Function: find_shortest_root ---")
 
-        print("\tChecking for Replacements:")
-        replacements = []
-        for root in dictionary:
-            print(f"\t\tTesting Root: '{root}'")
-            if word.startswith(root):
-                replacements.append(root)
-                print(f"\t\t\tWord starts with '{root}'. Adding to replacements: {replacements}")
+    def find_shortest_root(word: str) -> str:
+        print(f"\n\t--- Processing word: '{word}' ---")
+        matching_roots = [root for root in dictionary if word.startswith(root)]
+        print(f"\t\tMatching roots: {matching_roots}")
 
-        print(f"\tPossible Replacements Found: {replacements}")
-        if replacements:
-            shortest = min(replacements, key=len)
-            print(f"\tShortest Replacement Selected: '{shortest}'")
-            return shortest
+        if matching_roots:
+            shortest_root = min(matching_roots, key=len)
+            print(f"\t\tShortest root found: '{shortest_root}'")
         else:
-            print("\tNo Replacements Found. Returning Original Word.")
-            return word
+            shortest_root = word
+            print(f"\t\tNo matching root found. Using original word: '{shortest_root}'")
 
-    print("\n--- Replacing Words with Shortest Roots ---")
-    replaced_words = []
-    for word in words:
-        replaced = shortest_root(word)
-        replaced_words.append(replaced)
+        return shortest_root
 
-    print("\n--- Iteration Summary (Word Replacements) ---")
-    headers = ["Original Word", "Replaced Word"]
-    table_data = [[original, replaced] for original, replaced in zip(words, replaced_words)]
-    print(tabulate(table_data, headers=headers, tablefmt="fancy_grid"))
+    print("\n--- Main Processing Loop ---")
+    iteration_data = []
+    for i, word in enumerate(words):
+        print(f"\n--- Word {i + 1}/{len(words)}: '{word}' ---")
 
-    print("\n--- Joining Replaced Words into Sentence ---")
-    result = " ".join(replaced_words)
-    print(f"\tResult: '{result}'")
+        replaced_word = find_shortest_root(word)
+
+        print(f"\tResult: {'Replaced' if replaced_word != word else 'Unchanged'}")
+        print(f"\tOriginal word: '{word}'")
+        print(f"\tFinal word: '{replaced_word}'")
+
+        iteration_data.append([i + 1, word, replaced_word, 'Replaced' if replaced_word != word else 'Unchanged'])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Word #", "Original Word", "Replaced Word", "Action"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
 
     print("\n--- Function Returning ---")
+    result = " ".join([row[2] for row in iteration_data])
+    print(f"\tFinal replaced sentence: '{result}'")
     return result
 
 
