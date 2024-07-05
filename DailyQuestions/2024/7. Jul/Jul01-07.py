@@ -331,11 +331,34 @@ def mergeNodes1(head: Optional[ListNode]) -> Optional[ListNode]:
 
 
 def nodesBetweenCriticalPoints1(head: Optional[ListNode]) -> List[int]:
-    pass
+    if not head.next_node.next_node:
+        return [-1, -1]
 
+    prev_node = head
+    current_node = head.next_node
 
-def nodesBetweenCriticalPoints2(head: Optional[ListNode]) -> List[int]:
-    pass
+    first_critical_point, last_critical_point = None, None
+    min_distance = float('inf')
+
+    index = 1
+    while current_node.next_node:
+        index += 1
+        if (prev_node.val < current_node.val and current_node.next_node.val < current_node.val) or \
+                (prev_node.val > current_node.val and current_node.next_node.val > current_node.val):
+            if not first_critical_point:
+                first_critical_point = index
+            else:
+                min_distance = min(min_distance, index - last_critical_point)
+            last_critical_point = index
+
+        prev_node = current_node
+        current_node = current_node.next_node
+
+    if min_distance != float('inf'):
+        max_distance = last_critical_point - first_critical_point
+        return [min_distance, max_distance]
+
+    return [-1, -1]
 
 
 # <-------------------------------------------------- July 6th, 2024 -------------------------------------------------->
@@ -387,17 +410,10 @@ def problem7_2():
 #     val=4, next_node=ListNode(val=5, next_node=ListNode(val=2, next_node=ListNode()))))))))
 
 # Test cases for July 5th, 2024
-# Expected output: [-1,-1]
-nodesBetweenCriticalPoints1(head=ListNode(val=3, next_node=ListNode(val=1)))
-
 # Expected output: [1, 3]
-nodesBetweenCriticalPoints2(head=ListNode(val=5, next_node=ListNode(val=3, next_node=ListNode(val=1, next_node=ListNode(
-    val=2, next_node=ListNode(val=5, next_node=ListNode(val=1, next_node=ListNode(val=2))))))))
-
-# Expected output: [3, 3]
-nodesBetweenCriticalPoints2(head=ListNode(val=1, next_node=ListNode(val=3, next_node=ListNode(val=2, next_node=ListNode(
-    val=2, next_node=ListNode(val=3, next_node=ListNode(val=2, next_node=ListNode(val=2, next_node=ListNode(
-        val=2, next_node=ListNode(val=7))))))))))
+# nodesBetweenCriticalPoints1(head=ListNode(val=5, next_node=ListNode(val=3, next_node=ListNode(
+#     val=1, next_node=ListNode(val=2, next_node=ListNode(val=5, next_node=ListNode(
+#         val=1, next_node=ListNode(val=2))))))))
 
 # Test cases for July 6th, 2024
 
