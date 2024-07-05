@@ -262,6 +262,19 @@ class ListNode:
 
 
 def mergeNodes1(head: Optional[ListNode]) -> Optional[ListNode]:
+    """
+    Merges nodes between consecutive zeros in a linked list, summing their values.
+
+    This function traverses the linked list, summing values between zeros and
+    updating the list in-place. It uses two pointers: one for traversal and another
+    for updating the result. This approach allows for efficient memory usage as it
+    modifies the existing list rather than creating a new one.
+
+    The time complexity is O(n), where n is the number of nodes in the list,
+    as we traverse each node exactly once. The space complexity is O(1) since
+    we only use a constant amount of extra space for pointers and variables,
+    regardless of the input size.
+    """
     result_node = head
     traversal_node = head.next_node
     current_sum = 0
