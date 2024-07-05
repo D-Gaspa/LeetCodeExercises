@@ -379,8 +379,8 @@ def problem7_2():
 
 # Test cases for July 4th, 2024
 # Expected output: [4, 11] -> ListNode(val=4, next_node=ListNode(val=11))
-mergeNodes1(head=ListNode(next_node=ListNode(val=3, next_node=ListNode(val=1, next_node=ListNode(next_node=ListNode(
-    val=4, next_node=ListNode(val=5, next_node=ListNode(val=2, next_node=ListNode()))))))))
+# mergeNodes1(head=ListNode(next_node=ListNode(val=3, next_node=ListNode(val=1, next_node=ListNode(next_node=ListNode(
+#     val=4, next_node=ListNode(val=5, next_node=ListNode(val=2, next_node=ListNode()))))))))
 
 # Test cases for July 5th, 2024
 
