@@ -9,7 +9,6 @@ from Utils.trees_utils import BinaryTreeNode, TreeVisualizer
 
 # June, 2024
 # <--------------------------------------------------- Week 1, June --------------------------------------------------->
-
 # 1940. Longest Common Subsequence Between Sorted Arrays
 
 # Given an array of integer arrays `arrays` where each `arrays[i]` is sorted in strictly increasing order,
