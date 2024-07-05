@@ -5,6 +5,8 @@ from typing import List
 
 from tabulate import tabulate
 
+from Utils.trie_utils import TrieVisualizer, TrieNode
+
 
 # June 2024, Week 2: June 3rd - June 9th
 
@@ -453,6 +455,61 @@ def replaceWords1(dictionary: List[str], sentence: str) -> str:
 
         return shortest_root
 
+    result = replace_words_main_loop(find_shortest_root, words)
+    return result
+
+
+def replaceWords2(dictionary: List[str], sentence: str) -> str:
+    print("\n--- Input Parameters ---")
+    print(f"\tdictionary = {dictionary}")
+    print(f"\tsentence = {sentence}")
+
+    print("\n--- Initialization ---")
+    words = sentence.split()
+    print(f"\tWords in sentence: {words}")
+
+    print("\n--- Building Trie ---")
+
+    def build_trie(words: List[str]) -> TrieNode:
+        root = TrieNode()
+        for word in words:
+            print(f"\tAdding word: '{word}'")
+            node = root
+            for char in word:
+                if char not in node.children:
+                    print(f"\t\tAdding new node for character: '{char}'")
+                    node.children[char] = TrieNode()
+                node = node.children[char]
+            node.is_word_end = True
+            print(f"\t\tMarking end of word: '{word}'")
+        return root
+
+    root = build_trie(dictionary)
+    print(f"\tTrie visualization: {TrieVisualizer.visualize(root, file_name='trie_visualization')}")
+
+    print("\n--- Helper Function: find_shortest_root ---")
+
+    def find_shortest_root(word: str) -> str:
+        print(f"\n\t--- Processing word: '{word}' ---")
+        node = root
+        for index, char in enumerate(word):
+            print(f"\t\tChecking character: '{char}'")
+            if char not in node.children:
+                print(f"\t\t\tNo matching child node. Returning original word: '{word}'")
+                return word
+            node = node.children[char]
+            if node.is_word_end:
+                shortest_root = word[:index + 1]
+                print(f"\t\t\tFound shortest root: '{shortest_root}'")
+                return shortest_root
+        print(f"\t\tNo shorter root found. Returning original word: '{word}'")
+        return word
+
+    result = replace_words_main_loop(find_shortest_root, words)
+    return result
+
+
+def replace_words_main_loop(find_shortest_root, words):
     print("\n--- Main Processing Loop ---")
     iteration_data = []
     for i, word in enumerate(words):
@@ -465,106 +522,12 @@ def replaceWords1(dictionary: List[str], sentence: str) -> str:
         print(f"\tFinal word: '{replaced_word}'")
 
         iteration_data.append([i + 1, word, replaced_word, 'Replaced' if replaced_word != word else 'Unchanged'])
-
     print("\n--- Iteration Summary ---")
     headers = ["Word #", "Original Word", "Replaced Word", "Action"]
     print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
-
     print("\n--- Function Returning ---")
     result = " ".join([row[2] for row in iteration_data])
     print(f"\tFinal replaced sentence: '{result}'")
-    return result
-
-
-def replaceWords2(dictionary: List[str], sentence: str) -> str:
-    """
-    Replaces all words in a sentence with their shortest root available in the given dictionary.
-
-    The first part of the function creates a Trie (prefix tree) using the dictionary.
-    Each character forms a node and word completions are marked using 'is_word_end' flag.
-    The initial building of the Trie allows for efficient prefix searches later on.
-
-    In the 'shortest_root' function, the Trie is traversed character by character for each word in the sentence.
-    If a word end is encountered during traversal, it returns the prefix up to that point.
-    If no matching root is found, it returns the original word.
-    The main function splits the sentence into words, replaces each word with the shortest root (if available)
-    and reassembles the sentence.
-
-    The time complexity is O(d * m + n * w) where d is the number of words in the dictionary, m is the average length
-    of these words, n is the number of words in the sentence, and w is the average length of the sentence words.
-    This is because, when building the Trie, each word is traversed character by character making it O(d * m).
-    Then, we call the 'shortest_root' function for each word in the sentence, and the Trie is traversed over the
-    characters of the sentence words, making it O(n * w).
-
-    The space complexity is (d * m + n * w), as we're storing all characters in the Trie and the new sentence.
-    """
-    print("\n--- Input Parameters ---")
-    print(f"\tdictionary = {dictionary}")
-    print(f"\tsentence = {sentence}")
-
-    class TrieNode:
-        def __init__(self):
-            self.children = {}
-            self.is_word_end = False
-
-    def build_trie(words: List[str]) -> TrieNode:
-        print("\n--- Building Trie ---")
-
-        root = TrieNode()
-
-        for word in words:
-            print(f"\tAdding word: '{word}'")
-            node = root
-            for char in word:
-                print(f"\t\tProcessing character: '{char}'")
-                if char not in node.children:
-                    print(f"\t\t\tAdding new node for '{char}'")
-                    node.children[char] = TrieNode()
-                node = node.children[char]
-            node.is_word_end = True
-            print(f"\t\tMarked end of word: '{word}'")
-
-        return root
-
-    root = build_trie(dictionary)
-
-    def shortest_root(word: str) -> str:
-        print(f"\n--- Finding Shortest Root for '{word}' ---")
-
-        node = root
-        for index, char in enumerate(word):
-            print(f"\tChecking character: '{char}'")
-            if char not in node.children:
-                print(f"\t\tCharacter not found in Trie. Returning original word: '{word}'")
-                return word
-            node = node.children[char]
-            if node.is_word_end:
-                print(f"\t\tFound root: '{word[:index + 1]}'")
-                return word[:index + 1]  # Shortest root found
-
-        print(f"\tNo root found. Returning original word: '{word}'")
-        return word
-
-    print("\n--- Splitting Sentence into Words ---")
-    words = sentence.split()
-    print(f"\tInitial words: {words}")
-
-    print("\n--- Replacing Words with Shortest Roots ---")
-    replaced_words = []
-    for word in words:
-        replaced_word = shortest_root(word)
-        replaced_words.append(replaced_word)
-
-    print("\n--- Iteration Summary (Word Replacements) ---")
-    headers = ["Word", "Replaced With"]
-    iteration_data = [[words[i], replaced_words[i]] for i in range(len(words))]
-    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
-
-    result = " ".join(replaced_words)
-
-    print("\n--- Function Returning ---")
-    print(f"\tFinal result: '{result}'")
-
     return result
 
 
