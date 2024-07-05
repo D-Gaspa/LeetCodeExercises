@@ -321,16 +321,20 @@ def mergeNodes1(head: Optional[ListNode]) -> Optional[ListNode]:
 
 
 # <-------------------------------------------------- July 5th, 2024 -------------------------------------------------->
-# 5. Problem
+# 2058. Find the Minimum and Maximum Number of Nodes Between Critical Points
 
-# Description
+# Given a linked list `head`, return an array `[minDistance, maxDistance]` where `minDistance` is the minimum distance
+# and `maxDistance` is the maximum distance between any two distinct critical points.
+# A critical point is defined as a node that is a local maxima or minima, with values strictly greater or smaller than
+# both its adjacent nodes.
+# If there are fewer than two critical points, return `[-1, -1]`.
 
 
-def problem5_1():
+def nodesBetweenCriticalPoints1(head: Optional[ListNode]) -> List[int]:
     pass
 
 
-def problem5_2():
+def nodesBetweenCriticalPoints2(head: Optional[ListNode]) -> List[int]:
     pass
 
 
@@ -383,6 +387,17 @@ def problem7_2():
 #     val=4, next_node=ListNode(val=5, next_node=ListNode(val=2, next_node=ListNode()))))))))
 
 # Test cases for July 5th, 2024
+# Expected output: [-1,-1]
+nodesBetweenCriticalPoints1(head=ListNode(val=3, next_node=ListNode(val=1)))
+
+# Expected output: [1, 3]
+nodesBetweenCriticalPoints2(head=ListNode(val=5, next_node=ListNode(val=3, next_node=ListNode(val=1, next_node=ListNode(
+    val=2, next_node=ListNode(val=5, next_node=ListNode(val=1, next_node=ListNode(val=2))))))))
+
+# Expected output: [3, 3]
+nodesBetweenCriticalPoints2(head=ListNode(val=1, next_node=ListNode(val=3, next_node=ListNode(val=2, next_node=ListNode(
+    val=2, next_node=ListNode(val=3, next_node=ListNode(val=2, next_node=ListNode(val=2, next_node=ListNode(
+        val=2, next_node=ListNode(val=7))))))))))
 
 # Test cases for July 6th, 2024
 
