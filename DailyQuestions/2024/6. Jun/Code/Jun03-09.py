@@ -532,80 +532,58 @@ def replace_words_main_loop(find_shortest_root, words):
 
 
 def replaceWords3(dictionary: List[str], sentence: str) -> str:
-    """
-    Replaces all words in a sentence with their shortest root available in the given dictionary.
-
-    The main context of the function is that it generates a dictionary 'word_lengths'
-    where key-value pairs are the words in the dictionary and their lengths respectively.
-    It then identifies and stores the minimum and maximum lengths of words in the dictionary for later use.
-    The function then splits the sentence into individual words.
-
-    For each word in the sentence, it checks each substring of the word from the length of the shortest to either the
-    length of the longest word in the dictionary or the length of the original word; whichever is smallest.
-    If it finds a matching substring in the dictionary, it stores the substring as the replacement for the word and
-    breaks out of the loop to avoid longer roots.
-    It then appends the replacement word to 'modified_sentence_words' list.
-    Finally, it joins all the words in the 'modified_sentence_words' list to recreate the sentence.
-
-    The time complexity of this solution is O(d * m + n * t) where d is the number of words in the dictionary,
-    m is the average length of these words, n is the number of words in the sentence, and t is the maximum possible
-    length of relevant substring checks for a word in the sentence.
-    For each word in the sentence, we are only creating substrings from the minimum length of dictionary words to the
-    minimum length between the maximum length of dictionary words and the length of the current word,
-    which is substantially fewer operations than checking every character.
-    Hence, the time complexity is O(n * t).
-    Building the 'word_lengths' dictionary takes O(d * m) time as we iterate over each word and store its length.
-
-    The space complexity is O(n + d) because we are storing n words from the sentence and d words from the dictionary.
-    """
     print("\n--- Input Parameters ---")
     print(f"\tdictionary = {dictionary}")
     print(f"\tsentence = {sentence}")
 
-    print("\n--- Building Word Length Dictionary ---")
-    word_lengths = {word: len(word) for word in dictionary}
-    print(f"\tword_lengths = {word_lengths}")
+    print("\n--- Initialization ---")
+    root_lengths = {root: len(root) for root in dictionary}
+    print("\tRoot lengths dictionary:")
+    print(tabulate(root_lengths.items(), headers=["Root", "Length"], tablefmt="fancy_grid"))
 
-    print("\n--- Determining Minimum and Maximum Word Lengths ---")
-    min_length = min(word_lengths.values())
-    max_length = max(word_lengths.values())
-    print(f"\tmin_length = {min_length}, max_length = {max_length}")
+    min_length = min(root_lengths.values())
+    max_length = max(root_lengths.values())
+    print(f"\tMinimum root length: {min_length}")
+    print(f"\tMaximum root length: {max_length}")
 
-    print("\n--- Splitting Sentence into Words ---")
     words = sentence.split()
-    print(f"\twords = {words}")
+    print(f"\tWords in sentence: {words}")
 
-    modified_sentence_words = []
+    print("\n--- Main Processing Loop ---")
+    replaced_words = []
+    iteration_data = []
     for i, word in enumerate(words):
-        print(f"\n--- Processing Word {i + 1}: '{word}' ---")
-
+        print(f"\n--- Word {i+1}/{len(words)}: '{word}' ---")
         replacement = word
-        print(f"\tInitial replacement = '{replacement}'")
+        prefix_checks = []
 
-        print("\tChecking Substrings:")
-        for index in range(min_length, min(max_length, len(word)) + 1):
-            substring = word[:index]
-            print(f"\t\tSubstring: '{substring}'")
-
-            if substring in word_lengths:
-                replacement = substring
-                print(f"\t\t\tFound in dictionary! Updating replacement to '{replacement}'")
+        for length in range(min_length, min(max_length, len(word)) + 1):
+            prefix = word[:length]
+            prefix_checks.append(prefix)
+            print(f"\tChecking prefix: '{prefix}'")
+            if prefix in root_lengths:
+                replacement = prefix
+                print(f"\t\tMatch found! Replacing with: '{replacement}'")
                 break
             else:
-                print(f"\t\t\tNot found in dictionary.")
+                print(f"\t\tNo match for this prefix")
 
-        modified_sentence_words.append(replacement)
-        print(f"\tFinal replacement for '{word}': '{replacement}'")
+        if replacement == word:
+            print(f"\tNo shorter root found. Keeping original word: '{word}'")
+        else:
+            print(f"\tReplaced '{word}' with '{replacement}'")
 
-    print("\n--- Iteration Summary (Word Replacements) ---")
-    headers = ["Original Word", "Replaced Word"]
-    table_data = [[original, replaced] for original, replaced in zip(words, modified_sentence_words)]
-    print(tabulate(table_data, headers=headers, tablefmt="fancy_grid"))
+        replaced_words.append(replacement)
+        iteration_data.append([i+1, word, replacement, ", ".join(prefix_checks),
+                               'Replaced' if replacement != word else 'Unchanged'])
 
-    result = " ".join(modified_sentence_words)
-    print(f"\tResult: '{result}'")
+    print("\n--- Iteration Summary ---")
+    headers = ["Word #", "Original Word", "Replaced Word", "Prefixes Checked", "Action"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
 
     print("\n--- Function Returning ---")
+    result = " ".join(replaced_words)
+    print(f"\tFinal replaced sentence: '{result}'")
     return result
 
 
@@ -777,9 +755,12 @@ def subarraysDivByK1(nums: List[int], k: int) -> int:
 
 # Test cases for june 7th, 2024
 # Expected output: "the cat was rat by the bat"
-# replaceWords1(dictionary=["cat", "bat", "rat"], sentence="the cattle was rattled by the battery")
-# replaceWords2(dictionary=["cat", "bat", "rat"], sentence="the cattle was rattled by the battery")
-# replaceWords3(dictionary=["cat", "bat", "rat"], sentence="the cattle was rattled by the battery")
+# replaceWords1(dictionary=["pre", "post", "anti", "pro"],
+#               sentence="The prewar and postwar eras had both prowar and antiwar sentiments")
+# replaceWords2(dictionary=["pre", "post", "anti", "pro"],
+#               sentence="The prewar and postwar eras had both prowar and antiwar sentiments")
+# replaceWords3(dictionary=["pre", "post", "anti", "pro"],
+#               sentence="The prewar and postwar eras had both prowar and antiwar sentiments")
 
 # Test cases for june 8th, 2024
 # Expected output: True
