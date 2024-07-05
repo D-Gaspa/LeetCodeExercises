@@ -5,6 +5,8 @@ from typing import List, Optional
 
 from tabulate import tabulate
 
+from Utils.linked_list_utils import ListNode, LinkedListVisualizer
+
 
 # <-------------------------------------------------- July 1st, 2024 -------------------------------------------------->
 # 1550. Three Consecutive Odds
@@ -226,13 +228,13 @@ def minDifference1(nums: List[int]) -> int:
     for i, (diff, strategy) in enumerate(differences, 1):
         print(f"\n--- Calculation {i}/4 ---")
         print(f"\tStrategy: {strategy}")
-        print(f"\tLargest: {largest_four[i-1]}, Smallest: {smallest_four[4-i]}")
-        print(f"\tDifference: {largest_four[i-1]} - {smallest_four[4-i]} = {diff}")
+        print(f"\tLargest: {largest_four[i - 1]}, Smallest: {smallest_four[4 - i]}")
+        print(f"\tDifference: {largest_four[i - 1]} - {smallest_four[4 - i]} = {diff}")
 
     print("\n--- Difference Summary ---")
     headers = ["Strategy", "Largest", "Smallest", "Difference"]
     table_data = [
-        [strategy, largest_four[i-1], smallest_four[4-i], diff]
+        [strategy, largest_four[i - 1], smallest_four[4 - i], diff]
         for i, (diff, strategy) in enumerate(differences, 1)
     ]
     print(tabulate(table_data, headers=headers, tablefmt="fancy_grid"))
@@ -255,41 +257,67 @@ def minDifference1(nums: List[int]) -> int:
 # nodes between every two consecutive `0`s into a single node with a value equal to their sum,
 # and return the modified list without any `0`s.
 
-class ListNode:
-    def __init__(self, val=0, next_node=None):
-        self.val = val
-        self.next_node = next_node
-
 
 def mergeNodes1(head: Optional[ListNode]) -> Optional[ListNode]:
-    """
-    Merges nodes between consecutive zeros in a linked list, summing their values.
+    print("\n--- Input Parameters ---")
+    print(f"\thead = {LinkedListVisualizer.visualize(head, file_name='mergeNodes1-Input')}")
 
-    This function traverses the linked list, summing values between zeros and
-    updating the list in-place. It uses two pointers: one for traversal and another
-    for updating the result. This approach allows for efficient memory usage as it
-    modifies the existing list rather than creating a new one.
-
-    The time complexity is O(n), where n is the number of nodes in the list,
-    as we traverse each node exactly once. The space complexity is O(1) since
-    we only use a constant amount of extra space for pointers and variables,
-    regardless of the input size.
-    """
+    print("\n--- Initialization ---")
     result_node = head
     traversal_node = head.next_node
     current_sum = 0
+    print(f"\tresult_node = Node with value {result_node.val}")
+    print(f"\ttraversal_node = Node with value {traversal_node.val}")
+    print(f"\tcurrent_sum = {current_sum}")
 
+    print("\n--- Main Loop ---")
+    iteration_data = []
+    iteration = 0
     while traversal_node:
+        iteration += 1
+        print(f"\n--- Iteration {iteration} ---")
+        print(f"\tCurrent state:")
+        print(f"\t\tresult_node.val = {result_node.val}")
+        print(f"\t\ttraversal_node.val = {traversal_node.val}")
+        print(f"\t\tcurrent_sum = {current_sum}")
+
+        print("\tDecision Point:")
         if traversal_node.val == 0:
+            print(f"\t\tCondition true: traversal_node.val == 0")
+            print(f"\t\tActions:")
+            print(f"\t\t\t1. Moving result_node to next node")
             result_node = result_node.next_node
+            print(f"\t\t\t2. Setting result_node.val to current_sum ({current_sum})")
             result_node.val = current_sum
+            print(f"\t\t\t3. Resetting current_sum to 0")
             current_sum = 0
+            action = "Zero found, sum applied"
+            print(f"\tUpdated List State: "
+                  f"{LinkedListVisualizer.visualize(head, file_name=f'mergeNodes1-Iteration{iteration}-End')}")
         else:
+            print(f"\t\tCondition false: traversal_node.val != 0")
+            print(f"\t\tAction: Adding traversal_node.val to current_sum")
             current_sum += traversal_node.val
+            action = f"Added {traversal_node.val} to sum"
+
+        print("\tMoving traversal_node to next node")
         traversal_node = traversal_node.next_node
 
+        iteration_data.append([iteration, result_node.val,
+                               traversal_node.val if traversal_node else "None", current_sum, action])
+
+    print("\n--- Final List Adjustment ---")
+    print(f"\tSetting result_node.next_node to None")
     result_node.next_node = None
-    return head.next_node
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Iteration", "Result Node Val", "Traversal Node Val", "Current Sum", "Action"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    return_value = head.next_node
+    print(f"\tReturning head.next_node: {LinkedListVisualizer.visualize(return_value, file_name='mergeNodes1-Output')}")
+    return return_value
 
 
 # <-------------------------------------------------- July 5th, 2024 -------------------------------------------------->
@@ -352,7 +380,7 @@ def problem7_2():
 # Test cases for July 4th, 2024
 # Expected output: [4, 11] -> ListNode(val=4, next_node=ListNode(val=11))
 mergeNodes1(head=ListNode(next_node=ListNode(val=3, next_node=ListNode(val=1, next_node=ListNode(next_node=ListNode(
-            val=4, next_node=ListNode(val=5, next_node=ListNode(val=2, next_node=ListNode()))))))))
+    val=4, next_node=ListNode(val=5, next_node=ListNode(val=2, next_node=ListNode()))))))))
 
 # Test cases for July 5th, 2024
 
