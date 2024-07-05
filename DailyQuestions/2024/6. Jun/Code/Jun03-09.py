@@ -826,7 +826,7 @@ def subarraysDivByK1(nums: List[int], k: int) -> int:
 # Test cases for june 6th, 2024
 # Expected output: True
 # isNStraightHand1(hand=[1, 2, 3, 6, 2, 3, 4, 7, 8], group_size=3)
-isNStraightHand2(hand=[1, 2, 3, 6, 2, 3, 4, 7, 8], group_size=3)
+# isNStraightHand2(hand=[1, 2, 3, 6, 2, 3, 4, 7, 8], group_size=3)
 
 # Test cases for june 7th, 2024
 # Expected output: "the cat was rat by the bat"
