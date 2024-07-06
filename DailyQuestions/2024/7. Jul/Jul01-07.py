@@ -331,33 +331,51 @@ def mergeNodes1(head: Optional[ListNode]) -> Optional[ListNode]:
 
 
 def nodesBetweenCriticalPoints1(head: Optional[ListNode]) -> List[int]:
+    """
+    Determines the minimum and maximum distances between critical points in a linked list.
+
+    This function traverses the linked list once, identifying critical points (local maxima or minima)
+    and keeping track of their positions. It calculates the minimum distance between any two adjacent
+    critical points and the maximum distance between the first and last critical points.
+    The algorithm uses a sliding window of three nodes (previous, current, and next) to check for
+    critical points. This approach allows for efficient, single-pass processing of the list.
+
+    The time complexity is O(n), where `n` is the number of nodes in the linked list, as we traverse
+    the list once. The space complexity is O(1) as we only use a constant amount of extra space
+    regardless of the input size.
+    """
     if not head.next_node.next_node:
         return [-1, -1]
 
     prev_node = head
     current_node = head.next_node
-
-    first_critical_point, last_critical_point = None, None
+    first_critical_index, last_critical_index = None, None
     min_distance = float('inf')
 
-    index = 1
+    current_index = 1
     while current_node.next_node:
-        index += 1
-        if (prev_node.val < current_node.val and current_node.next_node.val < current_node.val) or \
-                (prev_node.val > current_node.val and current_node.next_node.val > current_node.val):
-            if not first_critical_point:
-                first_critical_point = index
+        current_index += 1
+        # Check if we have a critical point
+        if (
+            # Local maxima
+            prev_node.val < current_node.val > current_node.next_node.val
+            # Local minima
+            or prev_node.val > current_node.val < current_node.next_node.val
+        ):
+            if not first_critical_index:
+                first_critical_index = current_index
             else:
-                min_distance = min(min_distance, index - last_critical_point)
-            last_critical_point = index
+                min_distance = min(min_distance,
+                                   current_index - last_critical_index)
+            last_critical_index = current_index
 
         prev_node = current_node
         current_node = current_node.next_node
 
+    # Calculate the maximum distance if at least two critical points exist
     if min_distance != float('inf'):
-        max_distance = last_critical_point - first_critical_point
+        max_distance = last_critical_index - first_critical_index
         return [min_distance, max_distance]
-
     return [-1, -1]
 
 
