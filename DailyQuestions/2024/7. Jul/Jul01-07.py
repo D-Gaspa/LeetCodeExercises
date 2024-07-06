@@ -331,52 +331,95 @@ def mergeNodes1(head: Optional[ListNode]) -> Optional[ListNode]:
 
 
 def nodesBetweenCriticalPoints1(head: Optional[ListNode]) -> List[int]:
-    """
-    Determines the minimum and maximum distances between critical points in a linked list.
+    print("\n--- Input Parameters ---")
+    input_visualization = LinkedListVisualizer.visualize(head, file_name='nodesBetweenCriticalPoints1-Input')
+    print(f"\thead = {input_visualization}")
 
-    This function traverses the linked list once, identifying critical points (local maxima or minima)
-    and keeping track of their positions. It calculates the minimum distance between any two adjacent
-    critical points and the maximum distance between the first and last critical points.
-    The algorithm uses a sliding window of three nodes (previous, current, and next) to check for
-    critical points. This approach allows for efficient, single-pass processing of the list.
-
-    The time complexity is O(n), where `n` is the number of nodes in the linked list, as we traverse
-    the list once. The space complexity is O(1) as we only use a constant amount of extra space
-    regardless of the input size.
-    """
+    print("\n--- Initialization ---")
     if not head.next_node.next_node:
+        print("\tInsufficient nodes in the list. Returning [-1, -1]")
         return [-1, -1]
 
     prev_node = head
     current_node = head.next_node
     first_critical_index, last_critical_index = None, None
     min_distance = float('inf')
-
     current_index = 1
+
+    print(f"\tprev_node = {prev_node.val}")
+    print(f"\tcurrent_node = {current_node.val}")
+    print(f"\tfirst_critical_index = {first_critical_index}")
+    print(f"\tlast_critical_index = {last_critical_index}")
+    print(f"\tmin_distance = {min_distance}")
+    print(f"\tcurrent_index = {current_index}")
+
+    print("\n--- Main Loop ---")
+    iteration_data = []
+    critical_points = []
     while current_node.next_node:
+        print(f"\n--- Iteration {current_index} ---")
         current_index += 1
-        # Check if we have a critical point
-        if (
-            # Local maxima
-            prev_node.val < current_node.val > current_node.next_node.val
-            # Local minima
-            or prev_node.val > current_node.val < current_node.next_node.val
-        ):
+        print(f"\tCurrent state: prev_node = {prev_node.val}, current_node = {current_node.val}, "
+              f"next_node = {current_node.next_node.val}")
+
+        print("\tChecking for critical point:")
+        is_local_maxima = prev_node.val < current_node.val > current_node.next_node.val
+        is_local_minima = prev_node.val > current_node.val < current_node.next_node.val
+        is_critical_point = is_local_maxima or is_local_minima
+
+        if is_critical_point:
+            print(f"\t\tCritical point found at index {current_index}")
+            critical_points.append(current_index)
+            if is_local_maxima:
+                print(f"\t\t\tLocal maxima: {prev_node.val} < {current_node.val} > {current_node.next_node.val}")
+            else:
+                print(f"\t\t\tLocal minima: {prev_node.val} > {current_node.val} < {current_node.next_node.val}")
+
             if not first_critical_index:
+                print(f"\t\tSetting first_critical_index to {current_index}")
                 first_critical_index = current_index
             else:
-                min_distance = min(min_distance,
-                                   current_index - last_critical_index)
-            last_critical_index = current_index
+                print(f"\t\tUpdating min_distance:")
+                print(f"\t\t\tCurrent min_distance: {min_distance}")
+                print(f"\t\t\tNew distance: {current_index - last_critical_index}")
+                min_distance = min(min_distance, current_index - last_critical_index)
+                print(f"\t\t\tUpdated min_distance: {min_distance}")
 
+            print(f"\t\tUpdating last_critical_index to {current_index}")
+            last_critical_index = current_index
+        else:
+            print("\t\tNot a critical point")
+
+        print("\tUpdating nodes for next iteration:")
+        print(f"\t\tprev_node: {prev_node.val} -> {current_node.val}")
+        print(f"\t\tcurrent_node: {current_node.val} -> {current_node.next_node.val}")
         prev_node = current_node
         current_node = current_node.next_node
 
-    # Calculate the maximum distance if at least two critical points exist
+        iteration_data.append([current_index - 1, prev_node.val, current_node.val,
+                               current_node.next_node.val if current_node.next_node else "None",
+                               is_critical_point, first_critical_index, last_critical_index, min_distance])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Index", "Prev", "Current", "Next", "Is Critical", "First Critical", "Last Critical", "Min Distance"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Critical Points Visualization ---")
+    critical_points_visualization = LinkedListVisualizer.visualize(
+        head, file_name='nodesBetweenCriticalPoints1-CriticalPoints')
+
+    print(f"\tCritical Points: {critical_points}")
+    print(f"\tVisualization: {critical_points_visualization}")
+
+    print("\n--- Function Returning ---")
     if min_distance != float('inf'):
         max_distance = last_critical_index - first_critical_index
+        print(f"\tCalculating max_distance: {last_critical_index} - {first_critical_index} = {max_distance}")
+        print(f"\tFinal Result: [{min_distance}, {max_distance}]")
         return [min_distance, max_distance]
-    return [-1, -1]
+    else:
+        print("\tLess than two critical points found. Returning [-1, -1]")
+        return [-1, -1]
 
 
 # <-------------------------------------------------- July 6th, 2024 -------------------------------------------------->
@@ -429,9 +472,9 @@ def problem7_2():
 
 # Test cases for July 5th, 2024
 # Expected output: [1, 3]
-# nodesBetweenCriticalPoints1(head=ListNode(val=5, next_node=ListNode(val=3, next_node=ListNode(
-#     val=1, next_node=ListNode(val=2, next_node=ListNode(val=5, next_node=ListNode(
-#         val=1, next_node=ListNode(val=2))))))))
+nodesBetweenCriticalPoints1(head=ListNode(val=5, next_node=ListNode(val=3, next_node=ListNode(
+    val=1, next_node=ListNode(val=2, next_node=ListNode(val=5, next_node=ListNode(
+        val=1, next_node=ListNode(val=2))))))))
 
 # Test cases for July 6th, 2024
 
