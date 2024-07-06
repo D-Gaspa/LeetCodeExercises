@@ -432,13 +432,15 @@ def nodesBetweenCriticalPoints1(head: Optional[ListNode]) -> List[int]:
 
 
 def passThePillow1(n: int, time: int) -> int:
-    time %= (n - 1) * 2
+    # Calculate position within a single back-and-forth cycle
+    cycle_position = time % ((n - 1) * 2)
 
-    if time < n:
-        return time + 1
+    # If the position is less than n, the pillow is moving forward
+    if cycle_position < n:
+        return cycle_position + 1
     else:
-        offset = time - n + 1
-        return n - offset
+        # Otherwise, the pillow is moving backward
+        return n - (cycle_position - n + 1)
 
 
 # <-------------------------------------------------- July 7th, 2024 -------------------------------------------------->

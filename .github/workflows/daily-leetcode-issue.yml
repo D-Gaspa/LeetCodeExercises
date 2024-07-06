@@ -33,5 +33,6 @@ jobs:
             ### Tasks:
             - [ ] Implement the python solution/solutions for ${date} daily problem
             - [ ] Update the documentation in the repository for the ${date} daily problem
-            `
+            `,
+            assignees: ['D-Gaspa']
           });
