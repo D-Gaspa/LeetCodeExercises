@@ -393,12 +393,13 @@ def nodesBetweenCriticalPoints1(head: Optional[ListNode]) -> List[int]:
         print("\tUpdating nodes for next iteration:")
         print(f"\t\tprev_node: {prev_node.val} -> {current_node.val}")
         print(f"\t\tcurrent_node: {current_node.val} -> {current_node.next_node.val}")
-        prev_node = current_node
-        current_node = current_node.next_node
 
-        iteration_data.append([current_index - 1, prev_node.val, current_node.val,
+        iteration_data.append([current_index, prev_node.val, current_node.val,
                                current_node.next_node.val if current_node.next_node else "None",
                                is_critical_point, first_critical_index, last_critical_index, min_distance])
+
+        prev_node = current_node
+        current_node = current_node.next_node
 
     print("\n--- Iteration Summary ---")
     headers = ["Index", "Prev", "Current", "Next", "Is Critical", "First Critical", "Last Critical", "Min Distance"]
@@ -472,9 +473,9 @@ def problem7_2():
 
 # Test cases for July 5th, 2024
 # Expected output: [1, 3]
-# nodesBetweenCriticalPoints1(head=ListNode(val=5, next_node=ListNode(val=3, next_node=ListNode(
-#     val=1, next_node=ListNode(val=2, next_node=ListNode(val=5, next_node=ListNode(
-#         val=1, next_node=ListNode(val=2))))))))
+nodesBetweenCriticalPoints1(head=ListNode(val=5, next_node=ListNode(val=3, next_node=ListNode(
+    val=1, next_node=ListNode(val=2, next_node=ListNode(val=5, next_node=ListNode(
+        val=1, next_node=ListNode(val=2))))))))
 
 # Test cases for July 6th, 2024
 

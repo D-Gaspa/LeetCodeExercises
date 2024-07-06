@@ -5,16 +5,16 @@ class UnionFind:
 
     def __init__(self, size: int, offset: int = 0):
         """Initializes the Union-Find data structure with the given number of elements and optional offset."""
-        self.parent = [i for i in range(size + offset)]
+        self.root = [i for i in range(size + offset)]
         self.rank = [1] * (size + offset)
         self.num_components = size
 
     def find(self, x: int) -> int:
         """Finds the root of the set containing x, applying path compression for efficiency."""
-        if x == self.parent[x]:
+        if x == self.root[x]:
             return x
-        self.parent[x] = self.find(self.parent[x])
-        return self.parent[x]
+        self.root[x] = self.find(self.root[x])
+        return self.root[x]
 
     def union(self, x: int, y: int) -> bool:
         """
@@ -26,9 +26,9 @@ class UnionFind:
         if root_x == root_y:
             return False
         if self.rank[root_x] < self.rank[root_y]:
-            self.parent[root_x] = root_y
+            self.root[root_x] = root_y
         else:
-            self.parent[root_y] = root_x
+            self.root[root_y] = root_x
             if self.rank[root_x] == self.rank[root_y]:
                 self.rank[root_x] += 1
         self.num_components -= 1
@@ -50,29 +50,29 @@ class UnionFind:
 class UnionFindWithLogs:
 
     def __init__(self, size: int, offset: int = 0):
-        self.parent = [i for i in range(size + offset)]
+        self.root = [i for i in range(size + offset)]
         self.rank = [1] * (size + offset)
         self.num_components = size
         print(f"\n--- Initializing UnionFind ---")
         print(f"\tSize: {size}")
         print(f"\tOffset: {offset}")
-        print(f"\tInitial parent array: {self.parent}")
+        print(f"\tInitial root array: {self.root}")
         print(f"\tInitial rank array: {self.rank}")
         print(f"\tInitial number of components: {self.num_components}")
 
     def find(self, x: int) -> int:
         print(f"\n\t--- Finding root for element {x} ---")
         path = [x]
-        while x != self.parent[x]:
-            x = self.parent[x]
+        while x != self.root[x]:
+            x = self.root[x]
             path.append(x)
         root = x
         print(f"\t\tPath to root: {' -> '.join(map(str, path))}")
 
         # Path compression
         for node in path[:-1]:
-            self.parent[node] = root
-        print(f"\t\tAfter path compression, parent array: {self.parent}")
+            self.root[node] = root
+        print(f"\t\tAfter path compression, root array: {self.root}")
 
         return root
 
@@ -88,10 +88,10 @@ class UnionFindWithLogs:
             return False
 
         if self.rank[root_x] < self.rank[root_y]:
-            self.parent[root_x] = root_y
+            self.root[root_x] = root_y
             print(f"\t\tAttaching tree rooted at {root_x} to {root_y}")
         else:
-            self.parent[root_y] = root_x
+            self.root[root_y] = root_x
             if self.rank[root_x] == self.rank[root_y]:
                 self.rank[root_x] += 1
                 print(f"\t\tAttaching tree rooted at {root_y} to {root_x} and incrementing rank of {root_x}")
@@ -99,7 +99,7 @@ class UnionFindWithLogs:
                 print(f"\t\tAttaching tree rooted at {root_y} to {root_x}")
 
         self.num_components -= 1
-        print(f"\t\tUpdated parent array: {self.parent}")
+        print(f"\t\tUpdated root array: {self.root}")
         print(f"\t\tUpdated rank array: {self.rank}")
         print(f"\t\tNumber of components reduced to: {self.num_components}")
         return True

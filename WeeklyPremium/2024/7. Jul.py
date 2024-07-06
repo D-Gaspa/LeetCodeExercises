@@ -13,16 +13,30 @@ from Utils.graph_utils import UnionFind
 
 
 def earliestAcq1(logs: List[List[int]], n: int) -> int:
+    """
+    Determines the earliest time when all people in a social group become acquainted.
+
+    This function uses the Union-Find data structure to efficiently track friend connections
+    and group formations. It sorts the logs by timestamp and processes each friendship event
+    chronologically. The algorithm leverages the properties of the Union-Find structure to
+    quickly check if all individuals have become part of a single connected component.
+
+    The time complexity of this solution is O(m log m + n + m * α(n)), where 'm' is the number of
+    logs, 'n' is the number of people and α(n) is the inverse Ackermann function.
+    This is due to the initial sort operation (O(m log m)), the UnionFind initialization (O(n)) and for
+    each log (m), the find and union operations (O(α(n))).
+    The space complexity is O(m + n), accounting for the sorted logs and the UnionFind data structure.
+    """
     if len(logs) < n - 1:
-        return -1
+        return -1  # Not enough friendships to connect all people
 
-    logs.sort(key=lambda x: x[0])
-    friends_uf = UnionFind(n)
+    logs.sort(key=lambda x: x[0])  # Sort logs by timestamp
+    friend_network_uf = UnionFind(n)
 
-    for timestamp, person_1, person_2 in logs:
-        friends_uf.union(person_1, person_2)
-        if friends_uf.is_single_component():
-            return timestamp
+    for timestamp, person_a, person_b in logs:
+        friend_network_uf.union(person_a, person_b)
+        if friend_network_uf.is_single_component():
+            return timestamp  # All people are connected
 
     return -1
 
