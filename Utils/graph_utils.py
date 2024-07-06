@@ -1,4 +1,68 @@
-from graphviz import Graph
+import colorsys
+
+from graphviz import Graph, Digraph
+
+
+class GraphVisualizer:
+    @staticmethod
+    def visualize(edges: list, file_name: str, directed: bool = False) -> str:
+        dot = Digraph(comment='Graph')
+        dot.attr(rankdir='LR')
+        dot.attr('node', shape='circle', style='filled', color='lightblue', fontcolor='black')
+
+        if directed:
+            dot.attr('edge', color='black', arrowsize='0.5')
+        else:
+            dot.attr('edge', color='black', dir='none')  # Removes arrow for undirected graphs
+
+        # Add all nodes
+        nodes = set()
+        for edge in edges:
+            nodes.add(edge[0])
+            nodes.add(edge[1])
+        for node in nodes:
+            dot.node(str(node), str(node))
+
+        # Add edges
+        for edge in edges:
+            dot.edge(str(edge[0]), str(edge[1]))
+
+        # Use the provided file name directly
+        dot.render(file_name, format='png', cleanup=True)
+
+        return file_name + '.png'
+
+
+class ExtendedGraphVisualizer:
+    @staticmethod
+    def visualize(edges: list, file_name: str) -> str:
+        dot = Digraph(comment='Graph with Typed Edges')
+        dot.attr(rankdir='LR')
+        dot.attr('node', shape='circle', style='filled', color='lightblue', fontcolor='black')
+
+        # Generate colors for edge types
+        edge_types = set(edge[0] for edge in edges)
+        colors = ExtendedGraphVisualizer._generate_colors(len(edge_types))
+        color_map = dict(zip(edge_types, colors))
+
+        # Add all nodes
+        nodes = set()
+        for edge in edges:
+            nodes.add(edge[1])
+            nodes.add(edge[2])
+        for node in nodes:
+            dot.node(str(node), str(node))
+
+        # Add edges
+        for edge in edges:
+            dot.edge(str(edge[1]), str(edge[2]), color=color_map[edge[0]], label=str(edge[0]))
+
+        dot.render(file_name, format='png', cleanup=True)
+        return file_name + '.png'
+
+    @staticmethod
+    def _generate_colors(n):
+        return ['#%02x%02x%02x' % tuple(int(i * 255) for i in colorsys.hsv_to_rgb(i / n, 1.0, 1.0)) for i in range(n)]
 
 
 class UnionFind:
