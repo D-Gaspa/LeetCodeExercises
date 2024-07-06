@@ -472,9 +472,9 @@ def problem7_2():
 
 # Test cases for July 5th, 2024
 # Expected output: [1, 3]
-nodesBetweenCriticalPoints1(head=ListNode(val=5, next_node=ListNode(val=3, next_node=ListNode(
-    val=1, next_node=ListNode(val=2, next_node=ListNode(val=5, next_node=ListNode(
-        val=1, next_node=ListNode(val=2))))))))
+# nodesBetweenCriticalPoints1(head=ListNode(val=5, next_node=ListNode(val=3, next_node=ListNode(
+#     val=1, next_node=ListNode(val=2, next_node=ListNode(val=5, next_node=ListNode(
+#         val=1, next_node=ListNode(val=2))))))))
 
 # Test cases for July 6th, 2024
 
