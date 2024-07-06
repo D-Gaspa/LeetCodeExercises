@@ -424,17 +424,21 @@ def nodesBetweenCriticalPoints1(head: Optional[ListNode]) -> List[int]:
 
 
 # <-------------------------------------------------- July 6th, 2024 -------------------------------------------------->
-# 6. Problem
+# 2582. Pass the Pillow
 
-# Description
-
-
-def problem6_1():
-    pass
+# Given `n` people that stand in a line from 1 to `n` passing a pillow to the next person every second, determine which
+# person is holding the pillow after `time` seconds.
+# When the pillow reaches either end, the direction reverses; return the index of the person holding the pillow.
 
 
-def problem6_2():
-    pass
+def passThePillow1(n: int, time: int) -> int:
+    time %= (n - 1) * 2
+
+    if time < n:
+        return time + 1
+    else:
+        offset = time - n + 1
+        return n - offset
 
 
 # <-------------------------------------------------- July 7th, 2024 -------------------------------------------------->
@@ -473,10 +477,12 @@ def problem7_2():
 
 # Test cases for July 5th, 2024
 # Expected output: [1, 3]
-nodesBetweenCriticalPoints1(head=ListNode(val=5, next_node=ListNode(val=3, next_node=ListNode(
-    val=1, next_node=ListNode(val=2, next_node=ListNode(val=5, next_node=ListNode(
-        val=1, next_node=ListNode(val=2))))))))
+# nodesBetweenCriticalPoints1(head=ListNode(val=5, next_node=ListNode(val=3, next_node=ListNode(
+#     val=1, next_node=ListNode(val=2, next_node=ListNode(val=5, next_node=ListNode(
+#         val=1, next_node=ListNode(val=2))))))))
 
 # Test cases for July 6th, 2024
+# Expected output: 2
+passThePillow1(n=3, time=7)
 
 # Test cases for July 7th, 2024
