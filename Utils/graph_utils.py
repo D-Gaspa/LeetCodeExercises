@@ -52,78 +52,93 @@ class UnionFind:
 
 class UnionFindWithLogs:
 
-    def __init__(self, size: int, offset: int = 0):
+    def __init__(self, size: int, offset: int = 0, images_only: bool = False):
         self.root = [i for i in range(size + offset)]
         self.rank = [1] * (size + offset)
         self.num_components = size
-        print(f"\n--- Initializing UnionFind ---")
-        print(f"\tSize: {size}")
-        print(f"\tOffset: {offset}")
-        print(f"\tInitial root array: {self.root}")
-        print(f"\tInitial rank array: {self.rank}")
-        print(f"\tInitial number of components: {self.num_components}")
+        self.images_only = images_only
+        if not images_only:
+            print(f"\n--- Initializing UnionFind ---")
+            print(f"\tSize: {size}")
+            print(f"\tOffset: {offset}")
+            print(f"\tInitial root array: {self.root}")
+            print(f"\tInitial rank array: {self.rank}")
+            print(f"\tInitial number of components: {self.num_components}")
         print(f"\nInitialized UnionFind: {UnionFindVisualizer.visualize(self, 'union-find-initial')}")
 
     def find(self, x: int) -> int:
-        print(f"\n\t--- Finding root for element {x} ---")
+        if not self.images_only:
+            print(f"\n\t--- Finding root for element {x} ---")
         path = [x]
         while x != self.root[x]:
             x = self.root[x]
             path.append(x)
         root = x
-        print(f"\t\tPath to root: {' -> '.join(map(str, path))}")
+        if not self.images_only:
+            print(f"\t\tPath to root: {' -> '.join(map(str, path))}")
 
         # Path compression
         for node in path[:-1]:
             self.root[node] = root
-        print(f"\t\tAfter path compression, root array: {self.root}")
+        if not self.images_only:
+            print(f"\t\tAfter path compression, root array: {self.root}")
 
         return root
 
     def union(self, x: int, y: int) -> bool:
-        print(f"\n\t--- Uniting sets containing {x} and {y} ---")
         root_x = self.find(x)
         root_y = self.find(y)
-        print(f"\t\tRoot of {x}: {root_x}")
-        print(f"\t\tRoot of {y}: {root_y}")
+
+        if not self.images_only:
+            print(f"\n\t--- Uniting sets containing {x} and {y} ---")
+            print(f"\t\tRoot of {x}: {root_x}")
+            print(f"\t\tRoot of {y}: {root_y}")
 
         if root_x == root_y:
-            print(f"\t\t{x} and {y} are already in the same set. No union performed.")
+            if not self.images_only:
+                print(f"\t\t{x} and {y} are already in the same set. No union performed.")
             return False
 
         if self.rank[root_x] < self.rank[root_y]:
             self.root[root_x] = root_y
-            print(f"\t\tAttaching tree rooted at {root_x} to {root_y}")
+            if not self.images_only:
+                print(f"\t\tAttaching tree rooted at {root_x} to {root_y}")
         else:
             self.root[root_y] = root_x
             if self.rank[root_x] == self.rank[root_y]:
                 self.rank[root_x] += 1
-                print(f"\t\tAttaching tree rooted at {root_y} to {root_x} and incrementing rank of {root_x}")
+                if not self.images_only:
+                    print(f"\t\tAttaching tree rooted at {root_y} to {root_x} and incrementing rank of {root_x}")
             else:
-                print(f"\t\tAttaching tree rooted at {root_y} to {root_x}")
+                if not self.images_only:
+                    print(f"\t\tAttaching tree rooted at {root_y} to {root_x}")
 
         self.num_components -= 1
-        print(f"\t\tUpdated root array: {self.root}")
-        print(f"\t\tUpdated rank array: {self.rank}")
-        print(f"\t\tNumber of components reduced to: {self.num_components}")
+        if not self.images_only:
+            print(f"\t\tUpdated root array: {self.root}")
+            print(f"\t\tUpdated rank array: {self.rank}")
+            print(f"\t\tNumber of components reduced to: {self.num_components}")
         print(f"Union performed: {UnionFindVisualizer.visualize(self, f'union-find-after-union-{x}-{y}')}")
         return True
 
     def is_connected(self, x: int, y: int) -> bool:
-        print(f"\n\t--- Checking if {x} and {y} are connected ---")
         result = self.find(x) == self.find(y)
-        print(f"\t\tResult: {result}")
+        if not self.images_only:
+            print(f"\n\t--- Checking if {x} and {y} are connected ---")
+            print(f"\t\tResult: {result}")
         return result
 
     def get_components(self) -> int:
-        print(f"\n\t--- Getting number of components ---")
-        print(f"\t\tCurrent number of components: {self.num_components}")
+        if not self.images_only:
+            print(f"\n\t--- Getting number of components ---")
+            print(f"\t\tCurrent number of components: {self.num_components}")
         return self.num_components
 
     def is_single_component(self) -> bool:
-        print(f"\n\t--- Checking if all elements are in a single component ---")
         result = self.num_components == 1
-        print(f"\t\tResult: {result}")
+        if not self.images_only:
+            print(f"\n\t--- Checking if all elements are in a single component ---")
+            print(f"\t\tResult: {result}")
         return result
 
 

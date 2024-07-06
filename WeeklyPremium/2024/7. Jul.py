@@ -29,7 +29,7 @@ def earliestAcq1(logs, n):
     print(tabulate(logs, headers=["Timestamp", "Person A", "Person B"], tablefmt="fancy_grid"))
 
     print("\n--- Initializing Union-Find ---")
-    friend_network_uf = UnionFindWithLogs(n)
+    friend_network_uf = UnionFindWithLogs(n, images_only=True)
     print(f"\tInitialized UnionFind with {n} elements")
 
     print("\n--- Processing Friendships ---")
@@ -126,7 +126,7 @@ def problem5_2():
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 # Test cases for Week 1, July
 # Expected output: 3
-earliestAcq1(logs=[[0, 2, 0], [1, 0, 1], [3, 0, 3], [4, 1, 2], [7, 3, 1]], n=4)
+# earliestAcq1(logs=[[0, 2, 0], [1, 0, 1], [3, 0, 3], [4, 1, 2], [7, 3, 1]], n=4)
 
 # Test cases for Week 2, July
 
