@@ -1,9 +1,10 @@
 # July, 2024
 # <-------------------------------------------------- Week 1, July -------------------------------------------------->
 # 1101. The Earliest Moment When Everyone Becomes Friends
-from typing import List
 
-from Utils.graph_utils import UnionFind
+from tabulate import tabulate
+
+from Utils.graph_utils import UnionFindWithLogs
 
 
 # Given `n` people in a social group labeled from `0` to `n - 1` and an array `logs` where
@@ -12,32 +13,57 @@ from Utils.graph_utils import UnionFind
 # Friendship is symmetric and transitive.
 
 
-def earliestAcq1(logs: List[List[int]], n: int) -> int:
-    """
-    Determines the earliest time when all people in a social group become acquainted.
+def earliestAcq1(logs, n):
+    print("\n--- Input Parameters ---")
+    print(f"\tlogs = {logs}")
+    print(f"\tn = {n}")
 
-    This function uses the Union-Find data structure to efficiently track friend connections
-    and group formations. It sorts the logs by timestamp and processes each friendship event
-    chronologically. The algorithm leverages the properties of the Union-Find structure to
-    quickly check if all individuals have become part of a single connected component.
-
-    The time complexity of this solution is O(m log m + n + m * α(n)), where 'm' is the number of
-    logs, 'n' is the number of people and α(n) is the inverse Ackermann function.
-    This is due to the initial sort operation (O(m log m)), the UnionFind initialization (O(n)) and for
-    each log (m), the find and union operations (O(α(n))).
-    The space complexity is O(m + n), accounting for the sorted logs and the UnionFind data structure.
-    """
+    print("\n--- Initialization ---")
     if len(logs) < n - 1:
-        return -1  # Not enough friendships to connect all people
+        print(f"\tNot enough friendships: {len(logs)} < {n - 1}")
+        return -1
 
-    logs.sort(key=lambda x: x[0])  # Sort logs by timestamp
-    friend_network_uf = UnionFind(n)
+    print("\n--- Sorting Logs ---")
+    logs.sort(key=lambda x: x[0])
+    print("\tSorted logs:")
+    print(tabulate(logs, headers=["Timestamp", "Person A", "Person B"], tablefmt="fancy_grid"))
 
-    for timestamp, person_a, person_b in logs:
-        friend_network_uf.union(person_a, person_b)
-        if friend_network_uf.is_single_component():
-            return timestamp  # All people are connected
+    print("\n--- Initializing Union-Find ---")
+    friend_network_uf = UnionFindWithLogs(n)
+    print(f"\tInitialized UnionFind with {n} elements")
 
+    print("\n--- Processing Friendships ---")
+    iteration_data = []
+    for i, (timestamp, person_a, person_b) in enumerate(logs):
+        print(f"\n--- Friendship {i + 1}/{len(logs)} ---")
+        print(f"\tTimestamp: {timestamp}")
+        print(f"\tPerson A: {person_a}")
+        print(f"\tPerson B: {person_b}")
+
+        print("\tPerforming Union Operation:")
+        union_result = friend_network_uf.union(person_a, person_b)
+        print(f"\t\tUnion result: {union_result}")
+
+        print("\tChecking for Single Component:")
+        is_single = friend_network_uf.is_single_component()
+        print(f"\t\tIs single component: {is_single}")
+
+        iteration_data.append([i + 1, timestamp, person_a, person_b, union_result, is_single])
+
+        if is_single:
+            print(f"\n--- All People Connected at Timestamp {timestamp} ---")
+            print("\n--- Iteration Summary ---")
+            headers = ["Iteration", "Timestamp", "Person A", "Person B", "Union Result", "Is Single Component"]
+            print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+            return timestamp
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Iteration", "Timestamp", "Person A", "Person B", "Union Result", "Is Single Component"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print("\tNot all people could be connected")
+    print("\tFinal Result: -1")
     return -1
 
 
@@ -100,13 +126,7 @@ def problem5_2():
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 # Test cases for Week 1, July
 # Expected output: 3
-print(earliestAcq1(logs=[[0, 2, 0], [1, 0, 1], [3, 0, 3], [4, 1, 2], [7, 3, 1]], n=4))
-
-# Expected output: 20,190,301
-print(earliestAcq1(
-    logs=[[20190101, 0, 1], [20190104, 3, 4], [20190107, 2, 3], [20190211, 1, 5], [20190224, 2, 4], [20190301, 0, 3],
-          [20190312, 1, 2], [20190322, 4, 5]],
-    n=6))
+earliestAcq1(logs=[[0, 2, 0], [1, 0, 1], [3, 0, 3], [4, 1, 2], [7, 3, 1]], n=4)
 
 # Test cases for Week 2, July
 

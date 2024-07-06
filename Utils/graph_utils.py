@@ -1,3 +1,6 @@
+from graphviz import Graph
+
+
 class UnionFind:
     """
     Implements the Union-Find data structure with path compression and union by rank optimizations.
@@ -59,6 +62,7 @@ class UnionFindWithLogs:
         print(f"\tInitial root array: {self.root}")
         print(f"\tInitial rank array: {self.rank}")
         print(f"\tInitial number of components: {self.num_components}")
+        print(f"\nInitialized UnionFind: {UnionFindVisualizer.visualize(self, 'union-find-initial')}")
 
     def find(self, x: int) -> int:
         print(f"\n\t--- Finding root for element {x} ---")
@@ -102,6 +106,7 @@ class UnionFindWithLogs:
         print(f"\t\tUpdated root array: {self.root}")
         print(f"\t\tUpdated rank array: {self.rank}")
         print(f"\t\tNumber of components reduced to: {self.num_components}")
+        print(f"Union performed: {UnionFindVisualizer.visualize(self, f'union-find-after-union-{x}-{y}')}")
         return True
 
     def is_connected(self, x: int, y: int) -> bool:
@@ -120,3 +125,33 @@ class UnionFindWithLogs:
         result = self.num_components == 1
         print(f"\t\tResult: {result}")
         return result
+
+
+class UnionFindVisualizer:
+    @staticmethod
+    def visualize(uf: UnionFind | UnionFindWithLogs, file_name: str) -> str:
+        dot = Graph(comment='Union-Find')
+        dot.attr(rankdir='TB')  # Top to bottom layout
+        dot.attr('node', shape='circle', style='filled', color='lightblue', fontcolor='black')
+        dot.attr('edge', color='black')
+
+        # Create a subgraph for each set
+        sets = {}
+        for i in range(len(uf.root)):
+            root = uf.find(i)
+            if root not in sets:
+                sets[root] = []
+            sets[root].append(i)
+
+        for root, elements in sets.items():
+            with dot.subgraph(name=f'cluster_{root}') as c:
+                c.attr(label=f'Set {root}', style='rounded', color='lightgrey')
+                for element in elements:
+                    c.node(str(element), str(element))
+                    if element != root:
+                        dot.edge(str(root), str(element), style='dashed')
+
+        # Use the provided file name directly
+        dot.render(file_name, format='png', cleanup=True)
+
+        return file_name + '.png'
