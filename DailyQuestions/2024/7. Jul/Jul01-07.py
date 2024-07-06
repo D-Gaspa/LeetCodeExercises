@@ -432,6 +432,18 @@ def nodesBetweenCriticalPoints1(head: Optional[ListNode]) -> List[int]:
 
 
 def passThePillow1(n: int, time: int) -> int:
+    """
+    Determines the index of the person holding the pillow after a given time in a line of n people.
+
+    This function uses modular arithmetic to efficiently calculate the pillow's position within a single
+    back-and-forth cycle. It first computes the cycle position using the modulo operator, then determines
+    whether the pillow is moving forward or backward based on this position. This approach avoids the need
+    for iteration, resulting in constant time complexity regardless of the input size.
+
+    The time complexity of this solution is O(1) because it performs a fixed number of arithmetic operations
+    regardless of the input values. The space complexity is also O(1) as it uses only a constant amount of
+    additional memory to store the `cycle_position` variable.
+    """
     # Calculate position within a single back-and-forth cycle
     cycle_position = time % ((n - 1) * 2)
 
