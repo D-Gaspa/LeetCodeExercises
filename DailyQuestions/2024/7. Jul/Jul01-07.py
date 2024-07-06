@@ -452,7 +452,7 @@ def passThePillow1(n: int, time: int) -> int:
         return cycle_position + 1
     else:
         # Otherwise, the pillow is moving backward
-        return n - (cycle_position - n + 1)
+        return 2 * n - (cycle_position + 1)
 
 
 # <-------------------------------------------------- July 7th, 2024 -------------------------------------------------->
