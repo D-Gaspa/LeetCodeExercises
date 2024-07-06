@@ -1,0 +1,36 @@
+name: Create Daily LeetCode Issue
+
+on:
+  schedule:
+    # This will run the action every day at 00:00 UTC
+    - cron: '0 0 * * *'
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  create-issue:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get current date
+      id: date
+      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+
+    - name: Create Issue
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: `LeetCode Daily Problem: ${new Date().toISOString().split('T')[0]}`,
+            body: `
+            ## Daily LeetCode Problem
+            
+            **Date:** ${new Date().toISOString().split('T')[0]}
+            
+            ### Tasks:
+            - [ ] Implement the python solution/solutions for ${new Date().toISOString().split('T')[0]} daily problem
+            - [ ] Update the documentation in the repository for the ${new Date().toISOString().split('T')[0]} daily problem
+            
+          })
