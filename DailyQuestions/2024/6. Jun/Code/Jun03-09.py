@@ -595,32 +595,63 @@ def replaceWords3(dictionary: List[str], sentence: str) -> str:
 
 
 def checkSubarraySum1(nums: List[int], k: int) -> bool:
-    """
-    Determines if there exists a subarray in 'nums' with a length of at least two and a sum that is a multiple of 'k'.
+    print("\n--- Input Parameters ---")
+    print(f"\tnums = {nums}")
+    print(f"\tk = {k}")
 
-    This function uses a prefix sum technique combined with modular arithmetic to efficiently solve the problem.
-    It iterates through the array once, maintaining a running sum modulo `k`. The key insight is that if the same
-    remainder is encountered twice, and the indices are at least 2 apart, it implies the existence of a subarray
-    whose sum is divisible by `k`. This approach avoids the need to check all possible subarrays, significantly
-    reducing time complexity.
-
-    The time complexity of this solution is O(n), where `n` is the length of nums, because it performs a single pass
-    through the array. The space complexity is O(min(n, k)) as the `remainder_index_map` can have at most min(n, k)
-    entries.
-
-    """
+    print("\n--- Initialization ---")
     prefix_sum_mod_k = 0
-    remainder_index_map = {0: -1}  # Initialize with 0 at index -1 to handle edge cases
+    remainder_index_map = {0: -1}
+    print(f"\tprefix_sum_mod_k = {prefix_sum_mod_k}")
+    print(f"\tremainder_index_map = {remainder_index_map}")
 
+    print("\n--- Main Loop ---")
+    iteration_data = []
+    is_valid_subarray = False
     for index, num in enumerate(nums):
+        print(f"\n--- Element {index+1}/{len(nums)} ---")
+        print(f"\tCurrent element: {num}")
+        print(f"\tCurrent state: prefix_sum_mod_k = {prefix_sum_mod_k}")
+
+        print("\tUpdating prefix sum:")
         prefix_sum_mod_k = (prefix_sum_mod_k + num) % k
+        print(f"\t\tNew prefix_sum_mod_k = (previous_sum + current_num) % k")
+        print(f"\t\tNew prefix_sum_mod_k = ({prefix_sum_mod_k - num} + {num}) % {k} = {prefix_sum_mod_k}")
 
+        print("\tChecking remainder in map:")
         if prefix_sum_mod_k not in remainder_index_map:
+            print(f"\t\tRemainder {prefix_sum_mod_k} not in map. Adding to map.")
             remainder_index_map[prefix_sum_mod_k] = index
-        elif index - remainder_index_map[prefix_sum_mod_k] >= 2:
-            return True  # Valid subarray found
+            print(f"\t\tUpdated map: {remainder_index_map}")
+        else:
+            print(f"\t\tRemainder {prefix_sum_mod_k} already in map at index {remainder_index_map[prefix_sum_mod_k]}")
+            print("\tChecking subarray length:")
+            subarray_length = index - remainder_index_map[prefix_sum_mod_k]
+            print(f"\t\tSubarray length = current_index - previous_index = "
+                  f"{index} - {remainder_index_map[prefix_sum_mod_k]} = {subarray_length}")
+            if subarray_length >= 2:
+                print(f"\t\tValid subarray found! Length {subarray_length} >= 2")
+                iteration_data.append([index, num, prefix_sum_mod_k, remainder_index_map.copy()])
+                is_valid_subarray = True
+                break
+            else:
+                print(f"\t\tSubarray length {subarray_length} < 2. Continuing...")
 
-    return False  # No valid subarray found
+        iteration_data.append([index, num, prefix_sum_mod_k, remainder_index_map.copy()])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Index", "Number", "Prefix Sum % k", "Remainder Index Map"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    if is_valid_subarray:
+        print("\n--- Function Returning ---")
+        print("\tReturn value: True")
+        return True
+
+    print("\n--- Function Returning ---")
+    print("\tNo valid subarray found.")
+    print("\tReturn value: False")
+    return False
 
 
 # <-------------------------------------------------- June 9th, 2024 -------------------------------------------------->
@@ -723,7 +754,7 @@ def subarraysDivByK1(nums: List[int], k: int) -> int:
 
 # Test cases for june 8th, 2024
 # Expected output: True
-checkSubarraySum1(nums=[23, 2, 6, 4, 7], k=6)
+# checkSubarraySum1(nums=[23, 2, 6, 4, 7], k=6)
 
 # Test cases for june 9th, 2024
 # Expected output: 7
