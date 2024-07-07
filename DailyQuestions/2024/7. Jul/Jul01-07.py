@@ -432,27 +432,43 @@ def nodesBetweenCriticalPoints1(head: Optional[ListNode]) -> List[int]:
 
 
 def passThePillow1(n: int, time: int) -> int:
-    """
-    Determines the index of the person holding the pillow after a given time in a line of n people.
+    print("\n--- Input Parameters ---")
+    print(f"\tn = {n}")
+    print(f"\ttime = {time}")
 
-    This function uses modular arithmetic to efficiently calculate the pillow's position within a single
-    back-and-forth cycle. It first computes the cycle position using the modulo operator, then determines
-    whether the pillow is moving forward or backward based on this position. This approach avoids the need
-    for iteration, resulting in constant time complexity regardless of the input size.
+    print("\n--- Initialization ---")
+    print(f"\tCalculating cycle length: (n - 1) * 2 = ({n} - 1) * 2 = {(n - 1) * 2}")
 
-    The time complexity of this solution is O(1) because it performs a fixed number of arithmetic operations
-    regardless of the input values. The space complexity is also O(1) as it uses only a constant amount of
-    additional memory to store the `cycle_position` variable.
-    """
-    # Calculate position within a single back-and-forth cycle
+    print("\n--- Main Calculation ---")
+    print("\tCalculating cycle position:")
     cycle_position = time % ((n - 1) * 2)
+    print(f"\t\ttime % ((n - 1) * 2) = {time} % {(n - 1) * 2} = {cycle_position}")
 
-    # If the position is less than n, the pillow is moving forward
+    print("\n--- Decision Point ---")
+    print(f"\tChecking condition: cycle_position ({cycle_position}) < n ({n})")
     if cycle_position < n:
-        return cycle_position + 1
+        print(f"\t\tCondition true: Pillow is moving forward")
+        result = cycle_position + 1
+        print(f"\t\tCalculating result: cycle_position + 1 = {cycle_position} + 1 = {result}")
     else:
-        # Otherwise, the pillow is moving backward
-        return 2 * n - (cycle_position + 1)
+        print(f"\t\tCondition false: Pillow is moving backward")
+        result = 2 * n - (cycle_position + 1)
+        print(f"\t\tCalculating result: 2 * n - (cycle_position + 1) = 2 * {n} - ({cycle_position} + 1) = {result}")
+
+    print("\n--- Calculation Summary ---")
+    summary_data = [
+        ["Input n", n],
+        ["Input time", time],
+        ["Cycle length", (n - 1) * 2],
+        ["Cycle position", cycle_position],
+        ["Movement direction", "Forward" if cycle_position < n else "Backward"],
+        ["Result", result]
+    ]
+    print(tabulate(summary_data, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal Result: {result}")
+    return result
 
 
 # <-------------------------------------------------- July 7th, 2024 -------------------------------------------------->
@@ -496,7 +512,7 @@ def problem7_2():
 #         val=1, next_node=ListNode(val=2))))))))
 
 # Test cases for July 6th, 2024
-# Expected output: 2
-passThePillow1(n=3, time=7)
+# Expected output: 4
+# passThePillow1(n=5, time=21)
 
 # Test cases for July 7th, 2024
