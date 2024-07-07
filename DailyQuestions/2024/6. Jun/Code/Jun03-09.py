@@ -596,72 +596,31 @@ def replaceWords3(dictionary: List[str], sentence: str) -> str:
 
 def checkSubarraySum1(nums: List[int], k: int) -> bool:
     """
-    Determines if there exists a continuous subarray of at least two elements in the given list `nums`
-    whose sum is a multiple of `k`.
+    Determines if there exists a subarray in 'nums' with a length of at least two and a sum that is a multiple of 'k'.
 
-    The function uses a hashmap to store the remainders of cumulative sums when divided by `k`.
-    By storing the first index where each remainder is seen, we can check if a later occurrence
-    of the same remainder indicates a valid subarray.
-    This is because if two cumulative sums have the same remainder when divided by `k`,
-    their difference is a multiple of `k`.
+    This function uses a prefix sum technique combined with modular arithmetic to efficiently solve the problem.
+    It iterates through the array once, maintaining a running sum modulo `k`. The key insight is that if the same
+    remainder is encountered twice, and the indices are at least 2 apart, it implies the existence of a subarray
+    whose sum is divisible by `k`. This approach avoids the need to check all possible subarrays, significantly
+    reducing time complexity.
 
-    The time complexity of this solution is O(n) where n is the length of the input array.
-    This is because every element in the array is processed exactly once.
-    The space complexity is O(min(n, k)) for the dictionary as it can store at most k remainders.
-    If k is larger than n, it stores at most n remainders.
+    The time complexity of this solution is O(n), where `n` is the length of nums, because it performs a single pass
+    through the array. The space complexity is O(min(n, k)) as the `remainder_index_map` can have at most min(n, k)
+    entries.
+
     """
-    print("\n--- Input Parameters ---")
-    print(f"\tnums = {nums}")
-    print(f"\tk = {k}")
+    prefix_sum_mod_k = 0
+    remainder_index_map = {0: -1}  # Initialize with 0 at index -1 to handle edge cases
 
-    # initialization of two variables
-    was_found = False
-    accumulated_mod_k = 0
-    mod_k_seen_map = {0: -1}
-    print("\n--- Initialization ---")
-    print(f"\taccumulated_mod_k = {accumulated_mod_k}")
-    print(f"\tmod_k_seen_map = {mod_k_seen_map} ")
+    for index, num in enumerate(nums):
+        prefix_sum_mod_k = (prefix_sum_mod_k + num) % k
 
-    print("\n--- Main Loop (Processing Nums Array) ---")
-    iteration_data = []
-    for index in range(len(nums)):
-        print(f"\nBeginning of Iteration {index + 1}:\n")
-        print(f"\tCurrent Index: {index}")
-        print(f"\tCurrent Number: {nums[index]}")
+        if prefix_sum_mod_k not in remainder_index_map:
+            remainder_index_map[prefix_sum_mod_k] = index
+        elif index - remainder_index_map[prefix_sum_mod_k] >= 2:
+            return True  # Valid subarray found
 
-        print("\tCalculating Accumulated Remainder:")
-        previous_accumulated_mod_k = accumulated_mod_k
-        accumulated_mod_k += nums[index]
-        accumulated_mod_k %= k
-        print(f"\tUpdated accumulated_mod_k: "
-              f"({previous_accumulated_mod_k} + {nums[index]}) % {k} = {accumulated_mod_k}")
-
-        if accumulated_mod_k not in mod_k_seen_map:
-            mod_k_seen_map[accumulated_mod_k] = index
-            print(f"\tNew remainder found. Updating mod_k_seen_map to: {mod_k_seen_map}")
-        elif index - mod_k_seen_map[accumulated_mod_k] >= 2:
-            print(f"\tA Valid subarray found. Returning True.")
-            was_found = True
-        else:
-            print(f"\tThe subarray is not of size at least 2.")
-
-        iteration_data.append([index + 1, nums[index], accumulated_mod_k,
-                               mod_k_seen_map.copy()])  # add copy so that reference doesn't get updated
-
-        if was_found:
-            break
-
-    print("\n--- Iteration Summary (Nums Processing) ---")
-    headers = ["Iteration", "Number", "Accumulated Mod k", "Remainder Seen Map"]
-    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
-
-    print("\n--- Function Returning ---")
-    if was_found:
-        print("A valid subarray was found. Returning True.")
-        return True
-
-    print("No valid subarray found. Returning False.")
-    return False
+    return False  # No valid subarray found
 
 
 # <-------------------------------------------------- June 9th, 2024 -------------------------------------------------->
@@ -764,7 +723,7 @@ def subarraysDivByK1(nums: List[int], k: int) -> int:
 
 # Test cases for june 8th, 2024
 # Expected output: True
-# checkSubarraySum1(nums=[23, 2, 6, 4, 7], k=6)
+checkSubarraySum1(nums=[23, 2, 6, 4, 7], k=6)
 
 # Test cases for june 9th, 2024
 # Expected output: 7
