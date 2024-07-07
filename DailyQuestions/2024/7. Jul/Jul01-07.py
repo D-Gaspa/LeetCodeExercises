@@ -481,28 +481,52 @@ def passThePillow1(n: int, time: int) -> int:
 
 
 def numWaterBottles1(num_bottles: int, num_exchange: int) -> int:
-    """
-    Calculates the maximum number of water bottles that can be drunk given initial full bottles and exchange rate.
+    print("\n--- Input Parameters ---")
+    print(f"\tnum_bottles = {num_bottles}")
+    print(f"\tnum_exchange = {num_exchange}")
 
-    This function simulates the process of drinking water bottles and exchanging empty ones for full ones.
-    It uses a greedy approach, continuously drinking and exchanging bottles until no more exchanges are possible.
-    The total count includes the initially full bottles plus all bottles obtained through exchanges.
-
-    The time complexity is O(log_m(n)) where `n` is the number of full bottles and `m` is the exchange rate.
-    This is because in each iteration the number of remaining bottles is divided by the exchange rate,
-    leading to a logarithmic number of iterations.
-    The space complexity is O(1) as it uses only a constant amount of extra space.
-    """
+    print("\n--- Initialization ---")
     total_drinks = num_bottles
     empty_bottles = num_bottles
+    print(f"\ttotal_drinks = {total_drinks}")
+    print(f"\tempty_bottles = {empty_bottles}")
 
+    print("\n--- Main Loop ---")
+    iteration_data = []
+    iteration = 0
     while empty_bottles >= num_exchange:
-        exchanged_bottles, unused_bottles = divmod(empty_bottles,
-                                                   num_exchange)
+        iteration += 1
+        print(
+            f"\n--- Iteration {iteration}: While empty_bottles ({empty_bottles}) >= num_exchange ({num_exchange}) ---")
+
+        print(f"\tCurrent state: total_drinks = {total_drinks}, empty_bottles = {empty_bottles}")
+
+        print("\tPerforming exchange calculation:")
+        exchanged_bottles, unused_bottles = divmod(empty_bottles, num_exchange)
+        print(f"\t\tdivmod({empty_bottles}, {num_exchange}) = ({exchanged_bottles}, {unused_bottles})")
+        print(f"\t\texchanged_bottles = {exchanged_bottles}")
+        print(f"\t\tunused_bottles = {unused_bottles}")
+
+        print("\tUpdating total_drinks:")
+        old_total_drinks = total_drinks
         total_drinks += exchanged_bottles
+        print(f"\t\ttotal_drinks = {old_total_drinks} + {exchanged_bottles} = {total_drinks}")
 
+        print("\tUpdating empty_bottles:")
+        old_empty_bottles = empty_bottles
         empty_bottles = exchanged_bottles + unused_bottles
+        print(f"\t\tempty_bottles = {exchanged_bottles} + {unused_bottles} = {empty_bottles}")
 
+        iteration_data.append(
+            [iteration, old_empty_bottles, exchanged_bottles, unused_bottles, total_drinks, empty_bottles])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Iteration", "Starting Empty Bottles", "Exchanged Bottles", "Unused Bottles", "Total Drinks",
+               "Ending Empty Bottles"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal Result: total_drinks = {total_drinks}")
     return total_drinks
 
 
