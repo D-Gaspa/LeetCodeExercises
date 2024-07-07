@@ -481,21 +481,42 @@ def passThePillow1(n: int, time: int) -> int:
 
 
 def numWaterBottles1(num_bottles: int, num_exchange: int) -> int:
+    """
+    Calculates the maximum number of water bottles that can be drunk given initial full bottles and exchange rate.
+
+    This function simulates the process of drinking water bottles and exchanging empty ones for full ones.
+    It uses a greedy approach, continuously drinking and exchanging bottles until no more exchanges are possible.
+    The total count includes the initially full bottles plus all bottles obtained through exchanges.
+
+    The time complexity is O(log_m(n)) where `n` is the number of full bottles and `m` is the exchange rate.
+    This is because in each iteration the number of remaining bottles is divided by the exchange rate,
+    leading to a logarithmic number of iterations.
+    The space complexity is O(1) as it uses only a constant amount of extra space.
+    """
     total_drinks = num_bottles
     empty_bottles = num_bottles
 
     while empty_bottles >= num_exchange:
-        # Exchange empty bottles for full ones and drink them
-        new_bottles, unused_bottles = divmod(empty_bottles, num_exchange)
-        total_drinks += new_bottles
+        exchanged_bottles, unused_bottles = divmod(empty_bottles,
+                                                   num_exchange)
+        total_drinks += exchanged_bottles
 
-        # Update the number of empty bottles
-        empty_bottles = new_bottles + unused_bottles
+        empty_bottles = exchanged_bottles + unused_bottles
 
     return total_drinks
 
 
 def numWaterBottles2(num_bottles: int, num_exchange: int) -> int:
+    """
+    Calculates the maximum number of water bottles that can be drunk given initial full bottles and exchange rate.
+
+    This function uses a mathematical formula to directly compute the total number of bottles that can be drunk.
+    It leverages the relationship between the initial number of bottles, the exchange rate, and the maximum
+    possible exchanges to arrive at the result in a single calculation.
+
+    The time complexity is O(1) as it performs a constant number of arithmetic operations regardless of input size.
+    The space complexity is O(1) as it uses only a constant amount of extra space for the calculation.
+    """
     return num_bottles + (num_bottles - 1) // (num_exchange - 1)
 
 
