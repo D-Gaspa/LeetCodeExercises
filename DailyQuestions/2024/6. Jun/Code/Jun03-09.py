@@ -662,64 +662,60 @@ def checkSubarraySum1(nums: List[int], k: int) -> bool:
 
 
 def subarraysDivByK1(nums: List[int], k: int) -> int:
-    """
-    Counts the number of contiguous subarrays in a given list whose sum is divisible by k.
-
-    The function uses a hashmap to keep track of the frequencies of remainders of the cumulative sums when divided by k.
-    By maintaining the count of these remainders,
-    it efficiently counts the number of subarrays that have a sum divisible by k.
-    The key insight is that if two prefix sums have the same remainder when divided by k, their difference is a
-    multiple of k, which implies that the subarray between these two sums has a sum divisible by k.
-
-    The time complexity of this solution is O(n), where n is the length of the input array.
-    This is because each element in the array is processed exactly once.
-    The space complexity is O(min(n, k)) for the dictionary as it can store at most k remainders.
-    If k is larger than n, it stores at most n remainders.
-    """
     print("\n--- Input Parameters ---")
     print(f"\tnums = {nums}")
     print(f"\tk = {k}")
 
-    print("\n--- Main Loop (Building Count Dictionary) ---")
-    remainder_counts = {0: 1}
-    prefix_sum = 0
-    subarray_count = 0
+    print("\n--- Initialization ---")
+    remainder_frequency = {0: 1}
+    cumulative_sum = 0
+    divisible_subarray_count = 0
+    print(f"\tremainder_frequency = {remainder_frequency}")
+    print(f"\tcumulative_sum = {cumulative_sum}")
+    print(f"\tdivisible_subarray_count = {divisible_subarray_count}")
 
-    iteration_data = []  # To collect data for iteration summary table
-    for index, num in enumerate(nums):
-        print(f"\nIteration {index + 1}:")
-        print(f"\tNumber: {num}")
+    print("\n--- Main Loop ---")
+    iteration_data = []
+    for i, num in enumerate(nums):
+        print(f"\n--- Iteration {i+1}/{len(nums)} ---")
+        print(f"\tCurrent number: {num}")
+        print(f"\tCurrent state: cumulative_sum = {cumulative_sum}, divisible_subarray_count = "
+              f"{divisible_subarray_count}")
 
-        prefix_sum += num
-        print(f"\tPrefix Sum (Updated): {prefix_sum}")
-        print(f"\tCurrent remainder count dictionary: {remainder_counts}")
+        print("\tUpdating cumulative sum:")
+        cumulative_sum += num
+        print(f"\t\tcumulative_sum = {cumulative_sum - num} + {num} = {cumulative_sum}")
 
-        remainder = prefix_sum % k
-        print(f"\tRemainder ({prefix_sum} % {k}): {remainder}")
+        print("\tCalculating remainder:")
+        remainder = cumulative_sum % k
+        print(f"\t\tremainder = {cumulative_sum} % {k} = {remainder}")
 
-        if remainder in remainder_counts:
-            print(f"\t\tRemainder found in dictionary with count: {remainder_counts[remainder]}")
-            print(f"\t\tTotal subarrays divisible by {k} so far ({subarray_count} + {remainder_counts[remainder]} = "
-                  f"{subarray_count + remainder_counts[remainder]})")
-            subarray_count += remainder_counts[remainder]
-            remainder_counts[remainder] += 1
-            print(f"\t\tUpdated count for remainder {remainder}: {remainder_counts[remainder]}")
+        print("\tChecking if remainder exists in remainder_frequency:")
+        if remainder in remainder_frequency:
+            print(f"\t\tRemainder {remainder} found in remainder_frequency")
+            print("\t\tUpdating divisible_subarray_count:")
+            divisible_subarray_count += remainder_frequency[remainder]
+            print(f"\t\t\tdivisible_subarray_count = {divisible_subarray_count - remainder_frequency[remainder]} + "
+                  f"{remainder_frequency[remainder]} = {divisible_subarray_count}")
+            print("\t\tIncrementing remainder frequency:")
+            remainder_frequency[remainder] += 1
+            print(f"\t\t\tremainder_frequency[{remainder}] = {remainder_frequency[remainder]}")
         else:
-            print(f"\t\tRemainder not found. Adding to dictionary.")
-            remainder_counts[remainder] = 1
+            print(f"\t\tRemainder {remainder} not found in remainder_frequency")
+            print("\t\tAdding new remainder to remainder_frequency:")
+            remainder_frequency[remainder] = 1
+            print(f"\t\t\tremainder_frequency[{remainder}] = 1")
 
-        iteration_data.append([index + 1, num, prefix_sum, remainder, subarray_count, remainder_counts.copy()])
+        iteration_data.append([i+1, num, cumulative_sum, remainder, divisible_subarray_count,
+                               dict(remainder_frequency)])
 
-    print("\n--- Iteration Summary (Remainder Counts & Subarray Count) ---")
-    headers = ["Iteration", "Number", "Prefix Sum", "Remainder", "Subarray Count", "Remainder Counts"]
+    print("\n--- Iteration Summary ---")
+    headers = ["Iteration", "Number", "Cumulative Sum", "Remainder", "Divisible Subarray Count", "Remainder Frequency"]
     print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
 
-    print("\n--- Final Remainder Counts Dictionary ---")
-    pprint(remainder_counts)  # Use pprint for better formatting
-
     print("\n--- Function Returning ---")
-    print(f"Total subarrays divisible by {k}: {subarray_count}")
-    return subarray_count
+    print(f"\tFinal divisible_subarray_count: {divisible_subarray_count}")
+    return divisible_subarray_count
 
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
@@ -758,4 +754,4 @@ def subarraysDivByK1(nums: List[int], k: int) -> int:
 
 # Test cases for june 9th, 2024
 # Expected output: 7
-# subarraysDivByK1(nums=[4, 5, 0, -2, -3, 1], k=5)
+subarraysDivByK1(nums=[4, 5, 0, -2, -3, 1], k=5)
