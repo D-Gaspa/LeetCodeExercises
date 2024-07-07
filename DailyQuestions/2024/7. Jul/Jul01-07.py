@@ -472,16 +472,19 @@ def passThePillow1(n: int, time: int) -> int:
 
 
 # <-------------------------------------------------- July 7th, 2024 -------------------------------------------------->
-# 7. Problem
+# 1518. Water Bottles
 
-# Description
+# There are `numBottles` water bottles that are initially full of water.
+# You can exchange `numExchange` empty water bottles from the market with one full water bottle.
+# The operation of drinking a full water bottle turns it into an empty bottle.
+# Given the two integers `numBottles` and `numExchange`, return the maximum number of water bottles you can drink*.
 
 
-def problem7_1():
+def numWaterBottles1(num_bottles: int, num_exchange: int) -> int:
     pass
 
 
-def problem7_2():
+def numWaterBottles2(num_bottles: int, num_exchange: int) -> int:
     pass
 
 
@@ -516,3 +519,10 @@ def problem7_2():
 # passThePillow1(n=5, time=21)
 
 # Test cases for July 7th, 2024
+# Expected output: 13
+# numWaterBottles1(num_bottles=9, num_exchange=3)
+# numWaterBottles2(num_bottles=9, num_exchange=3)
+
+# Expected output: 19
+# numWaterBottles1(num_bottles=15, num_exchange=4)
+# numWaterBottles2(num_bottles=15, num_exchange=4)
