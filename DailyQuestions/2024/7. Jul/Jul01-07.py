@@ -531,17 +531,45 @@ def numWaterBottles1(num_bottles: int, num_exchange: int) -> int:
 
 
 def numWaterBottles2(num_bottles: int, num_exchange: int) -> int:
-    """
-    Calculates the maximum number of water bottles that can be drunk given initial full bottles and exchange rate.
+    print("\n--- Input Parameters ---")
+    print(f"\tnum_bottles = {num_bottles}")
+    print(f"\tnum_exchange = {num_exchange}")
 
-    This function uses a mathematical formula to directly compute the total number of bottles that can be drunk.
-    It leverages the relationship between the initial number of bottles, the exchange rate, and the maximum
-    possible exchanges to arrive at the result in a single calculation.
+    print("\n--- Calculation Steps ---")
+    print("\tStep 1: Calculate initial empty bottles")
+    initial_empty = num_bottles - 1
+    print(f"\t\tinitial_empty = num_bottles - 1 = {num_bottles} - 1 = {initial_empty}")
 
-    The time complexity is O(1) as it performs a constant number of arithmetic operations regardless of input size.
-    The space complexity is O(1) as it uses only a constant amount of extra space for the calculation.
-    """
-    return num_bottles + (num_bottles - 1) // (num_exchange - 1)
+    print("\tStep 2: Calculate net cost of exchange")
+    net_exchange_cost = num_exchange - 1
+    print(f"\t\tnet_exchange_cost = num_exchange - 1 = {num_exchange} - 1 = {net_exchange_cost}")
+
+    print("\tStep 3: Calculate additional bottles from exchanges")
+    additional_bottles = initial_empty // net_exchange_cost
+    print(f"\t\tadditional_bottles = initial_empty // net_exchange_cost")
+    print(f"\t\t                   = {initial_empty} // {net_exchange_cost}")
+    print(f"\t\t                   = {additional_bottles}")
+
+    print("\tStep 4: Calculate total bottles drunk")
+    total_bottles = num_bottles + additional_bottles
+    print(f"\t\ttotal_bottles = num_bottles + additional_bottles")
+    print(f"\t\t              = {num_bottles} + {additional_bottles}")
+    print(f"\t\t              = {total_bottles}")
+
+    print("\n--- Calculation Summary ---")
+    summary_data = [
+        ["Initial Bottles", num_bottles],
+        ["Exchange Rate", num_exchange],
+        ["Initial Empty Bottles", initial_empty],
+        ["Net Exchange Cost", net_exchange_cost],
+        ["Additional Bottles", additional_bottles],
+        ["Total Bottles Drunk", total_bottles]
+    ]
+    print(tabulate(summary_data, headers=["Item", "Value"], tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal Result: {total_bottles}")
+    return total_bottles
 
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
