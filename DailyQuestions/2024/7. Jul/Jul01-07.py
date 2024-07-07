@@ -474,18 +474,29 @@ def passThePillow1(n: int, time: int) -> int:
 # <-------------------------------------------------- July 7th, 2024 -------------------------------------------------->
 # 1518. Water Bottles
 
-# There are `numBottles` water bottles that are initially full of water.
-# You can exchange `numExchange` empty water bottles from the market with one full water bottle.
+# There are `num_bottles` water bottles that are initially full of water.
+# You can exchange `num_exchange` empty water bottles from the market with one full water bottle.
 # The operation of drinking a full water bottle turns it into an empty bottle.
-# Given the two integers `numBottles` and `numExchange`, return the maximum number of water bottles you can drink*.
+# Given the two integers `num_bottles` and `num_exchange`, return the maximum number of water bottles you can drink.
 
 
 def numWaterBottles1(num_bottles: int, num_exchange: int) -> int:
-    pass
+    total_drinks = num_bottles
+    empty_bottles = num_bottles
+
+    while empty_bottles >= num_exchange:
+        # Exchange empty bottles for full ones and drink them
+        new_bottles, unused_bottles = divmod(empty_bottles, num_exchange)
+        total_drinks += new_bottles
+
+        # Update the number of empty bottles
+        empty_bottles = new_bottles + unused_bottles
+
+    return total_drinks
 
 
 def numWaterBottles2(num_bottles: int, num_exchange: int) -> int:
-    pass
+    return num_bottles + (num_bottles - 1) // (num_exchange - 1)
 
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
@@ -519,10 +530,6 @@ def numWaterBottles2(num_bottles: int, num_exchange: int) -> int:
 # passThePillow1(n=5, time=21)
 
 # Test cases for July 7th, 2024
-# Expected output: 13
-# numWaterBottles1(num_bottles=9, num_exchange=3)
-# numWaterBottles2(num_bottles=9, num_exchange=3)
-
 # Expected output: 19
 # numWaterBottles1(num_bottles=15, num_exchange=4)
 # numWaterBottles2(num_bottles=15, num_exchange=4)
