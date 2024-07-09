@@ -1,4 +1,6 @@
 # Week 2: July 8th - July 14th
+from collections import deque
+
 
 # <------------------------------------------------- July 8th, 2024 ------------------------------------------------->
 # 1823. Find the Winner of the Circular Game
@@ -11,11 +13,47 @@
 
 
 def findTheWinner1(n: int, k: int) -> int:
-    pass
+    # Initialize the queue with friends numbered from 0 to n-1
+    active_players = deque(range(n))
+
+    # Simulate the game until only one player remains
+    while len(active_players) > 1:
+        # Move k-1 players to the end of the queue
+        for _ in range(k - 1):
+            active_players.append(active_players.popleft())
+
+        # Remove the k-th player
+        active_players.popleft()
+
+    # Convert to 1-based indexing for the result
+    return active_players[0] + 1
 
 
 def findTheWinner2(n: int, k: int) -> int:
-    pass
+    def simulate_game(players: int, step: int) -> int:
+        # Base case: if only one player remains, they are at position 0
+        if players == 1:
+            return 0
+
+        # Recursive case: calculate the survivor's position
+        # for n-1 players and adjust it for n players
+        survivor_position = simulate_game(players - 1, step)
+        return (survivor_position + step) % players
+
+    # Convert the result to 1-based indexing
+    return simulate_game(n, k) + 1
+
+
+def findTheWinner3(n: int, k: int) -> int:
+    survivor_position = 0
+
+    # Iterate from 2 to n, simulating the game for increasing circle sizes
+    for circle_size in range(2, n + 1):
+        # Calculate the new position of the survivor for the current circle size
+        survivor_position = (survivor_position + k) % circle_size
+
+    # Convert the result to 1-based indexing
+    return survivor_position + 1
 
 
 # <------------------------------------------------- July 9th, 2024 ------------------------------------------------->
@@ -101,9 +139,12 @@ def problem7_1():
 def problem7_2():
     pass
 
+
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
 # Test cases for July 8th, 2024
+# Expected output: 1
+# findTheWinner2(n=6, k=5)
 
 # Test cases for July 9th, 2024
 
