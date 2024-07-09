@@ -13,10 +13,8 @@ from collections import deque
 
 
 def findTheWinner1(n: int, k: int) -> int:
-    # Initialize the queue with friends numbered from 0 to n-1
     active_players = deque(range(n))
 
-    # Simulate the game until only one player remains
     while len(active_players) > 1:
         # Move k-1 players to the end of the queue
         for _ in range(k - 1):
@@ -47,9 +45,8 @@ def findTheWinner2(n: int, k: int) -> int:
 def findTheWinner3(n: int, k: int) -> int:
     survivor_position = 0
 
-    # Iterate from 2 to n, simulating the game for increasing circle sizes
+    # Simulate the game for increasing circle sizes
     for circle_size in range(2, n + 1):
-        # Calculate the new position of the survivor for the current circle size
         survivor_position = (survivor_position + k) % circle_size
 
     # Convert the result to 1-based indexing
@@ -144,7 +141,9 @@ def problem7_2():
 
 # Test cases for July 8th, 2024
 # Expected output: 1
+# findTheWinner1(n=6, k=5)
 # findTheWinner2(n=6, k=5)
+# findTheWinner3(n=6, k=5)
 
 # Test cases for July 9th, 2024
 
