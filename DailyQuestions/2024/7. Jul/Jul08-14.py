@@ -1,20 +1,24 @@
-# Week X: Month day th - Month day th, 2024
+# Week 2: July 8th - July 14th
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
-# 1. Problem
+# <------------------------------------------------- July 8th, 2024 ------------------------------------------------->
+# 1823. Find the Winner of the Circular Game
 
-# Description
+# There are `n` friends playing a game where they sit in a clockwise circle and are numbered from `1` to `n`.
+# Starting at the `1st` friend, count the next `k` friends (wrapping around if necessary), and the last counted friend
+# leaves the circle.
+# Repeat until one friend remains, who is the winner.
+# Given `n` and `k`, return the winner.
 
 
-def problem1_1():
+def findTheWinner1(n: int, k: int) -> int:
     pass
 
 
-def problem1_2():
+def findTheWinner2(n: int, k: int) -> int:
     pass
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <------------------------------------------------- July 9th, 2024 ------------------------------------------------->
 # 2. Problem
 
 # Description
@@ -28,7 +32,7 @@ def problem2_2():
     pass
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <------------------------------------------------- July 10th, 2024 ------------------------------------------------->
 # 3. Problem
 
 # Description
@@ -42,7 +46,7 @@ def problem3_2():
     pass
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <------------------------------------------------- July 11th, 2024 ------------------------------------------------->
 # 4. Problem
 
 # Description
@@ -56,7 +60,7 @@ def problem4_2():
     pass
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <------------------------------------------------- July 12th, 2024 ------------------------------------------------->
 # 5. Problem
 
 # Description
@@ -70,7 +74,7 @@ def problem5_2():
     pass
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <------------------------------------------------- July 13th, 2024 ------------------------------------------------->
 # 6. Problem
 
 # Description
@@ -84,7 +88,7 @@ def problem6_2():
     pass
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <------------------------------------------------- July 14th, 2024 ------------------------------------------------->
 # 7. Problem
 
 # Description
@@ -99,16 +103,16 @@ def problem7_2():
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
-# Test cases for month day th, 2024
+# Test cases for July 8th, 2024
 
-# Test cases for month day th, 2024
+# Test cases for July 9th, 2024
 
-# Test cases for month day th, 2024
+# Test cases for July 10th, 2024
 
-# Test cases for month day th, 2024
+# Test cases for July 11th, 2024
 
-# Test cases for month day th, 2024
+# Test cases for July 12th, 2024
 
-# Test cases for month day th, 2024
+# Test cases for July 13th, 2024
 
-# Test cases for month day th, 2024
+# Test cases for July 14th, 2024
