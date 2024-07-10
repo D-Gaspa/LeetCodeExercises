@@ -104,14 +104,43 @@ def findTheWinner2(n: int, k: int) -> int:
 
 
 def findTheWinner3(n: int, k: int) -> int:
+    print("\n--- Input Parameters ---")
+    print(f"\tn = {n}")
+    print(f"\tk = {k}")
+
+    print("\n--- Initialization ---")
     survivor_position = 0
+    print(f"\tInitial survivor_position: {survivor_position}")
 
-    # Simulate the game for increasing circle sizes
+    iteration_data = []
+
+    print("\n--- Main Loop ---")
     for circle_size in range(2, n + 1):
-        survivor_position = (survivor_position + k) % circle_size
+        print(f"\n--- Iteration for circle size {circle_size} ---")
+        print(f"\tCurrent state:")
+        print(f"\t\tsurvivor_position = {survivor_position}")
+        print(f"\t\tcircle_size = {circle_size}")
 
-    # Convert the result to 1-based indexing
-    return survivor_position + 1
+        print("\tCalculation:")
+        new_position = (survivor_position + k) % circle_size
+        print(f"\t\tnew_position = (survivor_position + k) % circle_size")
+        print(f"\t\tnew_position = ({survivor_position} + {k}) % {circle_size} = {new_position}")
+
+        survivor_position = new_position
+        print(f"\tUpdated survivor_position: {survivor_position}")
+
+        iteration_data.append([circle_size, survivor_position])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Circle Size", "Survivor Position"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    final_result = survivor_position + 1
+    print(f"\tAdjusting result to 1-based indexing:")
+    print(f"\t\tFinal Result = {survivor_position} + 1 = {final_result}")
+
+    return final_result
 
 
 # <------------------------------------------------- July 9th, 2024 ------------------------------------------------->
