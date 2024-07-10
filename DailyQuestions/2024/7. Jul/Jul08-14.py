@@ -56,18 +56,51 @@ def findTheWinner1(n: int, k: int) -> int:
 
 
 def findTheWinner2(n: int, k: int) -> int:
+    print("\n--- Input Parameters ---")
+    print(f"\tn = {n}")
+    print(f"\tk = {k}")
+
+    print("\n--- Initialization ---")
+    print("\tStarting recursive simulation")
+
+    iteration_data = []
+
     def simulate_game(players: int, step: int) -> int:
-        # Base case: if only one player remains, they are at position 0
+        print(f"\n--- Recursive Call: simulate_game({players}, {step}) ---")
+        print(f"\tCurrent state: {players} players, step size {step}")
+
         if players == 1:
+            print("\tBase case reached: Only one player remains")
+            print("\tReturning position 0")
+            iteration_data.append([players, step, "Base case", 0])
             return 0
 
-        # Recursive case: calculate the survivor's position
-        # for n-1 players and adjust it for n players
+        print(f"\tMaking recursive call: simulate_game({players - 1}, {step})")
         survivor_position = simulate_game(players - 1, step)
-        return (survivor_position + step) % players
 
-    # Convert the result to 1-based indexing
-    return simulate_game(n, k) + 1
+        print("\n\tCalculating new survivor position:")
+        new_position = (survivor_position + step) % players
+        print(f"\t\t(survivor_position + step) % players")
+        print(f"\t\t({survivor_position} + {step}) % {players} = {new_position}")
+
+        iteration_data.append([players, step, "Recursive case", new_position])
+
+        print(f"\tReturning new position: {new_position}")
+        return new_position
+
+    print("\n--- Starting Main Recursive Function ---")
+    result = simulate_game(n, k)
+
+    print("\n--- Recursive Calls Summary ---")
+    headers = ["Players", "Step", "Case", "Survivor Position"]
+    print(tabulate(iteration_data[::-1], headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    final_result = result + 1
+    print(f"\tAdjusting result to 1-based indexing:")
+    print(f"\t\tFinal Result = {result} + 1 = {final_result}")
+
+    return final_result
 
 
 def findTheWinner3(n: int, k: int) -> int:
@@ -169,7 +202,7 @@ def problem7_2():
 
 # Test cases for July 8th, 2024
 # Expected output: 1
-findTheWinner1(n=6, k=5)
+# findTheWinner1(n=6, k=5)
 # findTheWinner2(n=6, k=5)
 # findTheWinner3(n=6, k=5)
 
