@@ -1,6 +1,8 @@
 # Week 2: July 8th - July 14th
 from collections import deque
 
+from tabulate import tabulate
+
 
 # <------------------------------------------------- July 8th, 2024 ------------------------------------------------->
 # 1823. Find the Winner of the Circular Game
@@ -13,18 +15,44 @@ from collections import deque
 
 
 def findTheWinner1(n: int, k: int) -> int:
+    print("\n--- Input Parameters ---")
+    print(f"\tn = {n}")
+    print(f"\tk = {k}")
+
+    print("\n--- Initialization ---")
     active_players = deque(range(n))
+    print(f"\tInitial active_players: {list(active_players)}")
 
+    iteration_data = []
+    round_number = 1
+
+    print("\n--- Main Loop ---")
     while len(active_players) > 1:
-        # Move k-1 players to the end of the queue
-        for _ in range(k - 1):
-            active_players.append(active_players.popleft())
+        print(f"\n--- Round {round_number} ---")
+        print(f"\tCurrent active players: {list(active_players)}")
+        print(f"\tRemoving player at position {k}")
 
-        # Remove the k-th player
-        active_players.popleft()
+        print("\tRotating players:")
+        for i in range(k - 1):
+            moved_player = active_players.popleft()
+            active_players.append(moved_player)
+            print(f"\t\tMove {i + 1}: Moved player {moved_player} to the end")
 
-    # Convert to 1-based indexing for the result
-    return active_players[0] + 1
+        removed_player = active_players.popleft()
+        print(f"\tRemoved player: {removed_player}")
+
+        iteration_data.append([round_number, list(active_players), removed_player])
+        round_number += 1
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Round", "Active Players", "Removed Player"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    winner = active_players[0] + 1
+    print(f"\tLast remaining player (0-indexed): {active_players[0]}")
+    print(f"\tConverting to 1-indexed: {active_players[0]} + 1 = {winner}")
+    return winner
 
 
 def findTheWinner2(n: int, k: int) -> int:
@@ -141,7 +169,7 @@ def problem7_2():
 
 # Test cases for July 8th, 2024
 # Expected output: 1
-# findTheWinner1(n=6, k=5)
+findTheWinner1(n=6, k=5)
 # findTheWinner2(n=6, k=5)
 # findTheWinner3(n=6, k=5)
 
