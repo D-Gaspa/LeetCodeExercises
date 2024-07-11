@@ -210,11 +210,34 @@ def averageWaitingTime1(customers: List[List[int]]) -> float:
 
 
 def minOperations1(logs: List[str]) -> int:
-    pass
+    folder_depth = 0
+
+    for operation in logs:
+        if operation == "./":
+            continue  # No change in depth for staying in the same folder
+        if operation == "../":
+            # Move up one level, but never go above the main folder (depth 0)
+            folder_depth = max(0, folder_depth - 1)
+        else:
+            # Moving into a subfolder increases depth by 1
+            folder_depth += 1
+
+    return folder_depth
 
 
 def minOperations2(logs: List[str]) -> int:
-    pass
+    folder_stack = []
+
+    for operation in logs:
+        if operation == "./":
+            continue  # No change in folder structure
+        elif operation == "../":
+            if folder_stack:
+                folder_stack.pop()  # Move up one level if not in the main folder
+        else:
+            folder_stack.append(operation)  # Enter a new subfolder
+
+    return len(folder_stack)
 
 
 # <------------------------------------------------- July 11th, 2024 ------------------------------------------------->
