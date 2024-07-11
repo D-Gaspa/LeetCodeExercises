@@ -1,5 +1,6 @@
 # Week 2: July 8th - July 14th
 from collections import deque
+from typing import List
 
 from tabulate import tabulate
 
@@ -144,16 +145,18 @@ def findTheWinner3(n: int, k: int) -> int:
 
 
 # <------------------------------------------------- July 9th, 2024 ------------------------------------------------->
-# 2. Problem
+# 1701. Average Waiting Time
 
-# Description
+# Given a restaurant with a single chef and an array `customers`, where each element `[arrival_i, time_i]` represents
+# the arrival time and preparation time for each customer, return the average waiting time, assuming the chef prepares
+# orders one at a time in the given order.
 
 
-def problem2_1():
+def averageWaitingTime1(customers: List[List[int]]) -> float:
     pass
 
 
-def problem2_2():
+def averageWaitingTime2(customers: List[List[int]]) -> float:
     pass
 
 
@@ -236,6 +239,13 @@ def problem7_2():
 # findTheWinner3(n=6, k=5)
 
 # Test cases for July 9th, 2024
+# Expected output: 5.0000
+# averageWaitingTime1(customers=[[1, 2], [2, 5], [4, 3]])
+# averageWaitingTime2(customers=[[1, 2], [2, 5], [4, 3]])
+
+# Expected output: 3.2500
+# averageWaitingTime1(customers=[[5, 2], [5, 4], [10, 3], [20, 1]])
+# averageWaitingTime2(customers=[[5, 2], [5, 4], [10, 3], [20, 1]])
 
 # Test cases for July 10th, 2024
 
