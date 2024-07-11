@@ -182,10 +182,12 @@ def averageWaitingTime1(customers: List[List[int]]) -> float:
         print("\tUpdating variables:")
         print(f"\t\torder_finish_time: {order_finish_time} -> {new_order_finish_time}")
         order_finish_time = new_order_finish_time
-        print(f"\t\ttotal_customer_wait_time: {total_customer_wait_time} -> {total_customer_wait_time + customer_wait_time}")
+        print(f"\t\ttotal_customer_wait_time: {total_customer_wait_time} -> "
+              f"{total_customer_wait_time + customer_wait_time}")
         total_customer_wait_time += customer_wait_time
 
-        iteration_data.append([i+1, arrival_time, prep_time, order_finish_time, customer_wait_time, total_customer_wait_time])
+        iteration_data.append([i + 1, arrival_time, prep_time, order_finish_time, customer_wait_time,
+                               total_customer_wait_time])
 
     print("\n--- Iteration Summary ---")
     headers = ["Customer", "Arrival Time", "Prep Time", "Order Finish Time", "Wait Time", "Total Wait Time"]
