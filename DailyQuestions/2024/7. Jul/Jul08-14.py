@@ -415,14 +415,9 @@ def problem7_2():
 # minOperations2(logs=["d1/", "d2/", "./", "d3/", "../", "d31/"])
 
 # Test cases for July 11th, 2024
-# Expected output: "dcba"
-print(reverseParentheses1(s="(abcd)"))
-
-# Expected output: "iloveu"
-print(reverseParentheses1(s="(u(love)i)"))
-
 # Expected output: "leetcode"
-print(reverseParentheses1(s="(ed(et(oc))el)"))
+# reverseParentheses1(s="(ed(et(oc))el)")
+# reverseParentheses2(s="(ed(et(oc))el)")
 
 # Test cases for July 12th, 2024
 
