@@ -303,11 +303,53 @@ def minOperations2(logs: List[str]) -> int:
 
 
 def reverseParentheses1(s: str) -> str:
-    pass
+    stack = []
+
+    for char in s:
+        if char == ')':
+            temp = []
+            while stack and stack[-1] != '(':
+                temp.append(stack.pop())
+
+            # Remove the opening parenthesis
+            if stack:
+                stack.pop()
+
+            # Add the reversed substring back to the stack
+            stack.extend(temp)
+        else:
+            stack.append(char)
+
+    return "".join(stack)
 
 
 def reverseParentheses2(s: str) -> str:
-    pass
+    pairs = {}
+    stack = []
+
+    # First pass: Pair up parentheses
+    for index, char in enumerate(s):
+        if char == '(':
+            stack.append(index)
+        elif char == ')':
+            if stack:
+                pairs[index] = stack[-1]
+                pairs[stack.pop()] = index
+
+    # Second pass: Build the result string
+    result = []
+    current_index = 0
+    direction = 1
+
+    while current_index < len(s):
+        if s[current_index] in '()':
+            current_index = pairs[current_index]
+            direction = -direction
+        else:
+            result.append(s[current_index])
+        current_index += direction
+
+    return ''.join(result)
 
 
 # <------------------------------------------------- July 12th, 2024 ------------------------------------------------->
