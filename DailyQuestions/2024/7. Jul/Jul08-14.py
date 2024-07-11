@@ -307,16 +307,17 @@ def reverseParentheses1(s: str) -> str:
 
     for char in s:
         if char == ')':
-            temp = []
+            reversed_substring = []
+            # Pop characters until the matching '(' is found
             while stack and stack[-1] != '(':
-                temp.append(stack.pop())
+                reversed_substring.append(stack.pop())
 
             # Remove the opening parenthesis
             if stack:
                 stack.pop()
 
             # Add the reversed substring back to the stack
-            stack.extend(temp)
+            stack.extend(reversed_substring)
         else:
             stack.append(char)
 
@@ -324,26 +325,28 @@ def reverseParentheses1(s: str) -> str:
 
 
 def reverseParentheses2(s: str) -> str:
-    pairs = {}
-    stack = []
+    parentheses_pairs = {}
+    opening_parentheses = []
 
     # First pass: Pair up parentheses
     for index, char in enumerate(s):
         if char == '(':
-            stack.append(index)
+            opening_parentheses.append(index)
         elif char == ')':
-            if stack:
-                pairs[index] = stack[-1]
-                pairs[stack.pop()] = index
+            if opening_parentheses:
+                opening_index = opening_parentheses.pop()
+                parentheses_pairs[index] = opening_index
+                parentheses_pairs[opening_index] = index
 
     # Second pass: Build the result string
     result = []
     current_index = 0
-    direction = 1
+    direction = 1  # 1 for forward, -1 for backward
 
     while current_index < len(s):
         if s[current_index] in '()':
-            current_index = pairs[current_index]
+            # Jump to the matching parenthesis and reverse direction
+            current_index = parentheses_pairs[current_index]
             direction = -direction
         else:
             result.append(s[current_index])
