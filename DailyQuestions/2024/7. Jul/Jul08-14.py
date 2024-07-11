@@ -153,15 +153,50 @@ def findTheWinner3(n: int, k: int) -> int:
 
 
 def averageWaitingTime1(customers: List[List[int]]) -> float:
+    print("\n--- Input Parameters ---")
+    print(f"\tcustomers = {customers}")
+
+    print("\n--- Initialization ---")
     order_finish_time, total_customer_wait_time = 0, 0
+    print(f"\torder_finish_time = {order_finish_time}")
+    print(f"\ttotal_customer_wait_time = {total_customer_wait_time}")
 
-    for arrival_time, prep_time in customers:
-        # Start cooking order when the customer arrives or when the previous order is finished (whichever is later)
-        order_finish_time = max(arrival_time, order_finish_time) + prep_time
-        total_customer_wait_time += order_finish_time - arrival_time
+    print("\n--- Main Loop ---")
+    iteration_data = []
+    for i, (arrival_time, prep_time) in enumerate(customers):
+        print(f"\n--- Customer {i+1}/{len(customers)} ---")
+        print(f"\tCurrent state:")
+        print(f"\t\torder_finish_time = {order_finish_time}")
+        print(f"\t\ttotal_customer_wait_time = {total_customer_wait_time}")
+        print(f"\t\tarrival_time = {arrival_time}")
+        print(f"\t\tprep_time = {prep_time}")
 
+        print("\tCalculating new order_finish_time:")
+        new_order_finish_time = max(arrival_time, order_finish_time) + prep_time
+        print(f"\t\tmax({arrival_time}, {order_finish_time}) + {prep_time} = {new_order_finish_time}")
+
+        print("\tCalculating customer wait time:")
+        customer_wait_time = new_order_finish_time - arrival_time
+        print(f"\t\t{new_order_finish_time} - {arrival_time} = {customer_wait_time}")
+
+        print("\tUpdating variables:")
+        print(f"\t\torder_finish_time: {order_finish_time} -> {new_order_finish_time}")
+        order_finish_time = new_order_finish_time
+        print(f"\t\ttotal_customer_wait_time: {total_customer_wait_time} -> {total_customer_wait_time + customer_wait_time}")
+        total_customer_wait_time += customer_wait_time
+
+        iteration_data.append([i+1, arrival_time, prep_time, order_finish_time, customer_wait_time, total_customer_wait_time])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Customer", "Arrival Time", "Prep Time", "Order Finish Time", "Wait Time", "Total Wait Time"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
     average_wait_time = total_customer_wait_time / len(customers)
+    print(f"\tCalculating average wait time: {total_customer_wait_time} / {len(customers)} = {average_wait_time}")
+    print(f"\tFinal Result: {average_wait_time}")
     return average_wait_time
+
 
 # <------------------------------------------------- July 10th, 2024 ------------------------------------------------->
 # 3. Problem
@@ -242,13 +277,8 @@ def problem7_2():
 # findTheWinner3(n=6, k=5)
 
 # Test cases for July 9th, 2024
-# Expected output: 5.0000
-averageWaitingTime1(customers=[[1, 2], [2, 5], [4, 3]])
-# averageWaitingTime2(customers=[[1, 2], [2, 5], [4, 3]])
-
 # Expected output: 3.2500
-averageWaitingTime1(customers=[[5, 2], [5, 4], [10, 3], [20, 1]])
-# averageWaitingTime2(customers=[[5, 2], [5, 4], [10, 3], [20, 1]])
+# averageWaitingTime1(customers=[[5, 2], [5, 4], [10, 3], [20, 1]])
 
 # Test cases for July 10th, 2024
 
