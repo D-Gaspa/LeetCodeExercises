@@ -210,18 +210,43 @@ def averageWaitingTime1(customers: List[List[int]]) -> float:
 
 
 def minOperations1(logs: List[str]) -> int:
+    print("\n--- Input Parameters ---")
+    print(f"\tlogs = {logs}")
+
+    print("\n--- Initialization ---")
     folder_depth = 0
+    print(f"\tfolder_depth = {folder_depth}")
 
-    for operation in logs:
+    print("\n--- Main Loop ---")
+    iteration_data = []
+    for i, operation in enumerate(logs):
+        print(f"\n--- Operation {i + 1}/{len(logs)} ---")
+        print(f"\tCurrent folder_depth = {folder_depth}")
+        print(f"\tCurrent operation: '{operation}'")
+
+        print("\tProcessing operation:")
         if operation == "./":
-            continue  # No change in depth for staying in the same folder
-        if operation == "../":
-            # Move up one level, but never go above the main folder (depth 0)
+            print("\t\tOperation is './': Stay in the same folder")
+            print("\t\tAction: No change to folder_depth")
+        elif operation == "../":
+            print("\t\tOperation is '../': Move to parent folder")
+            print(f"\t\tCalculation: max(0, {folder_depth} - 1)")
             folder_depth = max(0, folder_depth - 1)
+            print(f"\t\tAction: Updated folder_depth to {folder_depth}")
         else:
-            # Moving into a subfolder increases depth by 1
+            print(f"\t\tOperation is '{operation}': Move to child folder")
             folder_depth += 1
+            print(f"\t\tAction: Incremented folder_depth to {folder_depth}")
 
+        iteration_data.append([i + 1, operation, folder_depth])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Operation #", "Command", "Resulting Depth"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal folder_depth: {folder_depth}")
+    print(f"\tThis represents the minimum number of '../' operations needed to return to the main folder.")
     return folder_depth
 
 
@@ -309,17 +334,9 @@ def problem7_2():
 # averageWaitingTime1(customers=[[5, 2], [5, 4], [10, 3], [20, 1]])
 
 # Test cases for July 10th, 2024
-# Expected output: 2
-minOperations1(logs=["d1/", "d2/", "../", "d21/", "./"])
-minOperations2(logs=["d1/", "d2/", "../", "d21/", "./"])
-
 # Expected output: 3
-minOperations1(logs=["d1/", "d2/", "./", "d3/", "../", "d31/"])
-minOperations2(logs=["d1/", "d2/", "./", "d3/", "../", "d31/"])
-
-# Expected output: 0
-minOperations1(logs=["d1/", "../", "../", "../"])
-minOperations2(logs=["d1/", "../", "../", "../"])
+# minOperations1(logs=["d1/", "d2/", "./", "d3/", "../", "d31/"])
+# minOperations2(logs=["d1/", "d2/", "./", "d3/", "../", "d31/"])
 
 # Test cases for July 11th, 2024
 
