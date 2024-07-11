@@ -251,18 +251,48 @@ def minOperations1(logs: List[str]) -> int:
 
 
 def minOperations2(logs: List[str]) -> int:
+    print("\n--- Input Parameters ---")
+    print(f"\tlogs = {logs}")
+
+    print("\n--- Initialization ---")
     folder_stack = []
+    print(f"\tfolder_stack = {folder_stack}")
 
-    for operation in logs:
+    print("\n--- Main Loop ---")
+    iteration_data = []
+    for i, operation in enumerate(logs):
+        print(f"\n--- Operation {i + 1}/{len(logs)} ---")
+        print(f"\tCurrent folder_stack = {folder_stack}")
+        print(f"\tCurrent operation: '{operation}'")
+
+        print("\tProcessing operation:")
         if operation == "./":
-            continue  # No change in folder structure
+            print("\t\tOperation is './': Stay in the same folder")
+            print("\t\tAction: No change to folder_stack")
         elif operation == "../":
+            print("\t\tOperation is '../': Move to parent folder")
             if folder_stack:
-                folder_stack.pop()  # Move up one level if not in the main folder
+                removed_folder = folder_stack.pop()
+                print(f"\t\tAction: Removed '{removed_folder}' from folder_stack")
+            else:
+                print("\t\tAction: Already in main folder, no change to folder_stack")
         else:
-            folder_stack.append(operation)  # Enter a new subfolder
+            print(f"\t\tOperation is '{operation}': Move to child folder")
+            folder_stack.append(operation)
+            print(f"\t\tAction: Added '{operation}' to folder_stack")
 
-    return len(folder_stack)
+        iteration_data.append([i + 1, operation, len(folder_stack), folder_stack.copy()])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Operation #", "Command", "Stack Depth", "Current Stack"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    result = len(folder_stack)
+    print(f"\tFinal folder_stack: {folder_stack}")
+    print(f"\tLength of folder_stack: {result}")
+    print(f"\tThis represents the minimum number of '../' operations needed to return to the main folder.")
+    return result
 
 
 # <------------------------------------------------- July 11th, 2024 ------------------------------------------------->
