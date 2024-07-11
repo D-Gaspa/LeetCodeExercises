@@ -296,16 +296,17 @@ def minOperations2(logs: List[str]) -> int:
 
 
 # <------------------------------------------------- July 11th, 2024 ------------------------------------------------->
-# 4. Problem
+# 1190. Reverse Substrings Between Each Pair of Parentheses
 
-# Description
+# You are given a string `s` that consists of lower case English letters and brackets.
+# Reverse the strings in each pair of matching parentheses, starting from the innermost one.
 
 
-def problem4_1():
+def reverseParentheses1(s: str) -> str:
     pass
 
 
-def problem4_2():
+def reverseParentheses2(s: str) -> str:
     pass
 
 
@@ -369,6 +370,14 @@ def problem7_2():
 # minOperations2(logs=["d1/", "d2/", "./", "d3/", "../", "d31/"])
 
 # Test cases for July 11th, 2024
+# Expected output: "dcba"
+print(reverseParentheses1(s="(abcd)"))
+
+# Expected output: "iloveu"
+print(reverseParentheses1(s="(u(love)i)"))
+
+# Expected output: "leetcode"
+print(reverseParentheses1(s="(ed(et(oc))el)"))
 
 # Test cases for July 12th, 2024
 
