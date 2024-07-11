@@ -153,12 +153,15 @@ def findTheWinner3(n: int, k: int) -> int:
 
 
 def averageWaitingTime1(customers: List[List[int]]) -> float:
-    pass
+    order_finish_time, total_customer_wait_time = 0, 0
 
+    for arrival_time, prep_time in customers:
+        # Start cooking order when the customer arrives or when the previous order is finished (whichever is later)
+        order_finish_time = max(arrival_time, order_finish_time) + prep_time
+        total_customer_wait_time += order_finish_time - arrival_time
 
-def averageWaitingTime2(customers: List[List[int]]) -> float:
-    pass
-
+    average_wait_time = total_customer_wait_time / len(customers)
+    return average_wait_time
 
 # <------------------------------------------------- July 10th, 2024 ------------------------------------------------->
 # 3. Problem
@@ -240,11 +243,11 @@ def problem7_2():
 
 # Test cases for July 9th, 2024
 # Expected output: 5.0000
-# averageWaitingTime1(customers=[[1, 2], [2, 5], [4, 3]])
+averageWaitingTime1(customers=[[1, 2], [2, 5], [4, 3]])
 # averageWaitingTime2(customers=[[1, 2], [2, 5], [4, 3]])
 
 # Expected output: 3.2500
-# averageWaitingTime1(customers=[[5, 2], [5, 4], [10, 3], [20, 1]])
+averageWaitingTime1(customers=[[5, 2], [5, 4], [10, 3], [20, 1]])
 # averageWaitingTime2(customers=[[5, 2], [5, 4], [10, 3], [20, 1]])
 
 # Test cases for July 10th, 2024
