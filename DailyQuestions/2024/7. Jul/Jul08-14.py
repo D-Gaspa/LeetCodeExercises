@@ -164,7 +164,7 @@ def averageWaitingTime1(customers: List[List[int]]) -> float:
     print("\n--- Main Loop ---")
     iteration_data = []
     for i, (arrival_time, prep_time) in enumerate(customers):
-        print(f"\n--- Customer {i+1}/{len(customers)} ---")
+        print(f"\n--- Customer {i + 1}/{len(customers)} ---")
         print(f"\tCurrent state:")
         print(f"\t\torder_finish_time = {order_finish_time}")
         print(f"\t\ttotal_customer_wait_time = {total_customer_wait_time}")
@@ -201,16 +201,19 @@ def averageWaitingTime1(customers: List[List[int]]) -> float:
 
 
 # <------------------------------------------------- July 10th, 2024 ------------------------------------------------->
-# 3. Problem
+# 1598. Crawler Log Folder
 
-# Description
+# The LeetCode file system logs user folder operations: "../" moves to parent folder, "./" remains in the same folder,
+# and "x/" moves to child folder x.
+# Given a list of strings 'logs' representing these operations starting from the main folder, return the minimum number
+# of operations needed to go back to the main folder.
 
 
-def problem3_1():
+def minOperations1(logs: List[str]) -> int:
     pass
 
 
-def problem3_2():
+def minOperations2(logs: List[str]) -> int:
     pass
 
 
@@ -283,6 +286,17 @@ def problem7_2():
 # averageWaitingTime1(customers=[[5, 2], [5, 4], [10, 3], [20, 1]])
 
 # Test cases for July 10th, 2024
+# Expected output: 2
+minOperations1(logs=["d1/", "d2/", "../", "d21/", "./"])
+minOperations2(logs=["d1/", "d2/", "../", "d21/", "./"])
+
+# Expected output: 3
+minOperations1(logs=["d1/", "d2/", "./", "d3/", "../", "d31/"])
+minOperations2(logs=["d1/", "d2/", "./", "d3/", "../", "d31/"])
+
+# Expected output: 0
+minOperations1(logs=["d1/", "../", "../", "../"])
+minOperations2(logs=["d1/", "../", "../", "../"])
 
 # Test cases for July 11th, 2024
 
