@@ -303,25 +303,56 @@ def minOperations2(logs: List[str]) -> int:
 
 
 def reverseParentheses1(s: str) -> str:
+    print("\n--- Input Parameters ---")
+    print(f"\ts = {s}")
+
+    print("\n--- Initialization ---")
     stack = []
+    print(f"\tstack = {stack}")
 
-    for char in s:
+    print("\n--- Main Loop: Iterating through string ---")
+    iteration_data = []
+    for i, char in enumerate(s):
+        print(f"\n--- Character {i + 1}/{len(s)}: '{char}' ---")
+        print(f"\tCurrent stack: {stack}")
+
         if char == ')':
+            print("\tEncountered closing parenthesis ')'")
             reversed_substring = []
-            # Pop characters until the matching '(' is found
+            print("\tReversing substring:")
             while stack and stack[-1] != '(':
-                reversed_substring.append(stack.pop())
+                popped_char = stack.pop()
+                reversed_substring.append(popped_char)
+                print(f"\t\tPopped '{popped_char}' from stack")
+                print(f"\t\tCurrent reversed_substring: {reversed_substring}")
+                print(f"\t\tUpdated stack: {stack}")
 
-            # Remove the opening parenthesis
+            print("\tRemoving opening parenthesis '(':")
             if stack:
                 stack.pop()
+                print(f"\t\tRemoved '(' from stack")
+                print(f"\t\tUpdated stack: {stack}")
 
-            # Add the reversed substring back to the stack
+            print("\tAdding reversed substring back to stack:")
             stack.extend(reversed_substring)
+            print(f"\t\tAdded {reversed_substring} to stack")
+            print(f"\t\tUpdated stack: {stack}")
         else:
+            print(f"\tAppending '{char}' to stack")
             stack.append(char)
+            print(f"\t\tUpdated stack: {stack}")
 
-    return "".join(stack)
+        iteration_data.append([i + 1, char, "".join(stack)])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Step", "Character", "Stack Content"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    result = "".join(stack)
+    print(f"\tJoining stack elements: {''.join(stack)}")
+    print(f"\tFinal Result: {result}")
+    return result
 
 
 def reverseParentheses2(s: str) -> str:
