@@ -356,34 +356,80 @@ def reverseParentheses1(s: str) -> str:
 
 
 def reverseParentheses2(s: str) -> str:
+    print("\n--- Input Parameters ---")
+    print(f"\ts = {s}")
+
+    print("\n--- Initialization ---")
     parentheses_pairs = {}
     opening_parentheses = []
+    print(f"\tparentheses_pairs = {parentheses_pairs}")
+    print(f"\topening_parentheses = {opening_parentheses}")
 
-    # First pass: Pair up parentheses
+    print("\n--- First Pass: Pairing Parentheses ---")
+    pairing_data = []
     for index, char in enumerate(s):
+        print(f"\n--- Character {index + 1}/{len(s)}: '{char}' ---")
         if char == '(':
+            print(f"\tEncountered opening parenthesis '(' at index {index}")
             opening_parentheses.append(index)
+            print(f"\t\tAdded {index} to opening_parentheses")
+            print(f"\t\tUpdated opening_parentheses: {opening_parentheses}")
         elif char == ')':
+            print(f"\tEncountered closing parenthesis ')' at index {index}")
             if opening_parentheses:
                 opening_index = opening_parentheses.pop()
+                print(f"\t\tPopped opening index {opening_index} from opening_parentheses")
                 parentheses_pairs[index] = opening_index
                 parentheses_pairs[opening_index] = index
+                print(f"\t\tPaired: ({opening_index}, {index})")
+                print(f"\t\tUpdated parentheses_pairs: {parentheses_pairs}")
+            else:
+                print("\t\tNo matching opening parenthesis found")
+        pairing_data.append([index, char, str(opening_parentheses), str(parentheses_pairs)])
 
-    # Second pass: Build the result string
+    print("\n--- Parentheses Pairing Summary ---")
+    headers = ["Index", "Character", "Opening Parentheses Stack", "Parentheses Pairs"]
+    print(tabulate(pairing_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Parentheses Pairs ---")
+    print(tabulate(parentheses_pairs.items(), headers=["Index", "Matching Index"], tablefmt="fancy_grid"))
+
+    print("\n--- Second Pass: Building Result ---")
     result = []
     current_index = 0
-    direction = 1  # 1 for forward, -1 for backward
+    direction = 1
+    print(f"\tInitial state: result = {result}, current_index = {current_index}, direction = {direction}")
 
+    iteration_data = []
     while current_index < len(s):
-        if s[current_index] in '()':
-            # Jump to the matching parenthesis and reverse direction
-            current_index = parentheses_pairs[current_index]
-            direction = -direction
-        else:
-            result.append(s[current_index])
-        current_index += direction
+        print(f"\n--- Processing index {current_index} ---")
+        print(f"\tCurrent character: '{s[current_index]}'")
+        print(f"\tCurrent direction: {'forward' if direction == 1 else 'backward'}")
 
-    return ''.join(result)
+        if s[current_index] in '()':
+            print(f"\tEncountered parenthesis at index {current_index}")
+            new_index = parentheses_pairs[current_index]
+            print(f"\t\tJumping to matching parenthesis at index {new_index}")
+            current_index = new_index
+            direction = -direction
+            print(f"\t\tReversed direction: {'forward' if direction == 1 else 'backward'}")
+        else:
+            print(f"\tAppending '{s[current_index]}' to result")
+            result.append(s[current_index])
+
+        current_index += direction
+        print(f"\tUpdated: result = {''.join(result)}, current_index = {current_index}, direction = {direction}")
+        iteration_data.append([current_index - direction, s[current_index - direction], ''.join(result), direction])
+
+    print("\n--- Result Building Summary ---")
+    headers = ["Processed Index", "Character", "Current Result", "Direction"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    final_result = ''.join(result)
+    print(f"\tJoining result: {''.join(result)}")
+    print(f"\tFinal Result: {final_result}")
+    return final_result
 
 
 # <------------------------------------------------- July 12th, 2024 ------------------------------------------------->
