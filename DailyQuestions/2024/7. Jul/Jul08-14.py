@@ -366,7 +366,6 @@ def reverseParentheses2(s: str) -> str:
     print(f"\topening_parentheses = {opening_parentheses}")
 
     print("\n--- First Pass: Pairing Parentheses ---")
-    pairing_data = []
     for index, char in enumerate(s):
         print(f"\n--- Character {index + 1}/{len(s)}: '{char}' ---")
         if char == '(':
@@ -385,11 +384,6 @@ def reverseParentheses2(s: str) -> str:
                 print(f"\t\tUpdated parentheses_pairs: {parentheses_pairs}")
             else:
                 print("\t\tNo matching opening parenthesis found")
-        pairing_data.append([index, char, str(opening_parentheses), str(parentheses_pairs)])
-
-    print("\n--- Parentheses Pairing Summary ---")
-    headers = ["Index", "Character", "Opening Parentheses Stack", "Parentheses Pairs"]
-    print(tabulate(pairing_data, headers=headers, tablefmt="fancy_grid"))
 
     print("\n--- Parentheses Pairs ---")
     print(tabulate(parentheses_pairs.items(), headers=["Index", "Matching Index"], tablefmt="fancy_grid"))
@@ -493,8 +487,8 @@ def problem7_2():
 
 # Test cases for July 11th, 2024
 # Expected output: "leetcode"
-# reverseParentheses1(s="(ed(et(oc))el)")
-# reverseParentheses2(s="(ed(et(oc))el)")
+# reverseParentheses1(s="(el(a(pm))xe)")
+reverseParentheses2(s="(el(a(pm))xe)")
 
 # Test cases for July 12th, 2024
 
