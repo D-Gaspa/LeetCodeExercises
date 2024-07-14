@@ -434,11 +434,60 @@ def reverseParentheses2(s: str) -> str:
 
 
 def maximumGain1(s: str, x: int, y: int) -> int:
-    pass
+    # Define sequences to remove and their corresponding points
+    high_value_seq, low_value_seq = ('ab', x), ('ba', y)
+    if x < y:
+        high_value_seq, low_value_seq = low_value_seq, high_value_seq
+
+    total_points = 0
+    for (first_char, second_char), points in [high_value_seq, low_value_seq]:
+        stack = []
+        for char in s:
+            if stack and stack[-1] == first_char and char == second_char:
+                stack.pop()
+                total_points += points
+            else:
+                stack.append(char)
+        s = stack  # Prepare remaining string for next iteration
+
+    return total_points
 
 
 def maximumGain2(s: str, x: int, y: int) -> int:
-    pass
+    # Determine which character pair has higher value
+    high_value_char, low_value_char = 'a', 'b'
+    if x < y:
+        x, y = y, x
+        high_value_char, low_value_char = low_value_char, high_value_char
+
+    total_points = 0
+    unpaired_high_count, unpaired_low_count = 0, 0
+
+    for char in s:
+        if char == high_value_char:
+            unpaired_high_count += 1
+        elif char == low_value_char:
+            if unpaired_high_count > 0:
+                # Found a high-value pair, remove it and add points
+                unpaired_high_count -= 1
+                total_points += x
+            else:
+                unpaired_low_count += 1
+        elif unpaired_high_count:
+            if unpaired_low_count:
+                # Add points for any low-value pairs
+                total_points += min(unpaired_high_count, unpaired_low_count) * y
+                unpaired_high_count, unpaired_low_count = 0, 0
+            else:
+                unpaired_high_count = 0
+        elif unpaired_low_count:
+            unpaired_low_count = 0
+
+    # Add remaining points for any leftover pairs
+    if unpaired_high_count and unpaired_low_count:
+        total_points += min(unpaired_high_count, unpaired_low_count) * y
+
+    return total_points
 
 
 # <------------------------------------------------- July 13th, 2024 ------------------------------------------------->
@@ -493,9 +542,8 @@ def problem7_2():
 
 # Test cases for July 12th, 2024
 # Expected output: 19
-print(maximumGain1(s="cdbcbbaaabab", x=4, y=5))
-# Expected output: 20
-print(maximumGain1(s="aabbaaxybbaabb", x=5, y=4))
+# maximumGain1(s="cdbcbbaaabab", x=4, y=5)
+# maximumGain2(s="cdbcbbaaabab", x=4, y=5)
 
 # Test cases for July 13th, 2024
 
