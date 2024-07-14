@@ -434,22 +434,53 @@ def reverseParentheses2(s: str) -> str:
 
 
 def maximumGain1(s: str, x: int, y: int) -> int:
-    # Define sequences to remove and their corresponding points
+    print("\n--- Input Parameters ---")
+    print(f"\ts = {s}")
+    print(f"\tx = {x}")
+    print(f"\ty = {y}")
+
+    print("\n--- Initialization ---")
     high_value_seq, low_value_seq = ('ab', x), ('ba', y)
     if x < y:
         high_value_seq, low_value_seq = low_value_seq, high_value_seq
-
+    print(f"\thigh_value_seq = {high_value_seq}")
+    print(f"\tlow_value_seq = {low_value_seq}")
     total_points = 0
-    for (first_char, second_char), points in [high_value_seq, low_value_seq]:
+    print(f"\ttotal_points = {total_points}")
+
+    iteration_data = []
+    for seq_index, ((first_char, second_char), points) in enumerate([high_value_seq, low_value_seq]):
+        print(
+            f"\n--- Processing {'High' if seq_index == 0 else 'Low'} Value Sequence: '{first_char}{second_char}' (Points: {points}) ---")
         stack = []
-        for char in s:
+        print(f"\tInitial stack: {stack}")
+
+        for char_index, char in enumerate(s):
+            print(f"\n\t--- Character {char_index + 1}/{len(s)}: '{char}' ---")
+            print(f"\tCurrent stack: {stack}")
+
             if stack and stack[-1] == first_char and char == second_char:
-                stack.pop()
+                popped_char = stack.pop()
                 total_points += points
+                print(f"\t\tFound sequence '{popped_char}{char}'. Removing from stack.")
+                print(f"\t\tAdding {points} points. Total points: {total_points}")
             else:
                 stack.append(char)
-        s = stack  # Prepare remaining string for next iteration
+                print(f"\t\tAppending '{char}' to stack.")
 
+            print(f"\tUpdated stack: {stack}")
+
+            iteration_data.append([seq_index + 1, char_index + 1, char, ''.join(stack), total_points])
+
+        s = stack
+        print(f"\tRemaining string after processing: {''.join(s)}")
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Sequence", "Character Index", "Current Char", "Stack", "Total Points"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal Total Points: {total_points}")
     return total_points
 
 
