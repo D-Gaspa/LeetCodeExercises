@@ -427,16 +427,17 @@ def reverseParentheses2(s: str) -> str:
 
 
 # <------------------------------------------------- July 12th, 2024 ------------------------------------------------->
-# 5. Problem
+# 1717. Maximum Score From Removing Substrings
 
-# Description
+# Given a string `s` and two integers `x` and `y`, return the maximum points you can gain by repeatedly removing the
+# substring "ab" for `x` points and "ba" for `y` points.
 
 
-def problem5_1():
+def maximumGain1(s: str, x: int, y: int) -> int:
     pass
 
 
-def problem5_2():
+def maximumGain2(s: str, x: int, y: int) -> int:
     pass
 
 
@@ -488,9 +489,13 @@ def problem7_2():
 # Test cases for July 11th, 2024
 # Expected output: "leetcode"
 # reverseParentheses1(s="(el(a(pm))xe)")
-reverseParentheses2(s="(el(a(pm))xe)")
+# reverseParentheses2(s="(el(a(pm))xe)")
 
 # Test cases for July 12th, 2024
+# Expected output: 19
+print(maximumGain1(s="cdbcbbaaabab", x=4, y=5))
+# Expected output: 20
+print(maximumGain1(s="aabbaaxybbaabb", x=5, y=4))
 
 # Test cases for July 13th, 2024
 
