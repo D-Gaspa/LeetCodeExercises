@@ -572,16 +572,20 @@ def maximumGain2(s: str, x: int, y: int) -> int:
 
 
 # <------------------------------------------------- July 13th, 2024 ------------------------------------------------->
-# 6. Problem
+# 2751. Robot Collisions
 
-# Description
+# There are `n` 1-indexed robots on a line, each with a position, health, and direction ('L' for left, 'R' for right).
+# Robots move simultaneously at the same speed, and collide if they share a position.
+# In a collision, the robot with lower health is removed, and the survivor's health decreases by one
+# (both are removed if health is equal).
+# The task is to determine the final health of surviving robots in their original order after all collisions.
 
 
-def problem6_1():
+def survivedRobotsHealths1(positions: List[int], healths: List[int], directions: str) -> List[int]:
     pass
 
 
-def problem6_2():
+def survivedRobotsHealths2(positions: List[int], healths: List[int], directions: str) -> List[int]:
     pass
 
 
@@ -627,5 +631,13 @@ def problem7_2():
 # maximumGain2(s="cdbcbbaaabab", x=4, y=5)
 
 # Test cases for July 13th, 2024
+# Expected output: [2, 17, 9, 15, 10]
+print(survivedRobotsHealths1(positions=[5, 4, 3, 2, 1], healths=[2, 17, 9, 15, 10], directions="RRRRR"))
+
+# Expected output: [14]
+print(survivedRobotsHealths1(positions=[3, 5, 2, 6], healths=[10, 10, 15, 12], directions="RLRL"))
+
+# Expected output: []
+print(survivedRobotsHealths1(positions=[1, 2, 5, 6], healths=[10, 10, 11, 11], directions="RLRL"))
 
 # Test cases for July 14th, 2024
