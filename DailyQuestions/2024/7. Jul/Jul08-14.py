@@ -442,6 +442,7 @@ def maximumGain1(s: str, x: int, y: int) -> int:
     print("\n--- Initialization ---")
     high_value_seq, low_value_seq = ('ab', x), ('ba', y)
     if x < y:
+        print(f"\tSince x < y, swapping high and low value sequences")
         high_value_seq, low_value_seq = low_value_seq, high_value_seq
     print(f"\thigh_value_seq = {high_value_seq}")
     print(f"\tlow_value_seq = {low_value_seq}")
@@ -451,7 +452,8 @@ def maximumGain1(s: str, x: int, y: int) -> int:
     iteration_data = []
     for seq_index, ((first_char, second_char), points) in enumerate([high_value_seq, low_value_seq]):
         print(
-            f"\n--- Processing {'High' if seq_index == 0 else 'Low'} Value Sequence: '{first_char}{second_char}' (Points: {points}) ---")
+            f"\n--- Processing {'High' if seq_index == 0 else 'Low'} Value Sequence: "
+            f"'{first_char}{second_char}' (Points: {points}) ---")
         stack = []
         print(f"\tInitial stack: {stack}")
 
@@ -485,39 +487,87 @@ def maximumGain1(s: str, x: int, y: int) -> int:
 
 
 def maximumGain2(s: str, x: int, y: int) -> int:
-    # Determine which character pair has higher value
+    print("\n--- Input Parameters ---")
+    print(f"\ts = {s}")
+    print(f"\tx = {x}")
+    print(f"\ty = {y}")
+
+    print("\n--- Initialization ---")
     high_value_char, low_value_char = 'a', 'b'
     if x < y:
+        print(f"\tSince x < y, swapping high and low value chars")
         x, y = y, x
         high_value_char, low_value_char = low_value_char, high_value_char
+    print(f"\thigh_value_char = '{high_value_char}', points = {x}")
+    print(f"\tlow_value_char = '{low_value_char}', points = {y}")
 
     total_points = 0
     unpaired_high_count, unpaired_low_count = 0, 0
+    print(f"\ttotal_points = {total_points}")
+    print(f"\tunpaired_high_count = {unpaired_high_count}")
+    print(f"\tunpaired_low_count = {unpaired_low_count}")
 
-    for char in s:
+    print("\n--- Main Loop ---")
+    iteration_data = []
+    for char_index, char in enumerate(s):
+        print(f"\n--- Character {char_index + 1}/{len(s)}: '{char}' ---")
+        print(
+            f"\tCurrent state: total_points = {total_points}, unpaired_high_count ="
+            f" {unpaired_high_count}, unpaired_low_count = {unpaired_low_count}")
+
         if char == high_value_char:
             unpaired_high_count += 1
+            print(
+                f"\tFound high-value char '{high_value_char}'. "
+                f"Incrementing unpaired_high_count to {unpaired_high_count}")
         elif char == low_value_char:
             if unpaired_high_count > 0:
-                # Found a high-value pair, remove it and add points
                 unpaired_high_count -= 1
                 total_points += x
+                print(f"\tFound low-value char '{low_value_char}' and unpaired_high_count > 0.")
+                print(f"\tForming high-value pair. Decrementing unpaired_high_count to {unpaired_high_count}")
+                print(f"\tAdding {x} points. Total points now {total_points}")
             else:
                 unpaired_low_count += 1
-        elif unpaired_high_count:
-            if unpaired_low_count:
-                # Add points for any low-value pairs
-                total_points += min(unpaired_high_count, unpaired_low_count) * y
-                unpaired_high_count, unpaired_low_count = 0, 0
-            else:
-                unpaired_high_count = 0
-        elif unpaired_low_count:
-            unpaired_low_count = 0
+                print(f"\tFound low-value char '{low_value_char}' but no unpaired high-value char.")
+                print(f"\tIncrementing unpaired_low_count to {unpaired_low_count}")
+        else:
+            print(f"\tFound non-pair char '{char}'. Checking for potential low-value pairs.")
+            if unpaired_high_count:
+                print("\tFound unpaired high-value chars. Checking for low-value pairs.")
+                if unpaired_low_count:
+                    pairs_to_remove = min(unpaired_high_count, unpaired_low_count)
+                    points_to_add = pairs_to_remove * y
+                    total_points += points_to_add
+                    print(f"\tFound {pairs_to_remove} low-value pairs to remove.")
+                    print(f"\tAdding {points_to_add} points. Total points now {total_points}")
+                    unpaired_high_count, unpaired_low_count = 0, 0
+                    print("\tResetting unpaired counts to 0")
+                else:
+                    print("\tNo low-value chars for pairing. Resetting unpaired_high_count to 0")
+                    unpaired_high_count = 0
+            elif unpaired_low_count:
+                print("\tNo high-value chars for pairing. Resetting unpaired_low_count to 0")
+                unpaired_low_count = 0
 
-    # Add remaining points for any leftover pairs
+        iteration_data.append([char_index + 1, char, unpaired_high_count, unpaired_low_count, total_points])
+
+    print("\n--- Final Check for Remaining Pairs ---")
     if unpaired_high_count and unpaired_low_count:
-        total_points += min(unpaired_high_count, unpaired_low_count) * y
+        pairs_to_remove = min(unpaired_high_count, unpaired_low_count)
+        points_to_add = pairs_to_remove * y
+        total_points += points_to_add
+        print(f"\tFound {pairs_to_remove} remaining low-value pairs to remove.")
+        print(f"\tAdding {points_to_add} points. Total points now {total_points}")
 
+    iteration_data.append(["Final", "N/A", unpaired_high_count, unpaired_low_count, total_points])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Character Index", "Current Char", "Unpaired High Count", "Unpaired Low Count", "Total Points"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal Total Points: {total_points}")
     return total_points
 
 
