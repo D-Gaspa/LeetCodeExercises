@@ -1,5 +1,5 @@
 # Week 2: July 8th - July 14th
-from collections import deque
+from collections import deque, defaultdict
 from typing import List
 
 from tabulate import tabulate
@@ -674,11 +674,54 @@ def survivedRobotsHealths1(positions: List[int], healths: List[int], directions:
 
 
 def countOfAtoms1(formula: str) -> str:
-    pass
+    def count_atoms():
+        nonlocal current_index
+        element_counts = defaultdict(int)
 
+        while current_index < n and formula[current_index] != ')':
+            if formula[current_index] == '(':
+                current_index += 1
+                nested_elements_count = count_atoms()
+                for element, count in nested_elements_count.items():
+                    element_counts[element] += count
+            elif formula[current_index].isupper():
+                current_element = formula[current_index]
+                current_index += 1
+                if current_index < n and formula[current_index].islower():
+                    current_element += formula[current_index]
+                    current_index += 1
+                multiplicity = ''
+                while current_index < n and formula[current_index].isdigit():
+                    multiplicity += formula[current_index]
+                    current_index += 1
+                if multiplicity:
+                    element_counts[current_element] += int(multiplicity)
+                else:
+                    element_counts[current_element] += 1
 
-def countOfAtoms2(formula: str) -> str:
-    pass
+        multiplicity = ''
+        current_index += 1
+        while current_index < n and formula[current_index].isdigit():
+            multiplicity += formula[current_index]
+            current_index += 1
+        if multiplicity:
+            for element in element_counts:
+                element_counts[element] *= int(multiplicity)
+
+        return element_counts
+
+    n = len(formula)
+    current_index = 0
+    atom_count = ""
+
+    atom_counts = count_atoms()
+
+    for element, count in sorted(atom_counts.items()):
+        atom_count += element
+        if count > 1:
+            atom_count += str(count)
+
+    return atom_count
 
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
@@ -713,11 +756,5 @@ def countOfAtoms2(formula: str) -> str:
 # survivedRobotsHealths1(positions=[3, 5, 2, 6], healths=[10, 12, 15, 12], directions="RLRL")
 
 # Test cases for July 14th, 2024
-# Expected output: "H2O"
-print(countOfAtoms1(formula="H2O"))
-
-# Expected output: "H2MgO2"
-print(countOfAtoms1(formula="Mg(OH)2"))
-
-# Expected output: "K4N2O14S4"
-print(countOfAtoms1(formula="K4(ON(SO3)2)2"))
+# Expected output: "K32N2O62S20"
+# countOfAtoms1(formula="K32(ON(SO3)10)2")
