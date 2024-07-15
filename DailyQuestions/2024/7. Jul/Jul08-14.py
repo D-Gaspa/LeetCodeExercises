@@ -664,16 +664,20 @@ def survivedRobotsHealths1(positions: List[int], healths: List[int], directions:
 
 
 # <------------------------------------------------- July 14th, 2024 ------------------------------------------------->
-# 7. Problem
+# 726. Number of Atoms
 
-# Description
+# Given a string formula representing a chemical formula, return the count of each atom.
+# Atoms start with an uppercase letter followed by optional lowercase letters, and may have a count greater than 1
+# indicated by digits.
+# The formula can include concatenated formulas, parentheses, and nested counts, and the output should be a string with
+# atom names in sorted order followed by their counts if greater than 1.
 
 
-def problem7_1():
+def countOfAtoms1(formula: str) -> str:
     pass
 
 
-def problem7_2():
+def countOfAtoms2(formula: str) -> str:
     pass
 
 
@@ -709,3 +713,11 @@ def problem7_2():
 # survivedRobotsHealths1(positions=[3, 5, 2, 6], healths=[10, 12, 15, 12], directions="RLRL")
 
 # Test cases for July 14th, 2024
+# Expected output: "H2O"
+print(countOfAtoms1(formula="H2O"))
+
+# Expected output: "H2MgO2"
+print(countOfAtoms1(formula="Mg(OH)2"))
+
+# Expected output: "K4N2O14S4"
+print(countOfAtoms1(formula="K4(ON(SO3)2)2"))
