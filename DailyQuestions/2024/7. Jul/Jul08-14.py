@@ -581,36 +581,84 @@ def maximumGain2(s: str, x: int, y: int) -> int:
 # The task is to determine the final health of surviving robots in their original order after all collisions.
 
 
-def survivedRobotsHealths1(positions: List[int], healths: List[int],
-                           directions: str) -> List[int]:
+def survivedRobotsHealths1(positions: List[int], healths: List[int], directions: str) -> List[int]:
+    print("\n--- Input Parameters ---")
+    print(f"\tpositions = {positions}")
+    print(f"\thealths = {healths}")
+    print(f"\tdirections = {directions}")
+
+    print("\n--- Initialization ---")
+    sorted_robot_indices = sorted(range(len(positions)), key=lambda x: positions[x])
+    right_moving_robot_stack = []
+    print(f"\tsorted_robot_indices = {sorted_robot_indices}")
+    print(f"\tright_moving_robot_stack = {right_moving_robot_stack}")
+
     def handle_collision(left_robot_index, right_robot_index):
+        print(f"\n\t--- Handling Collision between Robot {left_robot_index + 1} and Robot {right_robot_index + 1} ---")
+        print(
+            f"\t\tBefore collision: Robot {left_robot_index + 1} health = {healths[left_robot_index]}, "
+            f"Robot {right_robot_index + 1} health = {healths[right_robot_index]}")
+
         health_diff = healths[left_robot_index] - healths[right_robot_index]
+        print(f"\t\tHealth difference: {health_diff}")
+
         if health_diff < 0:
+            print(f"\t\tRobot {left_robot_index + 1} is destroyed, Robot {right_robot_index + 1} loses 1 health")
             healths[left_robot_index] = 0
             healths[right_robot_index] -= 1
             right_moving_robot_stack.pop()
         elif health_diff > 0:
+            print(f"\t\tRobot {right_robot_index + 1} is destroyed, Robot {left_robot_index + 1} loses 1 health")
             healths[right_robot_index] = 0
             healths[left_robot_index] -= 1
         else:
+            print(f"\t\tBoth robots are destroyed")
             healths[left_robot_index], healths[right_robot_index] = 0, 0
             right_moving_robot_stack.pop()
 
-    sorted_robot_indices = sorted(range(len(positions)),
-                                  key=lambda x: positions[x])
-    right_moving_robot_stack = []
+        print(
+            f"\t\tAfter collision: Robot {left_robot_index + 1} health = {healths[left_robot_index]}, "
+            f"Robot {right_robot_index + 1} health = {healths[right_robot_index]}")
 
-    # Simulate collisions
-    for current_robot_index in sorted_robot_indices:
+    print("\n--- Main Simulation Loop ---")
+    iteration_data = []
+    for i, current_robot_index in enumerate(sorted_robot_indices):
+        print(f"\n--- Processing Robot {current_robot_index + 1} (Iteration {i + 1}/{len(sorted_robot_indices)}) ---")
+        print(
+            f"\tPosition: {positions[current_robot_index]}, Health: {healths[current_robot_index]}, "
+            f"Direction: {directions[current_robot_index]}")
+
         if directions[current_robot_index] == 'R':
+            print(f"\tRobot {current_robot_index + 1} is moving right, adding to stack")
             right_moving_robot_stack.append(current_robot_index)
+            print(f"\tUpdated right_moving_robot_stack: {right_moving_robot_stack}")
         else:
-            while (right_moving_robot_stack and
-                   healths[current_robot_index] > 0):
+            print(f"\tRobot {current_robot_index + 1} is moving left, checking for collisions")
+            collisions = 0
+            while right_moving_robot_stack and healths[current_robot_index] > 0:
                 colliding_robot_index = right_moving_robot_stack[-1]
+                print(f"\t\tPotential collision with Robot {colliding_robot_index + 1}")
                 handle_collision(colliding_robot_index, current_robot_index)
+                collisions += 1
 
+            print(f"\tTotal collisions for Robot {current_robot_index + 1}: {collisions}")
+
+        iteration_data.append([
+            i + 1,
+            current_robot_index + 1,
+            positions[current_robot_index],
+            healths[current_robot_index],
+            directions[current_robot_index],
+            len(right_moving_robot_stack)
+        ])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Iteration", "Robot", "Position", "Health", "Direction", "Right-moving Stack Size"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
     surviving_healths = [health for health in healths if health > 0]
+    print(f"\tSurviving robot healths: {surviving_healths}")
 
     return surviving_healths
 
@@ -658,7 +706,6 @@ def problem7_2():
 
 # Test cases for July 13th, 2024
 # Expected output: [14]
-# survivedRobotsHealths1(positions=[3, 5, 2, 6], healths=[10, 10, 15, 12], directions="RLRL")
-
+survivedRobotsHealths1(positions=[3, 5, 2, 6], healths=[10, 10, 15, 12], directions="RLRL")
 
 # Test cases for July 14th, 2024
