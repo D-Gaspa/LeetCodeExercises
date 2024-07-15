@@ -581,24 +581,23 @@ def maximumGain2(s: str, x: int, y: int) -> int:
 # The task is to determine the final health of surviving robots in their original order after all collisions.
 
 
-def survivedRobotsHealths1(positions: List[int], healths: List[int], directions: str) -> List[int]:
+def survivedRobotsHealths1(positions: List[int], healths: List[int],
+                           directions: str) -> List[int]:
     def handle_collision(left_robot_index, right_robot_index):
         health_diff = healths[left_robot_index] - healths[right_robot_index]
         if health_diff < 0:
-            # The right robot survives
             healths[left_robot_index] = 0
             healths[right_robot_index] -= 1
             right_moving_robot_stack.pop()
         elif health_diff > 0:
-            # The left robot survives
             healths[right_robot_index] = 0
             healths[left_robot_index] -= 1
         else:
-            # Both robots are removed
             healths[left_robot_index], healths[right_robot_index] = 0, 0
             right_moving_robot_stack.pop()
 
-    sorted_robot_indices = sorted(range(len(positions)), key=lambda x: positions[x])
+    sorted_robot_indices = sorted(range(len(positions)),
+                                  key=lambda x: positions[x])
     right_moving_robot_stack = []
 
     # Simulate collisions
@@ -606,8 +605,8 @@ def survivedRobotsHealths1(positions: List[int], healths: List[int], directions:
         if directions[current_robot_index] == 'R':
             right_moving_robot_stack.append(current_robot_index)
         else:
-            # Handle collisions with robots moving to the right
-            while right_moving_robot_stack and healths[current_robot_index] > 0:
+            while (right_moving_robot_stack and
+                   healths[current_robot_index] > 0):
                 colliding_robot_index = right_moving_robot_stack[-1]
                 handle_collision(colliding_robot_index, current_robot_index)
 
