@@ -582,11 +582,33 @@ def maximumGain2(s: str, x: int, y: int) -> int:
 
 
 def survivedRobotsHealths1(positions: List[int], healths: List[int], directions: str) -> List[int]:
-    pass
+    robot_indices = list(range(len(positions)))
+    robot_indices.sort(key=lambda x: positions[x])
+    stack = []
 
+    for index in robot_indices:
+        if directions[index] == 'R':
+            stack.append(index)
+        else:
+            while stack and healths[index] > 0:
+                top_index = stack[-1]
+                difference = healths[top_index] - healths[index]
 
-def survivedRobotsHealths2(positions: List[int], healths: List[int], directions: str) -> List[int]:
-    pass
+                if difference < 0:
+                    healths[top_index] = 0
+                    healths[index] -= 1
+                    stack.pop()
+                elif difference > 0:
+                    healths[index] = 0
+                    healths[top_index] -= 1
+                else:
+                    healths[top_index] = 0
+                    healths[index] = 0
+                    stack.pop()
+
+    robots_health = [robot_health for robot_health in healths if robot_health > 0]
+
+    return robots_health
 
 
 # <------------------------------------------------- July 14th, 2024 ------------------------------------------------->
@@ -639,5 +661,9 @@ print(survivedRobotsHealths1(positions=[3, 5, 2, 6], healths=[10, 10, 15, 12], d
 
 # Expected output: []
 print(survivedRobotsHealths1(positions=[1, 2, 5, 6], healths=[10, 10, 11, 11], directions="RLRL"))
+
+# Expected output: [16]
+print(survivedRobotsHealths1(positions=[13, 3], healths=[17, 2], directions="LR"))
+
 
 # Test cases for July 14th, 2024
