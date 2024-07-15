@@ -582,33 +582,38 @@ def maximumGain2(s: str, x: int, y: int) -> int:
 
 
 def survivedRobotsHealths1(positions: List[int], healths: List[int], directions: str) -> List[int]:
-    robot_indices = list(range(len(positions)))
-    robot_indices.sort(key=lambda x: positions[x])
-    stack = []
-
-    for index in robot_indices:
-        if directions[index] == 'R':
-            stack.append(index)
+    def handle_collision(left_robot_index, right_robot_index):
+        health_diff = healths[left_robot_index] - healths[right_robot_index]
+        if health_diff < 0:
+            # The right robot survives
+            healths[left_robot_index] = 0
+            healths[right_robot_index] -= 1
+            right_moving_robot_stack.pop()
+        elif health_diff > 0:
+            # The left robot survives
+            healths[right_robot_index] = 0
+            healths[left_robot_index] -= 1
         else:
-            while stack and healths[index] > 0:
-                top_index = stack[-1]
-                difference = healths[top_index] - healths[index]
+            # Both robots are removed
+            healths[left_robot_index], healths[right_robot_index] = 0, 0
+            right_moving_robot_stack.pop()
 
-                if difference < 0:
-                    healths[top_index] = 0
-                    healths[index] -= 1
-                    stack.pop()
-                elif difference > 0:
-                    healths[index] = 0
-                    healths[top_index] -= 1
-                else:
-                    healths[top_index] = 0
-                    healths[index] = 0
-                    stack.pop()
+    sorted_robot_indices = sorted(range(len(positions)), key=lambda x: positions[x])
+    right_moving_robot_stack = []
 
-    robots_health = [robot_health for robot_health in healths if robot_health > 0]
+    # Simulate collisions
+    for current_robot_index in sorted_robot_indices:
+        if directions[current_robot_index] == 'R':
+            right_moving_robot_stack.append(current_robot_index)
+        else:
+            # Handle collisions with robots moving to the right
+            while right_moving_robot_stack and healths[current_robot_index] > 0:
+                colliding_robot_index = right_moving_robot_stack[-1]
+                handle_collision(colliding_robot_index, current_robot_index)
 
-    return robots_health
+    surviving_healths = [health for health in healths if health > 0]
+
+    return surviving_healths
 
 
 # <------------------------------------------------- July 14th, 2024 ------------------------------------------------->
@@ -653,17 +658,8 @@ def problem7_2():
 # maximumGain2(s="cdbcbbaaabab", x=4, y=5)
 
 # Test cases for July 13th, 2024
-# Expected output: [2, 17, 9, 15, 10]
-print(survivedRobotsHealths1(positions=[5, 4, 3, 2, 1], healths=[2, 17, 9, 15, 10], directions="RRRRR"))
-
 # Expected output: [14]
-print(survivedRobotsHealths1(positions=[3, 5, 2, 6], healths=[10, 10, 15, 12], directions="RLRL"))
-
-# Expected output: []
-print(survivedRobotsHealths1(positions=[1, 2, 5, 6], healths=[10, 10, 11, 11], directions="RLRL"))
-
-# Expected output: [16]
-print(survivedRobotsHealths1(positions=[13, 3], healths=[17, 2], directions="LR"))
+# survivedRobotsHealths1(positions=[3, 5, 2, 6], healths=[10, 10, 15, 12], directions="RLRL")
 
 
 # Test cases for July 14th, 2024
