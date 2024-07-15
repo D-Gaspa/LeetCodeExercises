@@ -706,6 +706,6 @@ def problem7_2():
 
 # Test cases for July 13th, 2024
 # Expected output: [14]
-survivedRobotsHealths1(positions=[3, 5, 2, 6], healths=[10, 10, 15, 12], directions="RLRL")
+# survivedRobotsHealths1(positions=[3, 5, 2, 6], healths=[10, 12, 15, 12], directions="RLRL")
 
 # Test cases for July 14th, 2024
