@@ -672,54 +672,46 @@ def survivedRobotsHealths1(positions: List[int], healths: List[int], directions:
 # The formula can include concatenated formulas, parentheses, and nested counts, and the output should be a string with
 # atom names in sorted order followed by their counts if greater than 1.
 
-
 def countOfAtoms1(formula: str) -> str:
-    def count_atoms():
-        nonlocal current_index
-        element_counts = defaultdict(int)
-
-        while current_index < n and formula[current_index] != ')':
-            if formula[current_index] == '(':
-                current_index += 1
-                nested_elements_count = count_atoms()
-                for element, count in nested_elements_count.items():
-                    element_counts[element] += count
-            elif formula[current_index].isupper():
-                current_element = formula[current_index]
-                current_index += 1
-                if current_index < n and formula[current_index].islower():
-                    current_element += formula[current_index]
-                    current_index += 1
-                multiplicity = ''
-                while current_index < n and formula[current_index].isdigit():
-                    multiplicity += formula[current_index]
-                    current_index += 1
-                if multiplicity:
-                    element_counts[current_element] += int(multiplicity)
-                else:
-                    element_counts[current_element] += 1
-
-        multiplicity = ''
-        current_index += 1
-        while current_index < n and formula[current_index].isdigit():
-            multiplicity += formula[current_index]
-            current_index += 1
-        if multiplicity:
-            for element in element_counts:
-                element_counts[element] *= int(multiplicity)
-
-        return element_counts
-
     n = len(formula)
+    atoms_stack = [defaultdict(int)]
+
     current_index = 0
-    atom_count = ""
+    while current_index < n:
+        if formula[current_index] == '(':
+            atoms_stack.append(defaultdict(int))
+            current_index += 1
+        elif formula[current_index] == ')':
+            nested_atom_counts = atoms_stack.pop()
+            multiplicity = ''
+            current_index += 1
+            while current_index < n and formula[current_index].isdigit():
+                multiplicity += formula[current_index]
+                current_index += 1
+            if multiplicity:
+                for atom in nested_atom_counts:
+                    nested_atom_counts[atom] *= int(multiplicity)
 
-    atom_counts = count_atoms()
+            for atom, count in nested_atom_counts.items():
+                atoms_stack[-1][atom] += count
 
-    for element, count in sorted(atom_counts.items()):
-        atom_count += element
-        if count > 1:
-            atom_count += str(count)
+        elif formula[current_index].isupper():
+            current_atom = formula[current_index]
+            current_index += 1
+            if current_index < n and formula[current_index].islower():
+                current_atom += formula[current_index]
+                current_index += 1
+            multiplicity = ''
+            while current_index < n and formula[current_index].isdigit():
+                multiplicity += formula[current_index]
+                current_index += 1
+            if multiplicity:
+                atoms_stack[-1][current_atom] += int(multiplicity)
+            else:
+                atoms_stack[-1][current_atom] += 1
+
+    atom_count = "".join(atom + (str(count) if count > 1 else "") for
+                         atom, count in sorted(atoms_stack[0].items()))
 
     return atom_count
 
@@ -758,3 +750,5 @@ def countOfAtoms1(formula: str) -> str:
 # Test cases for July 14th, 2024
 # Expected output: "K32N2O62S20"
 # countOfAtoms1(formula="K32(ON(SO3)10)2")
+
+countOfAtoms1(formula="H2O")
