@@ -1,4 +1,5 @@
 # Week 2: July 8th - July 14th
+import re
 from collections import deque, defaultdict
 from typing import List
 
@@ -774,6 +775,38 @@ def countOfAtoms2(formula: str) -> str:
     return atom_counts
 
 
+def countOfAtoms3(formula: str) -> str:
+    mult_stack = [1]
+    curr_mult = 1
+    atom_map = defaultdict(int)
+
+    matcher = re.findall(r"([A-Z][a-z]*)(\d*)|(\()|(\))(\d*)", formula)
+    matcher.reverse()
+
+    for atom, count, left_parenthesis, right_parenthesis, multiplicity in matcher:
+        if atom:
+            if count:
+                atom_map[atom] += int(count) * curr_mult
+            else:
+                atom_map[atom] += curr_mult
+
+        elif right_parenthesis:
+            if not multiplicity:
+                multiplicity = 1
+            else:
+                multiplicity = int(multiplicity)
+            mult_stack.append(multiplicity)
+            curr_mult *= multiplicity
+
+        elif left_parenthesis:
+            curr_mult //= mult_stack.pop()
+
+    atom_counts = "".join(atom + (str(count) if count > 1 else "") for
+                          atom, count in sorted(atom_map.items()))
+
+    return atom_counts
+
+
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
 # Test cases for July 8th, 2024
@@ -809,4 +842,4 @@ def countOfAtoms2(formula: str) -> str:
 # Expected output: "K32N2O62S20"
 print(countOfAtoms1(formula="K32(ON(SO3)10)2"))
 print(countOfAtoms2(formula="K32(ON(SO3)10)2"))
-print(countOfAtoms2(formula="H20"))
+print(countOfAtoms3(formula="K32(ON(SO3)10)2"))
