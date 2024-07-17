@@ -738,14 +738,17 @@ def countOfAtoms2(formula: str) -> str:
             current_count_str = ""
 
         elif current_char == ')':
+            # Start of a nested formula (reading right to left)
             new_multiplier = int(current_count_str[::-1] or 1)
             multiplier_stack.append(new_multiplier)
             current_multiplier *= new_multiplier
             current_count_str = ""
 
         elif current_char == '(':
+            # End of a nested formula (reading right to left)
             current_multiplier //= multiplier_stack.pop()
 
+        # Store the current multiplier for each character
         multiplier_at_index[index] = current_multiplier
         index -= 1
 
@@ -766,6 +769,8 @@ def countOfAtoms2(formula: str) -> str:
             while index < formula_length and formula[index].isdigit():
                 index += 1
             atom_count = int(formula[start_index:index] or 1)
+
+            # Apply pre-calculated multiplier to atom count
             atom_map[atom_name] += atom_count * multiplier_at_index[index - 1]
         else:
             index += 1
