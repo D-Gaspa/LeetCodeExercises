@@ -674,48 +674,69 @@ def survivedRobotsHealths1(positions: List[int], healths: List[int], directions:
 # atom names in sorted order followed by their counts if greater than 1.
 
 def countOfAtoms1(formula: str) -> str:
+    print("\n--- Input Parameters ---")
+    print(f"\tformula = {formula}")
+
+    print("\n--- Initialization ---")
     formula_length = len(formula)
     atoms_stack = [defaultdict(int)]
+    print(f"\tformula_length = {formula_length}")
+    print(f"\tatoms_stack = {atoms_stack}")
 
     index = 0
+
+    print("\n--- Main Loop ---")
     while index < formula_length:
+        print(f"\n--- While Loop Iteration: while {index} < {formula_length} ---")
+        print(f"\tCurrent character: '{formula[index]}' at index {index}")
+        print(f"\tCurrent atoms_stack: {atoms_stack}")
+
         if formula[index] == '(':
-            # Start of a new nested formula
+            print("\tFound opening parenthesis. Starting a new nested formula.")
             atoms_stack.append(defaultdict(int))
             index += 1
         elif formula[index] == ')':
-            # End of a nested formula
+            print("\tFound closing parenthesis. Processing nested formula.")
             index += 1
             start_index = index
             while index < formula_length and formula[index].isdigit():
                 index += 1
             count_multiplier = int(formula[start_index:index] or 1)
+            print(f"\tNested formula multiplier: {count_multiplier}")
 
-            # Multiply and merge nested atom counts with parent formula
+            print("\tMultiplying and merging nested atom counts with parent formula")
             nested_atom_counts = atoms_stack.pop()
             for atom, count in nested_atom_counts.items():
                 atoms_stack[-1][atom] += count * count_multiplier
+                print(f"\t\tUpdating {atom}: {atoms_stack[-1][atom] - count * count_multiplier} + {count} * {count_multiplier} = {atoms_stack[-1][atom]}")
 
         elif formula[index].isupper():
-            # Start of a new atom
+            print("\tFound uppercase letter. Processing new atom.")
             start_index = index
             index += 1
             while index < formula_length and formula[index].islower():
                 index += 1
             atom_name = formula[start_index:index]
+            print(f"\tAtom name: {atom_name}")
 
-            # Parse the count for this atom
             start_index = index
             while index < formula_length and formula[index].isdigit():
                 index += 1
             count = int(formula[start_index:index] or 1)
+            print(f"\tAtom count: {count}")
 
-            # Add atom count to current formula level
+            print(f"\tAdding atom count to current formula level")
             atoms_stack[-1][atom_name] += count
+            print(f"\t\tUpdated {atom_name} count: {atoms_stack[-1][atom_name]}")
 
-    # Format the final result
-    formatted_atom_counts = "".join(atom + (str(count) if count > 1 else "") for
-                                    atom, count in sorted(atoms_stack[0].items()))
+    print("\n--- Function Returning ---")
+    print("\tFormatting the final result")
+    formatted_atom_counts = ""
+    for atom, count in sorted(atoms_stack[0].items()):
+        print(f"\t\t{atom}: {count}")
+        formatted_atom_counts += atom + (str(count) if count > 1 else "")
+
+    print(f"\tFinal Result: {formatted_atom_counts}")
 
     return formatted_atom_counts
 
@@ -849,6 +870,6 @@ def countOfAtoms3(formula: str) -> str:
 
 # Test cases for July 14th, 2024
 # Expected output: "K32N2O62S20"
-print(countOfAtoms1(formula="K32(ON(SO3)10)2"))
-print(countOfAtoms2(formula="K32(ON(SO3)10)2"))
-print(countOfAtoms3(formula="K32(ON(SO3)10)2"))
+countOfAtoms1(formula="K32(ON(SO3)10)2")
+# countOfAtoms2(formula="K32(ON(SO3)10)2")
+# countOfAtoms3(formula="K32(ON(SO3)10)2")
