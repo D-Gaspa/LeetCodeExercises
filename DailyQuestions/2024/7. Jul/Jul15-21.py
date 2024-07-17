@@ -1,20 +1,28 @@
-# Week X: Month day th - Month day th, 2024
+# Week 3: July 15th - July 21st, 2024
+from typing import List, Optional
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
-# 1. Problem
-
-# Description
+from Utils.trees_utils import BinaryTreeNode
 
 
-def problem1_1():
+# <------------------------------------------------- July 15th, 2024 ------------------------------------------------->
+# 2196. Create Binary Tree From Descriptions
+
+# You are given a 2D integer array `descriptions`, where each element `[parent_i, child_i, isLeft_i]` specifies that
+# `parent_i` is the parent of `child_i` in a binary tree with unique values.
+# If `isLeft_i == 1`, `child_i` is the left child; if `isLeft_i == 0`, `child_i` is the right child.
+# Construct and return the root of the binary tree described by `descriptions`.
+# The binary tree is guaranteed to be valid.
+
+
+def createBinaryTree1(descriptions: List[List[int]]) -> Optional[BinaryTreeNode]:
     pass
 
 
-def problem1_2():
+def createBinaryTree2(descriptions: List[List[int]]) -> Optional[BinaryTreeNode]:
     pass
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <------------------------------------------------- July 16th, 2024 ------------------------------------------------->
 # 2. Problem
 
 # Description
@@ -28,7 +36,7 @@ def problem2_2():
     pass
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <------------------------------------------------- July 17th, 2024 ------------------------------------------------->
 # 3. Problem
 
 # Description
@@ -42,7 +50,7 @@ def problem3_2():
     pass
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <------------------------------------------------- July 18th, 2024 ------------------------------------------------->
 # 4. Problem
 
 # Description
@@ -56,7 +64,7 @@ def problem4_2():
     pass
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <------------------------------------------------- July 19th, 2024 ------------------------------------------------->
 # 5. Problem
 
 # Description
@@ -70,7 +78,7 @@ def problem5_2():
     pass
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <------------------------------------------------- July 20th, 2024 ------------------------------------------------->
 # 6. Problem
 
 # Description
@@ -84,7 +92,7 @@ def problem6_2():
     pass
 
 
-# <------------------------------------------------ Month day th, 2024 ------------------------------------------------>
+# <------------------------------------------------- July 21st, 2024 ------------------------------------------------->
 # 7. Problem
 
 # Description
@@ -97,18 +105,24 @@ def problem7_1():
 def problem7_2():
     pass
 
+
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
-# Test cases for month day th, 2024
+# Test cases for July 15th, 2024
+# Expected output: [50, 20, 80, 15, 19, 17]
+print(createBinaryTree1(descriptions=[[20, 15, 1], [20, 17, 0], [50, 20, 1], [50, 80, 0], [80, 19, 1]]))
 
-# Test cases for month day th, 2024
+# Expected output: [1,2,null,null,3,4]
+print(createBinaryTree1(descriptions=[[1, 2, 1], [2, 3, 0], [3, 4, 1]]))
 
-# Test cases for month day th, 2024
+# Test cases for July 16th, 2024
 
-# Test cases for month day th, 2024
+# Test cases for July 17th, 2024
 
-# Test cases for month day th, 2024
+# Test cases for July 18th, 2024
 
-# Test cases for month day th, 2024
+# Test cases for July 19th, 2024
 
-# Test cases for month day th, 2024
+# Test cases for July 20th, 2024
+
+# Test cases for July 21st, 2024
