@@ -683,33 +683,28 @@ def countOfAtoms1(formula: str) -> str:
             atoms_stack.append(defaultdict(int))
             curr_index += 1
         elif formula[curr_index] == ')':
-            nested_atom_counts = atoms_stack.pop()
-            multiplicity = ''
             curr_index += 1
+            start_index = curr_index
             while curr_index < n and formula[curr_index].isdigit():
-                multiplicity += formula[curr_index]
                 curr_index += 1
-            if multiplicity:
-                for atom in nested_atom_counts:
-                    nested_atom_counts[atom] *= int(multiplicity)
+            multiplicity = int(formula[start_index:curr_index] or 1)
 
+            nested_atom_counts = atoms_stack.pop()
             for atom, count in nested_atom_counts.items():
-                atoms_stack[-1][atom] += count
+                atoms_stack[-1][atom] += count * multiplicity
 
         elif formula[curr_index].isupper():
-            curr_atom = formula[curr_index]
+            start_index = curr_index
             curr_index += 1
-            if curr_index < n and formula[curr_index].islower():
-                curr_atom += formula[curr_index]
+            while curr_index < n and formula[curr_index].islower():
                 curr_index += 1
-            count = ''
+            curr_atom = formula[start_index:curr_index]
+
+            start_index = curr_index
             while curr_index < n and formula[curr_index].isdigit():
-                count += formula[curr_index]
                 curr_index += 1
-            if count:
-                atoms_stack[-1][curr_atom] += int(count)
-            else:
-                atoms_stack[-1][curr_atom] += 1
+            count = int(formula[start_index:curr_index] or 1)
+            atoms_stack[-1][curr_atom] += count
 
     atom_counts = "".join(atom + (str(count) if count > 1 else "") for
                           atom, count in sorted(atoms_stack[0].items()))
