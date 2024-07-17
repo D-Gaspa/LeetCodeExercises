@@ -674,120 +674,137 @@ def survivedRobotsHealths1(positions: List[int], healths: List[int], directions:
 # atom names in sorted order followed by their counts if greater than 1.
 
 def countOfAtoms1(formula: str) -> str:
-    n = len(formula)
+    formula_length = len(formula)
     atoms_stack = [defaultdict(int)]
 
-    curr_index = 0
-    while curr_index < n:
-        if formula[curr_index] == '(':
+    index = 0
+    while index < formula_length:
+        if formula[index] == '(':
+            # Start of a new nested formula
             atoms_stack.append(defaultdict(int))
-            curr_index += 1
-        elif formula[curr_index] == ')':
-            curr_index += 1
-            start_index = curr_index
-            while curr_index < n and formula[curr_index].isdigit():
-                curr_index += 1
-            multiplicity = int(formula[start_index:curr_index] or 1)
+            index += 1
+        elif formula[index] == ')':
+            # End of a nested formula
+            index += 1
+            start_index = index
+            while index < formula_length and formula[index].isdigit():
+                index += 1
+            count_multiplier = int(formula[start_index:index] or 1)
 
             nested_atom_counts = atoms_stack.pop()
             for atom, count in nested_atom_counts.items():
-                atoms_stack[-1][atom] += count * multiplicity
+                atoms_stack[-1][atom] += count * count_multiplier
 
-        elif formula[curr_index].isupper():
-            start_index = curr_index
-            curr_index += 1
-            while curr_index < n and formula[curr_index].islower():
-                curr_index += 1
-            curr_atom = formula[start_index:curr_index]
+        elif formula[index].isupper():
+            # Start of a new atom
+            start_index = index
+            index += 1
+            while index < formula_length and formula[index].islower():
+                index += 1
+            atom_name = formula[start_index:index]
 
-            start_index = curr_index
-            while curr_index < n and formula[curr_index].isdigit():
-                curr_index += 1
-            count = int(formula[start_index:curr_index] or 1)
-            atoms_stack[-1][curr_atom] += count
+            start_index = index
+            while index < formula_length and formula[index].isdigit():
+                index += 1
+            count = int(formula[start_index:index] or 1)
+            atoms_stack[-1][atom_name] += count
 
-    atom_counts = "".join(atom + (str(count) if count > 1 else "") for
-                          atom, count in sorted(atoms_stack[0].items()))
+    # Format the final result
+    formatted_atom_counts = "".join(atom + (str(count) if count > 1 else "") for
+                                    atom, count in sorted(atoms_stack[0].items()))
 
-    return atom_counts
+    return formatted_atom_counts
 
 
 def countOfAtoms2(formula: str) -> str:
-    n = len(formula)
-    mult_stack = [1]
-    mult_index = [1] * n
-    curr_mult = 1
-    curr_count = ""
+    formula_length = len(formula)
+    multiplier_stack = [1]
+    multiplier_at_index = [1] * formula_length
+    current_multiplier = 1
+    current_count_str = ""
 
-    curr_index = n - 1
-    while curr_index >= 0:
-        curr_char = formula[curr_index]
-        if curr_char.isdigit():
-            curr_count += curr_char
+    # First pass: Calculate multipliers
+    index = formula_length - 1
+    while index >= 0:
+        current_char = formula[index]
+        if current_char.isdigit():
+            current_count_str += current_char
 
-        elif curr_char.isalpha():
-            curr_count = ""
+        elif current_char.isalpha():
+            current_count_str = ""
 
-        elif curr_char == ')':
-            new_mult = int(curr_count[::-1] or 1)
-            mult_stack.append(new_mult)
-            curr_mult *= new_mult
-            curr_count = ""
+        elif current_char == ')':
+            new_multiplier = int(current_count_str[::-1] or 1)
+            multiplier_stack.append(new_multiplier)
+            current_multiplier *= new_multiplier
+            current_count_str = ""
 
-        elif curr_char == '(':
-            curr_mult //= mult_stack.pop()
+        elif current_char == '(':
+            current_multiplier //= multiplier_stack.pop()
 
-        mult_index[curr_index] = curr_mult
-        curr_index -= 1
+        multiplier_at_index[index] = current_multiplier
+        index -= 1
 
+    # Second pass: Count atoms
     atom_map = defaultdict(int)
-    curr_index = 0
-    while curr_index < n:
-        if formula[curr_index].isupper():
-            start_index = curr_index
-            curr_index += 1
-            if curr_index < n and formula[curr_index].islower():
-                curr_index += 1
-            curr_atom = formula[start_index:curr_index]
+    index = 0
+    while index < formula_length:
+        if formula[index].isupper():
+            # Start of a new atom
+            start_index = index
+            index += 1
+            if index < formula_length and formula[index].islower():
+                index += 1
+            atom_name = formula[start_index:index]
 
-            start_index = curr_index
-            while curr_index < n and formula[curr_index].isdigit():
-                curr_index += 1
-            curr_count = int(formula[start_index:curr_index] or 1)
-            atom_map[curr_atom] += curr_count * mult_index[curr_index - 1]
+            # Get atom count
+            start_index = index
+            while index < formula_length and formula[index].isdigit():
+                index += 1
+            atom_count = int(formula[start_index:index] or 1)
+            atom_map[atom_name] += atom_count * multiplier_at_index[index - 1]
         else:
-            curr_index += 1
+            index += 1
 
-    atom_counts = "".join(atom + (str(count) if count > 1 else "") for
-                          atom, count in sorted(atom_map.items()))
+    # Format the final result
+    formatted_atom_counts = "".join(atom + (str(count) if count > 1 else "") for
+                                    atom, count in sorted(atom_map.items()))
 
-    return atom_counts
+    return formatted_atom_counts
 
 
 def countOfAtoms3(formula: str) -> str:
-    mult_stack = [1]
-    curr_mult = 1
+    multiplier_stack = [1]
+    current_multiplier = 1
     atom_map = defaultdict(int)
 
-    matcher = re.findall(r"([A-Z][a-z]*)(\d*)|(\()|(\))(\d*)", formula)
-    matcher.reverse()
+    # Regex pattern explanation:
+    # ([A-Z][a-z]*)(\d*) - Matches an atom (capital letter followed by lowercase letters) and its count
+    # (\() - Matches opening parenthesis
+    # (\))(\d*) - Matches closing parenthesis and its multiplier
+    formula_components = re.findall(r"([A-Z][a-z]*)(\d*)|(\()|(\))(\d*)", formula)
+    formula_components.reverse()  # Process from right to left to handle nested parentheses correctly
 
-    for atom, count, left_parenthesis, right_parenthesis, multiplicity in matcher:
+    for atom, count, left_parenthesis, right_parenthesis, multiplicity in formula_components:
         if atom:
-            atom_map[atom] += curr_mult * (int(count) if count else 1)
+            # Handle atom and its count
+            atom_map[atom] += current_multiplier * (int(count) if count else 1)
 
         elif right_parenthesis:
+            # Handle closing parenthesis and its multiplier
             multiplicity = int(multiplicity) if multiplicity else 1
-            mult_stack.append(multiplicity)
-            curr_mult *= multiplicity
+            multiplier_stack.append(multiplicity)
+            current_multiplier *= multiplicity
 
         elif left_parenthesis:
-            curr_mult //= mult_stack.pop()
+            # Handle opening parenthesis (end of a group when processing in reverse)
+            current_multiplier //= multiplier_stack.pop()
 
-    atom_counts = "".join(atom + (str(count) if count > 1 else "") for
-                          atom, count in sorted(atom_map.items()))
+    # Format the final result
+    formatted_atom_counts = "".join(atom + (str(count) if count > 1 else "") for
+                                    atom, count in sorted(atom_map.items()))
 
-    return atom_counts
+    return formatted_atom_counts
 
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
