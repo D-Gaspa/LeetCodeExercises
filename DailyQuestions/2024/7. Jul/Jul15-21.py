@@ -15,11 +15,22 @@ from Utils.trees_utils import BinaryTreeNode
 
 
 def createBinaryTree1(descriptions: List[List[int]]) -> Optional[BinaryTreeNode]:
-    pass
+    # Create a map of child values to their corresponding nodes
+    node_map = {child: BinaryTreeNode(child) for _, child, _ in descriptions}
 
+    root = None
+    for parent_value, child_value, is_left_child in descriptions:
+        # Create parent node if it doesn't exist (this will be the root)
+        if parent_value not in node_map:
+            root = node_map[parent_value] = BinaryTreeNode(parent_value)
 
-def createBinaryTree2(descriptions: List[List[int]]) -> Optional[BinaryTreeNode]:
-    pass
+        # Assign child node to appropriate side of parent
+        if is_left_child:
+            node_map[parent_value].left = node_map[child_value]
+        else:
+            node_map[parent_value].right = node_map[child_value]
+
+    return root
 
 
 # <------------------------------------------------- July 16th, 2024 ------------------------------------------------->
@@ -109,11 +120,15 @@ def problem7_2():
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
 # Test cases for July 15th, 2024
-# Expected output: [50, 20, 80, 15, 19, 17]
-print(createBinaryTree1(descriptions=[[20, 15, 1], [20, 17, 0], [50, 20, 1], [50, 80, 0], [80, 19, 1]]))
-
-# Expected output: [1,2,null,null,3,4]
-print(createBinaryTree1(descriptions=[[1, 2, 1], [2, 3, 0], [3, 4, 1]]))
+# Expected output:
+# root = BinaryTreeNode(60)
+# root.left = BinaryTreeNode(52)
+# root.left.left = BinaryTreeNode(45)
+# root.left.right = BinaryTreeNode(58)
+# root.left.left.left = BinaryTreeNode(41)
+# root.left.left.left.left = BinaryTreeNode(39)
+# root.left.left.left.right = BinaryTreeNode(43)
+createBinaryTree1(descriptions=[[52, 58, 0], [41, 39, 1], [52, 45, 1], [41, 43, 0], [45, 41, 1], [60, 52, 1]])
 
 # Test cases for July 16th, 2024
 
