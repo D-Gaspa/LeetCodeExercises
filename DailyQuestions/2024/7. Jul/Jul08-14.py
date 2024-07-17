@@ -787,17 +787,17 @@ def countOfAtoms3(formula: str) -> str:
     current_multiplier = 1
     atom_map = defaultdict(int)
 
-    # Regex pattern explanation:
-    # ([A-Z][a-z]*)(\d*) - Matches an atom (capital letter followed by lowercase letters) and its count
-    # (\() - Matches opening parenthesis
-    # (\))(\d*) - Matches closing parenthesis and its multiplier
-    formula_components = re.findall(r"([A-Z][a-z]*)(\d*)|(\()|(\))(\d*)", formula)
-    formula_components.reverse()  # Process from right to left to handle nested parentheses correctly
+    # Regex pattern to match atoms, parentheses, and their counts
+    pattern = r"([A-Z][a-z]*)(\d*)|(\()|(\))(\d*)"
+    formula_components = re.findall(pattern, formula)
+    formula_components.reverse()  # Process from right to left for correct nested parentheses handling
 
-    for atom, count, left_parenthesis, right_parenthesis, multiplicity in formula_components:
+    for atom, count, left_parenthesis, right_parenthesis, multiplicity\
+            in formula_components:
         if atom:
             # Handle atom and its count
-            atom_map[atom] += current_multiplier * (int(count) if count else 1)
+            atom_count = int(count) if count else 1
+            atom_map[atom] += current_multiplier * atom_count
 
         elif right_parenthesis:
             # Handle closing parenthesis and its multiplier
