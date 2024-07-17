@@ -729,7 +729,7 @@ def countOfAtoms2(formula: str) -> str:
             curr_count = ""
 
         elif curr_char == ')':
-            new_mult = int(curr_count[::-1]) if curr_count else 1
+            new_mult = int(curr_count[::-1] or 1)
             mult_stack.append(new_mult)
             curr_mult *= new_mult
             curr_count = ""
@@ -742,25 +742,19 @@ def countOfAtoms2(formula: str) -> str:
 
     atom_map = defaultdict(int)
     curr_index = 0
-
     while curr_index < n:
         if formula[curr_index].isupper():
-            curr_atom = formula[curr_index]
+            start_index = curr_index
             curr_index += 1
-
-            while curr_index < n and formula[curr_index].islower():
-                curr_atom += formula[curr_index]
+            if curr_index < n and formula[curr_index].islower():
                 curr_index += 1
+            curr_atom = formula[start_index:curr_index]
 
-            curr_count = ""
+            start_index = curr_index
             while curr_index < n and formula[curr_index].isdigit():
-                curr_count += formula[curr_index]
                 curr_index += 1
-
-            if curr_count:
-                atom_map[curr_atom] += int(curr_count) * mult_index[curr_index - 1]
-            else:
-                atom_map[curr_atom] += mult_index[curr_index - 1]
+            curr_count = int(formula[start_index:curr_index] or 1)
+            atom_map[curr_atom] += curr_count * mult_index[curr_index - 1]
         else:
             curr_index += 1
 
@@ -780,16 +774,10 @@ def countOfAtoms3(formula: str) -> str:
 
     for atom, count, left_parenthesis, right_parenthesis, multiplicity in matcher:
         if atom:
-            if count:
-                atom_map[atom] += int(count) * curr_mult
-            else:
-                atom_map[atom] += curr_mult
+            atom_map[atom] += curr_mult * (int(count) if count else 1)
 
         elif right_parenthesis:
-            if not multiplicity:
-                multiplicity = 1
-            else:
-                multiplicity = int(multiplicity)
+            multiplicity = int(multiplicity) if multiplicity else 1
             mult_stack.append(multiplicity)
             curr_mult *= multiplicity
 
