@@ -691,6 +691,7 @@ def countOfAtoms1(formula: str) -> str:
                 index += 1
             count_multiplier = int(formula[start_index:index] or 1)
 
+            # Multiply and merge nested atom counts with parent formula
             nested_atom_counts = atoms_stack.pop()
             for atom, count in nested_atom_counts.items():
                 atoms_stack[-1][atom] += count * count_multiplier
@@ -703,10 +704,13 @@ def countOfAtoms1(formula: str) -> str:
                 index += 1
             atom_name = formula[start_index:index]
 
+            # Parse the count for this atom
             start_index = index
             while index < formula_length and formula[index].isdigit():
                 index += 1
             count = int(formula[start_index:index] or 1)
+
+            # Add atom count to current formula level
             atoms_stack[-1][atom_name] += count
 
     # Format the final result
