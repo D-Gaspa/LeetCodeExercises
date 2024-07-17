@@ -708,7 +708,8 @@ def countOfAtoms1(formula: str) -> str:
             nested_atom_counts = atoms_stack.pop()
             for atom, count in nested_atom_counts.items():
                 atoms_stack[-1][atom] += count * count_multiplier
-                print(f"\t\tUpdating {atom}: {atoms_stack[-1][atom] - count * count_multiplier} + {count} * {count_multiplier} = {atoms_stack[-1][atom]}")
+                print(f"\t\tUpdating {atom}: {atoms_stack[-1][atom] - count * count_multiplier} + "
+                      f"{count} * {count_multiplier} = {atoms_stack[-1][atom]}")
 
         elif formula[index].isupper():
             print("\tFound uppercase letter. Processing new atom.")
@@ -720,7 +721,8 @@ def countOfAtoms1(formula: str) -> str:
             print(f"\tAtom name: {atom_name}")
 
             start_index = index
-            while index < formula_length and formula[index].isdigit():
+            while (index < formula_length and
+                   formula[index].isdigit()):
                 index += 1
             count = int(formula[start_index:index] or 1)
             print(f"\tAtom count: {count}")
@@ -742,63 +744,107 @@ def countOfAtoms1(formula: str) -> str:
 
 
 def countOfAtoms2(formula: str) -> str:
+    print("\n--- Input Parameters ---")
+    print(f"\tformula = {formula}")
+
+    print("\n--- Initialization ---")
     formula_length = len(formula)
     multiplier_stack = [1]
     multiplier_at_index = [1] * formula_length
     current_multiplier = 1
     current_count_str = ""
+    print(f"\tformula_length = {formula_length}")
+    print(f"\tmultiplier_stack = {multiplier_stack}")
+    print(f"\tmultiplier_at_index = {multiplier_at_index}")
+    print(f"\tcurrent_multiplier = {current_multiplier}")
+    print(f"\tcurrent_count_str = '{current_count_str}'")
 
-    # First pass: Calculate multipliers
+    print("\n--- First Pass: Calculate multipliers ---")
     index = formula_length - 1
+    first_pass_data = []
     while index >= 0:
+        print(f"\n--- Iteration {formula_length - index}/{formula_length} ---")
         current_char = formula[index]
+        print(f"\tCurrent character: '{current_char}' at index {index}")
+        print(f"\tBefore processing: current_multiplier = {current_multiplier}, "
+              f"current_count_str = '{current_count_str}'")
+
         if current_char.isdigit():
             current_count_str += current_char
-
+            print(f"\tDigit found. Updated current_count_str = '{current_count_str}'")
         elif current_char.isalpha():
             current_count_str = ""
-
+            print(f"\tAlphabet found. Reset current_count_str = '{current_count_str}'")
         elif current_char == ')':
-            # Start of a nested formula (reading right to left)
+            print("\tClosing parenthesis found. Start of a nested formula (reading right to left)")
             new_multiplier = int(current_count_str[::-1] or 1)
             multiplier_stack.append(new_multiplier)
             current_multiplier *= new_multiplier
             current_count_str = ""
-
+            print(f"\t\tNew multiplier: {new_multiplier}")
+            print(f"\t\tUpdated multiplier_stack: {multiplier_stack}")
+            print(f"\t\tUpdated current_multiplier: {current_multiplier}")
         elif current_char == '(':
-            # End of a nested formula (reading right to left)
+            print("\tOpening parenthesis found. End of a nested formula (reading right to left)")
             current_multiplier //= multiplier_stack.pop()
+            print(f"\t\tUpdated multiplier_stack: {multiplier_stack}")
+            print(f"\t\tUpdated current_multiplier: {current_multiplier}")
 
-        # Store the current multiplier for each character
         multiplier_at_index[index] = current_multiplier
+        print(f"\tStored current_multiplier {current_multiplier} at index {index}")
+
+        first_pass_data.append([formula_length - index, current_char, current_multiplier, current_count_str])
         index -= 1
 
-    # Second pass: Count atoms
+    print("\n--- First Pass Summary ---")
+    headers = ["Iteration", "Character", "Current Multiplier", "Current Count String"]
+    print(tabulate(first_pass_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Second Pass: Count atoms ---")
     atom_map = defaultdict(int)
     index = 0
+    second_pass_data = []
     while index < formula_length:
+        print(f"\n--- While Loop Iteration: while {index} < {formula_length} ---")
+        print(f"\tCurrent character: '{formula[index]}' at index {index}")
+
         if formula[index].isupper():
-            # Start of a new atom
+            print("\tUppercase letter found. Processing new atom.")
             start_index = index
             index += 1
             if index < formula_length and formula[index].islower():
                 index += 1
             atom_name = formula[start_index:index]
+            print(f"\tAtom name: {atom_name}")
 
-            # Get atom count
             start_index = index
             while index < formula_length and formula[index].isdigit():
                 index += 1
             atom_count = int(formula[start_index:index] or 1)
+            print(f"\tAtom count: {atom_count}")
 
-            # Apply pre-calculated multiplier to atom count
-            atom_map[atom_name] += atom_count * multiplier_at_index[index - 1]
+            final_count = atom_count * multiplier_at_index[index - 1]
+            atom_map[atom_name] += final_count
+            print(f"\tApplied multiplier: {multiplier_at_index[index - 1]}")
+            print(f"\tFinal count for {atom_name}: {final_count}")
+            print(f"\tUpdated atom_map: {dict(atom_map)}")
+
+            second_pass_data.append([atom_name, atom_count, multiplier_at_index[index - 1], final_count])
         else:
             index += 1
 
-    # Format the final result
-    formatted_atom_counts = "".join(atom + (str(count) if count > 1 else "") for
-                                    atom, count in sorted(atom_map.items()))
+    print("\n--- Second Pass Summary ---")
+    headers = ["Atom", "Initial Count", "Multiplier", "Final Count"]
+    print(tabulate(second_pass_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print("\tFormatting the final result")
+    formatted_atom_counts = ""
+    for atom, count in sorted(atom_map.items()):
+        print(f"\t\t{atom}: {count}")
+        formatted_atom_counts += atom + (str(count) if count > 1 else "")
+
+    print(f"\tFinal Result: {formatted_atom_counts}")
 
     return formatted_atom_counts
 
@@ -870,6 +916,6 @@ def countOfAtoms3(formula: str) -> str:
 
 # Test cases for July 14th, 2024
 # Expected output: "K32N2O62S20"
-countOfAtoms1(formula="K32(ON(SO3)10)2")
+# countOfAtoms1(formula="K32(ON(SO3)10)2")
 # countOfAtoms2(formula="K32(ON(SO3)10)2")
-# countOfAtoms3(formula="K32(ON(SO3)10)2")
+countOfAtoms3(formula="K32(ON(SO3)10)2")
