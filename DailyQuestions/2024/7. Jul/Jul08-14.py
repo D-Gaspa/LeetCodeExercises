@@ -850,35 +850,72 @@ def countOfAtoms2(formula: str) -> str:
 
 
 def countOfAtoms3(formula: str) -> str:
+    print("\n--- Input Parameters ---")
+    print(f"\tformula = {formula}")
+
+    print("\n--- Initialization ---")
     multiplier_stack = [1]
     current_multiplier = 1
     atom_map = defaultdict(int)
+    print(f"\tmultiplier_stack = {multiplier_stack}")
+    print(f"\tcurrent_multiplier = {current_multiplier}")
+    print(f"\tatom_map = {dict(atom_map)}")
 
-    # Regex pattern to match atoms, parentheses, and their counts
+    print("\n--- Regex Pattern Matching ---")
     pattern = r"([A-Z][a-z]*)(\d*)|(\()|(\))(\d*)"
+    print(f"\tPattern: {pattern}")
     formula_components = re.findall(pattern, formula)
-    formula_components.reverse()  # Process from right to left for correct nested parentheses handling
+    print(f"\tMatched components: {formula_components}")
+    formula_components.reverse()
+    print(f"\tReversed components: {formula_components}")
 
-    for atom, count, left_parenthesis, right_parenthesis, multiplicity\
-            in formula_components:
+    print("\n--- Main Loop: Processing Formula Components ---")
+    iteration_data = []
+    for i, (atom, count, left_parenthesis, right_parenthesis, multiplicity) in enumerate(formula_components, 1):
+        print(f"\n--- Iteration {i}/{len(formula_components)} ---")
+        print(f"\tCurrent component: {(atom, count, left_parenthesis, right_parenthesis, multiplicity)}")
+        print(f"\tBefore processing: current_multiplier = {current_multiplier}, multiplier_stack = {multiplier_stack}")
+
         if atom:
-            # Handle atom and its count
+            print(f"\tProcessing atom: {atom}")
             atom_count = int(count) if count else 1
+            print(f"\t\tAtom count: {atom_count}")
             atom_map[atom] += current_multiplier * atom_count
+            print(f"\t\tUpdated atom_map[{atom}] = {atom_map[atom]}")
 
         elif right_parenthesis:
-            # Handle closing parenthesis and its multiplier
+            print("\tProcessing closing parenthesis")
             multiplicity = int(multiplicity) if multiplicity else 1
+            print(f"\t\tMultiplicity: {multiplicity}")
             multiplier_stack.append(multiplicity)
             current_multiplier *= multiplicity
+            print(f"\t\tUpdated multiplier_stack: {multiplier_stack}")
+            print(f"\t\tUpdated current_multiplier: {current_multiplier}")
 
         elif left_parenthesis:
-            # Handle opening parenthesis (end of a group when processing in reverse)
-            current_multiplier //= multiplier_stack.pop()
+            print("\tProcessing opening parenthesis (end of a group when processing in reverse)")
+            popped_multiplier = multiplier_stack.pop()
+            current_multiplier //= popped_multiplier
+            print(f"\t\tPopped multiplier: {popped_multiplier}")
+            print(f"\t\tUpdated multiplier_stack: {multiplier_stack}")
+            print(f"\t\tUpdated current_multiplier: {current_multiplier}")
 
-    # Format the final result
-    formatted_atom_counts = "".join(atom + (str(count) if count > 1 else "") for
-                                    atom, count in sorted(atom_map.items()))
+        iteration_data.append([i, atom or left_parenthesis or right_parenthesis,
+                               count or multiplicity, current_multiplier, dict(atom_map)])
+
+    print("\n--- Iteration Summary ---")
+    headers = ["Iteration", "Component", "Count/Multiplicity", "Current Multiplier", "Atom Map"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print("\tFormatting the final result")
+    formatted_atom_counts = ""
+    for atom, count in sorted(atom_map.items()):
+        print(f"\t\t{atom}: {count}")
+        formatted_atom_counts += (atom +
+                                  (str(count) if count > 1 else ""))
+
+    print(f"\tFinal Result: {formatted_atom_counts}")
 
     return formatted_atom_counts
 
@@ -918,4 +955,4 @@ def countOfAtoms3(formula: str) -> str:
 # Expected output: "K32N2O62S20"
 # countOfAtoms1(formula="K32(ON(SO3)10)2")
 # countOfAtoms2(formula="K32(ON(SO3)10)2")
-countOfAtoms3(formula="K32(ON(SO3)10)2")
+# countOfAtoms3(formula="K32(ON(SO3)10)2")
