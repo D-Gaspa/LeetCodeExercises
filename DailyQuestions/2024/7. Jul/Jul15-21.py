@@ -67,16 +67,19 @@ def createBinaryTree1(descriptions: List[List[int]]) -> Optional[BinaryTreeNode]
     return root
 
 # <------------------------------------------------- July 16th, 2024 ------------------------------------------------->
-# 2. Problem
+# 2096. Step-By-Step Directions From a Binary Tree Node to Another
 
-# Description
+# Given the root of a binary tree with `n` nodes uniquely valued from 1 to `n`, find the shortest path between two
+# nodes: startValue (s) and destValue (t).
+# Return the path as a string of uppercase letters 'L' (left child),
+# 'R' (right child), and 'U' (parent), representing the step-by-step directions from `s` to `t`.
 
 
-def problem2_1():
+def getDirections1(root: Optional[BinaryTreeNode], start_value: int, dest_value: int) -> str:
     pass
 
 
-def problem2_2():
+def getDirections2(root: Optional[BinaryTreeNode], start_value: int, dest_value: int) -> str:
     pass
 
 
@@ -164,6 +167,14 @@ def problem7_2():
 # createBinaryTree1(descriptions=[[52, 58, 0], [41, 39, 1], [52, 45, 1], [41, 43, 0], [45, 41, 1], [60, 52, 1]])
 
 # Test cases for July 16th, 2024
+# Expected output: "UURL"
+getDirections1(root=BinaryTreeNode(val=5, left=BinaryTreeNode(val=1, left=BinaryTreeNode(val=3)),
+                                   right=BinaryTreeNode(val=2, left=BinaryTreeNode(val=6),
+                                                        right=BinaryTreeNode(val=4))),
+               start_value=3, dest_value=6)
+
+# Expected output: "L"
+getDirections1(root=BinaryTreeNode(val=2, left=BinaryTreeNode(val=1)), start_value=2, dest_value=1)
 
 # Test cases for July 17th, 2024
 
