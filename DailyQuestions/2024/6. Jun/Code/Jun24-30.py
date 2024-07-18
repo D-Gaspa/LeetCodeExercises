@@ -6,7 +6,7 @@ from typing import List
 from tabulate import tabulate
 
 from Utils.graph_utils import UnionFindWithLogs
-from Utils.trees_utils import BinaryTreeNode, TreeVisualizer
+from Utils.trees_utils import BinaryTreeNode, BinaryTreeVisualizer
 
 
 # <------------------------------------------------- June 24th, 2024 ------------------------------------------------->
@@ -181,7 +181,7 @@ def minKBitFlips2(nums: List[int], k: int) -> int:
 
 def bstToGst1(root: BinaryTreeNode) -> BinaryTreeNode:
     print("\n--- Input Parameters ---")
-    print(f"\troot = {TreeVisualizer.visualize(root, file_name='bstToGst1-Input')}")
+    print(f"\troot = {BinaryTreeVisualizer.visualize(root, file_name='bstToGst1-Input')}")
 
     print("\n--- Initialization ---")
     cumulative_sum = 0
@@ -232,13 +232,13 @@ def bstToGst1(root: BinaryTreeNode) -> BinaryTreeNode:
     print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
 
     print("\n--- Function Returning ---")
-    print(f"\tModified Tree: {TreeVisualizer.visualize(root, file_name='bstToGst1-Output')}")
+    print(f"\tModified Tree: {BinaryTreeVisualizer.visualize(root, file_name='bstToGst1-Output')}")
     return root
 
 
 def bstToGst2(root: BinaryTreeNode) -> BinaryTreeNode:
     print("\n--- Input Parameters ---")
-    print(f"\troot = {TreeVisualizer.visualize(root, file_name='bstToGst2-Input')}")
+    print(f"\troot = {BinaryTreeVisualizer.visualize(root, file_name='bstToGst2-Input')}")
 
     print("\n--- Initialization ---")
     stack = []
@@ -292,13 +292,13 @@ def bstToGst2(root: BinaryTreeNode) -> BinaryTreeNode:
     print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
 
     print("\n--- Function Returning ---")
-    print(f"\tModified Tree: {TreeVisualizer.visualize(root, file_name='bstToGst2-Output')}")
+    print(f"\tModified Tree: {BinaryTreeVisualizer.visualize(root, file_name='bstToGst2-Output')}")
     return root
 
 
 def bstToGst3(root: BinaryTreeNode) -> BinaryTreeNode:
     print("\n--- Input Parameters ---")
-    print(f"\troot = {TreeVisualizer.visualize(root, file_name='bstToGst3-Input')}")
+    print(f"\troot = {BinaryTreeVisualizer.visualize(root, file_name='bstToGst3-Input')}")
 
     def find_successor(current_node: BinaryTreeNode) -> BinaryTreeNode:
         print("\n\t--- Finding Successor ---")
@@ -344,7 +344,7 @@ def bstToGst3(root: BinaryTreeNode) -> BinaryTreeNode:
     print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
 
     print("\n--- Function Returning ---")
-    print(f"\tModified Tree: {TreeVisualizer.visualize(root, file_name='bstToGst3-Output')}")
+    print(f"\tModified Tree: {BinaryTreeVisualizer.visualize(root, file_name='bstToGst3-Output')}")
     return root
 
 
@@ -372,7 +372,7 @@ def update_node_and_move_left(cumulative_sum, current_node, iteration_data):
 
 def balanceBST1(root: BinaryTreeNode) -> BinaryTreeNode:
     print("\n--- Input Parameters ---")
-    print(f"\troot = {TreeVisualizer.visualize(root, file_name='balanceBST1-Input')}")
+    print(f"\troot = {BinaryTreeVisualizer.visualize(root, file_name='balanceBST1-Input')}")
 
     print("\n--- Initialization ---")
     inorder_nodes = []
@@ -419,13 +419,13 @@ def balanceBST1(root: BinaryTreeNode) -> BinaryTreeNode:
     balanced_root = build_balanced_bst(0, len(inorder_nodes) - 1)
 
     print("\n--- Function Returning ---")
-    print(f"\tBalanced Tree: {TreeVisualizer.visualize(balanced_root, file_name='balanceBST1-Output')}")
+    print(f"\tBalanced Tree: {BinaryTreeVisualizer.visualize(balanced_root, file_name='balanceBST1-Output')}")
     return balanced_root
 
 
 def balanceBST2(root: BinaryTreeNode) -> BinaryTreeNode:
     print("\n--- Input Parameters ---")
-    print(f"\tInitial Tree:\n{TreeVisualizer.visualize(root, file_name='balanceBST2-Input')}")
+    print(f"\tInitial Tree:\n{BinaryTreeVisualizer.visualize(root, file_name='balanceBST2-Input')}")
 
     right_rotation_count = 0
     left_rotation_count = 0
@@ -435,45 +435,45 @@ def balanceBST2(root: BinaryTreeNode) -> BinaryTreeNode:
         nonlocal right_rotation_count
         right_rotation_count += 1
         print(f"\n\t--- Right Rotation ---")
-        print(f"\t\tBefore rotation saved at: {TreeVisualizer.visualize(dummy_root.right,
-                                                                        file_name=f"balanceBST2-Right_rot_"
-                                                                                  f"{right_rotation_count}_before")}")
+        print(f"\t\tBefore rotation saved at: {BinaryTreeVisualizer.visualize(dummy_root.right,
+                                                                              file_name=f"balanceBST2-Right_rot_"
+                                                                                        f"{right_rotation_count}_before")}")
         left_child = node.left
         print(f"\t\tParent: {parent.val}, Node: {node.val}")
         print(f"\t\tLeft child: {left_child.val}")
         node.left = left_child.right
         left_child.right = node
         parent.right = left_child
-        print(f"\t\tAfter rotation saved at: {TreeVisualizer.visualize(dummy_root.right,
-                                                                       file_name=f"balanceBST2-Right_rot_"
-                                                                                 f"{right_rotation_count}_after")}")
+        print(f"\t\tAfter rotation saved at: {BinaryTreeVisualizer.visualize(dummy_root.right,
+                                                                             file_name=f"balanceBST2-Right_rot_"
+                                                                                       f"{right_rotation_count}_after")}")
 
     def left_rotate(parent: BinaryTreeNode, node: BinaryTreeNode) -> None:
         print(f"\n\t--- Left Rotation ---")
         nonlocal left_rotation_count
         left_rotation_count += 1
-        print(f"\t\tBefore rotation saved at: {TreeVisualizer.visualize(dummy_root.right,
-                                                                        file_name=f"balanceBST2-Left_rot_"
-                                                                                  f"{left_rotation_count}_before")}")
+        print(f"\t\tBefore rotation saved at: {BinaryTreeVisualizer.visualize(dummy_root.right,
+                                                                              file_name=f"balanceBST2-Left_rot_"
+                                                                                        f"{left_rotation_count}_before")}")
         print(f"\t\tParent: {parent.val}, Node: {node.val}")
         right_child = node.right
         print(f"\t\tRight child: {right_child.val}")
         node.right = right_child.left
         right_child.left = node
         parent.right = right_child
-        print(f"\t\tAfter rotation saved at: {TreeVisualizer.visualize(dummy_root.right,
-                                                                       file_name=f"balanceBST2-Left_rot_"
-                                                                                 f"{left_rotation_count}_after")}")
+        print(f"\t\tAfter rotation saved at: {BinaryTreeVisualizer.visualize(dummy_root.right,
+                                                                             file_name=f"balanceBST2-Left_rot_"
+                                                                                       f"{left_rotation_count}_after")}")
 
     def compress_vine(vine_root: BinaryTreeNode, rotations: int) -> None:
         print(f"\n\t--- Compressing Vine: {rotations} rotations ---")
         if rotations > 0:
             nonlocal compression_count
             compression_count += 1
-            print(f"\t\tBefore compression saved at: {TreeVisualizer.visualize(dummy_root.right,
-                                                                               file_name=f"balanceBST2-Compression_"
-                                                                                         f"{compression_count}_before"
-                                                                               )}")
+            print(f"\t\tBefore compression saved at: {BinaryTreeVisualizer.visualize(dummy_root.right,
+                                                                                     file_name=f"balanceBST2-Compression_"
+                                                                                               f"{compression_count}_before"
+                                                                                     )}")
         else:
             print("\t\tNo rotations needed")
             return
@@ -483,9 +483,9 @@ def balanceBST2(root: BinaryTreeNode) -> BinaryTreeNode:
             print(f"\t\tRotation {i + 1}: Left rotate {current_node.val} and {child.val}")
             left_rotate(current_node, child)
             current_node = current_node.right
-        print(f"\t\tAfter compression saved at: {TreeVisualizer.visualize(dummy_root.right,
-                                                                          file_name=f"balanceBST2-Compression_"
-                                                                                    f"{compression_count}_after")}")
+        print(f"\t\tAfter compression saved at: {BinaryTreeVisualizer.visualize(dummy_root.right,
+                                                                                file_name=f"balanceBST2-Compression_"
+                                                                                          f"{compression_count}_after")}")
 
     print("\n--- Initialization ---")
     dummy_root = BinaryTreeNode(val="dummy")
@@ -506,8 +506,7 @@ def balanceBST2(root: BinaryTreeNode) -> BinaryTreeNode:
 
     print("\n\tVine creation complete")
     print(f"\tVine nodes: {vine_nodes}")
-    print(
-        f"\tFinal vine structure saved at: {TreeVisualizer.visualize(dummy_root.right, file_name='balanceBST2-Vine')}")
+    print(f"\tFinal vine structure saved at: {BinaryTreeVisualizer.visualize(dummy_root.right, file_name='balanceBST2-Vine')}")
 
     print("\n--- Step 2: Count nodes and calculate perfect tree size ---")
     node_count = len(vine_nodes)
@@ -535,7 +534,8 @@ def balanceBST2(root: BinaryTreeNode) -> BinaryTreeNode:
 
     print("\n--- Function Returning ---")
     balanced_root = dummy_root.right
-    print(f"\tFinal Balanced Tree saved at: {TreeVisualizer.visualize(balanced_root, file_name='balanceBST2-Output')}")
+    print(
+        f"\tFinal Balanced Tree saved at: {BinaryTreeVisualizer.visualize(balanced_root, file_name='balanceBST2-Output')}")
     return balanced_root
 
 
@@ -971,7 +971,6 @@ def maxNumEdgesToRemove1(n: int, edges: List[List[int]]) -> int:
     print("\tFull traversal is not possible for both Alice and Bob")
     print("\tReturning: -1")
     return -1
-
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 

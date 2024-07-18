@@ -8,7 +8,7 @@ class BinaryTreeNode:
         self.right = right
 
 
-class TreeVisualizer:
+class BinaryTreeVisualizer:
     @staticmethod
     def visualize(root: BinaryTreeNode, file_name: str) -> str:
         dot = Digraph(comment='Binary Tree')

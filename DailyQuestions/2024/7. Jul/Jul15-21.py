@@ -1,7 +1,9 @@
 # Week 3: July 15th - July 21st, 2024
 from typing import List, Optional
 
-from Utils.trees_utils import BinaryTreeNode
+from tabulate import tabulate
+
+from Utils.trees_utils import BinaryTreeNode, BinaryTreeVisualizer
 
 
 # <------------------------------------------------- July 15th, 2024 ------------------------------------------------->
@@ -15,23 +17,54 @@ from Utils.trees_utils import BinaryTreeNode
 
 
 def createBinaryTree1(descriptions: List[List[int]]) -> Optional[BinaryTreeNode]:
-    # Create a map of child values to their corresponding nodes
+    print("\n--- Input Parameters ---")
+    print(f"\tdescriptions = {descriptions}")
+
+    print("\n--- Initialization ---")
     node_map = {child: BinaryTreeNode(child) for _, child, _ in descriptions}
+    print("\tInitialized node_map:")
+    print(tabulate([[child, f"BinaryTreeNode({child})"] for child in node_map],
+                   headers=["Child Value", "Node"], tablefmt="fancy_grid"))
 
+    print("\n--- Main Loop ---")
     root = None
-    for parent_value, child_value, is_left_child in descriptions:
-        # Create parent node if it doesn't exist (this will be the root)
-        if parent_value not in node_map:
-            root = node_map[parent_value] = BinaryTreeNode(parent_value)
+    iteration_data = []
+    for i, (parent_value, child_value, is_left_child) in enumerate(descriptions, 1):
+        print(f"\n--- Iteration {i}/{len(descriptions)} ---")
+        print(f"\tCurrent description: parent={parent_value}, child={child_value}, is_left_child={is_left_child}")
 
-        # Assign child node to appropriate side of parent
+        iteration_data.append([i, parent_value, child_value,
+                               "Left" if is_left_child else "Right",
+                               "Created" if parent_value not in node_map else "Existed"])
+
+        print("\tChecking if parent node exists:")
+        if parent_value not in node_map:
+            print(f"\t\tParent node {parent_value} doesn't exist. Creating it.")
+            root = node_map[parent_value] = BinaryTreeNode(parent_value)
+            print(f"\t\tSet as root: {root.val}")
+        else:
+            print(f"\t\tParent node {parent_value} already exists.")
+
+        print("\tAssigning child node to parent:")
         if is_left_child:
+            print(f"\t\tAssigning {child_value} as left child of {parent_value}")
             node_map[parent_value].left = node_map[child_value]
         else:
+            print(f"\t\tAssigning {child_value} as right child of {parent_value}")
             node_map[parent_value].right = node_map[child_value]
 
-    return root
+    print("\n--- Iteration Summary ---")
+    headers = ["Iteration", "Parent", "Child", "Child Position", "Parent Node Status"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
 
+    print("\n--- Function Returning ---")
+    print(f"\tRoot node: {root.val if root else None}")
+
+    # Visualize the final tree
+    final_tree_image = BinaryTreeVisualizer.visualize(root, 'final_tree')
+    print(f"\tFinal tree structure: {final_tree_image}")
+
+    return root
 
 # <------------------------------------------------- July 16th, 2024 ------------------------------------------------->
 # 2. Problem
@@ -128,7 +161,7 @@ def problem7_2():
 # root.left.left.left = BinaryTreeNode(41)
 # root.left.left.left.left = BinaryTreeNode(39)
 # root.left.left.left.right = BinaryTreeNode(43)
-createBinaryTree1(descriptions=[[52, 58, 0], [41, 39, 1], [52, 45, 1], [41, 43, 0], [45, 41, 1], [60, 52, 1]])
+# createBinaryTree1(descriptions=[[52, 58, 0], [41, 39, 1], [52, 45, 1], [41, 43, 0], [45, 41, 1], [60, 52, 1]])
 
 # Test cases for July 16th, 2024
 

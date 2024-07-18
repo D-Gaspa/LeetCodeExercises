@@ -4,7 +4,7 @@ from typing import List, Optional
 
 from tabulate import tabulate
 
-from Utils.trees_utils import BinaryTreeNode, TreeVisualizer
+from Utils.trees_utils import BinaryTreeNode, BinaryTreeVisualizer
 
 
 # June, 2024
@@ -449,7 +449,7 @@ def splitBST1(root: Optional[BinaryTreeNode], target: int) -> List[Optional[Bina
     print(f"\ttarget = {target}")
 
     # Visualize the initial tree
-    TreeVisualizer.visualize(root, "initial_tree")
+    BinaryTreeVisualizer.visualize(root, "initial_tree")
     print(f"\nInitial tree visualization saved as 'initial_tree.png'")
 
     print("\n--- Initialization ---")
@@ -521,11 +521,11 @@ def splitBST1(root: Optional[BinaryTreeNode], target: int) -> List[Optional[Bina
         # Visualize the current state of both subtrees
         if is_added_to_smaller_equal_subtree:
             se_subtree_iter += 1
-            TreeVisualizer.visualize(smaller_equal_subtree, f"smaller_equal_subtree_step_{se_subtree_iter}")
+            BinaryTreeVisualizer.visualize(smaller_equal_subtree, f"smaller_equal_subtree_step_{se_subtree_iter}")
             print(f"\tSmaller/Equal subtree visualization saved as 'smaller_equal_subtree_step_{se_subtree_iter}.png'")
         if is_added_to_greater_subtree:
             g_subtree_iter += 1
-            TreeVisualizer.visualize(greater_subtree, f"greater_subtree_step_{g_subtree_iter}")
+            BinaryTreeVisualizer.visualize(greater_subtree, f"greater_subtree_step_{g_subtree_iter}")
             print(f"\tGreater subtree visualization saved as 'greater_subtree_step_{g_subtree_iter}.png'")
 
     print("\n--- Reconstruction Summary ---")
@@ -541,7 +541,7 @@ def splitBST2(root: Optional[BinaryTreeNode], target: int) -> List[Optional[Bina
     print(f"\ttarget = {target}")
 
     # Visualize the initial tree
-    TreeVisualizer.visualize(root, "initial_tree")
+    BinaryTreeVisualizer.visualize(root, "initial_tree")
     print(f"\nInitial tree visualization saved as 'initial_tree.png'")
 
     print("\n--- Initialization ---")
@@ -572,7 +572,7 @@ def splitBST2(root: Optional[BinaryTreeNode], target: int) -> List[Optional[Bina
                   greater_subtree else None}]")
 
             se_subtree_iter += 1
-            TreeVisualizer.visualize(node, f"smaller_equal_subtree_step_{se_subtree_iter}")
+            BinaryTreeVisualizer.visualize(node, f"smaller_equal_subtree_step_{se_subtree_iter}")
             print(
                 f"{'  ' * depth}Smaller/Equal subtree visualization saved as "
                 f"'smaller_equal_subtree_step_{se_subtree_iter}.png'")
@@ -592,7 +592,7 @@ def splitBST2(root: Optional[BinaryTreeNode], target: int) -> List[Optional[Bina
                   smaller_equal_subtree else None}, {node.val}]")
 
             g_subtree_iter += 1
-            TreeVisualizer.visualize(node, f"greater_subtree_step_{g_subtree_iter}")
+            BinaryTreeVisualizer.visualize(node, f"greater_subtree_step_{g_subtree_iter}")
             print(f"{'  ' * depth}Greater subtree visualization saved as 'greater_subtree_step_{g_subtree_iter}.png'")
 
             reconstruction_data.append([depth, node.val, "greater",
@@ -612,10 +612,10 @@ def splitBST2(root: Optional[BinaryTreeNode], target: int) -> List[Optional[Bina
 
     # Final visualization of both subtrees
     if result[0]:
-        TreeVisualizer.visualize(result[0], "final_smaller_equal_subtree")
+        BinaryTreeVisualizer.visualize(result[0], "final_smaller_equal_subtree")
         print(f"\nFinal Smaller/Equal subtree visualization saved as 'final_smaller_equal_subtree.png'")
     if result[1]:
-        TreeVisualizer.visualize(result[1], "final_greater_subtree")
+        BinaryTreeVisualizer.visualize(result[1], "final_greater_subtree")
         print(f"\nFinal Greater subtree visualization saved as 'final_greater_subtree.png'")
 
     return result
@@ -627,7 +627,7 @@ def splitBST3(root: Optional[BinaryTreeNode], target: int) -> List[Optional[Bina
     print(f"\ttarget = {target}")
 
     # Visualize the initial tree
-    TreeVisualizer.visualize(root, "initial_tree")
+    BinaryTreeVisualizer.visualize(root, "initial_tree")
     print(f"\nInitial tree visualization saved as 'initial_tree.png'")
 
     print("\n--- Initialization ---")
@@ -663,7 +663,7 @@ def splitBST3(root: Optional[BinaryTreeNode], target: int) -> List[Optional[Bina
             print(f"\t\tCut off right subtree. Next node: "
                   f"{next_node.val if next_node else None}")
 
-            TreeVisualizer.visualize(dummy_smaller_equal, f"smaller_equal_subtree_step_{iteration}")
+            BinaryTreeVisualizer.visualize(dummy_smaller_equal, f"smaller_equal_subtree_step_{iteration}")
             print(f"\t\tSmaller/Equal subtree visualization saved as 'smaller_equal_subtree_step_{iteration}.png'")
         else:
             print(f"\t\tCondition false. Adding to greater subtree.")
@@ -675,7 +675,7 @@ def splitBST3(root: Optional[BinaryTreeNode], target: int) -> List[Optional[Bina
             current_greater.left = None  # Cut off left subtree
             print(f"\t\tCut off left subtree. Next node: {next_node.val if next_node else None}")
 
-            TreeVisualizer.visualize(dummy_greater, f"greater_subtree_step_{iteration}")
+            BinaryTreeVisualizer.visualize(dummy_greater, f"greater_subtree_step_{iteration}")
             print(f"\t\tGreater subtree visualization saved as 'greater_subtree_step_{iteration}.png'")
 
         current_node = next_node
@@ -702,10 +702,10 @@ def returnSplitBSTResult(greater_subtree, smaller_equal_subtree) -> List[Optiona
     print(f"\tgreater_subtree root: {greater_subtree.val if greater_subtree else None}")
     # Final visualization of both subtrees
     if smaller_equal_subtree:
-        TreeVisualizer.visualize(smaller_equal_subtree, "final_smaller_equal_subtree")
+        BinaryTreeVisualizer.visualize(smaller_equal_subtree, "final_smaller_equal_subtree")
         print(f"\nFinal Smaller/Equal subtree visualization saved as 'final_smaller_equal_subtree.png'")
     if greater_subtree:
-        TreeVisualizer.visualize(greater_subtree, "final_greater_subtree")
+        BinaryTreeVisualizer.visualize(greater_subtree, "final_greater_subtree")
         print(f"\nFinal Greater subtree visualization saved as 'final_greater_subtree.png'")
     return [smaller_equal_subtree, greater_subtree]
 
