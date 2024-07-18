@@ -66,6 +66,7 @@ def createBinaryTree1(descriptions: List[List[int]]) -> Optional[BinaryTreeNode]
 
     return root
 
+
 # <------------------------------------------------- July 16th, 2024 ------------------------------------------------->
 # 2096. Step-By-Step Directions From a Binary Tree Node to Another
 
@@ -73,6 +74,32 @@ def createBinaryTree1(descriptions: List[List[int]]) -> Optional[BinaryTreeNode]
 # nodes: startValue (s) and destValue (t).
 # Return the path as a string of uppercase letters 'L' (left child),
 # 'R' (right child), and 'U' (parent), representing the step-by-step directions from `s` to `t`.
+
+# Introductory Problem
+# 236. Lowest Common Ancestor of a Binary Tree
+# Given a binary tree, find the lowest common ancestor (LCA) of two given nodes in the tree.
+# The lowest common ancestor is defined between two nodes `p` and `q` as the lowest node in `T` that has both `p` and
+# `q` as descendants (where we allow a node to be a descendant of itself).
+
+
+def lowestCommonAncestor(root: BinaryTreeNode, p: BinaryTreeNode, q: BinaryTreeNode) -> BinaryTreeNode:
+    def findCommonAncestor(node: BinaryTreeNode) -> BinaryTreeNode | None:
+        # Base case: if node is None or is one of the target nodes
+        if node is None or node.val == p.val or node.val == q.val:
+            return node
+
+        # Recurse on left and right subtrees
+        left_subtree = findCommonAncestor(node.left)
+        right_subtree = findCommonAncestor(node.right)
+
+        # If both subtrees return a node, this is the LCA
+        if left_subtree and right_subtree:
+            return node
+        # Otherwise, return the non-None result (if any)
+        return left_subtree or right_subtree
+
+    # Start the recursive search from the root
+    return findCommonAncestor(root)
 
 
 def getDirections1(root: Optional[BinaryTreeNode], start_value: int, dest_value: int) -> str:
@@ -167,14 +194,25 @@ def problem7_2():
 # createBinaryTree1(descriptions=[[52, 58, 0], [41, 39, 1], [52, 45, 1], [41, 43, 0], [45, 41, 1], [60, 52, 1]])
 
 # Test cases for July 16th, 2024
-# Expected output: "UURL"
-getDirections1(root=BinaryTreeNode(val=5, left=BinaryTreeNode(val=1, left=BinaryTreeNode(val=3)),
-                                   right=BinaryTreeNode(val=2, left=BinaryTreeNode(val=6),
-                                                        right=BinaryTreeNode(val=4))),
-               start_value=3, dest_value=6)
+# Introductory problem
+root = BinaryTreeNode(val=-1)
+root.left = BinaryTreeNode()
+root.right = BinaryTreeNode(val=3)
+root.left.left = BinaryTreeNode(val=-2)
+root.left.right = BinaryTreeNode(val=4)
+root.left.left.left = BinaryTreeNode(val=8)
 
+# Expected output: 0
+lowestCommonAncestor(root=root, p=root.left.left.left, q=root.left.right)
+
+# Expected output: "UURL"
+# getDirections1(root=BinaryTreeNode(val=5, left=BinaryTreeNode(val=1, left=BinaryTreeNode(val=3)),
+#                                    right=BinaryTreeNode(val=2, left=BinaryTreeNode(val=6),
+#                                                         right=BinaryTreeNode(val=4))),
+#                start_value=3, dest_value=6)
+#
 # Expected output: "L"
-getDirections1(root=BinaryTreeNode(val=2, left=BinaryTreeNode(val=1)), start_value=2, dest_value=1)
+# getDirections1(root=BinaryTreeNode(val=2, left=BinaryTreeNode(val=1)), start_value=2, dest_value=1)
 
 # Test cases for July 17th, 2024
 
