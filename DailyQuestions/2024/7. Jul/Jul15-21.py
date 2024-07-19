@@ -322,14 +322,13 @@ def problem7_2():
 
 # Test cases for July 16th, 2024
 # Expected output: "UURL"
-root = BinaryTreeNode(val=5)
-root.left = BinaryTreeNode(val=1)
-root.right = BinaryTreeNode(val=2)
-root.left.left = BinaryTreeNode(val=3)
-root.right.left = BinaryTreeNode(val=6)
-root.right.right = BinaryTreeNode(val=4)
-
-getDirections1(root=root, start_value=3, dest_value=6)
+# root = BinaryTreeNode(val=5)
+# root.left = BinaryTreeNode(val=1)
+# root.right = BinaryTreeNode(val=2)
+# root.left.left = BinaryTreeNode(val=3)
+# root.right.left = BinaryTreeNode(val=6)
+# root.right.right = BinaryTreeNode(val=4)
+# getDirections1(root=root, start_value=3, dest_value=6)
 # getDirections2(root=root, start_value=3, dest_value=6)
 
 # Test cases for July 17th, 2024
