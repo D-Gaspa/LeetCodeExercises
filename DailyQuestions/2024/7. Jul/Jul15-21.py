@@ -266,16 +266,17 @@ def problem4_2():
 
 
 # <------------------------------------------------- July 19th, 2024 ------------------------------------------------->
-# 5. Problem
+# 1380. Lucky Numbers in a Matrix
 
-# Description
+# Given an `m x n` matrix of distinct numbers, return all lucky numbers in the matrix in any order.
+# A lucky number is an element of the matrix such that it is the minimum element in its row and maximum in its column.
 
 
-def problem5_1():
+def luckyNumbers1(matrix: List[List[int]]) -> List[int]:
     pass
 
 
-def problem5_2():
+def luckyNumbers2(matrix: List[List[int]]) -> List[int]:
     pass
 
 
@@ -336,6 +337,12 @@ def problem7_2():
 # Test cases for July 18th, 2024
 
 # Test cases for July 19th, 2024
+# Expected output: [15]
+print(luckyNumbers1(matrix=[[3, 7, 8], [9, 11, 13], [15, 16, 17]]))
+# Expected output: [12]
+print(luckyNumbers1(matrix=[[1, 10, 4, 2], [9, 3, 8, 7], [15, 16, 12, 13]]))
+# Expected output: [7]
+print(luckyNumbers1(matrix=[[7, 8], [1, 2]]))
 
 # Test cases for July 20th, 2024
 
