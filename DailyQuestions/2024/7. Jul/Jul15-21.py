@@ -148,6 +148,7 @@ def getDirections2(root: Optional[BinaryTreeNode], start_value: int, dest_value:
 
     return initial_path + final_path
 
+
 # <------------------------------------------------- July 17th, 2024 ------------------------------------------------->
 # 3. Problem
 
@@ -216,7 +217,6 @@ def problem7_1():
 
 def problem7_2():
     pass
-
 
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
