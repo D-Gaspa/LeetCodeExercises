@@ -98,21 +98,6 @@ def getDirections1(root: Optional[BinaryTreeNode], start_value: int, dest_value:
         # Otherwise, return the non-None result (if any)
         return left_subtree or right_subtree
 
-    def findPath(current_node: BinaryTreeNode, target_value: int, path: List[str]) -> bool:
-        if current_node.val == target_value:
-            return True
-        if current_node.left:
-            path.append('L')
-            if findPath(current_node.left, target_value, path):
-                return True
-            path.pop()
-        if current_node.right:
-            path.append('R')
-            if findPath(current_node.right, target_value, path):
-                return True
-            path.pop()
-        return False
-
     lowest_common_ancestor = findCommonAncestor(root)
     path_to_start = []
     path_to_dest = []
@@ -125,9 +110,37 @@ def getDirections1(root: Optional[BinaryTreeNode], start_value: int, dest_value:
     return initial_path + final_path
 
 
-def getDirections2(root: Optional[BinaryTreeNode], start_value: int, dest_value: int) -> str:
-    pass
+def findPath(current_node: BinaryTreeNode, target_node_value: int, path: List[str]) -> bool:
+    # Recursively find the path to target node, appending directions to 'path'
+    if current_node.val == target_node_value:
+        return True
+    if current_node.left:
+        path.append('L')
+        if findPath(current_node.left, target_node_value, path):
+            return True
+        path.pop()
+    if current_node.right:
+        path.append('R')
+        if findPath(current_node.right, target_node_value, path):
+            return True
+        path.pop()
+    return False
 
+
+def getDirections2(root: Optional[BinaryTreeNode], start_value: int, dest_value: int) -> str:
+    path_to_start = []
+    path_to_dest = []
+    findPath(root, start_value, path_to_start)
+    findPath(root, dest_value, path_to_dest)
+
+    i = 0
+    while i < len(path_to_start) and i < len(path_to_dest) and path_to_start[i] == path_to_dest[i]:
+        i += 1
+
+    initial_path = 'U' * (len(path_to_start) - i)
+    final_path = ''.join(path_to_dest[i:])
+
+    return initial_path + final_path
 
 # <------------------------------------------------- July 17th, 2024 ------------------------------------------------->
 # 3. Problem
