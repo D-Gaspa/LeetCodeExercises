@@ -89,14 +89,14 @@ def getDirections1(root: Optional[BinaryTreeNode], start_value: int, dest_value:
             return node
 
         # Recurse on left and right subtrees
-        left_subtree = findCommonAncestor(node.left)
-        right_subtree = findCommonAncestor(node.right)
+        left_result = findCommonAncestor(node.left)
+        right_result = findCommonAncestor(node.right)
 
         # If both subtrees return a node, this is the LCA
-        if left_subtree and right_subtree:
+        if left_result and right_result:
             return node
         # Otherwise, return the non-None result (if any)
-        return left_subtree or right_subtree
+        return left_result or right_result
 
     lowest_common_ancestor = findCommonAncestor(root)
     path_to_start = []
@@ -104,41 +104,47 @@ def getDirections1(root: Optional[BinaryTreeNode], start_value: int, dest_value:
     findPath(lowest_common_ancestor, start_value, path_to_start)
     findPath(lowest_common_ancestor, dest_value, path_to_dest)
 
+    # Construct the final path: 'U's to go up to LCA, then path down to destination
     initial_path = 'U' * len(path_to_start)
     final_path = ''.join(path_to_dest)
 
     return initial_path + final_path
 
 
-def findPath(current_node: BinaryTreeNode, target_node_value: int, path: List[str]) -> bool:
+def findPath(current_node: BinaryTreeNode, target_value: int, path: List[str]) -> bool:
     # Recursively find the path to target node, appending directions to 'path'
-    if current_node.val == target_node_value:
+    if current_node.val == target_value:
         return True
     if current_node.left:
         path.append('L')
-        if findPath(current_node.left, target_node_value, path):
+        if findPath(current_node.left, target_value, path):
             return True
         path.pop()
     if current_node.right:
         path.append('R')
-        if findPath(current_node.right, target_node_value, path):
+        if findPath(current_node.right, target_value, path):
             return True
         path.pop()
     return False
 
 
 def getDirections2(root: Optional[BinaryTreeNode], start_value: int, dest_value: int) -> str:
+    # Find paths from root to start and destination nodes
     path_to_start = []
     path_to_dest = []
     findPath(root, start_value, path_to_start)
     findPath(root, dest_value, path_to_dest)
 
-    i = 0
-    while i < len(path_to_start) and i < len(path_to_dest) and path_to_start[i] == path_to_dest[i]:
-        i += 1
+    # Find the length of the common prefix in both paths
+    common_prefix_length = 0
+    while (common_prefix_length < len(path_to_start) and
+           common_prefix_length < len(path_to_dest) and
+           path_to_start[common_prefix_length] == path_to_dest[common_prefix_length]):
+        common_prefix_length += 1
 
-    initial_path = 'U' * (len(path_to_start) - i)
-    final_path = ''.join(path_to_dest[i:])
+    # Construct the final path: 'U's to go up to LCA, then path down to destination
+    initial_path = 'U' * (len(path_to_start) - common_prefix_length)
+    final_path = ''.join(path_to_dest[common_prefix_length:])
 
     return initial_path + final_path
 
