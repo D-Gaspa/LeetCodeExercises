@@ -83,48 +83,90 @@ def createBinaryTree1(descriptions: List[List[int]]) -> Optional[BinaryTreeNode]
 
 
 def getDirections1(root: Optional[BinaryTreeNode], start_value: int, dest_value: int) -> str:
+    print("\n--- Input Parameters ---")
+    print(f"\troot = {root}, start_value = {start_value}, dest_value = {dest_value}")
+
     def findCommonAncestor(node: BinaryTreeNode) -> Optional[BinaryTreeNode]:
-        # Base case: if node is None or is one of the target nodes
+        print(f"\n--- Finding Common Ancestor for node {node.val if node else 'None'} ---")
         if node is None or node.val == start_value or node.val == dest_value:
+            if node is None:
+                print("\tNode is None")
+            else:
+                print(f"\tNode {node.val} matches start/dest value")
+            print(f"\tReturning node {node.val if node else 'None'}")
             return node
 
-        # Recurse on left and right subtrees
+        print(f"\tRecursing on left subtree of node {node.val} -> {node.left.val if node.left else 'None'}")
         left_result = findCommonAncestor(node.left)
+        print(f"\tRecursing on right subtree of node {node.val} -> {node.right.val if node.right else 'None'}")
         right_result = findCommonAncestor(node.right)
 
-        # If both subtrees return a node, this is the LCA
         if left_result and right_result:
+            print(f"\tFound LCA at node {node.val}")
             return node
-        # Otherwise, return the non-None result (if any)
         return left_result or right_result
 
+    print("\n--- Finding Lowest Common Ancestor ---")
     lowest_common_ancestor = findCommonAncestor(root)
+    print(f"\tLowest Common Ancestor: {lowest_common_ancestor.val}")
+
+    print("\n--- Initialization ---")
     path_to_start = []
     path_to_dest = []
-    findPath(lowest_common_ancestor, start_value, path_to_start)
-    findPath(lowest_common_ancestor, dest_value, path_to_dest)
+    print(f"\tpath_to_start = {path_to_start}")
+    print(f"\tpath_to_dest = {path_to_dest}")
 
-    # Construct the final path: 'U's to go up to LCA, then path down to destination
+    print("\n--- Finding Path to Start ---")
+    findPath(lowest_common_ancestor, start_value, path_to_start)
+    print(f"\tPath to start: {path_to_start}")
+
+    print("\n--- Finding Path to Destination ---")
+    findPath(lowest_common_ancestor, dest_value, path_to_dest)
+    print(f"\tPath to destination: {path_to_dest}")
+
+    print("\n--- Constructing Final Path ---")
     initial_path = 'U' * len(path_to_start)
     final_path = ''.join(path_to_dest)
+    result = initial_path + final_path
 
-    return initial_path + final_path
+    print("\n--- Path Construction Summary ---")
+    headers = ["Component", "Value", "Length"]
+    summary_data = [
+        ["Initial Path (U's)", initial_path, len(initial_path)],
+        ["Final Path", final_path, len(final_path)],
+        ["Result", result, len(result)]
+    ]
+    print(tabulate(summary_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal Result: {result}")
+
+    return result
 
 
 def findPath(current_node: BinaryTreeNode, target_value: int, path: List[str]) -> bool:
-    # Recursively find the path to target node, appending directions to 'path'
+    print(f"\n--- Finding Path from node {current_node.val} to {target_value} ---")
     if current_node.val == target_value:
+        print(f"\tFound target node {target_value}")
         return True
+
     if current_node.left:
+        print(f"\tGoing left from node {current_node.val}")
         path.append('L')
         if findPath(current_node.left, target_value, path):
             return True
+        print(f"\tBacktracking from left of node {current_node.val}")
         path.pop()
+
     if current_node.right:
+        print(f"\tGoing right from node {current_node.val}")
         path.append('R')
         if findPath(current_node.right, target_value, path):
             return True
+        print(f"\tBacktracking from right of node {current_node.val}")
         path.pop()
+
+    print(f"\tTarget {target_value} not found in subtree of node {current_node.val}")
     return False
 
 
@@ -218,6 +260,7 @@ def problem7_1():
 def problem7_2():
     pass
 
+
 # <---------------------------------------------------- Test cases ---------------------------------------------------->
 
 # Test cases for July 15th, 2024
@@ -233,14 +276,15 @@ def problem7_2():
 
 # Test cases for July 16th, 2024
 # Expected output: "UURL"
-# root = BinaryTreeNode(val=5)
-# root.left = BinaryTreeNode(val=1)
-# root.right = BinaryTreeNode(val=2)
-# root.left.left = BinaryTreeNode(val=3)
-# root.right.left = BinaryTreeNode(val=6)
-# root.right.right = BinaryTreeNode(val=4)
-#
-# getDirections1(root=root, start_value=3, dest_value=6)
+root = BinaryTreeNode(val=5)
+root.left = BinaryTreeNode(val=1)
+root.right = BinaryTreeNode(val=2)
+root.left.left = BinaryTreeNode(val=3)
+root.right.left = BinaryTreeNode(val=6)
+root.right.right = BinaryTreeNode(val=4)
+
+getDirections1(root=root, start_value=3, dest_value=6)
+# getDirections2(root=root, start_value=3, dest_value=6)
 
 # Test cases for July 17th, 2024
 
