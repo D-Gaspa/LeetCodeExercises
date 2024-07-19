@@ -151,17 +151,19 @@ def findPath(current_node: BinaryTreeNode, target_value: int, path: List[str]) -
         return True
 
     if current_node.left:
-        print(f"\tGoing left from node {current_node.val}")
+        print(f"\tGoing left from node {current_node.val} -> {current_node.left.val}")
         path.append('L')
         if findPath(current_node.left, target_value, path):
+            print(f"\tFound target {target_value} in left subtree of node {current_node.val}")
             return True
         print(f"\tBacktracking from left of node {current_node.val}")
         path.pop()
 
     if current_node.right:
-        print(f"\tGoing right from node {current_node.val}")
+        print(f"\tGoing right from node {current_node.val} -> {current_node.right.val}")
         path.append('R')
         if findPath(current_node.right, target_value, path):
+            print(f"\tFound target {target_value} in right subtree of node {current_node.val}")
             return True
         print(f"\tBacktracking from right of node {current_node.val}")
         path.pop()
@@ -171,24 +173,66 @@ def findPath(current_node: BinaryTreeNode, target_value: int, path: List[str]) -
 
 
 def getDirections2(root: Optional[BinaryTreeNode], start_value: int, dest_value: int) -> str:
-    # Find paths from root to start and destination nodes
+    print("\n--- Input Parameters ---")
+    print(f"\troot = {root}, start_value = {start_value}, dest_value = {dest_value}")
+
+    print("\n--- Initialization ---")
     path_to_start = []
     path_to_dest = []
-    findPath(root, start_value, path_to_start)
-    findPath(root, dest_value, path_to_dest)
+    print(f"\tpath_to_start "
+          f"= {path_to_start}")
+    print(f"\tpath_to_dest = {path_to_dest}")
 
-    # Find the length of the common prefix in both paths
+    print("\n--- Finding Path to Start ---")
+    findPath(root, start_value, path_to_start)
+    print(f"\tPath to start: {path_to_start}")
+
+    print("\n--- Finding Path to Destination ---")
+    findPath(root, dest_value, path_to_dest)
+    print(f"\tPath to destination: {path_to_dest}")
+
+    print("\n--- Finding Common Prefix ---")
     common_prefix_length = 0
+    print("\n--- Iteration Summary ---")
+    headers = ["Iteration", "Start Path", "Dest Path", "Common?"]
+    iteration_data = []
+
     while (common_prefix_length < len(path_to_start) and
            common_prefix_length < len(path_to_dest) and
            path_to_start[common_prefix_length] == path_to_dest[common_prefix_length]):
+        is_common = path_to_start[common_prefix_length] == path_to_dest[common_prefix_length]
+        iteration_data.append([
+            common_prefix_length + 1,
+            path_to_start[common_prefix_length] if common_prefix_length < len(path_to_start) else "N/A",
+            path_to_dest[common_prefix_length] if common_prefix_length < len(path_to_dest) else "N/A",
+            "Yes" if is_common else "No"
+        ])
         common_prefix_length += 1
 
-    # Construct the final path: 'U's to go up to LCA, then path down to destination
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+    print(f"\tCommon Prefix Length: {common_prefix_length}")
+
+    print("\n--- Constructing Final Path ---")
     initial_path = 'U' * (len(path_to_start) - common_prefix_length)
     final_path = ''.join(path_to_dest[common_prefix_length:])
+    result = initial_path + final_path
 
-    return initial_path + final_path
+    print("\n--- Path Construction Summary ---")
+    headers = ["Component", "Value", "Length"]
+    summary_data = [
+        ["Path to Start", ''.join(path_to_start), len(path_to_start)],
+        ["Path to Destination", ''.join(path_to_dest), len(path_to_dest)],
+        ["Common Prefix", ''.join(path_to_start[:common_prefix_length]), common_prefix_length],
+        ["Initial Path (U's)", initial_path, len(initial_path)],
+        ["Final Path", final_path, len(final_path)],
+        ["Result", result, len(result)]
+    ]
+    print(tabulate(summary_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal Result: {result}")
+
+    return result
 
 
 # <------------------------------------------------- July 17th, 2024 ------------------------------------------------->
@@ -283,8 +327,8 @@ root.left.left = BinaryTreeNode(val=3)
 root.right.left = BinaryTreeNode(val=6)
 root.right.right = BinaryTreeNode(val=4)
 
-getDirections1(root=root, start_value=3, dest_value=6)
-# getDirections2(root=root, start_value=3, dest_value=6)
+# getDirections1(root=root, start_value=3, dest_value=6)
+getDirections2(root=root, start_value=3, dest_value=6)
 
 # Test cases for July 17th, 2024
 
