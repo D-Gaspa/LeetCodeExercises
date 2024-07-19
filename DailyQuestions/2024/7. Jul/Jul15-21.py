@@ -84,7 +84,8 @@ def createBinaryTree1(descriptions: List[List[int]]) -> Optional[BinaryTreeNode]
 
 def getDirections1(root: Optional[BinaryTreeNode], start_value: int, dest_value: int) -> str:
     print("\n--- Input Parameters ---")
-    print(f"\troot = {root}, start_value = {start_value}, dest_value = {dest_value}")
+    print(f"\troot = {BinaryTreeVisualizer.visualize(root, 'root_tree')}")
+    print(f"\tstart_value = {start_value}, dest_value = {dest_value}")
 
     def findCommonAncestor(node: BinaryTreeNode) -> Optional[BinaryTreeNode]:
         print(f"\n--- Finding Common Ancestor for node {node.val if node else 'None'} ---")
@@ -174,7 +175,8 @@ def findPath(current_node: BinaryTreeNode, target_value: int, path: List[str]) -
 
 def getDirections2(root: Optional[BinaryTreeNode], start_value: int, dest_value: int) -> str:
     print("\n--- Input Parameters ---")
-    print(f"\troot = {root}, start_value = {start_value}, dest_value = {dest_value}")
+    print(f"\troot = {BinaryTreeVisualizer.visualize(root, 'root_tree')}")
+    print(f"\tstart_value = {start_value}, dest_value = {dest_value}")
 
     print("\n--- Initialization ---")
     path_to_start = []
@@ -327,8 +329,8 @@ root.left.left = BinaryTreeNode(val=3)
 root.right.left = BinaryTreeNode(val=6)
 root.right.right = BinaryTreeNode(val=4)
 
-# getDirections1(root=root, start_value=3, dest_value=6)
-getDirections2(root=root, start_value=3, dest_value=6)
+getDirections1(root=root, start_value=3, dest_value=6)
+# getDirections2(root=root, start_value=3, dest_value=6)
 
 # Test cases for July 17th, 2024
 
