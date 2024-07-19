@@ -82,10 +82,10 @@ def createBinaryTree1(descriptions: List[List[int]]) -> Optional[BinaryTreeNode]
 # `q` as descendants (where we allow a node to be a descendant of itself).
 
 
-def lowestCommonAncestor(root: BinaryTreeNode, p: BinaryTreeNode, q: BinaryTreeNode) -> BinaryTreeNode:
-    def findCommonAncestor(node: BinaryTreeNode) -> BinaryTreeNode | None:
+def getDirections1(root: Optional[BinaryTreeNode], start_value: int, dest_value: int) -> str:
+    def findCommonAncestor(node: BinaryTreeNode) -> Optional[BinaryTreeNode]:
         # Base case: if node is None or is one of the target nodes
-        if node is None or node.val == p.val or node.val == q.val:
+        if node is None or node.val == start_value or node.val == dest_value:
             return node
 
         # Recurse on left and right subtrees
@@ -98,12 +98,31 @@ def lowestCommonAncestor(root: BinaryTreeNode, p: BinaryTreeNode, q: BinaryTreeN
         # Otherwise, return the non-None result (if any)
         return left_subtree or right_subtree
 
-    # Start the recursive search from the root
-    return findCommonAncestor(root)
+    def findPath(current_node: BinaryTreeNode, target_value: int, path: List[str]) -> bool:
+        if current_node.val == target_value:
+            return True
+        if current_node.left:
+            path.append('L')
+            if findPath(current_node.left, target_value, path):
+                return True
+            path.pop()
+        if current_node.right:
+            path.append('R')
+            if findPath(current_node.right, target_value, path):
+                return True
+            path.pop()
+        return False
 
+    lowest_common_ancestor = findCommonAncestor(root)
+    path_to_start = []
+    path_to_dest = []
+    findPath(lowest_common_ancestor, start_value, path_to_start)
+    findPath(lowest_common_ancestor, dest_value, path_to_dest)
 
-def getDirections1(root: Optional[BinaryTreeNode], start_value: int, dest_value: int) -> str:
-    pass
+    initial_path = 'U' * len(path_to_start)
+    final_path = ''.join(path_to_dest)
+
+    return initial_path + final_path
 
 
 def getDirections2(root: Optional[BinaryTreeNode], start_value: int, dest_value: int) -> str:
@@ -194,25 +213,15 @@ def problem7_2():
 # createBinaryTree1(descriptions=[[52, 58, 0], [41, 39, 1], [52, 45, 1], [41, 43, 0], [45, 41, 1], [60, 52, 1]])
 
 # Test cases for July 16th, 2024
-# Introductory problem
-root = BinaryTreeNode(val=-1)
-root.left = BinaryTreeNode()
-root.right = BinaryTreeNode(val=3)
-root.left.left = BinaryTreeNode(val=-2)
-root.left.right = BinaryTreeNode(val=4)
-root.left.left.left = BinaryTreeNode(val=8)
-
-# Expected output: 0
-lowestCommonAncestor(root=root, p=root.left.left.left, q=root.left.right)
-
 # Expected output: "UURL"
-# getDirections1(root=BinaryTreeNode(val=5, left=BinaryTreeNode(val=1, left=BinaryTreeNode(val=3)),
-#                                    right=BinaryTreeNode(val=2, left=BinaryTreeNode(val=6),
-#                                                         right=BinaryTreeNode(val=4))),
-#                start_value=3, dest_value=6)
+# root = BinaryTreeNode(val=5)
+# root.left = BinaryTreeNode(val=1)
+# root.right = BinaryTreeNode(val=2)
+# root.left.left = BinaryTreeNode(val=3)
+# root.right.left = BinaryTreeNode(val=6)
+# root.right.right = BinaryTreeNode(val=4)
 #
-# Expected output: "L"
-# getDirections1(root=BinaryTreeNode(val=2, left=BinaryTreeNode(val=1)), start_value=2, dest_value=1)
+# getDirections1(root=root, start_value=3, dest_value=6)
 
 # Test cases for July 17th, 2024
 
