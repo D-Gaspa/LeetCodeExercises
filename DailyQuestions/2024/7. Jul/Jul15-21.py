@@ -280,16 +280,20 @@ def problem5_2():
 
 
 # <------------------------------------------------- July 20th, 2024 ------------------------------------------------->
-# 6. Problem
+# 1605. Find Valid Matrix Given Row and Column Sums
 
-# Description
+# You are given two arrays, `rowSum` and `colSum`, representing the sums of the non-negative elements in each row and
+# column of an unknown 2D matrix.
+# Your task is to construct and return any 2D matrix of non-negative integers that satisfies these row and column sum
+# requirements.
+# It is guaranteed that at least one such matrix exists.
 
 
-def problem6_1():
+def restoreMatrix1(row_sum: List[int], col_sum: List[int]) -> List[List[int]]:
     pass
 
 
-def problem6_2():
+def restoreMatrix2(row_sum: List[int], col_sum: List[int]) -> List[List[int]]:
     pass
 
 
@@ -338,5 +342,9 @@ def problem7_2():
 # Test cases for July 19th, 2024
 
 # Test cases for July 20th, 2024
+# Expected Output: [[3,0], [1,7]] or [[1,2], [3,5]]
+print(restoreMatrix1(row_sum=[3, 8], col_sum=[4, 7]))
+# Expected Output: [[0,5,0], [6,1,0], [2,0,8]]
+print(restoreMatrix1(row_sum=[5, 7, 10], col_sum=[8, 6, 8]))
 
 # Test cases for July 21st, 2024
