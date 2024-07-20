@@ -290,7 +290,26 @@ def problem5_2():
 
 
 def restoreMatrix1(row_sum: List[int], col_sum: List[int]) -> List[List[int]]:
-    pass
+    row_length = len(row_sum)
+    col_length = len(col_sum)
+
+    matrix = [[0] * col_length for _ in range(row_length)]
+
+    row_index, col_index = 0, 0
+
+    while row_index < row_length and col_index < col_length:
+        new_value = min(row_sum[row_index], col_sum[col_index])
+        matrix[row_index][col_index] = new_value
+
+        row_sum[row_index] -= new_value
+        col_sum[col_index] -= new_value
+
+        if row_sum[row_index] == 0:
+            row_index += 1
+        else:
+            col_index += 1
+
+    return matrix
 
 
 def restoreMatrix2(row_sum: List[int], col_sum: List[int]) -> List[List[int]]:
@@ -344,7 +363,7 @@ def problem7_2():
 # Test cases for July 20th, 2024
 # Expected Output: [[3,0], [1,7]] or [[1,2], [3,5]]
 print(restoreMatrix1(row_sum=[3, 8], col_sum=[4, 7]))
-# Expected Output: [[0,5,0], [6,1,0], [2,0,8]]
+# Expected Output: [[0,5,0], [6,1,0], [2,0,8]] or [5,0,0], [3,4,0], [0,2,8]
 print(restoreMatrix1(row_sum=[5, 7, 10], col_sum=[8, 6, 8]))
 
 # Test cases for July 21st, 2024
