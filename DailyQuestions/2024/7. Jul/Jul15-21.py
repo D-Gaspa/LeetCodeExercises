@@ -238,16 +238,19 @@ def getDirections2(root: Optional[BinaryTreeNode], start_value: int, dest_value:
 
 
 # <------------------------------------------------- July 17th, 2024 ------------------------------------------------->
-# 3. Problem
+# 1110. Delete Nodes And Return Forest
 
-# Description
+# Given the `root` of a binary tree, each node in the tree has a distinct value.
+# After deleting all nodes with a value in `to_delete`, we are left with a forest (a disjoint union of trees).
+# Return the roots of the trees in the remaining forest.
+# You may return the result in any order.
 
 
-def problem3_1():
+def delNodes1(root: Optional[BinaryTreeNode], to_delete: List[int]) -> List[BinaryTreeNode]:
     pass
 
 
-def problem3_2():
+def delNodes2(root: Optional[BinaryTreeNode], to_delete: List[int]) -> List[BinaryTreeNode]:
     pass
 
 
@@ -332,6 +335,25 @@ def problem7_2():
 # getDirections2(root=root, start_value=3, dest_value=6)
 
 # Test cases for July 17th, 2024
+# Expected output:
+# [BinaryTreeNode(val=1, left=BinaryTreeNode(val=2, left=BinaryTreeNode(val=4)),
+#  BinaryTreeNode(val=6),
+#  BinaryTreeNode(val=7))]
+root = BinaryTreeNode(val=1)
+root.left = BinaryTreeNode(val=2)
+root.right = BinaryTreeNode(val=3)
+root.left.left = BinaryTreeNode(val=4)
+root.left.right = BinaryTreeNode(val=5)
+root.right.left = BinaryTreeNode(val=6)
+root.right.right = BinaryTreeNode(val=7)
+delNodes1(root=root, to_delete=[3, 5])
+
+# Expected output:
+# [BinaryTreeNode(val=1, left=BinaryTreeNode(val=2), right=BinaryTreeNode(val=4))]
+root = BinaryTreeNode(val=1)
+root.left = BinaryTreeNode(val=2)
+root.right = BinaryTreeNode(val=4)
+root.left.left = BinaryTreeNode(val=3)
 
 # Test cases for July 18th, 2024
 
