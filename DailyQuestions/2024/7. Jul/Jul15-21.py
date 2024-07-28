@@ -252,7 +252,6 @@ def delNodes1(root: Optional[BinaryTreeNode], to_delete: List[int]) -> List[Bina
     forest_roots = []
     nodes_to_delete = set(to_delete)
 
-    # Process nodes, delete specified ones, and build the resulting forest
     def processNodesAndBuildForest(current_node: BinaryTreeNode) -> Optional[BinaryTreeNode]:
         if not current_node:
             return None
@@ -286,24 +285,22 @@ def delNodes2(root: Optional[BinaryTreeNode], to_delete: List[int]) -> List[Bina
     nodes_to_delete = set(to_delete)
     forest_roots = []
 
-    # Process each node, handle deletions, and build the resulting forest
     def processNodeAndChildren(current_node: Optional[BinaryTreeNode], is_root: bool) -> Optional[BinaryTreeNode]:
         if not current_node:
             return None
 
         is_deleted = current_node.val in nodes_to_delete
 
-        # If the current node is a root (either the original root or child of a deleted node)
-        # and it's not to be deleted, add it to the forest
+        # Only add root nodes to the forest that won't be deleted
         if is_root and not is_deleted:
             forest_roots.append(current_node)
 
-        # Recursively process left and right children
-        # If this node is deleted, its children become new roots (is_deleted passed as is_root)
-        current_node.left = processNodeAndChildren(current_node.left, is_deleted)
-        current_node.right = processNodeAndChildren(current_node.right, is_deleted)
+        # If this node is deleted, its children become new roots
+        current_node.left = processNodeAndChildren(current_node.left,
+                                                   is_deleted)
+        current_node.right = processNodeAndChildren(current_node.right,
+                                                    is_deleted)
 
-        # Return None if the node is deleted, otherwise return the node itself
         return None if is_deleted else current_node
 
     processNodeAndChildren(root, True)
