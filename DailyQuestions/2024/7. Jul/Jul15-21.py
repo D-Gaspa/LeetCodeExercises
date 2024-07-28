@@ -479,7 +479,7 @@ root.right.right = BinaryTreeNode(val=5)
 root.right.right.left = BinaryTreeNode(val=6)
 root.right.right.right = BinaryTreeNode(val=7)
 # delNodes1(root=root, to_delete=[2, 1, 5])
-delNodes2(root=root, to_delete=[2, 1, 5])
+# delNodes2(root=root, to_delete=[2, 1, 5])
 
 # Test cases for July 18th, 2024
 
