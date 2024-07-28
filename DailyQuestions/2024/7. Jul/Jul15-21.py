@@ -247,34 +247,79 @@ def getDirections2(root: Optional[BinaryTreeNode], start_value: int, dest_value:
 
 
 def delNodes1(root: Optional[BinaryTreeNode], to_delete: List[int]) -> List[BinaryTreeNode]:
-    if not root:
-        return []
+    print("\n--- Input Parameters ---")
+    print(f"\troot = {root}")
+    print(f"\tto_delete = {to_delete}")
+
+    print("\n--- Initialization ---")
     forest_roots = []
     nodes_to_delete = set(to_delete)
+    print(f"\tforest_roots = {forest_roots}")
+    print(f"\tnodes_to_delete = {nodes_to_delete}")
+
+    iteration_data = []
+    iteration_count = 0
 
     def processNodesAndBuildForest(current_node: BinaryTreeNode) -> Optional[BinaryTreeNode]:
+        nonlocal iteration_count
+        iteration_count += 1
+        print(f"\n--- Iteration {iteration_count} ---")
+        print(f"\tCurrent node: {current_node.val if current_node else None}")
+
         if not current_node:
+            print("\tNode is None, returning None")
             return None
 
+        print(f"\tProcessing left child of node {current_node.val} -> "
+              f"{current_node.left.val if current_node.left else "None"}")
         current_node.left = processNodesAndBuildForest(current_node.left)
-        current_node.right = processNodesAndBuildForest(current_node.right)
+        print(f"\tFunction returned, updated left child of node {current_node.val} -> "
+              f"{current_node.left.val if current_node.left else "None"}")
 
+        print(f"\tProcessing right child of node {current_node.val} -> "
+              f"{current_node.right.val if current_node.right else "None"}")
+        current_node.right = processNodesAndBuildForest(current_node.right)
+        print(f"\tFunction returned, updated right child of node {current_node.val} -> "
+              f"{current_node.right.val if current_node.right else "None"}")
+
+        print(f"\tChecking if node {current_node.val} should be deleted")
         if current_node.val in nodes_to_delete:
-            # Add children of deleted node as new roots in the forest
+            print(f"\tNode {current_node.val} will be deleted")
             if current_node.left:
+                print(f"\tAdding left child {current_node.left.val} to forest_roots")
                 forest_roots.append(current_node.left)
             if current_node.right:
+                print(f"\tAdding right child {current_node.right.val} to forest_roots")
                 forest_roots.append(current_node.right)
-            return None  # Node is deleted by returning None
-        return current_node
 
-    # Process the entire tree
+            iteration_data.append([iteration_count, current_node.val, "Deleted",
+                                   f"Left: {current_node.left.val if current_node.left else None}, "
+                                   f"Right: {current_node.right.val if current_node.right else None}"])
+            print("\tReturning None (node deleted)")
+            return None
+        else:
+            iteration_data.append([iteration_count, current_node.val, "Kept",
+                                   f"Left: {current_node.left.val if current_node.left else None}, "
+                                   f"Right: {current_node.right.val if current_node.right else None}"])
+            print(f"\tReturning node {current_node.val} (not deleted)")
+            return current_node
+
+    print("\n--- Starting Tree Traversal ---")
     root = processNodesAndBuildForest(root)
 
-    # Add the root to `forest_roots` if it wasn't deleted
+    print("\n--- Post-Traversal Processing ---")
     if root:
+        print(f"\tAdding root {root.val} to forest_roots")
         forest_roots.append(root)
+    else:
+        print("\tRoot was deleted, not adding to forest_roots")
 
+    print("\n--- Iteration Summary ---")
+    headers = ["Iteration", "Node Value", "Action", "Children"]
+    print(tabulate(iteration_data, headers=headers, tablefmt="fancy_grid"))
+
+    print("\n--- Function Returning ---")
+    print(f"\tFinal forest_roots: {[node.val for node in forest_roots]}")
     return forest_roots
 
 
@@ -387,25 +432,16 @@ def problem7_2():
 
 # Test cases for July 17th, 2024
 # Expected output:
-# [BinaryTreeNode(val=1, left=BinaryTreeNode(val=2, left=BinaryTreeNode(val=4)),
-#  BinaryTreeNode(val=6),
-#  BinaryTreeNode(val=7))]
+# [BinaryTreeNode(val=3, left=BinaryTreeNode(val=4)), BinaryTreeNode(val=6), BinaryTreeNode(val=7)]
 root = BinaryTreeNode(val=1)
 root.left = BinaryTreeNode(val=2)
 root.right = BinaryTreeNode(val=3)
-root.left.left = BinaryTreeNode(val=4)
-root.left.right = BinaryTreeNode(val=5)
-root.right.left = BinaryTreeNode(val=6)
-root.right.right = BinaryTreeNode(val=7)
-delNodes1(root=root, to_delete=[3, 5])
-
-# Expected output:
-# [BinaryTreeNode(val=1, left=BinaryTreeNode(val=2), right=BinaryTreeNode(val=4))]
-root = BinaryTreeNode(val=1)
-root.left = BinaryTreeNode(val=2)
-root.right = BinaryTreeNode(val=3)
-root.right.right = BinaryTreeNode(val=4)
-delNodes1(root=root, to_delete=[2, 1])
+root.right.left = BinaryTreeNode(val=4)
+root.right.right = BinaryTreeNode(val=5)
+root.right.right.left = BinaryTreeNode(val=6)
+root.right.right.right = BinaryTreeNode(val=7)
+delNodes1(root=root, to_delete=[2, 1, 5])
+delNodes2(root=root, to_delete=[2, 1, 5])
 
 # Test cases for July 18th, 2024
 
