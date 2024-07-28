@@ -271,7 +271,7 @@ def delNodes1(root: Optional[BinaryTreeNode], to_delete: List[int]) -> List[Bina
     # Process the entire tree
     root = processNodesAndBuildForest(root)
 
-    # Add the root to forest_roots if it wasn't deleted
+    # Add the root to `forest_roots` if it wasn't deleted
     if root:
         forest_roots.append(root)
 
